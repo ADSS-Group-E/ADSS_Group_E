@@ -1,4 +1,6 @@
-public class Order {
+package SupplierModule.DataAccessLayer;
+
+class Order {
 
 }
 

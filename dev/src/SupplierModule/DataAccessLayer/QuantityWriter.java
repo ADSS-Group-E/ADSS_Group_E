@@ -1,4 +1,6 @@
-public class QuantityWriter {
+package SupplierModule.DataAccessLayer;
+
+class QuantityWriter {
 
 }
 

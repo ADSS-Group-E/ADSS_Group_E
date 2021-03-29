@@ -1,4 +1,6 @@
-public class Item {
+package SupplierModule.DataAccessLayer;
+
+class Item {
 
 }
 

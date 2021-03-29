@@ -1,4 +1,6 @@
-public class Contact {
+package SupplierModule.DataAccessLayer;
+
+class Contact {
 
 }
 
