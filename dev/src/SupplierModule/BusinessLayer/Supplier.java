@@ -13,8 +13,8 @@ class Supplier {
     private String paymentMethod;
     private String name;
 
-    Supplier(int companyNumber, String bankAccount, String paymentMethod, ArrayList<Item> items,
-             ArrayList<Contact> contacts, String name, QuantityWriter quantityWriter) {
+    Supplier(int companyNumber, String bankAccount, String paymentMethod, List<Item> items,
+             List<Contact> contacts, String name, QuantityWriter quantityWriter) {
         this.companyNumber = companyNumber;
         this.bankAccount = bankAccount;
         this.paymentMethod = paymentMethod;
@@ -25,7 +25,7 @@ class Supplier {
         this.quantityWriter = quantityWriter;
     }
 
-    Supplier(String name, int companyNumber, String paymentMethod, String bankAccount, ArrayList<Item> items, ArrayList<Contact> contacts){
+    Supplier(String name, int companyNumber, String paymentMethod, String bankAccount, List<Item> items, List<Contact> contacts){
         this.name = name;
         this.companyNumber = companyNumber;
         this.paymentMethod = paymentMethod;
