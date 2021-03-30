@@ -7,27 +7,27 @@ import java.util.Scanner;
 
 class PresentationController {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        InputService inputService = InputService.getInstance();
         ServiceController service = ServiceController.getInstance();
         service.initialize();
         final int numOfOptions = 5;
         //show user his options
-        //showOptions();
-        int input = scanner.nextInt();
+        showOptions();
+        int input = inputService.nextInt();
         while (input >= 0 && input < numOfOptions) {
             //decrypts input
             switch (input){
                 case (0) :{//register supplier
-                    String info = scanner.next();
+                    String info = inputService.next();
                     ArrayList<String> items = getInputIntoList();
                     ArrayList<String> contacts = getInputIntoList();
-                    register(info, items, contacts);
+                    manageQuantityWriter();
                     break;
                 }
                 case (1): {//order
                     showSupplierInfo();
-                    input = scanner.nextInt();
-                    String deliOptions = scanner.next();
+                    input = inputService.nextInt();
+                    String deliOptions = inputService.next();
                     ArrayList<String> items = getInputIntoList();
                     createOrder(input, deliOptions, items);
                     break;
@@ -36,17 +36,17 @@ class PresentationController {
                     break;
                 }
             }
-            input = scanner.nextInt();
+            input = inputService.nextInt();
         }
     }
 
     static ArrayList<String> getInputIntoList(){
+        InputService input = InputService.getInstance();
         ArrayList<String> list = new ArrayList<>();
-        Scanner scanner = new Scanner(System.in);
-        String next = scanner.next();
+        String next = input.next();
         while(!next.equals("-1")){
             list.add(next);
-            next = scanner.next();
+            next = input.next();
         }
         return list;
     }
@@ -62,11 +62,25 @@ class PresentationController {
     static void showSupplierInfo(){
         ArrayList<String[]> sups = ServiceController.getInstance().getSuppliersInfo();
         for (int i = 0; i < sups.size(); i++) {
-            System.out.println(i + ": " + Arrays.toString(sups.get(i)));
+            OutputService.getInstance().println(i + ": " + Arrays.toString(sups.get(i)));
         }
     }
 
     static void createOrder(int supplierNum, String deliOptions, List<String> items){
         ServiceController.getInstance().createOrder(supplierNum, deliOptions, items);
+    }
+
+    static void manageQuantityWriter(){
+        OutputService.getInstance().println("Do you need a Quantity Writer?");
+
+    }
+
+    static void showOptions(){
+        String[] options = new String[]{
+          "Add Supplier", "Create Order"
+        };
+        for(int i = 0; i < options.length; i++){
+            OutputService.getInstance().println(i + ") " + options[i]);
+        }
     }
 }

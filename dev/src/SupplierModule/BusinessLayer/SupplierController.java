@@ -4,6 +4,7 @@ import SupplierModule.DataAccessLayer.DataController;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class SupplierController {
@@ -13,8 +14,8 @@ public class SupplierController {
     public SupplierController() {
         suppliers = new ArrayList<>();
         data = new DataController();
-        suppliers.add(new Supplier(1, "1234560", "Paypal", new ArrayList<>(),
-                new ArrayList<>(), "Pepsi", new QuantityWriter(new int[1][2], 2, 20000)));
+        suppliers.add(new Supplier("Pepsi", 1, "1234560", "Paypal", new ArrayList<>(),
+                new ArrayList<>(), new QuantityWriter(new HashMap<>(), 2, 20000)));
     }
 
     public ArrayList<String[]> getSuppliersInfo() {
