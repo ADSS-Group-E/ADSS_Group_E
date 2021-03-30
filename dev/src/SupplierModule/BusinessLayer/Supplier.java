@@ -1,12 +1,13 @@
 package SupplierModule.BusinessLayer;
 
 import java.util.ArrayList;
+import java.util.List;
 
 class Supplier {
-    private ArrayList<Item> items;
-    private ArrayList<Contact> contacts;
+    private List<Item> items;
+    private List<Contact> contacts;
     private QuantityWriter quantityWriter;
-    private ArrayList<Order> orders;
+    private List<Order> orders;
     private int companyNumber;
     private String bankAccount;
     private String paymentMethod;
@@ -22,6 +23,21 @@ class Supplier {
         this.name = name;
         this.orders = new ArrayList<>();
         this.quantityWriter = quantityWriter;
+    }
+
+    Supplier(String name, int companyNumber, String paymentMethod, String bankAccount, ArrayList<Item> items, ArrayList<Contact> contacts){
+        this.name = name;
+        this.companyNumber = companyNumber;
+        this.paymentMethod = paymentMethod;
+        this.bankAccount = bankAccount;
+        this.items = items;
+        this.contacts = contacts;
+        quantityWriter = null;
+        orders = new ArrayList<>();
+    }
+
+    void addOrder(Order or){
+        orders.add(or);
     }
 
     String getCompanyNumber() {
