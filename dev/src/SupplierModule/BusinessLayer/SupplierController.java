@@ -38,13 +38,12 @@ public class SupplierController {
         suppliers.add(new Supplier(name, companyNumber, paymentMethod, bankAccount, Arrays.asList(realItems), Arrays.asList(realContacts)));
     }
 
-    public void createOrder(int supplierNum, String deliOptions, String items){
+    public void createOrder(int supplierNum, String deliOptions, List<String> items){
         boolean needsDelivery = Boolean.parseBoolean(deliOptions.split(",")[0]);
         boolean constantDelivery = Boolean.parseBoolean(deliOptions.split(",")[1]);
-        String[] itemlist = items.split(",");
-        Item[] realItems = new Item[itemlist.length];
+        Item[] realItems = new Item[items.size()];
         for(int i = 0; i < realItems.length; i++){
-            realItems[i] = new Item(itemlist[i].split("|")[0], Integer.parseInt(itemlist[i].split("|")[1]), Integer.parseInt(itemlist[i].split("|")[2]), Integer.parseInt((itemlist[i].split("|")[3])));
+            realItems[i] = new Item(items.get(i).split("|")[0], Integer.parseInt(items.get(i).split("|")[1]), Integer.parseInt(items.get(i).split("|")[2]), Integer.parseInt((items.get(i).split("|")[3])));
         }
         suppliers.get(supplierNum).addOrder(new Order(constantDelivery, needsDelivery, Arrays.asList(realItems)));
     }

@@ -18,7 +18,7 @@ class ServiceController {
         supplierController.register(name, companyNumber, paymentMethod, bankAccount, items, contacts);
     }
 
-    public void createOrder(int supplierNum, String deliOptions, String items) {
+    public void createOrder(int supplierNum, String deliOptions, List<String> items) {
         supplierController.createOrder(supplierNum, deliOptions, items);
     }
 

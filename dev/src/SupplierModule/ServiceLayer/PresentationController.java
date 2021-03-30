@@ -19,18 +19,8 @@ class PresentationController {
             switch (input){
                 case (0) :{//register supplier
                     String info = scanner.next();
-                    ArrayList<String> items = new ArrayList<>();
-                    String next = scanner.next();
-                    while(!next.equals("-1")){
-                        items.add(next);
-                        next = scanner.next();
-                    }
-                    next = scanner.next();
-                    ArrayList<String> contacts = new ArrayList<>();
-                    while(!next.equals("-1")){
-                        contacts.add(next);
-                        next = scanner.next();
-                    }
+                    ArrayList<String> items = getInputIntoList();
+                    ArrayList<String> contacts = getInputIntoList();
                     register(info, items, contacts);
                     break;
                 }
@@ -38,7 +28,7 @@ class PresentationController {
                     showSupplierInfo();
                     input = scanner.nextInt();
                     String deliOptions = scanner.next();
-                    String items = scanner.next();
+                    ArrayList<String> items = getInputIntoList();
                     createOrder(input, deliOptions, items);
                     break;
                 }
@@ -48,6 +38,17 @@ class PresentationController {
             }
             input = scanner.nextInt();
         }
+    }
+
+    static ArrayList<String> getInputIntoList(){
+        ArrayList<String> list = new ArrayList<>();
+        Scanner scanner = new Scanner(System.in);
+        String next = scanner.next();
+        while(!next.equals("-1")){
+            list.add(next);
+            next = scanner.next();
+        }
+        return list;
     }
 
     static void register(String info, List<String> items, List<String> contacts){
@@ -65,7 +66,7 @@ class PresentationController {
         }
     }
 
-    static void createOrder(int supplierNum, String deliOptions, String items){
+    static void createOrder(int supplierNum, String deliOptions, List<String> items){
         ServiceController.getInstance().createOrder(supplierNum, deliOptions, items);
     }
 }
