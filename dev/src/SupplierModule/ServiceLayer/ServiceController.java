@@ -47,8 +47,8 @@ class ServiceController {
         return supplierController.getSpecificItem(supplierNum, itemNum);
     }
 
-    public boolean updateItemQuantity (int supplierNum, int itemNum, int newQuantity) {
-        return supplierController.updateItemQuantity(supplierNum, itemNum, newQuantity);
+    public boolean updateItemQuantity (int supplierNum, int itemNum, int quantity) {
+        return supplierController.updateItemQuantity(supplierNum, itemNum, quantity);
     }
 
     void initialize() {

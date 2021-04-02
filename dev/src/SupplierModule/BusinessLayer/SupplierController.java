@@ -15,8 +15,6 @@ public class SupplierController {
     public SupplierController() {
         suppliers = new ArrayList<>();
         data = new DataController();
-        suppliers.add(new Supplier("Pepsi", 1, "1234560", "Paypal", new ArrayList<>(),
-                new ArrayList<>(), new QuantityWriter(new HashMap<>(), 2, 20000)));
     }
 
     public ArrayList<String[]> getSuppliersInfo() {
@@ -86,22 +84,23 @@ public class SupplierController {
         return items.get(itemNum).toStringArray();
     }
 
-    public boolean updateItemQuantity(int supplierNum, int itemNum, int newQuantity) {
+    public boolean updateItemQuantity(int supplierNum, int itemNum, int quantity) {
         if (supplierNum >= suppliers.size() || supplierNum < 0) return false;
         List<Item> items = suppliers.get(supplierNum).getItems();
         if (itemNum >= items.size() || itemNum < 0) return false;
         Item item = items.get(itemNum);
-        if (newQuantity < 0 || newQuantity > item.getQuantity()) return false;
-        item.setQuantity(newQuantity);
+        if (quantity < 0 || quantity > item.getQuantity()) return false;
+        item.setQuantity(item.getQuantity() - quantity);
         return true;
     }
 
     public ArrayList<String> getItemsFromSupplier(int supplierNum) {
         if (supplierNum >= suppliers.size() || supplierNum < 0) return null;
         ArrayList<String> regOrders = new ArrayList<>();
-            for (Item i : suppliers.get(supplierNum).getItems()) {
-                regOrders.add(i + ": \n" + i.toString());
-            }
+        List<Item> items = suppliers.get(supplierNum).getItems();
+        for (Item item : items) {
+            regOrders.add(item.toString());
+        }
         return regOrders;
     }
 }

@@ -15,7 +15,7 @@ class PresentationController {
             //decrypts input
             switch (input){
                 case (0) :{//register supplier
-                    String name = in.next("Enter suppllier name: ");
+                    String name = in.next("Enter supplier name: ");
                     int companyNumber = in.nextInt("Enter company number: ");
                     String paymentMethod = in.next("Enter payment method: ");
                     String bankAccount = in.next("Enter bank account: ");
@@ -39,10 +39,10 @@ class PresentationController {
                         input = in.nextInt("Enter number of the supplier: ");
                         supplierItems = service.getItemsFromSupplier(input);
                     }
-                    out.println("Supplier items: ");
-                    out.println(showSupplierItems(supplierItems));
-                    boolean constantDelivery = in.nextBoolean("Constant Delivery? true/false ");
+                    boolean constantDelivery = in.nextBoolean("\nConstant Delivery? true/false ");
                     boolean needsDelivery = in.nextBoolean("In need of delivery? ");
+                    out.println("\nSupplier items: ");
+                    out.println(showSupplierItems(supplierItems));
                     ArrayList<String[]> items = createItemList(input);
                     service.createOrder(input, needsDelivery, constantDelivery, items);
                     break;
@@ -67,18 +67,21 @@ class PresentationController {
         while (!ans.equals("N")) {
             if (ans.equals("Y")) {
                 int number;
-                int newQuantity;
                 String[] item;
                 OutputService.getInstance().println("\nItems: ");
-                do {
+                number = InputService.getInstance().nextInt("Enter Item Number: ");
+                int quantity;
+                quantity = InputService.getInstance().nextInt("Enter Item quantity: ");
+                item = ServiceController.getInstance().getSpecificItem(supplierNum, number);
+                while (!ServiceController.getInstance().updateItemQuantity(supplierNum, number, quantity) || item.length != 4) {
+                    OutputService.getInstance().println("Please try again.");
                     number = InputService.getInstance().nextInt("Enter Item Number: ");
-                    String quantity = InputService.getInstance().nextInt("Enter Item quantity: ") + "";
+                    quantity = InputService.getInstance().nextInt("Enter Item quantity: ");
                     item = ServiceController.getInstance().getSpecificItem(supplierNum, number);
-                    newQuantity = Integer.parseInt(item[2]) - Integer.parseInt(quantity);
-                } while (!ServiceController.getInstance().updateItemQuantity(supplierNum, number, newQuantity) && item.length != 4);
-                String[] order = {item[0], item[1], (Integer.parseInt(item[2]) - newQuantity) + "", item[3]};
+                }
+                String[] order = {item[0], item[1], (quantity) + "", item[3]};
                 list.add(order);
-                OutputService.getInstance().println("Add an Item? N/Y ");
+                OutputService.getInstance().println("Add another Item? N/Y ");
             }
             else {
                 OutputService.getInstance().println("please try again");
@@ -90,10 +93,20 @@ class PresentationController {
 
     static ArrayList<String[]> createItemList() {
         ArrayList<String[]> list = new ArrayList<>();
+        ArrayList<String> used = new ArrayList<>();
         String ans = "Y";
+        OutputService.getInstance().println("\nItems: ");
         while (!ans.equals("N")) {
             if (ans.equals("Y")) {
-                String name = InputService.getInstance().next("Enter Item Number: ");
+                String name = "";
+                boolean contains = true;
+                while (contains) {
+                    name = InputService.getInstance().next("Enter Item Name: ");
+                    if (!used.contains(name.toLowerCase())) {
+                        used.add(name.toLowerCase());
+                        contains = false;
+                    }
+                }
                 String price = InputService.getInstance().nextInt("Enter Item price: ") + "";
                 String quantity = InputService.getInstance().nextInt("Enter Item quantity: ") + "";
                 String supplierCN = InputService.getInstance().nextInt("Enter Item catalog number: ") + "";
@@ -118,7 +131,7 @@ class PresentationController {
                 String email = InputService.getInstance().next("Enter Contact Email: ");
                 String[] item = {name, email};
                 list.add(item);
-                OutputService.getInstance().print("Add a Contact? N/Y ");
+                OutputService.getInstance().print("Add another Contact? N/Y ");
             }
             else {
                 OutputService.getInstance().println("Please try again");
@@ -130,7 +143,7 @@ class PresentationController {
 
     static HashMap<Integer, Integer> createDiscountList() {
         HashMap<Integer, Integer> map = new HashMap<>();
-        String ans = InputService.getInstance().next("Add a discount step? N/Y ");
+        String ans = InputService.getInstance().next("Add discount steps? N/Y ");
         while (!ans.equals("N")) {
             if (ans.equals("Y")) {
                 Integer cash = InputService.getInstance().nextInt("Enter amount of money: ");

@@ -1,5 +1,6 @@
 package SupplierModule.ServiceLayer;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public final class InputService {//The class controls the input received from the user
@@ -22,7 +23,7 @@ public final class InputService {//The class controls the input received from th
         while (retry) {
             try {
                 OutputService.getInstance().print(message);
-                nextString = scanner.next();
+                nextString = scanner.nextLine();
                 retry = false;
             } catch (Exception e) {
                 if (!scanner.hasNext()) {
@@ -40,12 +41,9 @@ public final class InputService {//The class controls the input received from th
         while (retry) {
             try {
                 OutputService.getInstance().print(message);
-                nextInt = scanner.nextInt();
+                nextInt = Integer.parseInt(scanner.nextLine());
                 retry = false;
             } catch (Exception e) {
-                if (!scanner.hasNextInt()) {
-                    scanner.nextLine();
-                }
                 OutputService.getInstance().println("Please try again.");
             }
         }
@@ -58,12 +56,13 @@ public final class InputService {//The class controls the input received from th
         while (retry) {
             try {
                 OutputService.getInstance().print(message);
-                nextBool = scanner.nextBoolean();
+                String ans = scanner.nextLine();
+                if (!ans.equalsIgnoreCase("true") && !ans.equalsIgnoreCase("false")) {
+                    throw new InputMismatchException("String is not true or false");
+                }
+                nextBool = Boolean.parseBoolean(ans.toLowerCase());
                 retry = false;
             } catch (Exception e) {
-                if (!scanner.hasNextBoolean()) {
-                    scanner.nextLine();
-                }
                 OutputService.getInstance().println("Please try again.");
             }
         }
