@@ -7,7 +7,7 @@ class Supplier {
     private List<Item> items;
     private List<Contact> contacts;
     private QuantityWriter quantityWriter;
-    private List<Order> orders;
+    private ArrayList<Order> orders;
     private int companyNumber;
     private String bankAccount;
     private String paymentMethod;
@@ -52,5 +52,9 @@ class Supplier {
     String getName() {
         return name;
     }
+
+    public ArrayList<Order> getOrders() { return orders; }
+
+    public List<Item> getItems() { return items; }
 }
 

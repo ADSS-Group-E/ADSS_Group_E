@@ -12,5 +12,17 @@ public class Item {
         this.quantity = quantity;
         this.supplierCN = supplierCN;
     }
+
+    public String toString() {
+        return "Name: " + name + "\nPrice: " + price + "\nQuantity: " + quantity + "\nCatalog Number: " + supplierCN;
+    }
+
+    public String[] toStringArray() {
+        return new String[]{name, price + "", quantity + "", supplierCN + ""};
+    }
+
+    public void setQuantity(int quantity) { this.quantity = quantity; }
+
+    public int getQuantity() { return quantity; }
 }
 
