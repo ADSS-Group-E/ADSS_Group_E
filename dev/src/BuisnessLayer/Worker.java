@@ -1,6 +1,8 @@
 package BuisnessLayer;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 public class Worker {
     private String firstName;
@@ -11,16 +13,45 @@ public class Worker {
     private Boolean isCurrentWorker;
     private HiringConditions hiringConditions;
     private AvailableWorkDays availableWorkDays;
+    private List<Qualifications> qualifications;
 
+    public List<Qualifications> getQualifications() {
+        return qualifications;
+    }
 
-    public Worker(String firstName, String lastName, String ID, String bankAccount, Date startWorkingDay, Boolean isCurrentWorker) {
+    public void setQualifications(List<Qualifications> qualifications) {
+        this.qualifications = qualifications;
+    }
+
+    public HiringConditions getHiringConditions() {
+        return hiringConditions;
+    }
+
+    public void setHiringConditions(HiringConditions hiringConditions) {
+        this.hiringConditions = hiringConditions;
+    }
+
+    public AvailableWorkDays getAvailableWorkDays() {
+        return availableWorkDays;
+    }
+
+    public void setAvailableWorkDays(AvailableWorkDays availableWorkDays) {
+        this.availableWorkDays = availableWorkDays;
+    }
+
+    public Worker(String firstName, String lastName, String ID, String bankAccount, Date startWorkingDay, HiringConditions hiringConditions, AvailableWorkDays availableWorkDays, List<Qualifications> qualifications) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.ID = ID;
         this.bankAccount = bankAccount;
         this.startWorkingDay = startWorkingDay;
-        this.isCurrentWorker = isCurrentWorker;
+        this.isCurrentWorker = true;
+        this.hiringConditions = hiringConditions;
+        this.availableWorkDays = availableWorkDays;
+        this.qualifications = qualifications;
     }
+
+
 
     public String getFirstName() {
         return firstName;
