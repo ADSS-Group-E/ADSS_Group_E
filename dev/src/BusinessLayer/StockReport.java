@@ -1,4 +1,4 @@
 package BusinessLayer;
 
-public class StockReport implements Report {
+public class StockReport extends Report {
 }

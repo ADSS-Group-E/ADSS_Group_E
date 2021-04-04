@@ -1,4 +1,4 @@
 package BusinessLayer;
 
-public class InvalidReport implements Report{
+public class InvalidReport extends Report{
 }

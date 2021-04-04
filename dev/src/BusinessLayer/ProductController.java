@@ -9,7 +9,10 @@ public class ProductController {
         return products.get(pid);
     }
 
+    // TODO add checks if product already exists
     public void addProduct(int pid, String name, String storageLocation, String storeLocation, int amountInStorage, int amountInStore, String manufacturer, double buyingPrice, double sellingPrice, int minAmount){
         products.put(pid, new Product(pid,name,storageLocation,storeLocation,amountInStorage,amountInStore,manufacturer,buyingPrice,sellingPrice,minAmount));
     }
+
+    // TODO add removeProduct
 }
