@@ -1,5 +1,6 @@
 package BuisnessLayer;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,7 +20,22 @@ public class BranchController {
         return instance;
     }
 
-    public void addBranch(Branch branch){
+
+    public Worker findWorker(int branchID,String workerID){
+        Branch branch=getBranch(branchID);
+        return branch.FindWorker(workerID);
+    }
+
+    public void showWorkers(int branchID){
+        getBranch(branchID).showWorkers();
+    }
+
+    public void addBranch(int branchID,Worker branchManager,Worker activeHRD){
+        if(!branchManager.getQualifications().contains(Qualifications.BranchManager))
+            throw new IllegalArgumentException("The worker you entered is not qualified as a branch manager");
+        if(!activeHRD.getQualifications().contains(Qualifications.Human_Resources_Director))
+            throw new IllegalArgumentException("The worker you entered is not qualified as a HRD");
+        Branch branch=new Branch(branchID,branchManager,activeHRD);
         branchList.add(branch);
     }
 
@@ -39,21 +55,35 @@ public class BranchController {
     }
 
     public void addWorker(Worker worker,int branchID){
-        if(getBranch(branchID).FindWorker(worker)!=null){
-            getBranch(branchID).FindWorker(worker).setCurrentWorker(true);
+        boolean found=false;
+        Worker w1 = getBranch(branchID).FindWorker(worker.getID());
+        if(w1!=null&& !worker.equals(w1))
+            throw new IllegalArgumentException("Different workers with same ID");
+        else if(w1!=null&& worker.equals(w1)){
+            System.out.println("You tried to add a worker that is already exists so we just update the avilable days of it");
+            w1.setAvailableWorkDays(worker.getAvailableWorkDays());
         }else {
-            worker.setCurrentWorker(true);
-            getBranch(branchID).addWorker(worker);
+            w1 = getBranch(branchID).FindFormerWorker(worker.getID());
+            if(w1!=null&& !worker.equals(w1))
+                throw new IllegalArgumentException("Different workers with same ID");
+            else if(w1!=null&& worker.equals(w1)) {
+                getBranch(branchID).getFormerWorkers().remove(w1);
+                getBranch(branchID).addWorker(worker);
+            }
+            else if(w1==null)
+                getBranch(branchID).addWorker(worker);
+
         }
+
+
     }
+
 
     public void removeWorker(Worker worker,int branchID){
-        if(getBranch(branchID).FindWorker(worker)!=null){
-            getBranch(branchID).FindWorker(worker).setCurrentWorker(false);
+        Boolean isRemoved=getBranch(branchID).getWorkersList().remove(worker);
+        if(isRemoved){
+            getBranch(branchID).getFormerWorkers().add(worker);
         }
     }
-
-
-
 
 }

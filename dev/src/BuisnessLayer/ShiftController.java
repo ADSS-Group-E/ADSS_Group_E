@@ -4,34 +4,31 @@ import javafx.util.Pair;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 public class ShiftController {
     private static ShiftController instance = null;
-    private List<Pair<Integer, List<Shift[][]>>> weeklyAssignmentsHistory;
-    private List<Pair<Integer, Shift[][]>> weeklyAssignment;
+    private HashMap<Integer,List<Shift[][]>> weeklyAssignmentsHistory;
+    private HashMap<Integer,Shift[][]> weeklyAssignment;
+
 
     private ShiftController() {
-        weeklyAssignmentsHistory = new LinkedList<>();
-        weeklyAssignment = new LinkedList<>();
+        weeklyAssignmentsHistory = new HashMap<>();
+        weeklyAssignment = new HashMap<>();
     }
 
     public static ShiftController getInstance() {
         if (instance == null) {
-            return new ShiftController();
+            instance=new ShiftController();
         }
         return instance;
     }
 
     public void addBranch(int branchID) {
         boolean isFound = false;
-        for (Pair pair : weeklyAssignment) {
-            if ((int) pair.getKey() == branchID) {
-                isFound = true;
-                break;
-            }
-        }
+        isFound=weeklyAssignment.containsKey(branchID);
 
         if (!isFound) {
             Shift[][] shifts = new Shift[7][2];
@@ -40,17 +37,21 @@ public class ShiftController {
                     shifts[i][j]=null;
                 }
             }
-            Pair p = new Pair(branchID, shifts);
-            weeklyAssignment.add(p);
-            weeklyAssignmentsHistory.add(new Pair<>(branchID, new LinkedList<Shift[][]>()));
+            weeklyAssignment.put(branchID,shifts);
+            weeklyAssignmentsHistory.put(branchID,new LinkedList<Shift[][]>());
         }
     }
 
+
+
+    public void printWorkersAtShift(int branchID,LocalDate date,ShiftType shiftType){
+        getShift(branchID,date,shiftType).printWorkersAtShift();
+    }
+
     public void removeBranch(int branchID) {
-        for (Pair pair : weeklyAssignment) {
-            if ((int) pair.getKey() == branchID)
-                weeklyAssignment.remove(pair);
-        }
+        if(!weeklyAssignmentsHistory.get(branchID).contains(weeklyAssignment.get(branchID)))
+            weeklyAssignmentsHistory.get(branchID).add(weeklyAssignment.get(branchID));
+        weeklyAssignment.remove(branchID);
     }
 
     private List<Worker> createShiftAssignment(LocalDate date, ShiftType shiftType, int branchID, ShiftDemands shiftDemands, List<Worker> workerList, Worker branchManager) {
@@ -116,44 +117,55 @@ public class ShiftController {
         }
 
         Shift shift = new Shift(date, shiftType, shiftDemands, cashiers, storeKeepers, arrangers, guards, assistants, branchManager);
-        for (Pair pair : weeklyAssignment) {
-            if ((int) pair.getKey() == branchID) {
-                ((Shift[][]) (pair.getValue()))[dayAtWeek][typeOfShift] = shift;
-            }
-        }
+        weeklyAssignment.get(branchID)[dayAtWeek][typeOfShift]=shift;
         return workingList;
     }
 
     private void updateHistory(int branchID){
-        for(Pair pair: weeklyAssignment){
-            if((int)pair.getKey()==branchID){
-                for(Pair p: weeklyAssignmentsHistory){
-                    if((int)p.getKey()==branchID){
-                       ((List<Shift[][]>)p.getValue()).add((Shift[][]) pair.getValue());
-                       return ;
-                    }
+        for(int i=0;i<7;i++){
+            for(int j=0;j<2;j++){
+                if(weeklyAssignment.get(branchID)[i][j]!=null){
+                    if(!weeklyAssignmentsHistory.get(branchID).contains(weeklyAssignment.get(branchID)))
+                        weeklyAssignmentsHistory.get(branchID).add(weeklyAssignment.get(branchID));
+                    return;
                 }
             }
         }
     }
 
-    public void createWeeklyAssignment(int branchID, LocalDate startDate, ShiftDemands[][] shiftDemands,List<Worker>workers ,Worker branchManager) {
-        Boolean found = false;
-        for(Pair pair : weeklyAssignment){
-            if((int)pair.getKey()==branchID){
-                for(int i=0;i<7&&!found;i++){
-                    for(int j=0;j<2&&!found;j++){
-                        if(((Shift[][]) (pair.getValue()))[i][j]!=null){
-                            updateHistory(branchID);
-                            found = true;
-                        }
-                    }
-                }
-
-            }
-            if(found)
-                break;
+    public Shift getShift(int branchID,LocalDate date,ShiftType shiftType){
+        int shift=shiftType==ShiftType.Morning? 0 : 1;
+        for(int i=0;i<7;i++){
+                if(weeklyAssignment.get(branchID)[i][shift].getDate().equals(date))
+                    return weeklyAssignment.get(branchID)[i][shift];
         }
+        return null;
+    }
+
+    private Qualifications findWorkerJob(Worker worker,int branchID,LocalDate date,ShiftType shiftType){
+        return getShift(branchID,date,shiftType).findWorkerJob(worker);
+    }
+
+
+    public void workerReplacement(int branchID,LocalDate date1, ShiftType shiftType1,LocalDate date2 ,ShiftType shiftType2,Worker worker1,Worker worker2, Worker branchManager){
+        int type1=shiftType1==ShiftType.Morning? 0 : 1;
+        int type2=shiftType2==ShiftType.Morning? 0 : 1;
+        Qualifications qualifications1=findWorkerJob(worker1,branchID,date1,shiftType1);
+        Qualifications qualifications2=findWorkerJob(worker2,branchID,date2,shiftType2);
+        if(qualifications1==qualifications2){
+            Shift shift1=getShift(branchID,date1,shiftType1);
+            Shift shift2=getShift(branchID,date2,shiftType2);
+            shift1.getWorkers().get(qualifications1).remove(worker1);
+            shift2.getWorkers().get(qualifications2).add(worker1);
+            shift2.getWorkers().get(qualifications2).remove(worker2);
+            shift1.getWorkers().get(qualifications1).add(worker2);
+        }
+
+    }
+
+    public void createWeeklyAssignment(int branchID, LocalDate startDate, ShiftDemands[][] shiftDemands,List<Worker>workers ,Worker branchManager) {
+
+        updateHistory(branchID);
         ShiftType type;
         for(int i=0;i<7;i++){
             List<Worker>ableToWork=new LinkedList<>(workers);

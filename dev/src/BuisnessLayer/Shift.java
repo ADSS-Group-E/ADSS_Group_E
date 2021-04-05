@@ -1,57 +1,80 @@
 package BuisnessLayer;
 
 import java.time.LocalDate;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Objects;
 
 public class Shift {
     private LocalDate date;
     private ShiftType type;
     private ShiftDemands demands;
-    private List<Worker> cashiers;
-    private List<Worker> storeKeepers;
-    private List<Worker> arrangers;
-    private List<Worker> guards;
-    private List<Worker> assistants;
+    private EnumMap<Qualifications,List<Worker>> workers;
     private Worker shiftManager;
 
+    public EnumMap<Qualifications, List<Worker>> getWorkers() {
+        return workers;
+    }
+
+    public void printWorkersAtShift(){
+        int i=1;
+        System.out.println("The manager of this shift is: "+shiftManager.getFirstName()+" "+shiftManager.getLastName()+ "and his Id is:"+shiftManager.getID());
+        for(Qualifications qualifications : Qualifications.values()){
+            System.out.println("works as "+qualifications.name()+":");
+            for( Worker worker : workers.get(qualifications)){
+                System.out.println(i+") name:"+worker.getFirstName()+" "+worker.getLastName()+"ID:"+worker.getID());
+                i++;
+            }
+        }
+    }
+
+    public void setWorkers(EnumMap<Qualifications, List<Worker>> workers) {
+        this.workers = workers;
+    }
+
     public List<Worker> getCashiers() {
-        return cashiers;
+        return workers.get(Qualifications.Cashier);
     }
 
     public void setCashiers(List<Worker> cashiers) {
-        this.cashiers = cashiers;
+         workers.remove(Qualifications.Cashier);
+         workers.put(Qualifications.Cashier,cashiers);
     }
 
     public List<Worker> getStoreKeepers() {
-        return storeKeepers;
+        return workers.get(Qualifications.Storekeeper);
     }
 
     public void setStoreKeepers(List<Worker> storeKeepers) {
-        this.storeKeepers = storeKeepers;
+        workers.remove(Qualifications.Storekeeper);
+        workers.put(Qualifications.Storekeeper,storeKeepers);
     }
 
     public List<Worker> getArrangers() {
-        return arrangers;
+        return workers.get(Qualifications.Arranger);
     }
 
     public void setArrangers(List<Worker> arrangers) {
-        this.arrangers = arrangers;
+        workers.remove(Qualifications.Arranger);
+        workers.put(Qualifications.Arranger,arrangers);
     }
 
     public List<Worker> getGuards() {
-        return guards;
+        return workers.get(Qualifications.Guard);
     }
 
     public void setGuards(List<Worker> guards) {
-        this.guards = guards;
+        workers.remove(Qualifications.Guard);
+        workers.put(Qualifications.Guard,guards);
     }
 
     public List<Worker> getAssistants() {
-        return assistants;
+        return workers.get(Qualifications.Assistant);
     }
 
     public void setAssistants(List<Worker> assistants) {
-        this.assistants = assistants;
+        workers.remove(Qualifications.Assistant);
+        workers.put(Qualifications.Assistant,assistants);
     }
 
     public Worker getShiftManager() {
@@ -66,11 +89,11 @@ public class Shift {
         this.date = date;
         this.type = type;
         this.demands = demands;
-        this.cashiers = cashiers;
-        this.storeKeepers = storeKeepers;
-        this.arrangers = arrangers;
-        this.guards = guards;
-        this.assistants = assistants;
+        setArrangers(arrangers);
+        setAssistants(assistants);
+        setCashiers(cashiers);
+        setGuards(guards);
+        setStoreKeepers(storeKeepers);
         this.shiftManager = shiftManager;
     }
 
@@ -96,5 +119,14 @@ public class Shift {
 
     public void setDemands(ShiftDemands demands) {
         this.demands = demands;
+    }
+
+    public Qualifications findWorkerJob(Worker worker) {
+
+        for(Qualifications qualifications : Qualifications.values()){
+            if(workers.get(qualifications).contains(worker))
+                return qualifications;
+        }
+        return null;
     }
 }

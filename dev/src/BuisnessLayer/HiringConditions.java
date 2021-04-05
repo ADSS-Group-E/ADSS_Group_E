@@ -1,5 +1,7 @@
 package BuisnessLayer;
 
+import java.util.Objects;
+
 public class HiringConditions {
     private double salaryPerHour;
     private String fund;
@@ -31,6 +33,14 @@ public class HiringConditions {
 
     public int getVacationDays() {
         return vacationDays;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof HiringConditions)) return false;
+        HiringConditions that = (HiringConditions) o;
+        return Double.compare(that.getSalaryPerHour(), getSalaryPerHour()) == 0 && getVacationDays() == that.getVacationDays() && getSickLeavePerMonth() == that.getSickLeavePerMonth() && Objects.equals(getFund(), that.getFund());
     }
 
     public void setVacationDays(int vacationDays) {
