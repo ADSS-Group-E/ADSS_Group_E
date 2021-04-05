@@ -1,5 +1,6 @@
 package BusinessLayer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ProductController {
@@ -9,10 +10,30 @@ public class ProductController {
         return products.get(pid);
     }
 
-    // TODO add checks if product already exists
-    public void addProduct(int pid, String name, String storageLocation, String storeLocation, int amountInStorage, int amountInStore, String manufacturer, double buyingPrice, double sellingPrice, int minAmount){
-        products.put(pid, new Product(pid,name,storageLocation,storeLocation,amountInStorage,amountInStore,manufacturer,buyingPrice,sellingPrice,minAmount));
+    public void addProduct(int pid, String name, String storageLocation, String storeLocation, int amountInStorage, int amountInStore, String manufacturer, double buyingPrice, double sellingPrice, int minAmount) {
+        if (products.containsKey(pid)) {
+            throw new IllegalArgumentException("Product pid already exist");
+        } else {
+            products.put(pid, new Product(pid, name, storageLocation, storeLocation, amountInStorage, amountInStore, manufacturer, buyingPrice, sellingPrice, minAmount));
+        }
     }
 
-    // TODO add removeProduct
+    public void removeProduct (int pid) {
+        if (products.containsKey(pid)) {
+            products.remove(pid);
+        }
+        else {
+            throw new IllegalArgumentException("Product pid is not exist");
+        }
+    }
+
+    public boolean isExist(int pid) {
+        return products.containsKey(pid);
+    }
+
+    public ArrayList getList() {
+        ArrayList<Product> list = new ArrayList<Product>(products.values());
+        return list;
+    }
 }
+// check, remove, list
