@@ -69,7 +69,12 @@ public class Facade {
         return  null;
     }
 
+    public Shift getShift(int branchID,LocalDate date,ShiftType shiftType){
+        return shiftController.getShift(branchID,date,shiftType);
+    }
+
     public void createWeeklyAssignment(int branchID, LocalDate startDate, ShiftDemands[][] shiftDemands, List<Worker>workers , Worker shiftManager){
+
         shiftController.createWeeklyAssignment(branchID,startDate,shiftDemands,workers,shiftManager);
     }
 

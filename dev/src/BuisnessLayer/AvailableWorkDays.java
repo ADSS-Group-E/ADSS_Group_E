@@ -22,6 +22,13 @@ public class AvailableWorkDays {
         this.cantWork = cantWork;
     }
 
+    public AvailableWorkDays(Boolean[][] favoriteShifts, Boolean[][] cantWork) {
+        this.cantWork=new Boolean[7][2];
+        this.favoriteShifts=new Boolean[7][2];
+        this.favoriteShifts = favoriteShifts;
+        this.cantWork = cantWork;
+    }
+
     public AvailableWorkDays() {
         favoriteShifts=new Boolean[7][2];
         cantWork=new Boolean[7][2];

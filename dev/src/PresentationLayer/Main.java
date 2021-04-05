@@ -2,10 +2,7 @@ package PresentationLayer;
 
 import BuisnessLayer.*;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
@@ -22,50 +19,89 @@ public class Main {
         Facade facade=Facade.getInstance();
     }
 
-    //public static List<Qualifications>
-    
+    public static HiringConditions createHiringConditions(){
+        double salary;
+        String fund;
+        int vacationDays,sickLeavePerMonth;
+        System.out.println("Enter salary per hour:");
+        salary=reader.nextDouble();
+        System.out.println("Enter fund:");
+        fund=reader.next();
+        System.out.println("Enter the amount of vacation days per year");
+        vacationDays=reader.nextInt();
+        System.out.println("Enter the number of sick days per month");
+        sickLeavePerMonth=reader.nextInt();
+        return new HiringConditions(salary,fund,vacationDays,sickLeavePerMonth);
+    }
 
-
-    public  static  Worker initialWorker(){
-        String firstname,lastname,ID,bankName,branch,bankAccount;
+    public static LocalDate createDate(){
         int day,month,year;
-        System.out.println("Enter worker first name:");
-        firstname=reader.next();
-        System.out.println("Enter worker last name:");
-        lastname=reader.next();
-        System.out.println("Enter worker ID");
-        ID=reader.next();
+        System.out.println("Enter the day:");
+        day= reader.nextInt();
+        System.out.println("Enter the month:");
+        month= reader.nextInt();
+        System.out.println("Enter the year:");
+        year= reader.nextInt();
+        return LocalDate.of(day,month,year);
+    }
+
+    public static BankAccount createBankAccount(){
+        String bankName,branch,bankAccount;
         System.out.println("Enter bank name");
         bankName=reader.next();
         System.out.println("Enter bank branch number");
         branch= reader.next();
         System.out.println("Enter bank account number");
         bankAccount= reader.next();
-        System.out.println("enter worker start day (enter day then month then year separate with enters)");
-        day= reader.nextInt();
-        month=reader.nextInt();
-        year=reader.nextInt();
+        return new BankAccount(bankName,branch,bankAccount);
+    }
 
+    public static  List<Qualifications> createQualifications(){
+        char c;
+        List<Qualifications>qualifications=new LinkedList<>();
+        for(Qualifications q : Qualifications.values()){
+            do {
+                System.out.println("Do the worker is talented to work as " + q.name() + " Enter Y/N");
+                c = reader.next().charAt(0);
+            }while(c!='Y'&&c!='y'&&c!='n'&&c!='N');
+            if(c=='Y'||c=='y')
+                qualifications.add(q);
+        }
+        return qualifications;
+    }
 
+    public  static  Worker createWorker(){
+        String firstname,lastname,ID;
+        System.out.println("Enter worker first name:");
+        firstname=reader.next();
+        System.out.println("Enter worker last name:");
+        lastname=reader.next();
+        System.out.println("Enter worker ID");
+        ID=reader.next();
+        BankAccount bankAccount=createBankAccount();
+        LocalDate startWorkingDay=createDate();
+        HiringConditions hiringConditions=createHiringConditions();
+        AvailableWorkDays availableWorkDays= createAvailableWorkDays();
+        List<Qualifications>qualifications=createQualifications();
+        return new Worker(firstname,lastname,ID,bankAccount,startWorkingDay,hiringConditions,availableWorkDays,qualifications);
+    }
 
-
-
-
+    private static AvailableWorkDays createAvailableWorkDays() {
         return null;
     }
 
-    public static void initialSystem(Facade facade){
-        BankAccount bankAccount=new BankAccount("Mizrahi-Tefahot","234","0123456");
-        LocalDate date=LocalDate.of(2001,5,23);
-        HiringConditions hiringConditions=new HiringConditions(10000,"Meitav-Dash",10,20);
-        List<Qualifications>qualifications=new LinkedList<>();
-        qualifications.add(Qualifications.BranchManager);
-        Worker branchManager=new Worker("Yoad","Ohayon","323079103",bankAccount,date,hiringConditions,new AvailableWorkDays(),qualifications);
-        Worker activeHRD=new Worker("Omer","Shitrit","208060210",bankAccount,date,hiringConditions,new AvailableWorkDays(),qualifications);
-        Worker worker1=new Worker("Guy","Lerer","2083678543",bankAccount,date,hiringConditions,new AvailableWorkDays(),qualifications);
+    public static void initialSystem(){
+        Worker branchManager=createWorker();
+        Worker activeHRD=createWorker();
+        Worker worker1=createWorker();
+        Worker worker2=createWorker();
+        Worker worker3=createWorker();
+        Worker worker4=createWorker();
         facade.addBranch(1,branchManager,activeHRD);
         facade.addWorker(worker1,1);
-
+        facade.addWorker(worker2,1);
+        facade.addWorker(worker3,1);
+        facade.addWorker(worker4,1);
 
 
     }
