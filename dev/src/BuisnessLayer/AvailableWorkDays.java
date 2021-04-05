@@ -39,6 +39,13 @@ public class AvailableWorkDays {
             }
         }
     }
+    public AvailableWorkDays(Boolean[][] favoriteShifts, Boolean[][] cantWork) {
+     /*   this.cantWork=new Boolean[7][2];
+        this.favoriteShifts=new Boolean[7][2];*/
+        this.favoriteShifts = favoriteShifts;
+        this.cantWork = cantWork;
+    }
+
 
     @Override
     public String toString() {
