@@ -65,11 +65,16 @@ public class Facade {
         shiftController.removeBranch(branchID);
     }
 
-    public List<Shift> getHistory(){
-        return  null;
+    public List<Shift> getHistory(int branchID){
+        return  branchController.getBranch(branchID).getWeeklyAssignmentsHistory();
+    }
+
+    public Shift getShift(int branchID,LocalDate date,ShiftType shiftType){
+        return shiftController.getShift(branchID,date,shiftType);
     }
 
     public void createWeeklyAssignment(int branchID, LocalDate startDate, ShiftDemands[][] shiftDemands, List<Worker>workers , Worker shiftManager){
+
         shiftController.createWeeklyAssignment(branchID,startDate,shiftDemands,workers,shiftManager);
     }
 
