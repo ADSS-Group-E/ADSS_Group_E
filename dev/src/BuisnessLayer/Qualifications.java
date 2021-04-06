@@ -10,4 +10,6 @@ public enum Qualifications {
     Assistant,
     ShiftManager;
 
+
+
 }

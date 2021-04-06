@@ -3,6 +3,7 @@ package BuisnessLayer;
 import java.util.Date;
 
 public class ShiftDemands {
+
     private int cashierAmount;
     private int storeKeeperAmount;
     private int arrangerAmount;

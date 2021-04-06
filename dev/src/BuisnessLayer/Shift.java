@@ -18,7 +18,10 @@ public class Shift {
 
     public void printWorkersAtShift(){
         int i=1;
+        System.out.println("Date: "+ date);
+        System.out.println("Shift Type "+ type.name());
         System.out.println("The manager of this shift is: "+shiftManager.getFirstName()+" "+shiftManager.getLastName()+ "and his Id is:"+shiftManager.getID());
+        System.out.println("The workers of this shift are: ");
         for(Qualifications qualifications : Qualifications.values()){
             System.out.println("works as "+qualifications.name()+":");
             for( Worker worker : workers.get(qualifications)){

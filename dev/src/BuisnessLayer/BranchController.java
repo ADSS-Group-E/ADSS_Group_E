@@ -25,7 +25,27 @@ public class BranchController {
         Branch branch=getBranch(branchID);
         return branch.FindWorker(workerID);
     }
+    public Worker findWorkerByID(String ID){
+        Worker w=null;
+        for(Branch branch : branchList){
+            w = findWorker(branch.getBranchID(),ID);
+            if(w!=null)
+                break;
+        }
+        return w;
+    }
 
+    public Branch findBranchByWorker(String WorkerID){
+        Worker w=null;
+        Branch branchByWorker=null;
+        for(Branch branch : branchList){
+            w = findWorker(branch.getBranchID(),WorkerID);
+            if(w!=null){
+                branchByWorker = branch;
+                break;}
+        }
+        return branchByWorker;
+    }
     public void showWorkers(int branchID){
         getBranch(branchID).showWorkers();
     }
@@ -85,5 +105,11 @@ public class BranchController {
             getBranch(branchID).getFormerWorkers().add(worker);
         }
     }
+    public List<Qualifications> getWorkerQualifications(Worker worker){
+        return worker.getQualifications();
+
+    }
+
+
 
 }

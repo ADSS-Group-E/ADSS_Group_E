@@ -54,4 +54,14 @@ public class HiringConditions {
     public void setSickLeavePerMonth(int sickLeavePerMonth) {
         this.sickLeavePerMonth = sickLeavePerMonth;
     }
+
+    @Override
+    public String toString() {
+        return "HiringConditions{" +
+                "salaryPerHour=" + salaryPerHour +
+                ", fund='" + fund + '\'' +
+                ", vacationDays=" + vacationDays +
+                ", sickLeavePerMonth=" + sickLeavePerMonth +
+                '}';
+    }
 }

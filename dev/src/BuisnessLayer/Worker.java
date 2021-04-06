@@ -99,4 +99,17 @@ public class Worker {
         return Objects.equals(getFirstName(), worker.getFirstName()) && Objects.equals(getLastName(), worker.getLastName()) && Objects.equals(getID(), worker.getID()) && Objects.equals(getBankAccount(), worker.getBankAccount()) && Objects.equals(getStartWorkingDay(), worker.getStartWorkingDay()) && Objects.equals(getHiringConditions(), worker.getHiringConditions()) && Objects.equals(getQualifications(), worker.getQualifications());
     }
 
+    @Override
+    public String toString() {
+        return "Worker{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", ID='" + ID + '\'' +
+                ", bankAccount=" + bankAccount +
+                ", startWorkingDay=" + startWorkingDay +
+                ", hiringConditions=" + hiringConditions +
+                ", availableWorkDays=" + availableWorkDays +
+                ", qualifications=" + qualifications +
+                '}';
+    }
 }

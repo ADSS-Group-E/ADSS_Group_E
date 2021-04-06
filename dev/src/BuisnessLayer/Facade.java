@@ -73,26 +73,18 @@ public class Facade {
         shiftController.createWeeklyAssignment(branchID,startDate,shiftDemands,workers,shiftManager);
     }
 
-    public void workerReplacement(int branchID,LocalDate date1, ShiftType shiftType1,LocalDate date2 ,ShiftType shiftType2) {
-        int worker1SerialNumber,worker2SerialNumber;
-        Scanner reader=new Scanner(System.in);
-        System.out.println("Workers at first shift:");
-        printWorkersAtShift(branchID,date1,shiftType1);
-        System.out.println("Enter the worker's serial number you want to replace");
-        worker1SerialNumber=reader.nextInt();
-        System.out.println("Workers at second shift:");
-        printWorkersAtShift(branchID,date1,shiftType2);
-        System.out.println("Enter the worker's serial number you want to replace");
-        worker2SerialNumber=reader.nextInt();
-        Worker branchManager=branchController.getBranch(branchID).getBranchManager();
-        Worker worker1= branchController.getBranch(branchID).getCurrentWorkersList().get(worker1SerialNumber-1);
-        Worker worker2=branchController.getBranch(branchID).getCurrentWorkersList().get(worker2SerialNumber-1);
+    public void workerReplacement(int branchID,LocalDate date1, ShiftType shiftType1,LocalDate date2 ,ShiftType shiftType2,Worker worker1,Worker worker2,Worker branchManager) {
         shiftController.workerReplacement(branchID,date1,shiftType1,date2,shiftType2,worker1,worker2,branchManager);
     }
 
     public Worker findWorker(int branchID,String workerID){
         return branchController.findWorker(branchID,workerID);
     }
+
+    public Worker findWorkerByID(String workerID){
+        return branchController.findWorkerByID(workerID);
+    }
+
 
     public void printWorkersAtShift(int branchID,LocalDate date,ShiftType shiftType){
         shiftController.printWorkersAtShift(branchID,date,shiftType);
@@ -102,4 +94,14 @@ public class Facade {
         branchController.showWorkers(branchID);
     }
 
+    public List<Qualifications> getWorkerQualifications(Worker worker) {
+        return branchController.getWorkerQualifications(worker);
+    }
+    public Shift getShift(int branchID,LocalDate date, ShiftType shiftType){
+        return shiftController.getShift(branchID,date,shiftType);
+    }
+
+    public void printWorker(Worker worker){
+        System.out.println(worker.toString());
+    }
 }
