@@ -1,6 +1,9 @@
 package BusinessLayer;
 
 import PresentationLayer.ProductDTO;
+import dev.src.BusinessLayer.Discount;
+
+import java.time.format.DateTimeFormatter;
 
 public class Product {
     private int pid;
@@ -13,6 +16,9 @@ public class Product {
     private double buyingPrice;
     private double sellingPrice;
     private int minAmount;
+    private BusinessLayer.Category category;
+    private BusinessLayer.Category subCategory;
+    private BusinessLayer.Category subSubCategory;
 
     public int getPid() {
         return pid;
@@ -54,7 +60,31 @@ public class Product {
         return minAmount;
     }
 
-    public Product(int pid, String name, String storageLocation, String storeLocation, int amountInStorage, int amountInStore, String manufacturer, double buyingPrice, double sellingPrice, int minAmount) {
+    public BusinessLayer.Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(BusinessLayer.Category category) {
+        this.category = category;
+    }
+
+    public BusinessLayer.Category getSubCategory() {
+        return subCategory;
+    }
+
+    public void setSubCategory(BusinessLayer.Category subCategory) {
+        this.subCategory = subCategory;
+    }
+
+    public BusinessLayer.Category getSubSubCategory() {
+        return subSubCategory;
+    }
+
+    public void setSubSubCategory(BusinessLayer.Category subSubCategory) {
+        this.subSubCategory = subSubCategory;
+    }
+
+    public Product(int pid, String name, String storageLocation, String storeLocation, int amountInStorage, int amountInStore, String manufacturer, double buyingPrice, double sellingPrice, int minAmount, BusinessLayer.Category category, BusinessLayer.Category subCategory, BusinessLayer.Category subSubCategory) {
         this.pid = pid;
         this.name = name;
         this.storageLocation = storageLocation;
@@ -65,6 +95,9 @@ public class Product {
         this.buyingPrice = buyingPrice;
         this.sellingPrice = sellingPrice;
         this.minAmount = minAmount;
+        this.category = category;
+        this.subCategory = subCategory;
+        this.subSubCategory = subSubCategory;
     }
 
     public Product(ProductDTO other) {
@@ -78,5 +111,10 @@ public class Product {
         this.buyingPrice = other.getBuyingPrice();
         this.sellingPrice = other.getSellingPrice();
         this.minAmount = other.getMinAmount();
+        // TODO add categories to ProductDTO (?)
+    }
+
+    public void setDiscount(int did, String name, double discountPercent, DateTimeFormatter startDate, DateTimeFormatter endDate) {
+        Discount dis = new Discount(did, name, discountPercent, startDate, endDate);
     }
 }
