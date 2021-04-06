@@ -1,8 +1,8 @@
-package BusinessLayer;
+package PresentationLayer;
 
-import PresentationLayer.ProductDTO;
+import BusinessLayer.Product;
 
-public class Product {
+public class ProductDTO {
     private int pid;
     private String name;
     private String storageLocation;
@@ -54,7 +54,7 @@ public class Product {
         return minAmount;
     }
 
-    public Product(int pid, String name, String storageLocation, String storeLocation, int amountInStorage, int amountInStore, String manufacturer, double buyingPrice, double sellingPrice, int minAmount) {
+    public ProductDTO(int pid, String name, String storageLocation, String storeLocation, int amountInStorage, int amountInStore, String manufacturer, double buyingPrice, double sellingPrice, int minAmount) {
         this.pid = pid;
         this.name = name;
         this.storageLocation = storageLocation;
@@ -67,7 +67,7 @@ public class Product {
         this.minAmount = minAmount;
     }
 
-    public Product(ProductDTO other) {
+    public ProductDTO(Product other) {
         this.pid = other.getPid();
         this.name = other.getName();
         this.storageLocation = other.getStorageLocation();
@@ -78,5 +78,18 @@ public class Product {
         this.buyingPrice = other.getBuyingPrice();
         this.sellingPrice = other.getSellingPrice();
         this.minAmount = other.getMinAmount();
+    }
+
+    public String toString(){
+        return  "PID:                " + pid + "\n" +
+                "Name:               " + name + "\n" +
+                "Storage Location:   " + storageLocation + "\n" +
+                "Store Location:     " + storeLocation + "\n" +
+                "Amount In Storage:  " + amountInStorage + "\n" +
+                "Amount In Store:    " + amountInStore + "\n" +
+                "Manufacturer:       " + manufacturer + "\n" +
+                "Buying Price:       " + buyingPrice + "\n" +
+                "Selling Price:      " + sellingPrice + "\n" +
+                "Min Amount:         " + minAmount;
     }
 }

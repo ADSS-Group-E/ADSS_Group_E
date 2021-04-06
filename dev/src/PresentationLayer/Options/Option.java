@@ -1,12 +1,10 @@
-package PresentationLayer;
+package PresentationLayer.Options;
 
 public class Option {
-    int choiceNum;
     String description;
     Runnable runOption;
 
-    public Option(int choiceNum, String description, Runnable runOption) {
-        this.choiceNum = choiceNum;
+    public Option(String description, Runnable runOption) {
         this.description = description;
         this.runOption = runOption;
     }

@@ -6,8 +6,20 @@ import java.util.HashMap;
 public class ProductController {
     private HashMap<Integer,Product> products;
 
+    public ProductController() {
+        this.products = new HashMap<>();
+    }
+
     public Product getProduct(int pid){
         return products.get(pid);
+    }
+
+    public void addProduct(Product product){
+        if (products.containsKey(product.getPid())) {
+            throw new IllegalArgumentException("Product pid already exist");
+        } else {
+            products.put(product.getPid(), product);
+        }
     }
 
     public void addProduct(int pid, String name, String storageLocation, String storeLocation, int amountInStorage, int amountInStore, String manufacturer, double buyingPrice, double sellingPrice, int minAmount) {
