@@ -2,8 +2,7 @@ package PresentationLayer;
 
 
 import BusinessLayer.Facade;
-import PresentationLayer.Options.MainOptionsMenu;
-import PresentationLayer.Options.ProductsOptionsMenu;
+import PresentationLayer.Options.*;
 
 import java.sql.Time;
 import java.time.LocalDate;
@@ -17,6 +16,9 @@ public class CommandLineInterface {
     private Facade facade;
     private MainOptionsMenu mainOptionsMenu;
     private ProductsOptionsMenu productsOptionsMenu;
+    private CategoriesOptionsMenu categoriesOptionsMenu;
+    private DiscountsOptionsMenu discountsOptionsMenu;
+    private ReportsOptionsMenu reportsOptionsMenu;
 
     public Facade getFacade() {
         return facade;
@@ -30,10 +32,25 @@ public class CommandLineInterface {
         return productsOptionsMenu;
     }
 
+    public CategoriesOptionsMenu getCategoriesOptionsMenu() {
+        return categoriesOptionsMenu;
+    }
+
+    public DiscountsOptionsMenu getDiscountsOptionsMenu() {
+        return discountsOptionsMenu;
+    }
+
+    public ReportsOptionsMenu getReportsOptionsMenu() {
+        return reportsOptionsMenu;
+    }
+
     public CommandLineInterface() {
         facade = new Facade();
         mainOptionsMenu= new MainOptionsMenu(this);
         productsOptionsMenu = new ProductsOptionsMenu(this);
+        categoriesOptionsMenu = new CategoriesOptionsMenu(this);
+        discountsOptionsMenu = new DiscountsOptionsMenu(this);
+        reportsOptionsMenu = new ReportsOptionsMenu(this);
     }
 
     // Loads sample data because there is no data access layer in this part of the project.

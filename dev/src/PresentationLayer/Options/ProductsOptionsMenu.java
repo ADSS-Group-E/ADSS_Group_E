@@ -49,6 +49,6 @@ public class ProductsOptionsMenu extends OptionsMenu{
 
         // TODO AddProduct, AddItemTo, remove
         //
-        options.put(i++, new Option( "Back",() -> System.out.println("Going back.")));
+        options.put(i, new Option( "Back",() -> System.out.println("Going back.")));
     }
 }
