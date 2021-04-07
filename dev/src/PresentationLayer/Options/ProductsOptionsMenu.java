@@ -3,6 +3,7 @@ package PresentationLayer.Options;
 import PresentationLayer.CommandLineInterface;
 import PresentationLayer.ProductDTO;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ProductsOptionsMenu extends OptionsMenu{
@@ -16,7 +17,12 @@ public class ProductsOptionsMenu extends OptionsMenu{
             ProductDTO product = parentCLI.getFacade().getProduct(pid);
             System.out.println(product);
         }));
-        options.put(2, new Option( "Test product two",() -> System.out.println("Test product two success!")));
+        options.put(2, new Option( "List all products",() -> {
+
+            ArrayList<ProductDTO> DTOlist = parentCLI.getFacade().getProductList();
+            System.out.printf("%-10s %s%n", "PID","Name");
+            DTOlist.forEach((DTO)->System.out.printf("%-10s %s%n", DTO.getPid(),DTO.getName()));
+        }));
         options.put(3, new Option( "Back",() -> System.out.println("Going back.")));
     }
 }

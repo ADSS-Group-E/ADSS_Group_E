@@ -16,9 +16,9 @@ public class Product {
     private double buyingPrice;
     private double sellingPrice;
     private int minAmount;
-    private BusinessLayer.Category category;
-    private BusinessLayer.Category subCategory;
-    private BusinessLayer.Category subSubCategory;
+    private Category category;
+    private Category subCategory;
+    private Category subSubCategory;
 
     public int getPid() {
         return pid;

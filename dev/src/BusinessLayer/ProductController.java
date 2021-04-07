@@ -22,11 +22,11 @@ public class ProductController {
         }
     }
 
-    public void addProduct(int pid, String name, String storageLocation, String storeLocation, int amountInStorage, int amountInStore, String manufacturer, double buyingPrice, double sellingPrice, int minAmount) {
+    public void addProduct(int pid, String name, String storageLocation, String storeLocation, int amountInStorage, int amountInStore, String manufacturer, double buyingPrice, double sellingPrice, int minAmount, Category category, Category subCategory, Category subSubCategory) {
         if (products.containsKey(pid)) {
             throw new IllegalArgumentException("Product pid already exist");
         } else {
-            products.put(pid, new Product(pid, name, storageLocation, storeLocation, amountInStorage, amountInStore, manufacturer, buyingPrice, sellingPrice, minAmount));
+            products.put(pid, new Product(pid, name, storageLocation, storeLocation, amountInStorage, amountInStore, manufacturer, buyingPrice, sellingPrice, minAmount, category, subCategory, subSubCategory));
         }
     }
 
