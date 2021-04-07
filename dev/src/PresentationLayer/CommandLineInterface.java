@@ -36,6 +36,7 @@ public class CommandLineInterface {
         productsOptionsMenu = new ProductsOptionsMenu(this);
     }
 
+    // Loads sample data because there is no data access layer in this part of the project.
     public void loadSampleData(){
         facade.addProduct(new ProductDTO(1, "Test Juice", "AB01","B13", "Test Company",10.5, 10.1, 5));
         facade.addItemToStore(1,1, LocalDateTime.of(2020,4,24,16,0));
