@@ -2,6 +2,7 @@ package SupplierModule.ServiceLayer;
 
 import SupplierModule.BusinessLayer.SupplierController;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,8 +27,12 @@ class ServiceController {
                 regCostumer, minPrice, discountSteps);
     }
 
-    public void createOrder(int supplierNum, boolean needsDelivery, boolean constantDelivery, ArrayList<String[]> items) {
-        supplierController.createOrder(supplierNum, needsDelivery, constantDelivery, items);
+    public int createOrder(int supplierNum, boolean needsDelivery, boolean constantDelivery, ArrayList<String[]> items) {
+        return supplierController.createOrder(supplierNum, needsDelivery, constantDelivery, items);
+    }
+
+    public int getMaxDiscount() {
+        return supplierController.getMaxDiscount();
     }
 
     ArrayList<String[]> getSuppliersInfo() {
@@ -49,6 +54,10 @@ class ServiceController {
 
     public boolean updateItemQuantity (int supplierNum, int itemNum, int quantity) {
         return supplierController.updateItemQuantity(supplierNum, itemNum, quantity);
+    }
+
+    public boolean contains(String name, ArrayList<String[]> list, int nameIndex) {
+        return supplierController.contains(name, list, nameIndex);
     }
 
     void initialize() {

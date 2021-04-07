@@ -56,5 +56,14 @@ class Supplier {
     public ArrayList<Order> getOrders() { return orders; }
 
     public List<Item> getItems() { return items; }
+
+    public int calcPrice(Order order) {
+        if (quantityWriter == null) {
+            return order.getPrice();
+        }
+        else {
+            return quantityWriter.calcPrice(order.getPrice());
+        }
+    }
 }
 

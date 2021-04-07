@@ -2,6 +2,7 @@ package SupplierModule.BusinessLayer;
 
 import SupplierModule.DataAccessLayer.DataController;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -11,6 +12,7 @@ import java.util.stream.Stream;
 public class SupplierController {
     private ArrayList<Supplier> suppliers;
     private DataController data;
+    private final int maxDiscount = 100;
 
     public SupplierController() {
         suppliers = new ArrayList<>();
@@ -53,12 +55,14 @@ public class SupplierController {
         suppliers.add(new Supplier(name, companyNumber, paymentMethod, bankAccount, Arrays.asList(realItems), Arrays.asList(realContacts), writer));
     }
 
-    public void createOrder(int supplierNum, boolean needsDelivery, boolean constantDelivery, ArrayList<String[]> items){
+    public int createOrder(int supplierNum, boolean needsDelivery, boolean constantDelivery, ArrayList<String[]> items){
         Item[] realItems = new Item[items.size()];
         for(int i = 0; i < realItems.length; i++){
             realItems[i] = new Item(items.get(i)[0], Integer.parseInt(items.get(i)[1]), Integer.parseInt(items.get(i)[2]), Integer.parseInt((items.get(i)[3])));
         }
-        suppliers.get(supplierNum).addOrder(new Order(constantDelivery, needsDelivery, Arrays.asList(realItems)));
+        Order order = new Order(constantDelivery, needsDelivery, Arrays.asList(realItems));
+        suppliers.get(supplierNum).addOrder(order);
+        return suppliers.get(supplierNum).calcPrice(order);
     }
 
     public ArrayList<String[]> getRegularOrders() {
@@ -94,6 +98,14 @@ public class SupplierController {
         return true;
     }
 
+    public boolean contains(String name, ArrayList<String[]> list, int nameIndex) {
+        for (String[] object : list) {
+            if (object[nameIndex].equalsIgnoreCase(name))
+                return true;
+        }
+        return false;
+    }
+
     public ArrayList<String> getItemsFromSupplier(int supplierNum) {
         if (supplierNum >= suppliers.size() || supplierNum < 0) return null;
         ArrayList<String> regOrders = new ArrayList<>();
@@ -102,6 +114,10 @@ public class SupplierController {
             regOrders.add(item.toString());
         }
         return regOrders;
+    }
+
+    public int getMaxDiscount() {
+        return maxDiscount;
     }
 }
 

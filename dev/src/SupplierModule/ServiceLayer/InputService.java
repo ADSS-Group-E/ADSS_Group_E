@@ -42,6 +42,8 @@ public final class InputService {//The class controls the input received from th
             try {
                 OutputService.getInstance().print(message);
                 nextInt = Integer.parseInt(scanner.nextLine());
+                if (nextInt < 0)
+                    throw new InputMismatchException("Number was negative");
                 retry = false;
             } catch (Exception e) {
                 OutputService.getInstance().println("Please try again.");
