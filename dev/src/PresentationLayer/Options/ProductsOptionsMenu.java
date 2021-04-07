@@ -23,6 +23,9 @@ public class ProductsOptionsMenu extends OptionsMenu{
             System.out.printf("%-10s %s%n", "PID","Name");
             DTOlist.forEach((DTO)->System.out.printf("%-10s %s%n", DTO.getPid(),DTO.getName()));
         }));
+
+        // TODO AddProduct
+        //
         options.put(3, new Option( "Back",() -> System.out.println("Going back.")));
     }
 }

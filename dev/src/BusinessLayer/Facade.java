@@ -2,6 +2,7 @@ package BusinessLayer;
 
 import PresentationLayer.ProductDTO;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Facade {
@@ -29,5 +30,13 @@ public class Facade {
         ArrayList<Product> productList = pCont.getList();
         productList.forEach((product)-> DTOlist.add(new ProductDTO(product)));
         return DTOlist;
+    }
+
+    public void addItemToStore(int pid, int id, LocalDateTime expiration){
+        pCont.getProduct(pid).addItemToStore(id,expiration);
+    }
+
+    public void addItemToStorage(int pid, int id, LocalDateTime expiration){
+        pCont.getProduct(pid).addItemToStorage(id,expiration);
     }
 }

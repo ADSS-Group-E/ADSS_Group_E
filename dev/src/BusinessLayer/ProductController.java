@@ -26,7 +26,7 @@ public class ProductController {
         if (products.containsKey(pid)) {
             throw new IllegalArgumentException("Product pid already exist");
         } else {
-            products.put(pid, new Product(pid, name, storageLocation, storeLocation, amountInStorage, amountInStore, manufacturer, buyingPrice, sellingPrice, minAmount, category, subCategory, subSubCategory));
+            products.put(pid, new Product(pid, name, storageLocation, storeLocation, manufacturer, buyingPrice, sellingPrice, minAmount, category, subCategory, subSubCategory));
         }
     }
 

@@ -5,6 +5,10 @@ import BusinessLayer.Facade;
 import PresentationLayer.Options.MainOptionsMenu;
 import PresentationLayer.Options.ProductsOptionsMenu;
 
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Scanner;
 
 public class CommandLineInterface {
@@ -33,7 +37,9 @@ public class CommandLineInterface {
     }
 
     public void loadSampleData(){
-        facade.addProduct(new ProductDTO(1, "Test Juice", "AB01","B13",42,42,"Test Company",10.5, 10.1, 5));
+        facade.addProduct(new ProductDTO(1, "Test Juice", "AB01","B13", "Test Company",10.5, 10.1, 5));
+        facade.addItemToStore(1,1, LocalDateTime.of(2020,4,24,16,0));
+        facade.addItemToStorage(1,2, LocalDateTime.of(2020,4,25,16,0));
     }
 //    public ProductDTO(int pid, String name, String storageLocation, String storeLocation, int amountInStorage, int amountInStore, String manufacturer, double buyingPrice, double sellingPrice, int minAmount) {
     public void run() {

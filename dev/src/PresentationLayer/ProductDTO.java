@@ -54,13 +54,13 @@ public class ProductDTO {
         return minAmount;
     }
 
-    public ProductDTO(int pid, String name, String storageLocation, String storeLocation, int amountInStorage, int amountInStore, String manufacturer, double buyingPrice, double sellingPrice, int minAmount) {
+    public ProductDTO(int pid, String name, String storageLocation, String storeLocation, String manufacturer, double buyingPrice, double sellingPrice, int minAmount) {
         this.pid = pid;
         this.name = name;
         this.storageLocation = storageLocation;
         this.storeLocation = storeLocation;
-        this.amountInStorage = amountInStorage;
-        this.amountInStore = amountInStore;
+        this.amountInStorage = 0;
+        this.amountInStore = 0;
         this.manufacturer = manufacturer;
         this.buyingPrice = buyingPrice;
         this.sellingPrice = sellingPrice;
