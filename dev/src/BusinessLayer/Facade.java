@@ -1,5 +1,6 @@
 package BusinessLayer;
 
+import PresentationLayer.DiscountDTO;
 import PresentationLayer.ProductDTO;
 
 import java.time.LocalDateTime;
@@ -10,11 +11,13 @@ public class Facade {
     private ProductController pCont;
     private ReportController rCont;
     private CategoryController cCont;
+    private DiscountController dCont;
 
     public Facade() {
         pCont = new ProductController();
         rCont = new ReportController();
         cCont = new CategoryController();
+        dCont = new DiscountController();
     }
 
     public void addProduct(ProductDTO newProduct){
@@ -52,5 +55,24 @@ public class Facade {
 
         Report report = rCont.generateStockReport(new ArrayList<>(products));
         return report.toString();
+    }
+
+    public DiscountDTO getDiscount(int did){
+        return new DiscountDTO(dCont.getDiscount(did));
+    }
+
+    public void addDiscount(DiscountDTO discountDTO){
+        ArrayList<Product> products = new ArrayList<>();
+        discountDTO.getPids().forEach((pid)->{
+            products.add(pCont.getProduct(pid));
+        });
+
+        if (discountDTO.getType().equals("Buying")){
+            dCont.addDiscount(Discount.DiscountForBuying(discountDTO,products));
+        }
+        else
+        {
+            dCont.addDiscount(Discount.DiscountForSelling(discountDTO,products));
+        }
     }
 }

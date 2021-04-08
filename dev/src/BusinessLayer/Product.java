@@ -1,10 +1,8 @@
 package BusinessLayer;
 
 import PresentationLayer.ProductDTO;
-import dev.src.BusinessLayer.Discount;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Product {
@@ -22,6 +20,8 @@ public class Product {
     private Category subSubCategory;
     private ArrayList<Item> storage;
     private ArrayList<Item> store;
+    private Discount buyingDiscount;
+    private Discount sellingDiscount;
 
     public int getPid() {
         return pid;
@@ -101,6 +101,7 @@ public class Product {
         this.subSubCategory = subSubCategory;
         this.storage = new ArrayList<>();
         this.store = new ArrayList<>();
+        this.buyingDiscount = null;
     }
 
     public Product(ProductDTO other) {
@@ -126,8 +127,38 @@ public class Product {
         storage.add(new Item(id,expiration));
     }
 
-    public void setDiscount(int did, String name, double discountPercent, LocalDateTime startDate, LocalDateTime endDate) {
-        Discount dis = new Discount(did, name, discountPercent, startDate, endDate);
+    public void setBuyingDiscount(Discount buyingDiscount) {
+        // Remove the listing from the discount object of the previous discount
+        if (this.buyingDiscount != null){
+            this.buyingDiscount.removeProductFromDiscount(this);
+        }
+        this.buyingDiscount = buyingDiscount;
+    }
+
+    public void setSellingDiscount(Discount sellingDiscount) {
+        // Remove the listing from the discount object of the previous discount
+        if (this.sellingDiscount != null){
+            this.sellingDiscount.removeProductFromDiscount(this);
+        }
+        this.sellingDiscount = sellingDiscount;
+    }
+
+    public double getBuyingPriceAfterDiscount(){
+        if (buyingDiscount !=null && buyingDiscount.discountValid()){
+            return (1- buyingDiscount.getDiscountPercent()) * buyingPrice;
+        }
+        else{
+            return buyingPrice;
+        }
+    }
+
+    public double getSellingPriceAfterDiscount(){
+        if (sellingDiscount !=null && sellingDiscount.discountValid()){
+            return (1- sellingDiscount.getDiscountPercent()) * sellingPrice;
+        }
+        else{
+            return sellingPrice;
+        }
     }
 
     public boolean isInCategory(Category checkCategory){

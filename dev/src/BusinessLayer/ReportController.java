@@ -5,12 +5,12 @@ import java.util.HashMap;
 
 public class ReportController {
     private HashMap<Integer,Report> reports;
-    private int rid;
+    private int nextRid;
 
     public StockReport generateStockReport(ArrayList<Product> products){
-        StockReport report = new StockReport(rid, products);
-        reports.put(rid,report);
-        rid++;
+        StockReport report = new StockReport(nextRid, products);
+        reports.put(nextRid,report);
+        nextRid++;
         return report;
     }
 
@@ -19,7 +19,7 @@ public class ReportController {
     }
 
     public ReportController() {
-        this.rid = 1;
+        this.nextRid = 1;
         reports = new HashMap<>();
     }
 }

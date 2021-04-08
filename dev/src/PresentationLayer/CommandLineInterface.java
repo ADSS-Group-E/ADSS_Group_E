@@ -7,8 +7,7 @@ import PresentationLayer.Options.*;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.Scanner;
+import java.util.*;
 
 public class CommandLineInterface {
 
@@ -56,8 +55,15 @@ public class CommandLineInterface {
     // Loads sample data because there is no data access layer in this part of the project.
     public void loadSampleData(){
         facade.addProduct(new ProductDTO(1, "Test Juice", "AB01","B13", "Test Company",10.5, 10.1, 5));
-        facade.addItemToStore(1,1, LocalDateTime.of(2020,4,24,16,0));
-        facade.addItemToStorage(1,2, LocalDateTime.of(2020,4,25,16,0));
+        facade.addItemToStore(1,1, LocalDateTime.of(2021,4,24,16,0));
+        facade.addItemToStorage(1,2, LocalDateTime.of(2021,4,25,16,0));
+        ArrayList<Integer> pids = new ArrayList<>();
+        pids.add(1);
+        facade.addDiscount(new DiscountDTO(1,"Test Spring Discount", 0.1,
+                LocalDateTime.of(2021,4,1,16,0),
+                LocalDateTime.of(2021,5,1,16,0),
+                pids,
+                "Selling"));
     }
 //    public ProductDTO(int pid, String name, String storageLocation, String storeLocation, int amountInStorage, int amountInStore, String manufacturer, double buyingPrice, double sellingPrice, int minAmount) {
     public void run() {
