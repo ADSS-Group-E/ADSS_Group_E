@@ -126,7 +126,7 @@ public class Product {
         storage.add(new Item(id,expiration));
     }
 
-    public void setDiscount(int did, String name, double discountPercent, DateTimeFormatter startDate, DateTimeFormatter endDate) {
+    public void setDiscount(int did, String name, double discountPercent, LocalDateTime startDate, LocalDateTime endDate) {
         Discount dis = new Discount(did, name, discountPercent, startDate, endDate);
     }
 }
