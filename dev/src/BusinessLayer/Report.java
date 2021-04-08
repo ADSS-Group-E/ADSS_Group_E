@@ -3,6 +3,7 @@ package BusinessLayer;
 import sun.reflect.generics.tree.Tree;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public abstract class Report {
@@ -17,7 +18,7 @@ public abstract class Report {
     }
 
     public String toString(){
-        return headerRow() + "\n" + String.join("\n",records);
+        return "RID: " + rid + "     Created: " + created.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")) + "\n" + headerRow() + "\n" + String.join("\n",records);
     }
 
     protected abstract String headerRow();
