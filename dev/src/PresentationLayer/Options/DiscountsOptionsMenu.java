@@ -4,6 +4,7 @@ import PresentationLayer.CommandLineInterface;
 import PresentationLayer.DiscountDTO;
 import PresentationLayer.ProductDTO;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class DiscountsOptionsMenu extends OptionsMenu{
@@ -20,7 +21,9 @@ public class DiscountsOptionsMenu extends OptionsMenu{
         }));
 
         options.put(i++, new Option("List all discounts", () -> {
-
+            ArrayList<DiscountDTO> DTOlist = parentCLI.getFacade().getDiscountList();
+            System.out.printf("%-10s %s%n", "DID","Name");
+            DTOlist.forEach((DTO)->System.out.printf("%-10s %s%n", DTO.getDid(),DTO.getName()));
         }));
 
         options.put(i++, new Option("Add discount", () -> {

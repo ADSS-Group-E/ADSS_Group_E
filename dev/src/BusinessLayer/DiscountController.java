@@ -1,5 +1,6 @@
 package BusinessLayer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DiscountController {
@@ -20,5 +21,10 @@ public class DiscountController {
         } else {
             discounts.put(discount.getDid(), discount);
         }
+    }
+
+    public ArrayList<Discount> getList() {
+        ArrayList<Discount> list = new ArrayList<>(discounts.values());
+        return list;
     }
 }

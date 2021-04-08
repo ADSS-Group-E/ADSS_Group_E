@@ -79,6 +79,14 @@ public class Facade {
         return new DiscountDTO(dCont.getDiscount(did));
     }
 
+    public ArrayList<DiscountDTO> getDiscountList(){
+        ArrayList<DiscountDTO> DTOlist = new ArrayList<>();
+        //Turn products into DTOs
+        ArrayList<Discount> discountList = dCont.getList();
+        discountList.forEach((discount)-> DTOlist.add(new DiscountDTO(discount)));
+        return DTOlist;
+    }
+
     public void addDiscount(DiscountDTO discountDTO){
         ArrayList<Product> products = new ArrayList<>();
         discountDTO.getPids().forEach((pid)->{
