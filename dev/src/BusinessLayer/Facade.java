@@ -117,6 +117,10 @@ public class Facade {
         return stringList;
     }
 
+    public void removeReport(int rid){
+        rCont.removeReport(rid);
+    }
+
     // ------- DISCOUNTS --------
 
     public DiscountDTO getDiscount(int did){

@@ -34,4 +34,8 @@ public class ReportController {
         nextRid++;
         return report;
     }
+
+    public void removeReport(int rid) {
+        reports.remove(rid);
+    }
 }

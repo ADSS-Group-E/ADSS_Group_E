@@ -2,9 +2,9 @@ package BusinessLayer;
 
 import PresentationLayer.ProductDTO;
 
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Product {
     private int pid;
@@ -18,8 +18,8 @@ public class Product {
     private Category category;
     private Category subCategory;
     private Category subSubCategory;
-    private ArrayList<Item> storage;
-    private ArrayList<Item> store;
+    private HashMap<Integer, Item> storage;
+    private HashMap<Integer, Item> store;
     private Discount buyingDiscount;
     private Discount sellingDiscount;
 
@@ -99,8 +99,8 @@ public class Product {
         this.category = category;
         this.subCategory = subCategory;
         this.subSubCategory = subSubCategory;
-        this.storage = new ArrayList<>();
-        this.store = new ArrayList<>();
+        this.storage = new HashMap<>();
+        this.store = new HashMap<>();
         this.buyingDiscount = null;
     }
 
@@ -113,18 +113,18 @@ public class Product {
         this.buyingPrice = other.getBuyingPrice();
         this.sellingPrice = other.getSellingPrice();
         this.minAmount = other.getMinAmount();
-        this.storage = new ArrayList<>();
-        this.store = new ArrayList<>();
+        this.storage = new HashMap<>();
+        this.store = new HashMap<>();
         // TODO add categories to ProductDTO (?)
     }
 
     // TODO check id before entering new item
     public void addItemToStore(int id, LocalDateTime expiration){
-        store.add(new Item(id,expiration));
+        store.put(id, new Item(id,expiration));
     }
 
     public void addItemToStorage(int id, LocalDateTime expiration){
-        storage.add(new Item(id,expiration));
+        storage.put(id, new Item(id,expiration));
     }
 
     public void setBuyingDiscount(Discount buyingDiscount) {
@@ -169,18 +169,23 @@ public class Product {
     public ArrayList<Item> getExpiredItems(){
         ArrayList<Item> expiredItems = new ArrayList<>();
 
-        store.forEach((item)->{
+        store.values().forEach((item)->{
             if (item.isExpired()){
                 expiredItems.add(item);
             }
         });
 
-        storage.forEach((item)->{
+        storage.values().forEach((item)->{
             if (item.isExpired()){
                 expiredItems.add(item);
             }
         });
 
         return expiredItems;
+    }
+
+    public void removeItem(int id) {
+        storage.remove(id);
+        store.remove(id);
     }
 }

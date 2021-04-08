@@ -75,7 +75,9 @@ public class ReportsOptionsMenu extends OptionsMenu{
         }));
 
         options.put(i++, new Option("Remove report", () -> {
-
+            System.out.println("Please enter the report id for the report you wish to remove:");
+            int rid = in.nextInt();
+            parentCLI.getFacade().removeReport(rid);
         }));
 
         options.put(i, new Option( "Back",() -> {
