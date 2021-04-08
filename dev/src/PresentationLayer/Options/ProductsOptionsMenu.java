@@ -1,5 +1,8 @@
 package PresentationLayer.Options;
 
+import BusinessLayer.Category;
+import BusinessLayer.Item;
+import BusinessLayer.Product;
 import PresentationLayer.CommandLineInterface;
 import PresentationLayer.ProductDTO;
 
@@ -29,8 +32,7 @@ public class ProductsOptionsMenu extends OptionsMenu{
             System.out.println("Please enter the details of the product you wish to add, by order: \n" +
                     "pid, name, storage location, store location, manufacturer, buying price, selling price, " +
                     "minimum amount, category, sub category, sub sub category");
-            // TODO Do we need also storage & store? not sure.
-            // How can we find Category object by his name?
+
             int pid = in.nextInt();
             String name = in.nextLine();
             String storageLocation = in.nextLine();
@@ -40,26 +42,43 @@ public class ProductsOptionsMenu extends OptionsMenu{
             double sellingPrice = in.nextDouble();
             int minAmount = in.nextInt();
 
-            // How do I do that?! ->
-            // Category category = in.next();
-            // Category subCategory = in.next();
-            // Category subSubCategory = in.next();
+            // TODO How can I find Category object by his name? ->
+            Category category = null;
+            Category subCategory = null;
+            Category subSubCategory = null;
+
+            Product p = new Product(pid, name, storageLocation, storeLocation, manufacturer,
+                    buyingPrice, sellingPrice, minAmount, category, subCategory, subSubCategory);
+            // ProductDTO product = parentCLI.getFacade().addProduct(p);
+
         }));
 
         options.put(i++, new Option( "Remove product",() -> {
             Scanner in = new Scanner(System.in);
             System.out.println("Please enter the product id for the product you wish to remove:");
             int pid = in.nextInt();
-            ProductDTO product = parentCLI.getFacade().removeProduct();
-            //TODO implementProduct remove in Facade
-
-            //Prompt for pid
-            //Warning message asking to confirm deletion
+            System.out.println("Are you sure you want to remove the product? type \"1\" to remove.");
+            int verify = in.nextInt();
+            if (verify == 1) {
+                // ProductDTO product = parentCLI.getFacade().removeProduct(pid);
+            }
+            else {
+                System.out.println("Product did not removed");
+            }
+            //TODO implement Product remove in Facade
         }));
 
         options.put(i++, new Option( "Add item",() -> {
-            //Prompt for pid
-            //Prompt for store or storage
+            Scanner in = new Scanner(System.in);
+            System.out.println("Please enter the item id and the expiration date for the item you wish to add:");
+            int pid = in.nextInt();
+            String expiration = in.nextLine();
+            // Item item = new Item(pid, expiration);
+            System.out.println("Do you add the item to the sore or to the storage? type \"1\" for store, \"2\" for storage");
+            int storeStorage = in.nextInt();
+            if (storeStorage == 1) {
+                // ProductDTO product = parentCLI.getFacade().addItemToStore(pid, expiration);
+            }
             //Prompt for item id
             //Prompt for expiration
 
