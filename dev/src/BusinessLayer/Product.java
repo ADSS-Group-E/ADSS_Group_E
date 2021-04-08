@@ -62,31 +62,31 @@ public class Product {
         return minAmount;
     }
 
-    public BusinessLayer.Category getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(BusinessLayer.Category category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 
-    public BusinessLayer.Category getSubCategory() {
+    public Category getSubCategory() {
         return subCategory;
     }
 
-    public void setSubCategory(BusinessLayer.Category subCategory) {
+    public void setSubCategory(Category subCategory) {
         this.subCategory = subCategory;
     }
 
-    public BusinessLayer.Category getSubSubCategory() {
+    public Category getSubSubCategory() {
         return subSubCategory;
     }
 
-    public void setSubSubCategory(BusinessLayer.Category subSubCategory) {
+    public void setSubSubCategory(Category subSubCategory) {
         this.subSubCategory = subSubCategory;
     }
 
-    public Product(int pid, String name, String storageLocation, String storeLocation, String manufacturer, double buyingPrice, double sellingPrice, int minAmount, BusinessLayer.Category category, BusinessLayer.Category subCategory, BusinessLayer.Category subSubCategory) {
+    public Product(int pid, String name, String storageLocation, String storeLocation, String manufacturer, double buyingPrice, double sellingPrice, int minAmount, Category category, Category subCategory, Category subSubCategory) {
         this.pid = pid;
         this.name = name;
         this.storageLocation = storageLocation;
@@ -162,5 +162,10 @@ public class Product {
 
     public boolean isInCategory(Category checkCategory){
         return (category == checkCategory || subCategory == checkCategory || subSubCategory == checkCategory);
+    }
+
+    public void removeItem(int id) {
+        // storage.remove(Item.getId());
+        //TODO Why is he asking me to make the getter static?
     }
 }
