@@ -1,47 +1,26 @@
 package BusinessLayer;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class StockReport extends Report {
-    private int rid;
-    private LocalDateTime created;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
 
-    public StockReport(int rid, LocalDateTime created, LocalDateTime startDate, LocalDateTime endDate) {
-        this.rid = rid;
-        this.created = created;
-        this.startDate = startDate;
-        this.endDate = endDate;
+    public StockReport(int rid, ArrayList<Product> products) {
+        super(rid);
+
+        products.forEach(this::AddRecord);
     }
 
-    public int getRid() {
-        return rid;
+    private void AddRecord(Product product){
+        records.add(formatAsRecord(product));
     }
 
-    public LocalDateTime getCreated() {
-        return created;
+    private static String formatAsRecord(Product product){
+        return String.format("%-10d %-20s %-10d %-10d",product.getPid(),product.getName(), product.getAmountInStore(), product.getAmountInStorage());
     }
 
-    public LocalDateTime getStartDate() {
-        return startDate;
+    @Override
+    protected String headerRow() {
+        return String.format("%-10s %-20s %-10s %-10s","PID","Name","In Store","In Storage");
     }
-
-    public LocalDateTime getEndDate() {
-        return endDate;
-    }
-
-    public void setRid(int rid) {
-        this.rid = rid;
-    }
-
-    public void setStartDate(LocalDateTime startDate) {
-        this.startDate = startDate;
-    }
-
-    public void setEndDate(LocalDateTime endDate) {
-        this.endDate = endDate;
-    }
-
-
 }

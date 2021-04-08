@@ -4,6 +4,7 @@ import PresentationLayer.ProductDTO;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Facade {
     private ProductController pCont;
@@ -38,5 +39,18 @@ public class Facade {
 
     public void addItemToStorage(int pid, int id, LocalDateTime expiration){
         pCont.getProduct(pid).addItemToStorage(id,expiration);
+    }
+
+    public String generateStockReport(ArrayList<Integer> cids, ArrayList<Integer> pids){
+        HashSet<Product> products =  new HashSet<>();
+        cids.forEach((cid)->{
+            products.addAll(pCont.getAllProductsOfCategory(cCont.getCategory(cid)));
+        });
+        pids.forEach((pid)->{
+            products.add(pCont.getProduct(pid));
+        });
+
+        Report report = rCont.generateStockReport(new ArrayList<>(products));
+        return report.toString();
     }
 }

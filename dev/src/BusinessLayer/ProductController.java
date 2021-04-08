@@ -43,9 +43,19 @@ public class ProductController {
         return products.containsKey(pid);
     }
 
-    public ArrayList getList() {
+    public ArrayList<Product> getList() {
         ArrayList<Product> list = new ArrayList<Product>(products.values());
         return list;
+    }
+
+    public ArrayList<Product> getAllProductsOfCategory(Category category){
+        ArrayList<Product> productsOfCategory = new ArrayList<>();
+        products.values().forEach((product)->{
+            if(product.isInCategory(category)){
+                productsOfCategory.add(product);
+            }
+        });
+        return productsOfCategory;
     }
 }
 // check, remove, list
