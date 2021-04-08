@@ -25,10 +25,34 @@ public class ProductsOptionsMenu extends OptionsMenu{
         }));
 
         options.put(i++, new Option( "Add product",() -> {
-            //Prompt for all necessary fields
+            Scanner in = new Scanner(System.in);
+            System.out.println("Please enter the details of the product you wish to add, by order: \n" +
+                    "pid, name, storage location, store location, manufacturer, buying price, selling price, " +
+                    "minimum amount, category, sub category, sub sub category");
+            // TODO Do we need also storage & store? not sure.
+            // How can we find Category object by his name?
+            int pid = in.nextInt();
+            String name = in.nextLine();
+            String storageLocation = in.nextLine();
+            String storeLocation = in.nextLine();
+            String manufacturer = in.nextLine();
+            double buyingPrice = in.nextDouble();
+            double sellingPrice = in.nextDouble();
+            int minAmount = in.nextInt();
+
+            // How do I do that?! ->
+            // Category category = in.next();
+            // Category subCategory = in.next();
+            // Category subSubCategory = in.next();
         }));
 
         options.put(i++, new Option( "Remove product",() -> {
+            Scanner in = new Scanner(System.in);
+            System.out.println("Please enter the product id for the product you wish to remove:");
+            int pid = in.nextInt();
+            ProductDTO product = parentCLI.getFacade().removeProduct();
+            //TODO implementProduct remove in Facade
+
             //Prompt for pid
             //Warning message asking to confirm deletion
         }));
