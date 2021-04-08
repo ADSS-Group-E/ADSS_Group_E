@@ -24,7 +24,7 @@ public class Facade {
 
     // --------- PRODUCTS ------------
     public void addProduct(ProductDTO newProduct){
-        pCont.addProduct(new Product(newProduct));
+        pCont.addProduct(new Product(newProduct, cCont.getCategory(newProduct.getCategoryId())));
     }
 
     public ProductDTO getProduct(int pid){

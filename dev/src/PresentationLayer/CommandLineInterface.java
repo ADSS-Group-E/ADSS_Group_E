@@ -54,7 +54,9 @@ public class CommandLineInterface {
 
     // Loads sample data because there is no data access layer in this part of the project.
     public void loadSampleData(){
-        facade.addProduct(new ProductDTO(1, "Test Juice", "AB01","B13", "Test Company",10.5, 10.1, 5));
+        facade.addCategory(1,"Juice");
+        facade.addCategory(new CategoryDTO(2,"<500 ML",1));
+        facade.addProduct(new ProductDTO(1, "Test Juice", "AB01","B13", "Test Company",10.5, 10.1, 5,2));
         facade.addItemToStore(1,1, LocalDateTime.of(2021,4,24,16,0));
         facade.addItemToStorage(1,2, LocalDateTime.of(2021,4,25,16,0));
         facade.addItemToStore(1,3, LocalDateTime.of(2021,4,1,16,0));

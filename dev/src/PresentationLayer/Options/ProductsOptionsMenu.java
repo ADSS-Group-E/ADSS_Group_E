@@ -104,6 +104,9 @@ public class ProductsOptionsMenu extends OptionsMenu{
                 System.out.println("Product did not removed");
             }
         }));
-        options.put(i, new Option( "Back",() -> System.out.println("Going back.")));
+        options.put(i, new Option( "Back",() -> {
+            System.out.println("Going back.");
+            goBack=true;
+        }));
     }
 }

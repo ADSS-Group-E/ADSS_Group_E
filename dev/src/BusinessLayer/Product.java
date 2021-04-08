@@ -16,8 +16,6 @@ public class Product {
     private double sellingPrice;
     private int minAmount;
     private Category category;
-    private Category subCategory;
-    private Category subSubCategory;
     private HashMap<Integer, Item> storage;
     private HashMap<Integer, Item> store;
     private Discount buyingDiscount;
@@ -63,29 +61,10 @@ public class Product {
         return minAmount;
     }
 
-    public BusinessLayer.Category getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(BusinessLayer.Category category) {
-        this.category = category;
-    }
-
-    public BusinessLayer.Category getSubCategory() {
-        return subCategory;
-    }
-
-    public void setSubCategory(BusinessLayer.Category subCategory) {
-        this.subCategory = subCategory;
-    }
-
-    public BusinessLayer.Category getSubSubCategory() {
-        return subSubCategory;
-    }
-
-    public void setSubSubCategory(BusinessLayer.Category subSubCategory) {
-        this.subSubCategory = subSubCategory;
-    }
 
     public Product(int pid, String name, String storageLocation, String storeLocation, String manufacturer, double buyingPrice, double sellingPrice, int minAmount, BusinessLayer.Category category, BusinessLayer.Category subCategory, BusinessLayer.Category subSubCategory) {
         this.pid = pid;
@@ -97,14 +76,12 @@ public class Product {
         this.sellingPrice = sellingPrice;
         this.minAmount = minAmount;
         this.category = category;
-        this.subCategory = subCategory;
-        this.subSubCategory = subSubCategory;
         this.storage = new HashMap<>();
         this.store = new HashMap<>();
         this.buyingDiscount = null;
     }
 
-    public Product(ProductDTO other) {
+    public Product(ProductDTO other, Category category) {
         this.pid = other.getPid();
         this.name = other.getName();
         this.storageLocation = other.getStorageLocation();
@@ -115,7 +92,7 @@ public class Product {
         this.minAmount = other.getMinAmount();
         this.storage = new HashMap<>();
         this.store = new HashMap<>();
-        // TODO add categories to ProductDTO (?)
+        this.category = category;
     }
 
     // TODO check id before entering new item
@@ -161,8 +138,19 @@ public class Product {
         }
     }
 
+    // Check through the category's super-categories as well.
     public boolean isInCategory(Category checkCategory){
-        return (category == checkCategory || subCategory == checkCategory || subSubCategory == checkCategory);
+        Category applicableCategory = category;
+        // n is just there to prevent an endless loop if a mistake was made and a category was set as a super-category of one of its descendants
+        int n = 0;
+        while (applicableCategory != null && n != 10){
+            if (applicableCategory == checkCategory){
+                return true;
+            }
+            applicableCategory = applicableCategory.getSuperCategory();
+            n++;
+        }
+        return false;
     }
 
 

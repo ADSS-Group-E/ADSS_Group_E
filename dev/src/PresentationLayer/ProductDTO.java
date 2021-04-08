@@ -1,5 +1,6 @@
 package PresentationLayer;
 
+import BusinessLayer.Category;
 import BusinessLayer.Product;
 
 public class ProductDTO {
@@ -15,6 +16,7 @@ public class ProductDTO {
     private double sellingPrice;
     private double sellingPriceAfterDiscount;
     private int minAmount;
+    private int categoryId;
 
     public int getPid() {
         return pid;
@@ -56,7 +58,11 @@ public class ProductDTO {
         return minAmount;
     }
 
-    public ProductDTO(int pid, String name, String storageLocation, String storeLocation, String manufacturer, double buyingPrice, double sellingPrice, int minAmount) {
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public ProductDTO(int pid, String name, String storageLocation, String storeLocation, String manufacturer, double buyingPrice, double sellingPrice, int minAmount, int categoryId) {
         this.pid = pid;
         this.name = name;
         this.storageLocation = storageLocation;
@@ -69,6 +75,7 @@ public class ProductDTO {
         this.minAmount = minAmount;
         this.buyingPriceAfterDiscount = buyingPrice;
         this.sellingPriceAfterDiscount = sellingPrice;
+        this.categoryId = categoryId;
     }
 
     public ProductDTO(Product other) {
@@ -84,6 +91,7 @@ public class ProductDTO {
         this.sellingPrice = other.getSellingPrice();
         this.sellingPriceAfterDiscount = other.getSellingPriceAfterDiscount();
         this.minAmount = other.getMinAmount();
+        this.categoryId = other.getCategory().getCid();
     }
 
     public String toString(){
@@ -98,6 +106,7 @@ public class ProductDTO {
                 "Buying Price after Discount:   " + buyingPriceAfterDiscount + "\n" +
                 "Selling Price:                 " + sellingPrice + "\n" +
                 "Selling Price after Discount:  " + sellingPriceAfterDiscount + "\n" +
-                "Min Amount:                    " + minAmount;
+                "Min Amount:                    " + minAmount + "\n" +
+                "Category ID:                   " + categoryId;
     }
 }
