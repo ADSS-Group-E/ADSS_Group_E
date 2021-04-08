@@ -10,4 +10,9 @@ public class InvalidReport extends Report{
     protected String headerRow() {
         return null;
     }
+
+    @Override
+    public String getType() {
+        return "Invalids";
+    }
 }

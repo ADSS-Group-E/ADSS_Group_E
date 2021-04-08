@@ -69,11 +69,7 @@ public class CommandLineInterface {
     public void run() {
         Scanner in = new Scanner(System.in);
         System.out.println("SUPER-LI Inventory Module");
-        while (true){
-            mainOptionsMenu.displayOptions();
-            int choice = in.nextInt();
-            mainOptionsMenu.chooseOption(choice);
-        }
+        mainOptionsMenu.enter();
     }
 }
 

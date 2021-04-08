@@ -23,4 +23,11 @@ public class StockReport extends Report {
     protected String headerRow() {
         return String.format("%-10s %-20s %-10s %-10s","PID","Name","In Store","In Storage");
     }
+
+    @Override
+    public String getType() {
+        return "Stock";
+    }
+
+
 }

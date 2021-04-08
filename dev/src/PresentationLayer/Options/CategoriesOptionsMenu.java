@@ -22,6 +22,9 @@ public class CategoriesOptionsMenu extends OptionsMenu{
 
         }));
 
-        options.put(i, new Option( "Back",() -> System.out.println("Going back.")));
+        options.put(i, new Option( "Back",() -> {
+            System.out.println("Going back.");
+            goBack=true;
+        }));
     }
 }

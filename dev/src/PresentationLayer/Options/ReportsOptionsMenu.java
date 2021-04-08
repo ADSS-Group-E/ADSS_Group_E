@@ -1,6 +1,7 @@
 package PresentationLayer.Options;
 
 import PresentationLayer.CommandLineInterface;
+import PresentationLayer.ProductDTO;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -11,11 +12,16 @@ public class ReportsOptionsMenu extends OptionsMenu{
         int i = 1;
         Scanner in = new Scanner(System.in);
         options.put(i++, new Option("Get report", () -> {
-
+            System.out.println("Please enter the report id for the report you wish to display:");
+            int rid = in.nextInt();
+            System.out.println(parentCLI.getFacade().getReport(rid));
         }));
 
         options.put(i++, new Option("List all reports", () -> {
 
+            ArrayList<String> stringList = parentCLI.getFacade().getReportList();
+            System.out.printf("%-10s%-20s%-20s%n", "RID","Created","Type");
+            System.out.println(String.join("\n",stringList));
         }));
 
         options.put(i++, new Option("Generate report", () -> {
@@ -71,6 +77,9 @@ public class ReportsOptionsMenu extends OptionsMenu{
 
         }));
 
-        options.put(i, new Option( "Back",() -> System.out.println("Going back.")));
+        options.put(i, new Option( "Back",() -> {
+            System.out.println("Going back.");
+            goBack=true;
+        }));
     }
 }

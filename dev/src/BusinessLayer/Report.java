@@ -22,4 +22,18 @@ public abstract class Report {
     }
 
     protected abstract String headerRow();
+
+    public int getRid() {
+        return rid;
+    }
+
+    public LocalDateTime getCreated() {
+        return created;
+    }
+
+    public ArrayList<String> getRecords() {
+        return records;
+    }
+
+    public abstract String getType();
 }

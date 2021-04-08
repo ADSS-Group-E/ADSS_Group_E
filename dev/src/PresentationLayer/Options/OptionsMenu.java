@@ -4,16 +4,19 @@ package PresentationLayer.Options;
 import PresentationLayer.CommandLineInterface;
 
 import java.util.Map;
+import java.util.Scanner;
 import java.util.TreeMap;
 
 public abstract class OptionsMenu {
     protected TreeMap<Integer,Option> options;
     protected CommandLineInterface parentCLI;
+    protected boolean goBack;
 
     public OptionsMenu(CommandLineInterface parentCLI) {
 
         options = new TreeMap<>();
         this.parentCLI = parentCLI;
+        goBack=false;
     }
 
     /*
@@ -33,5 +36,15 @@ public abstract class OptionsMenu {
         else{
             System.out.println("Invalid choice.");
         }
+    }
+
+    public void enter(){
+        Scanner in = new Scanner(System.in);
+        while (!goBack) {
+            this.displayOptions();
+            int choice = in.nextInt();
+            this.chooseOption(choice);
+        }
+        goBack = false;
     }
 }

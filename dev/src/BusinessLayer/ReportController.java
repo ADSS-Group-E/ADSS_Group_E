@@ -22,4 +22,9 @@ public class ReportController {
         this.nextRid = 1;
         reports = new HashMap<>();
     }
+
+    public ArrayList<Report> getList() {
+        ArrayList<Report> list = new ArrayList<Report>(reports.values());
+        return list;
+    }
 }
