@@ -37,14 +37,20 @@ public class ReportsOptionsMenu extends OptionsMenu{
                                 cids.add(Integer.parseInt(cid));
                         }
                         catch (NumberFormatException e){
-                            System.out.println("Invalid input: " + e.getMessage());
+                            System.out.println("Invalid input - " + e.getMessage());
                         }
                     }
 
                     System.out.println("Enter PIDs of specific products you wish to include (separated by spaces), or press enter to skip.");
                     lineVector = in.nextLine().split(" ");
                     for (String pid : lineVector) {
-                        pids.add(Integer.parseInt(pid));
+                        try{
+                            if (!pid.equals(""))
+                                cids.add(Integer.parseInt(pid));
+                        }
+                        catch (NumberFormatException e){
+                            System.out.println("Invalid input - " + e.getMessage());
+                        }
                     }
 
                     String report = parentCLI.getFacade().generateStockReport(cids,pids);
