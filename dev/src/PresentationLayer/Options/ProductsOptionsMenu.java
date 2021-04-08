@@ -1,11 +1,7 @@
 package PresentationLayer.Options;
 
-import BusinessLayer.Category;
-import BusinessLayer.Item;
-import BusinessLayer.Product;
 import PresentationLayer.CommandLineInterface;
 import PresentationLayer.ProductDTO;
-
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -29,28 +25,31 @@ public class ProductsOptionsMenu extends OptionsMenu{
 
         options.put(i++, new Option( "Add product",() -> {
             Scanner in = new Scanner(System.in);
-            System.out.println("Please enter the details of the product you wish to add, by order: \n" +
-                    "pid, name, storage location, store location, manufacturer, buying price, selling price, " +
-                    "minimum amount, category, sub category, sub sub category");
-
+            System.out.println("Please enter the pid and the name of the product you wish to add");
             int pid = in.nextInt();
             String name = in.nextLine();
+            System.out.println("Please enter the storage location and the store location of the product you wish to add");
             String storageLocation = in.nextLine();
             String storeLocation = in.nextLine();
+            System.out.println("Please enter the amount in storage and amount in store of the product you wish to add");
+            int amountInStorage = in.nextInt();
+            int amountInStore = in.nextInt();
+            System.out.println("Please enter the manufacturer of the product you wish to add");
             String manufacturer = in.nextLine();
+            System.out.println("Please enter the buying price and the selling price of the product you wish to add");
             double buyingPrice = in.nextDouble();
             double sellingPrice = in.nextDouble();
+            System.out.println("Please enter the minimum amount of the product you wish to add");
             int minAmount = in.nextInt();
+            System.out.println("Please enter the cid of the category of the product you wish to add");
+            int CIDCategory = in.nextInt();
+            System.out.println("Please enter the cid of the SUB category of the product you wish to add");
+            int CIDSubCategory = in.nextInt();
+            System.out.println("Please enter the cid of the SUB SUB category of the product you wish to add");
+            int CIDSubSubCategory = in.nextInt();
 
-            // TODO How can I find Category object by his name? ->
-            Category category = null;
-            Category subCategory = null;
-            Category subSubCategory = null;
-
-            Product p = new Product(pid, name, storageLocation, storeLocation, manufacturer,
-                    buyingPrice, sellingPrice, minAmount, category, subCategory, subSubCategory);
-            // ProductDTO product = parentCLI.getFacade().addProduct(p);
-
+            // TODO add Category to product
+            // parentCLI.getFacade().addProduct(pid, name, storageLocation, storeLocation, amountInStorage, amountInStore, manufacturer, buyingPrice, sellingPrice, minAmount, , , );
         }));
 
         options.put(i++, new Option( "Remove product",() -> {
@@ -60,41 +59,51 @@ public class ProductsOptionsMenu extends OptionsMenu{
             System.out.println("Are you sure you want to remove the product? type \"1\" to remove.");
             int verify = in.nextInt();
             if (verify == 1) {
-                // ProductDTO product = parentCLI.getFacade().removeProduct(pid);
+                parentCLI.getFacade().removeProduct(pid);
             }
             else {
                 System.out.println("Product did not removed");
             }
-            //TODO implement Product remove in Facade
         }));
 
         options.put(i++, new Option( "Add item",() -> {
             Scanner in = new Scanner(System.in);
-            System.out.println("Please enter the item id and the expiration date for the item you wish to add:");
+            System.out.println("Please enter the PRODUCT id of the item you wish to add:");
             int pid = in.nextInt();
+            System.out.println("Please enter the ITEM id of the item you wish to add:");
+            int id = in.nextInt();
+            System.out.println("Please enter the expiration date of the item you wish to add by the format dd-mm-yyyy:");
             String expiration = in.nextLine();
-            // Item item = new Item(pid, expiration);
+            // TODO get date from user and insert to product
+            // Item item = new Item(pid, dateTime);
             System.out.println("Do you add the item to the sore or to the storage? type \"1\" for store, \"2\" for storage");
+            /*
             int storeStorage = in.nextInt();
             if (storeStorage == 1) {
-                // ProductDTO product = parentCLI.getFacade().addItemToStore(pid, expiration);
-            }
-            //Prompt for item id
-            //Prompt for expiration
-
+                 parentCLI.getFacade().addItemToStore(pid, id, dateTime);
+             }
+             else if (storeStorage == 2) {
+                 parentCLI.getFacade().addItemToStorage(pid, id, dateTime);
+             }
+            System.out.println("The item id is " + id + "and the expiration date is: " + dateTime);
+             */
         }));
 
         options.put(i++, new Option( "Remove item",() -> {
-            //Prompt for pid
-            //Prompt for item id
-            //Warning message asking to confirm deletion
+            Scanner in = new Scanner(System.in);
+            System.out.println("Please enter the PRODUCT id of the item you wish to remove:");
+            int pid = in.nextInt();
+            System.out.println("Please enter the id of the item you wish to remove:");
+            int id = in.nextInt();
+            System.out.println("Are you sure you want to remove the product? type \"1\" to remove.");
+            int verify = in.nextInt();
+            if (verify == 1) {
+                parentCLI.getFacade().removeItem(pid, id);
+            }
+            else {
+                System.out.println("Product did not removed");
+            }
         }));
-
-        // TODO AddProduct, AddItemTo, remove
-        //
-        options.put(i, new Option( "Back",() -> {
-            System.out.println("Going back.");
-            goBack=true;
-        }));
+        options.put(i, new Option( "Back",() -> System.out.println("Going back.")));
     }
 }

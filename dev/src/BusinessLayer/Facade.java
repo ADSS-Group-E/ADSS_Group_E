@@ -1,5 +1,6 @@
 package BusinessLayer;
 
+import PresentationLayer.CategoryDTO;
 import PresentationLayer.DiscountDTO;
 import PresentationLayer.ProductDTO;
 
@@ -21,6 +22,7 @@ public class Facade {
         dCont = new DiscountController();
     }
 
+    // --------- PRODUCTS ------------
     public void addProduct(ProductDTO newProduct){
         pCont.addProduct(new Product(newProduct));
     }
@@ -44,6 +46,43 @@ public class Facade {
     public void addItemToStorage(int pid, int id, LocalDateTime expiration){
         pCont.getProduct(pid).addItemToStorage(id,expiration);
     }
+
+    public void addProduct (int pid, String name, String storageLocation, String storeLocation, int amountInStorage, int amountInStore, String manufacturer, double buyingPrice, double sellingPrice, int minAmount, Category category, Category subCategory, Category subSubCategory) {
+        pCont.addProduct(pid, name, storageLocation, storeLocation, amountInStorage, amountInStore, manufacturer, buyingPrice, sellingPrice, minAmount, category, subCategory, subSubCategory);
+    }
+
+    public void addCategory(CategoryDTO newCategory){
+        cCont.addCategory(new Category(newCategory));
+    }
+
+    public void addCategory(int cid, String name){
+        cCont.addCategory(cid, name);
+    }
+
+    public void removeProduct(int pid) {
+        pCont.removeProduct(pid);
+    }
+
+    public void removeItem(int pid, int id) {
+        pCont.getProduct(pid).removeItem(id);
+    }
+
+    public CategoryDTO getCategory(int cid) {
+        return new CategoryDTO(cCont.getCategory(cid));
+    }
+
+    public ArrayList<CategoryDTO> getCategoryList(){
+        ArrayList<CategoryDTO> DTOlist = new ArrayList<CategoryDTO>();
+        //Turn products into DTOs
+        ArrayList<Category> categoryList = cCont.getList();
+        categoryList.forEach((category)-> DTOlist.add(new CategoryDTO(category)));
+        return DTOlist;
+    }
+
+    public void removeCategory(int cid) {
+        cCont.removeCategory(cid);
+    }
+
 
     // --------- REPORTS ------------
     public String generateStockReport(ArrayList<Integer> cids, ArrayList<Integer> pids){
