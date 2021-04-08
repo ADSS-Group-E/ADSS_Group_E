@@ -1,15 +1,15 @@
 package dev.src.BusinessLayer;
 
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 
 public class Discount {
     private int did;
     private String name;
     private double discountPercent;
-    private DateTimeFormatter startDate;
-    private DateTimeFormatter endDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
 
-    public Discount(int did, String name, double discountPercent, DateTimeFormatter startDate, DateTimeFormatter endDate) {
+    public Discount(int did, String name, double discountPercent, LocalDateTime startDate, LocalDateTime endDate) {
         this.did = did;
         this.name = name;
         this.discountPercent = discountPercent;
@@ -37,19 +37,19 @@ public class Discount {
         this.discountPercent = discountPercent;
     }
 
-    public DateTimeFormatter getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(DateTimeFormatter startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public DateTimeFormatter getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(DateTimeFormatter endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
 
