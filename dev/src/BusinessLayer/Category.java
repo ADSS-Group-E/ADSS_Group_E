@@ -5,23 +5,18 @@ import PresentationLayer.CategoryDTO;
 public class Category {
     private int cid;
     private String name;
-    private Category superCategory = null;
+    private Category superCategory;
 
     public Category(int cid, String name) {
         this.cid = cid;
         this.name = name;
+        this.superCategory = null;
     }
 
     public Category(int cid, String name, Category superCategory) {
         this.cid = cid;
         this.name = name;
         this.superCategory = superCategory;
-    }
-
-    public Category(CategoryDTO other) {
-        this.cid = other.getCid();
-        this.name = other.getName();
-        this.superCategory = other.getSuperCategory();
     }
 
     public int getCid() {

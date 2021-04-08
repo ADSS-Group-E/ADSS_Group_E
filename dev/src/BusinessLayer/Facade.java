@@ -51,20 +51,26 @@ public class Facade {
         pCont.addProduct(pid, name, storageLocation, storeLocation, amountInStorage, amountInStore, manufacturer, buyingPrice, sellingPrice, minAmount, category, subCategory, subSubCategory);
     }
 
-    public void addCategory(CategoryDTO newCategory){
-        cCont.addCategory(new Category(newCategory));
-    }
-
-    public void addCategory(int cid, String name){
-        cCont.addCategory(cid, name);
-    }
-
     public void removeProduct(int pid) {
         pCont.removeProduct(pid);
     }
 
     public void removeItem(int pid, int id) {
         pCont.getProduct(pid).removeItem(id);
+    }
+
+    // --------------- CATEGORIES --------------
+    public void addCategory(CategoryDTO newCategory){
+        if (newCategory.getSuperCategoryId()==-1){
+            cCont.addCategory(new Category(newCategory.getCid(),newCategory.getName()));
+        }
+        else {
+            cCont.addCategory(new Category(newCategory.getCid(), newCategory.getName(),cCont.getCategory(newCategory.getSuperCategoryId())));
+        }
+    }
+
+    public void addCategory(int cid, String name){
+        cCont.addCategory(cid, name);
     }
 
     public CategoryDTO getCategory(int cid) {

@@ -30,7 +30,7 @@ public class CategoryController {
         }
     }
 
-    public ArrayList getList() {
+    public ArrayList<Category> getList() {
         ArrayList<Category> list = new ArrayList<Category>(categories.values());
         return list;
     }

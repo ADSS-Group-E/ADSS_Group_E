@@ -32,24 +32,38 @@ public class CategoriesOptionsMenu extends OptionsMenu{
             Scanner in = new Scanner(System.in);
             System.out.println("Please enter the cid of the category you wish to add");
             int cid = in.nextInt();
+            in.nextLine();
             System.out.println("Please enter the name of the category you wish to add");
-            String name = in.next();
-            parentCLI.getFacade().addCategory(cid, name);
+            String name = in.nextLine();
+            System.out.println("Please enter the ID of this category's super-category, or press enter to skip.");
+            try{
+                int superCategoryId;
+                superCategoryId = Integer.parseInt(in.nextLine());
+                parentCLI.getFacade().addCategory(new CategoryDTO(cid, name,superCategoryId));
+            }
+            catch(NumberFormatException e){
+                parentCLI.getFacade().addCategory(cid,name);
+            }
+
         }));
 
         options.put(i++, new Option( "Remove category",() -> {
             Scanner in = new Scanner(System.in);
             System.out.println("Please enter the category id you wish to remove:");
             int pid = in.nextInt();
-            System.out.println("Are you sure you want to remove the category? type \"1\" to remove.");
-            int verify = in.nextInt();
-            if (verify == 1) {
+            System.out.println("Are you sure you want to remove the category? type \"y\" to remove.");
+            String verify = in.next().trim();
+            if (verify.equals("y")) {
                 parentCLI.getFacade().removeCategory(pid);
             }
             else {
-                System.out.println("Category did not removed");
+                System.out.println("Cancelled.");
             }
         }));
-        options.put(i, new Option( "Back",() -> System.out.println("Going back.")));
+
+        options.put(i, new Option( "Back",() -> {
+            System.out.println("Going back.");
+            goBack=true;
+        }));
     }
 }

@@ -5,23 +5,27 @@ import BusinessLayer.Category;
 public class CategoryDTO {
     private int cid;
     private String name;
-    private Category superCategory = null;
+    private int superCategoryId;
 
     public CategoryDTO(int cid, String name) {
-        this.cid = cid;
-        this.name = name;
+        this(cid,name,-1);
     }
 
-    public CategoryDTO(int cid, String name, Category superCategory) {
+    public CategoryDTO(int cid, String name, int superCategoryId) {
         this.cid = cid;
         this.name = name;
-        this.superCategory = superCategory;
+        this.superCategoryId = superCategoryId;
     }
 
     public CategoryDTO (Category other) {
         this.cid = other.getCid();
         this.name = other.getName();
-        this.superCategory = other.getSuperCategory();
+        if (other.getSuperCategory()==null){
+            this.superCategoryId = -1;
+        }
+        else{
+            this.superCategoryId = other.getSuperCategory().getCid();
+        }
     }
 
     public int getCid() {
@@ -32,15 +36,16 @@ public class CategoryDTO {
         return name;
     }
 
-    public Category getSuperCategory() {
-        return superCategory;
+    public int getSuperCategoryId() {
+        return superCategoryId;
     }
 
     public String toString() {
-        String s = "CID:                " + cid + "\n" +
-                   "Name:               " + name + "\n";
-        if (superCategory != null) {
-            return s += "Super category: " + superCategory;
+        String s =  "CID:                " + cid + "\n" +
+                    "Name:               " + name + "\n";
+        if (superCategoryId != -1) {
+            return s +
+                    "Super-category ID:  " + superCategoryId;
         }
         return s;
     }
