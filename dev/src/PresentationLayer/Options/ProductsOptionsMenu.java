@@ -24,6 +24,7 @@ public class ProductsOptionsMenu extends OptionsMenu{
         }));
 
         options.put(i++, new Option( "Add product",() -> {
+            //TODO Complete this
             Scanner in = new Scanner(System.in);
             System.out.println("Please enter the pid and the name of the product you wish to add");
             int pid = in.nextInt();
@@ -48,11 +49,11 @@ public class ProductsOptionsMenu extends OptionsMenu{
             System.out.println("Please enter the cid of the SUB SUB category of the product you wish to add");
             int CIDSubSubCategory = in.nextInt();
 
-            // TODO add Category to product
             // parentCLI.getFacade().addProduct(pid, name, storageLocation, storeLocation, amountInStorage, amountInStore, manufacturer, buyingPrice, sellingPrice, minAmount, , , );
         }));
 
         options.put(i++, new Option( "Remove product",() -> {
+            // TODO Check this works
             Scanner in = new Scanner(System.in);
             System.out.println("Please enter the product id for the product you wish to remove:");
             int pid = in.nextInt();
@@ -67,6 +68,7 @@ public class ProductsOptionsMenu extends OptionsMenu{
         }));
 
         options.put(i++, new Option( "Add item",() -> {
+            // TODO Check this
             Scanner in = new Scanner(System.in);
             System.out.println("Please enter the PRODUCT id of the item you wish to add:");
             int pid = in.nextInt();
@@ -90,6 +92,7 @@ public class ProductsOptionsMenu extends OptionsMenu{
         }));
 
         options.put(i++, new Option( "Remove item",() -> {
+            // TODO Check this
             Scanner in = new Scanner(System.in);
             System.out.println("Please enter the PRODUCT id of the item you wish to remove:");
             int pid = in.nextInt();

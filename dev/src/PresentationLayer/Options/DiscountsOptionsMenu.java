@@ -27,11 +27,11 @@ public class DiscountsOptionsMenu extends OptionsMenu{
         }));
 
         options.put(i++, new Option("Add discount", () -> {
-
+            //TODO implement
         }));
 
         options.put(i++, new Option("Remove discount", () -> {
-
+            //TODO implement
         }));
 
         options.put(i, new Option( "Back",() -> {
