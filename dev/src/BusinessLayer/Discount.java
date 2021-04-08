@@ -84,7 +84,4 @@ public class Discount {
         return (startDate.isBefore(LocalDateTime.now()) && endDate.isAfter(LocalDateTime.now()));
     }
 
-
-
-    // TODO implement ACTUAL discount, and add discountPercent field to the diagram
-    }
+}

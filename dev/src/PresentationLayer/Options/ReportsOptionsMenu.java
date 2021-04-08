@@ -35,7 +35,6 @@ public class ReportsOptionsMenu extends OptionsMenu{
                     ArrayList<Integer> cids = new ArrayList<>();
                     ArrayList<Integer> pids = new ArrayList<>();
                     System.out.println("Enter CIDs of categories you wish to include (separated by spaces), or press enter to skip.");
-                    // TODO need to test skipping, and check input
                     String[] lineVector = in.nextLine().split(" ");
                     for (String cid : lineVector) {
                         try{
