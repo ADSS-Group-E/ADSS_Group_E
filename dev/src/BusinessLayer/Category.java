@@ -1,5 +1,7 @@
 package BusinessLayer;
 
+import PresentationLayer.CategoryDTO;
+
 public class Category {
     private int cid;
     private String name;
@@ -14,5 +16,23 @@ public class Category {
         this.cid = cid;
         this.name = name;
         this.superCategory = superCategory;
+    }
+
+    public Category(CategoryDTO other) {
+        this.cid = other.getCid();
+        this.name = other.getName();
+        this.superCategory = other.getSuperCategory();
+    }
+
+    public int getCid() {
+        return cid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Category getSuperCategory() {
+        return superCategory;
     }
 }
