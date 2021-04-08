@@ -43,5 +43,5 @@ public class StockReport extends Report {
         this.endDate = endDate;
     }
 
-    public
+
 }
