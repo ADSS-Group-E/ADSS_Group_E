@@ -13,7 +13,6 @@ public class Product {
     private String manufacturer;
     private double buyingPrice;
     private double sellingPrice;
-    // TODO NEED PRICE AFTER DISCOUNT? and discount field
     private int minAmount;
     private Category category;
     private Category subCategory;

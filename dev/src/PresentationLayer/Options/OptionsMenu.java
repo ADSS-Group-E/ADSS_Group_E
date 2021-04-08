@@ -12,7 +12,7 @@ public abstract class OptionsMenu {
 
     public OptionsMenu(CommandLineInterface parentCLI) {
 
-        options = new TreeMap<Integer,Option>();
+        options = new TreeMap<>();
         this.parentCLI = parentCLI;
     }
 
@@ -27,7 +27,11 @@ public abstract class OptionsMenu {
     }
 
     public void chooseOption(int choice){
-        // TODO check choice exists
-        options.get(choice).run();
+        if(options.containsKey(choice)){
+            options.get(choice).run();
+        }
+        else{
+            System.out.println("Invalid choice.");
+        }
     }
 }
