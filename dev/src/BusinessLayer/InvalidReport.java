@@ -1,14 +1,29 @@
 package BusinessLayer;
 
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+
 public class InvalidReport extends Report{
 
-    public InvalidReport(int rid) {
+    public InvalidReport(int rid, ArrayList<Product> products) {
         super(rid);
+
+        products.forEach((product) -> {
+            product.getExpiredItems().forEach(item -> AddRecord(item,product));
+        });
+    }
+
+    private void AddRecord(Item item, Product product){
+        records.add(formatAsRecord(item, product));
+    }
+
+    private static String formatAsRecord(Item item, Product product){
+        return String.format("%-10d %-15d %-20s %-20s",item.getId(),product.getPid(), product.getName(), item.getExpiration().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
     }
 
     @Override
     protected String headerRow() {
-        return null;
+        return String.format("%-10s %-15s %-20s %-20s","Item ID","Product PID","Product Name","Expiration");
     }
 
     @Override

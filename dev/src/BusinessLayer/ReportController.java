@@ -27,4 +27,11 @@ public class ReportController {
         ArrayList<Report> list = new ArrayList<Report>(reports.values());
         return list;
     }
+
+    public Report generateInvalidsReport(ArrayList<Product> products) {
+        InvalidReport report = new InvalidReport(nextRid, products);
+        reports.put(nextRid,report);
+        nextRid++;
+        return report;
+    }
 }

@@ -2,6 +2,7 @@ package BusinessLayer;
 
 import PresentationLayer.ProductDTO;
 
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -162,5 +163,24 @@ public class Product {
 
     public boolean isInCategory(Category checkCategory){
         return (category == checkCategory || subCategory == checkCategory || subSubCategory == checkCategory);
+    }
+
+
+    public ArrayList<Item> getExpiredItems(){
+        ArrayList<Item> expiredItems = new ArrayList<>();
+
+        store.forEach((item)->{
+            if (item.isExpired()){
+                expiredItems.add(item);
+            }
+        });
+
+        storage.forEach((item)->{
+            if (item.isExpired()){
+                expiredItems.add(item);
+            }
+        });
+
+        return expiredItems;
     }
 }

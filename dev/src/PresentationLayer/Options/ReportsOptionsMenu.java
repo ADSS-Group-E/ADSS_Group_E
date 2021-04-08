@@ -59,12 +59,13 @@ public class ReportsOptionsMenu extends OptionsMenu{
                         }
                     }
 
-                    String report = parentCLI.getFacade().generateStockReport(cids,pids);
-                    System.out.println(report);
+                    String stockReport = parentCLI.getFacade().generateStockReport(cids,pids);
+                    System.out.println(stockReport);
                     break;
                 case 2:
                     //Invalids report
-                    System.out.println("To be implemented");
+                    String invalidsReport = parentCLI.getFacade().generateInvalidsReport();
+                    System.out.println(invalidsReport);
                     break;
                 default:
                     System.out.println("Invalid choice.");

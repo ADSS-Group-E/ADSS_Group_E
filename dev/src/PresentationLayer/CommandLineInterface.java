@@ -57,6 +57,8 @@ public class CommandLineInterface {
         facade.addProduct(new ProductDTO(1, "Test Juice", "AB01","B13", "Test Company",10.5, 10.1, 5));
         facade.addItemToStore(1,1, LocalDateTime.of(2021,4,24,16,0));
         facade.addItemToStorage(1,2, LocalDateTime.of(2021,4,25,16,0));
+        facade.addItemToStore(1,3, LocalDateTime.of(2021,4,1,16,0));
+        facade.addItemToStorage(1,4, LocalDateTime.of(2021,4,1,16,0));
         ArrayList<Integer> pids = new ArrayList<>();
         pids.add(1);
         facade.addDiscount(new DiscountDTO(1,"Test Spring Discount", 0.1,

@@ -59,6 +59,11 @@ public class Facade {
         return report.toString();
     }
 
+    public String generateInvalidsReport(){
+        Report report = rCont.generateInvalidsReport(pCont.getList());
+        return report.toString();
+    }
+
     public String getReport(int rid){
         return rCont.getReport(rid).toString();
     }
