@@ -1,4 +1,6 @@
-package InventoryModule.BusinessLayer;
+package InventoryModule.BusinessLayer.Controllers;
+
+import InventoryModule.BusinessLayer.Category;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,7 +10,7 @@ import java.util.HashMap;
  * All the categories are in a Hash Map that contains the CIDs as the keys and the rest of the fields as the values.
  */
 public class CategoryController {
-    private HashMap<Integer,Category> categories;
+    private final HashMap<Integer, Category> categories;
 
     public CategoryController() {
         this.categories = new HashMap<>();
@@ -20,8 +22,7 @@ public class CategoryController {
     }
 
     public ArrayList<Category> getList() {
-        ArrayList<Category> list = new ArrayList<Category>(categories.values());
-        return list;
+        return new ArrayList<>(categories.values());
     }
 
     /**

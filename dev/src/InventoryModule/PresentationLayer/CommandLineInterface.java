@@ -1,7 +1,9 @@
 package InventoryModule.PresentationLayer;
 
 
-import InventoryModule.BusinessLayer.Facade;
+import InventoryModule.BusinessLayer.Controllers.Facade;
+import InventoryModule.PresentationLayer.DataTransferObjects.CategoryDTO;
+import InventoryModule.PresentationLayer.DataTransferObjects.ProductDTO;
 import InventoryModule.PresentationLayer.Options.*;
 
 import java.time.LocalDateTime;
@@ -13,21 +15,19 @@ import java.util.*;
 public class CommandLineInterface {
 
 
-    private Facade facade;
-    private MainOptionsMenu mainOptionsMenu;
-    private ProductsOptionsMenu productsOptionsMenu;
-    private CategoriesOptionsMenu categoriesOptionsMenu;
-    private DiscountsOptionsMenu discountsOptionsMenu;
-    private ReportsOptionsMenu reportsOptionsMenu;
+    private final Facade facade;
+    private final MainOptionsMenu mainOptionsMenu;
+    private final ProductsOptionsMenu productsOptionsMenu;
+    private final CategoriesOptionsMenu categoriesOptionsMenu;
+    private final DiscountsOptionsMenu discountsOptionsMenu;
+    private final ReportsOptionsMenu reportsOptionsMenu;
 
+    // Getters
     public Facade getFacade() {
         return facade;
     }
 
-    // Getters
-    public MainOptionsMenu getMainOptionsMenu() {
-        return mainOptionsMenu;
-    }
+
 
     public ProductsOptionsMenu getProductsOptionsMenu() {
         return productsOptionsMenu;
@@ -76,7 +76,6 @@ public class CommandLineInterface {
     }
 //    public ProductDTO(int pid, String name, String storageLocation, String storeLocation, int amountInStorage, int amountInStore, String manufacturer, double buyingPrice, double sellingPrice, int minAmount) {
     public void run() {
-        Scanner in = new Scanner(System.in);
         System.out.println("SUPER-LI Inventory Module");
         mainOptionsMenu.enter();
     }

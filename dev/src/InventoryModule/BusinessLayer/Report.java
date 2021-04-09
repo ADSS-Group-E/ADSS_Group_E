@@ -36,9 +36,5 @@ public abstract class Report {
         return created;
     }
 
-    public ArrayList<String> getRecords() {
-        return records;
-    }
-
     public abstract String getType();
 }

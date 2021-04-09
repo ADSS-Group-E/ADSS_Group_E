@@ -1,6 +1,6 @@
 package InventoryModule.BusinessLayer;
 
-import InventoryModule.PresentationLayer.DiscountDTO;
+import InventoryModule.PresentationLayer.DataTransferObjects.DiscountDTO;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -10,12 +10,12 @@ import java.util.ArrayList;
  * Discounts Can be applied for specific products and/or categories.
  */
 public class Discount {
-    private int did;
-    private String name;
-    private double discountPercent;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
-    private ArrayList<Product> products;
+    private final int did;
+    private final String name;
+    private final double discountPercent;
+    private final LocalDateTime startDate;
+    private final LocalDateTime endDate;
+    private final ArrayList<Product> products;
     private String type;
 
     // Getters
@@ -59,18 +59,16 @@ public class Discount {
     /**
      * This function creates a discount for selling products
      * @param did discount ID
-     * @param name
-     * @param discountPercent
-     * @param startDate
-     * @param endDate
-     * @param products
+     * @param name Name
+     * @param discountPercent Discount percent
+     * @param startDate Start date
+     * @param endDate End date
+     * @param products Products to apply to
      * @return the discount
      */
     public static Discount DiscountForSelling(int did, String name, double discountPercent, LocalDateTime startDate, LocalDateTime endDate, ArrayList<Product> products){
         Discount discount = new Discount(did, name, discountPercent, startDate, endDate, products);
-        products.forEach((product)-> {
-            product.setSellingDiscount(discount);
-        });
+        products.forEach((product)-> product.setSellingDiscount(discount));
         discount.type = "Selling";
         return discount;
     }
@@ -78,18 +76,16 @@ public class Discount {
     /**
      * This function creates a discount for buying products
      * @param did discount ID
-     * @param name
-     * @param discountPercent
-     * @param startDate
-     * @param endDate
-     * @param products
+     * @param name Name
+     * @param discountPercent Discount percent
+     * @param startDate Start date
+     * @param endDate End date
+     * @param products Products to apply to
      * @return the discount
      */
     public static Discount DiscountForBuying(int did, String name, double discountPercent, LocalDateTime startDate, LocalDateTime endDate, ArrayList<Product> products){
         Discount discount = new Discount(did, name, discountPercent, startDate, endDate, products);
-        products.forEach((product)-> {
-            product.setBuyingDiscount(discount);
-        });
+        products.forEach((product)-> product.setBuyingDiscount(discount));
         discount.type = "Buying";
         return discount;
     }
@@ -112,7 +108,7 @@ public class Discount {
 
     /**
      * this function checks if the dates are valid
-     * @return
+     * @return true if the discount applies currently, false otherwise
      */
     public boolean discountValid(){
         return (startDate.isBefore(LocalDateTime.now()) && endDate.isAfter(LocalDateTime.now()));

@@ -1,4 +1,4 @@
-package InventoryModule.PresentationLayer;
+package InventoryModule.PresentationLayer.DataTransferObjects;
 
 import InventoryModule.BusinessLayer.Category;
 
@@ -8,9 +8,9 @@ import InventoryModule.BusinessLayer.Category;
  */
 
 public class CategoryDTO {
-    private int cid;
-    private String name;
-    private int superCategoryId;
+    private final int cid;
+    private final String name;
+    private final int superCategoryId;
 
     // Constructors
     public CategoryDTO(int cid, String name) {

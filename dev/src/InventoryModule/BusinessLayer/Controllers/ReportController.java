@@ -1,4 +1,6 @@
-package InventoryModule.BusinessLayer;
+package InventoryModule.BusinessLayer.Controllers;
+
+import InventoryModule.BusinessLayer.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,7 +11,7 @@ import java.util.HashMap;
  */
 
 public class ReportController {
-    private HashMap<Integer,Report> reports;
+    private final HashMap<Integer, Report> reports;
     private int nextRid;
 
     public StockReport generateStockReport(ArrayList<Product> products){
@@ -29,8 +31,7 @@ public class ReportController {
     }
 
     public ArrayList<Report> getList() {
-        ArrayList<Report> list = new ArrayList<Report>(reports.values());
-        return list;
+        return new ArrayList<>(reports.values());
     }
 
     public Report generateInvalidsReport(ArrayList<Product> products) {

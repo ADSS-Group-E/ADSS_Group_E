@@ -1,6 +1,6 @@
 package InventoryModule.BusinessLayer;
 
-import InventoryModule.PresentationLayer.ProductDTO;
+import InventoryModule.PresentationLayer.DataTransferObjects.ProductDTO;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -11,17 +11,17 @@ import java.util.HashMap;
  * Each product has a unique Product ID and other details like name, location, price, category and more.
  */
 public class Product {
-    private int pid;
-    private String name;
-    private String storageLocation;
-    private String storeLocation;
-    private String manufacturer;
-    private double buyingPrice;
-    private double sellingPrice;
-    private int minAmount;
-    private Category category;
-    private HashMap<Integer, Item> storage;
-    private HashMap<Integer, Item> store;
+    private final int pid;
+    private final String name;
+    private final String storageLocation;
+    private final String storeLocation;
+    private final String manufacturer;
+    private final double buyingPrice;
+    private final double sellingPrice;
+    private final int minAmount;
+    private final Category category;
+    private final HashMap<Integer, Item> storage;
+    private final HashMap<Integer, Item> store;
     private Discount buyingDiscount;
     private Discount sellingDiscount;
 
@@ -71,7 +71,7 @@ public class Product {
     }
 
     // Constructors
-    public Product(int pid, String name, String storageLocation, String storeLocation, String manufacturer, double buyingPrice, double sellingPrice, int minAmount, InventoryModule.BusinessLayer.Category category, InventoryModule.BusinessLayer.Category subCategory, InventoryModule.BusinessLayer.Category subSubCategory) {
+    public Product(int pid, String name, String storageLocation, String storeLocation, String manufacturer, double buyingPrice, double sellingPrice, int minAmount, Category category) {
         this.pid = pid;
         this.name = name;
         this.storageLocation = storageLocation;
@@ -84,6 +84,7 @@ public class Product {
         this.storage = new HashMap<>();
         this.store = new HashMap<>();
         this.buyingDiscount = null;
+        this.sellingDiscount = null;
     }
 
     public Product(ProductDTO other, Category category) {
@@ -99,8 +100,6 @@ public class Product {
         this.store = new HashMap<>();
         this.category = category;
     }
-
-    // TODO check id before entering new item
 
     // Adders
     public void addItemToStore(int id, LocalDateTime expiration){

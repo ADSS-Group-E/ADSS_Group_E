@@ -1,4 +1,4 @@
-package InventoryModule.PresentationLayer;
+package InventoryModule.PresentationLayer.DataTransferObjects;
 
 import InventoryModule.BusinessLayer.Product;
 
@@ -8,19 +8,19 @@ import InventoryModule.BusinessLayer.Product;
  */
 
 public class ProductDTO {
-    private int pid;
-    private String name;
-    private String storageLocation;
-    private String storeLocation;
-    private int amountInStorage;
-    private int amountInStore;
-    private String manufacturer;
-    private double buyingPrice;
-    private double buyingPriceAfterDiscount;
-    private double sellingPrice;
-    private double sellingPriceAfterDiscount;
-    private int minAmount;
-    private int categoryId;
+    private final int pid;
+    private final String name;
+    private final String storageLocation;
+    private final String storeLocation;
+    private final int amountInStorage;
+    private final int amountInStore;
+    private final String manufacturer;
+    private final double buyingPrice;
+    private final double buyingPriceAfterDiscount;
+    private final double sellingPrice;
+    private final double sellingPriceAfterDiscount;
+    private final int minAmount;
+    private final int categoryId;
 
     // Getters
     public int getPid() {
@@ -37,14 +37,6 @@ public class ProductDTO {
 
     public String getStoreLocation() {
         return storeLocation;
-    }
-
-    public int getAmountInStorage() {
-        return amountInStorage;
-    }
-
-    public int getAmountInStore() {
-        return amountInStore;
     }
 
     public String getManufacturer() {

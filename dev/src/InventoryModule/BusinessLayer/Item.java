@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
  * Each item has an ID, and date-time of expiration.
  */
 public class Item {
-    private int id;
-    private LocalDateTime expiration;
+    private final int id;
+    private final LocalDateTime expiration;
 
     public int getId() {
         return id;

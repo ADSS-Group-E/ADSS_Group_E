@@ -6,9 +6,9 @@ package InventoryModule.BusinessLayer;
  * Each category has a unique "CID" (which stands for category ID), and name.
  */
 public class Category {
-    private int cid;
-    private String name;
-    private Category superCategory;
+    private final int cid;
+    private final String name;
+    private final Category superCategory;
 
     public Category(int cid, String name) {
         this.cid = cid;

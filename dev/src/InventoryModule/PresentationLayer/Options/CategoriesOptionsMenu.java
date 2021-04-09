@@ -1,6 +1,6 @@
 package InventoryModule.PresentationLayer.Options;
 
-import InventoryModule.PresentationLayer.CategoryDTO;
+import InventoryModule.PresentationLayer.DataTransferObjects.CategoryDTO;
 import InventoryModule.PresentationLayer.CommandLineInterface;
 
 import java.util.ArrayList;

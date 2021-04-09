@@ -1,7 +1,7 @@
 package InventoryModule.PresentationLayer.Options;
 
 import InventoryModule.PresentationLayer.CommandLineInterface;
-import InventoryModule.PresentationLayer.DiscountDTO;
+import InventoryModule.PresentationLayer.DataTransferObjects.DiscountDTO;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

@@ -1,8 +1,12 @@
-package InventoryModule.BusinessLayer;
+package InventoryModule.BusinessLayer.Controllers;
 
-import InventoryModule.PresentationLayer.CategoryDTO;
-import InventoryModule.PresentationLayer.DiscountDTO;
-import InventoryModule.PresentationLayer.ProductDTO;
+import InventoryModule.BusinessLayer.Category;
+import InventoryModule.BusinessLayer.Discount;
+import InventoryModule.BusinessLayer.Product;
+import InventoryModule.BusinessLayer.Report;
+import InventoryModule.PresentationLayer.DataTransferObjects.CategoryDTO;
+import InventoryModule.PresentationLayer.DataTransferObjects.DiscountDTO;
+import InventoryModule.PresentationLayer.DataTransferObjects.ProductDTO;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -15,10 +19,10 @@ import java.util.HashSet;
  * thereby hiding it's complexities and providing an interface to the client using the system.
  */
 public class Facade {
-    private ProductController pCont;
-    private ReportController rCont;
-    private CategoryController cCont;
-    private DiscountController dCont;
+    private final ProductController pCont;
+    private final ReportController rCont;
+    private final CategoryController cCont;
+    private final DiscountController dCont;
 
     public Facade() {
         pCont = new ProductController();
@@ -85,7 +89,7 @@ public class Facade {
     }
 
     public ArrayList<CategoryDTO> getCategoryList(){
-        ArrayList<CategoryDTO> DTOlist = new ArrayList<CategoryDTO>();
+        ArrayList<CategoryDTO> DTOlist = new ArrayList<>();
         //Turn products into DTOs
         ArrayList<Category> categoryList = cCont.getList();
         categoryList.forEach((category)-> DTOlist.add(new CategoryDTO(category)));
@@ -103,12 +107,8 @@ public class Facade {
     // Generators
     public String generateStockReport(ArrayList<Integer> cids, ArrayList<Integer> pids){
         HashSet<Product> products =  new HashSet<>();
-        cids.forEach((cid)->{
-            products.addAll(pCont.getAllProductsOfCategory(cCont.getCategory(cid)));
-        });
-        pids.forEach((pid)->{
-            products.add(pCont.getProduct(pid));
-        });
+        cids.forEach((cid)-> products.addAll(pCont.getAllProductsOfCategory(cCont.getCategory(cid))));
+        pids.forEach((pid)-> products.add(pCont.getProduct(pid)));
 
         Report report = rCont.generateStockReport(new ArrayList<>(products));
         return report.toString();
@@ -134,9 +134,7 @@ public class Facade {
         //Turn products into DTOs
         ArrayList<Report> reportList = rCont.getList();
 
-        reportList.forEach((report)-> {
-            stringList.add(String.format("%-10d%-20s%-20s",report.getRid(),report.getCreated().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")),report.getType()));
-        });
+        reportList.forEach((report)-> stringList.add(String.format("%-10d%-20s%-20s",report.getRid(),report.getCreated().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")),report.getType())));
         return stringList;
     }
 
@@ -164,24 +162,20 @@ public class Facade {
     // Adder
 
     /**
-     * This function add discount to specific products or specific categories, by choise.
+     * This function adds a discount to specific products or specific categories.
      * @param did discount ID
      * @param name of the discount
      * @param discountPercent The value of the discount
-     * @param startDate
-     * @param endDate
+     * @param startDate The date at which the discount starts
+     * @param endDate The date at which the discount ends
      * @param cids category ID
      * @param pids product ID
      * @param type buying or selling
      */
     public void addDiscount(int did, String name, double discountPercent, LocalDateTime startDate, LocalDateTime endDate, ArrayList<Integer> cids, ArrayList<Integer> pids ,String type){
         HashSet<Product> productsNoRep =  new HashSet<>();
-        cids.forEach((cid)->{
-            productsNoRep.addAll(pCont.getAllProductsOfCategory(cCont.getCategory(cid)));
-        });
-        pids.forEach((pid)->{
-            productsNoRep.add(pCont.getProduct(pid));
-        });
+        cids.forEach((cid)-> productsNoRep.addAll(pCont.getAllProductsOfCategory(cCont.getCategory(cid))));
+        pids.forEach((pid)-> productsNoRep.add(pCont.getProduct(pid)));
         ArrayList<Product> products = new ArrayList<>(productsNoRep);
 
         DiscountDTO discountDTO = new DiscountDTO(did, name, discountPercent, startDate, endDate, pids, type);

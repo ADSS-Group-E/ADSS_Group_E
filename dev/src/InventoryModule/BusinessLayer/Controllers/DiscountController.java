@@ -1,4 +1,6 @@
-package InventoryModule.BusinessLayer;
+package InventoryModule.BusinessLayer.Controllers;
+
+import InventoryModule.BusinessLayer.Discount;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,8 +10,7 @@ import java.util.HashMap;
  * All the discounts are in a Hash Map that contains the Discount ID as the key and the rest of the fields as the values.
  */
 public class DiscountController {
-    private HashMap<Integer,Discount> discounts;
-    private int nextDid;
+    private final HashMap<Integer, Discount> discounts;
 
     public DiscountController() {
         this.discounts = new HashMap<>();
@@ -17,8 +18,7 @@ public class DiscountController {
 
     // Getters
     public ArrayList<Discount> getList() {
-        ArrayList<Discount> list = new ArrayList<>(discounts.values());
-        return list;
+        return new ArrayList<>(discounts.values());
     }
 
     public Discount getDiscount(int did){
@@ -27,7 +27,7 @@ public class DiscountController {
 
     /**
      * Add new discount by object to the hash map
-     * @param discount
+     * @param discount The discount to add
      */
     public void addDiscount(Discount discount){
         if (discounts.containsKey(discount.getDid())) {

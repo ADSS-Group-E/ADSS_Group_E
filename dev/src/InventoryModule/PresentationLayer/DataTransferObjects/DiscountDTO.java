@@ -1,4 +1,4 @@
-package InventoryModule.PresentationLayer;
+package InventoryModule.PresentationLayer.DataTransferObjects;
 
 import InventoryModule.BusinessLayer.Discount;
 
@@ -11,13 +11,13 @@ import java.util.ArrayList;
  */
 
 public class DiscountDTO {
-    private int did;
-    private String name;
-    private double discountPercent;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
-    private ArrayList<Integer> pids;
-    private String type;
+    private final int did;
+    private final String name;
+    private final double discountPercent;
+    private final LocalDateTime startDate;
+    private final LocalDateTime endDate;
+    private final ArrayList<Integer> pids;
+    private final String type;
 
     // Getters
     public int getDid() {
@@ -67,9 +67,7 @@ public class DiscountDTO {
         this.endDate = other.getEndDate();
         this.type = other.getType();
         this.pids = new ArrayList<>();
-        other.getProducts().forEach((product)->{
-            pids.add(product.getPid());
-        });
+        other.getProducts().forEach((product)-> pids.add(product.getPid()));
     }
 
     // Print
