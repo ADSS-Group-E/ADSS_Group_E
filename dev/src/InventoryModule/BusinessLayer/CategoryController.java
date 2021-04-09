@@ -1,11 +1,11 @@
-package BusinessLayer;
+package InventoryModule.BusinessLayer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
  * This class represents the category controller.
- * All the categories are in Hash Map that contain cid as the key, and the rest of the fields as the value.
+ * All the categories are in a Hash Map that contains the CIDs as the keys and the rest of the fields as the values.
  */
 public class CategoryController {
     private HashMap<Integer,Category> categories;
@@ -25,7 +25,7 @@ public class CategoryController {
     }
 
     /**
-     * Add category by object to the hash map
+     * Add a new category by object to the hash map
      * @param category to add
      */
     public void addCategory(Category category) {
@@ -37,7 +37,7 @@ public class CategoryController {
     }
 
     /**
-     * Add category by cid and name to the hash map
+     * Add a new category by cid and name to the hash map
      * @param cid of the category
      * @param name of the category
      */
@@ -51,7 +51,7 @@ public class CategoryController {
 
     /**
      * Remove category by cid
-     * @param cid the cid of the category to remove
+     * @param cid the cid of the category to be removed
      */
     public void removeCategory (int cid) {
         if (categories.containsKey(cid)) {

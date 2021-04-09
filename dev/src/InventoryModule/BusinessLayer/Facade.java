@@ -1,8 +1,8 @@
-package BusinessLayer;
+package InventoryModule.BusinessLayer;
 
-import PresentationLayer.CategoryDTO;
-import PresentationLayer.DiscountDTO;
-import PresentationLayer.ProductDTO;
+import InventoryModule.PresentationLayer.CategoryDTO;
+import InventoryModule.PresentationLayer.DiscountDTO;
+import InventoryModule.PresentationLayer.ProductDTO;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
- * This class represents the facade of the project.
- * the purpose of the facade is to hide the complexities of the system
- * and provides an interface to the client using which the client can access the system.
+ * This class represents the Facade of the project.
+ * The purpose of the facade is to act as a go-between the Presentation and Business layers of the system,
+ * thereby hiding it's complexities and providing an interface to the client using the system.
  */
 public class Facade {
     private ProductController pCont;
@@ -123,8 +123,6 @@ public class Facade {
         Report report = rCont.generateInvalidsReport(pCont.getList());
         return report.toString();
     }
-
-
 
     // Getters
     public String getReport(int rid){

@@ -1,11 +1,10 @@
-package PresentationLayer;
+package InventoryModule.PresentationLayer;
 
-import BusinessLayer.Category;
+import InventoryModule.BusinessLayer.Category;
 
 /**
- * This class represents categoryDTO.
- * A DTO is an object that is used to encapsulate data,
- * and send it from one subsystem of an application to another.
+ * This class represents the CategoryDTO.
+ * A DTO is an object that is used to encapsulate data and send it from one subsystem of an application to another.
  */
 
 public class CategoryDTO {

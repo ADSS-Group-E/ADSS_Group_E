@@ -1,7 +1,7 @@
-package PresentationLayer.Options;
+package InventoryModule.PresentationLayer.Options;
 
 
-import PresentationLayer.CommandLineInterface;
+import InventoryModule.PresentationLayer.CommandLineInterface;
 
 import java.util.Map;
 import java.util.Scanner;

@@ -1,11 +1,11 @@
-package BusinessLayer;
+package InventoryModule.BusinessLayer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
  * This class represents the discount controller
- * All the discounts are in Hash Map that contain did as the key, and the rest of the fields as the value.
+ * All the discounts are in a Hash Map that contains the Discount ID as the key and the rest of the fields as the values.
  */
 public class DiscountController {
     private HashMap<Integer,Discount> discounts;
@@ -26,7 +26,7 @@ public class DiscountController {
     }
 
     /**
-     * Add discounts by object to the hash map
+     * Add new discount by object to the hash map
      * @param discount
      */
     public void addDiscount(Discount discount){

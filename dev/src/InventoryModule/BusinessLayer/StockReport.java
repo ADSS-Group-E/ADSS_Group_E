@@ -1,13 +1,11 @@
-package BusinessLayer;
+package InventoryModule.BusinessLayer;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 /**
- * This class extends the "Report" class, and represent stock report.
- * Each Stock report has rid (stand for Report ID), and local date time of created report.
- * It's used to track products that are about to run out of stock,
- * so that the super can be prepared as needed.
+ * This class extends the "Report" class, and represent the stock report.
+ * Each Stock report has an RID (which stands for Report ID), and local date-time of the created report.
+ * It is used to track products that are about to run out of stock, so that the super can be prepared as needed.
  */
 
 public class StockReport extends Report {

@@ -1,12 +1,10 @@
-package PresentationLayer;
+package InventoryModule.PresentationLayer;
 
-import BusinessLayer.Category;
-import BusinessLayer.Product;
+import InventoryModule.BusinessLayer.Product;
 
 /**
- * This class represents productDTO.
- * A DTO is an object that is used to encapsulate data,
- * and send it from one subsystem of an application to another.
+ * This class represents the ProductDTO.
+ * A DTO is an object that is used to encapsulate data and send it from one subsystem of an application to another.
  */
 
 public class ProductDTO {

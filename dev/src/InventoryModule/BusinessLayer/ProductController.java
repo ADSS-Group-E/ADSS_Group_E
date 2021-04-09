@@ -1,14 +1,14 @@
-package BusinessLayer;
+package InventoryModule.BusinessLayer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
  * This class represents the product controller.
- * All the products are in Hash Map that contain pid as the key, and the rest of the fields as the value.
+ * All the products are in a Hash Map that contains the Product ID as the key and the rest of the fields as the value.
  */
 public class ProductController {
-    private HashMap<Integer,Product> products;
+    private final HashMap<Integer,Product> products;
 
     public ProductController() {
         this.products = new HashMap<>();
@@ -46,7 +46,7 @@ public class ProductController {
         }
     }
 
-    // Checks if the pid already exist
+    // Checks if the Product ID already exists
     public boolean isExist(int pid) {
         return products.containsKey(pid);
     }

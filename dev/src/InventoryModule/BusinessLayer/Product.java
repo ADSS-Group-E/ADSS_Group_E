@@ -1,6 +1,6 @@
-package BusinessLayer;
+package InventoryModule.BusinessLayer;
 
-import PresentationLayer.ProductDTO;
+import InventoryModule.PresentationLayer.ProductDTO;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 /**
  * This class represents Products.
- * Each product has his details. like name, location, price, category and more.
+ * Each product has a unique Product ID and other details like name, location, price, category and more.
  */
 public class Product {
     private int pid;
@@ -71,7 +71,7 @@ public class Product {
     }
 
     // Constructors
-    public Product(int pid, String name, String storageLocation, String storeLocation, String manufacturer, double buyingPrice, double sellingPrice, int minAmount, BusinessLayer.Category category, BusinessLayer.Category subCategory, BusinessLayer.Category subSubCategory) {
+    public Product(int pid, String name, String storageLocation, String storeLocation, String manufacturer, double buyingPrice, double sellingPrice, int minAmount, InventoryModule.BusinessLayer.Category category, InventoryModule.BusinessLayer.Category subCategory, InventoryModule.BusinessLayer.Category subSubCategory) {
         this.pid = pid;
         this.name = name;
         this.storageLocation = storageLocation;

@@ -1,16 +1,14 @@
-package BusinessLayer;
-
-import sun.reflect.generics.tree.Tree;
+package InventoryModule.BusinessLayer;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 /**
- * This class represents interface of report.
- * There is two kinds of report; Invalid report, and Stock report.
- * Each report has a rid (Stand for Report ID), and local date time of created report.
- * It's used to track products that are invalid or about to run out of stack, and to prevent wasting products.
+ * This class represents the interface for a report.
+ * There are three kinds of reports; Invalid report, Stock report and Low Stock Report.
+ * Each report has an RID (which stands for Report ID), and local date-time of the created report.
+ * It is used to track products that are invalid or about to run out of stack, and to prevent wasting products.
  */
 
 public abstract class Report {

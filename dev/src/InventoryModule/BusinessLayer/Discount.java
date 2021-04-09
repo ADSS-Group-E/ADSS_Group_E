@@ -1,13 +1,13 @@
-package BusinessLayer;
+package InventoryModule.BusinessLayer;
 
-import PresentationLayer.DiscountDTO;
+import InventoryModule.PresentationLayer.DiscountDTO;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 /**
- * This class represents discount for products.
- * Can be applied for specific products or categories.
+ * This class represents discounts for products.
+ * Discounts Can be applied for specific products and/or categories.
  */
 public class Discount {
     private int did;
@@ -57,7 +57,7 @@ public class Discount {
     }
 
     /**
-     * This function create a discount for selling products
+     * This function creates a discount for selling products
      * @param did discount ID
      * @param name
      * @param discountPercent
@@ -76,7 +76,7 @@ public class Discount {
     }
 
     /**
-     * This function create a discount for buying products
+     * This function creates a discount for buying products
      * @param did discount ID
      * @param name
      * @param discountPercent
@@ -103,8 +103,8 @@ public class Discount {
     }
 
     /**
-     * This function remove specific product from discount.
-     * @param product the product
+     * This function removes a specific product from a discount.
+     * @param product the product ID
      */
     public void removeProductFromDiscount(Product product){
         products.removeIf((x)->(x==product));

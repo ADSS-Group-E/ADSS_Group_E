@@ -1,4 +1,4 @@
-package PresentationLayer.Options;
+package InventoryModule.PresentationLayer.Options;
 
 public class Option {
     String description;

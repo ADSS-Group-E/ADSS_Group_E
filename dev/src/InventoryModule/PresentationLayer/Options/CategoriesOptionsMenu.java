@@ -1,21 +1,22 @@
-package PresentationLayer.Options;
+package InventoryModule.PresentationLayer.Options;
 
-import BusinessLayer.Category;
-import BusinessLayer.CategoryController;
-import PresentationLayer.CategoryDTO;
-import PresentationLayer.CommandLineInterface;
-import PresentationLayer.ProductDTO;
+import InventoryModule.PresentationLayer.CategoryDTO;
+import InventoryModule.PresentationLayer.CommandLineInterface;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
- * This class represent the options menu of the categories.
- * The menu contains all the function that required:
- * Get category, List of all categories, Add category and remove category.
- * The instruction of this class can be found in the attached document.
+ * This class represents the options menu for Categories.
+ *
+ * It displays a list of the various functions that a user can perform with Categories
+ * and prompts the user for their selection of which function to activate.
+ *
+ * The listed functions include - Get a category, List all categories, Add a category and Remove a category.
+ *
+ * Once the user has selected a function, the class then executes the required activity accordingly.
  */
 
+// Display the Category's list of functions and prompt the user for their selection.
 public class CategoriesOptionsMenu extends OptionsMenu{
     public CategoriesOptionsMenu(CommandLineInterface parentCLI) {
         super(parentCLI);
@@ -32,17 +33,17 @@ public class CategoriesOptionsMenu extends OptionsMenu{
     }
 
     /**
-     * This function uses to get details of category by the ID of the category
+     * Prompt the user for the Category ID and then proceed to retrieve and display the Category's details accordingly
      */
     public void getCategory(){
-        System.out.println("Please enter the category id for the category you wish to display:");
+        System.out.println("Please enter the Category ID for the category you wish to display:");
         int cid = in.nextInt();
         CategoryDTO category = parentCLI.getFacade().getCategory(cid);
         System.out.println(category);
     }
 
     /**
-     * This function uses to get list of all the categories that exist
+     * Display a list of all the Categories that exist
      */
     public void getCategoryList(){
         ArrayList<CategoryDTO> DTOlist = parentCLI.getFacade().getCategoryList();
@@ -51,8 +52,11 @@ public class CategoriesOptionsMenu extends OptionsMenu{
     }
 
     /**
-     * This function uses to add a new category
-     * It's require to insert ID, name, and super-category if exist.
+     * This function adds a new Category by prompting the user to enter the required information one field at a time.
+     *
+     * The required data includes Category ID, name and Super-Category ID if relevant.
+     *
+     * Once entered, the Facade function is called to save the newly input category information.
      */
     public void addCategory(){
         System.out.println("Please enter the ID of the category you wish to add");
@@ -60,19 +64,24 @@ public class CategoriesOptionsMenu extends OptionsMenu{
         in.nextLine();
         System.out.println("Please enter the name of the category you wish to add");
         String name = in.nextLine();
+        //Prompt for the optional super-category
         System.out.println("Please enter the ID of this category's super-category, or press enter to skip.");
         try{
             int superCategoryId;
             superCategoryId = Integer.parseInt(in.nextLine());
+            // Add the new category with super-category by calling the Facade function with the data the user just entered.
             parentCLI.getFacade().addCategory(new CategoryDTO(cid, name,superCategoryId));
         }
         catch(NumberFormatException e){
+            // Add the new category by calling the Facade function with the data the user just entered.
             parentCLI.getFacade().addCategory(cid,name);
         }
+        System.out.println("The new category was added successfully.");
     }
 
     /**
-     * This function uses to remove category by ID
+     * This function prompts the user to end the ID of a category they wish to remove,
+     * and then proceeds to remove the category by calling the Facade function
      */
     public void removeCategory(){
         System.out.println("Please enter the category id you wish to remove:");
@@ -80,10 +89,12 @@ public class CategoriesOptionsMenu extends OptionsMenu{
         System.out.println("Are you sure you want to remove the category? Enter \"y\" to remove.");
         String verify = in.next().trim();
         if (verify.equals("y")) {
+            // Remove the category by calling the Facade function with the ID the user just entered.
             parentCLI.getFacade().removeCategory(cid);
+            System.out.println("The category was removed successfully.");
         }
         else {
-            System.out.println("Cancelled.");
+            System.out.println("Product removal was cancelled.");
         }
     }
 }

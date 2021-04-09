@@ -1,10 +1,10 @@
-package BusinessLayer;
+package InventoryModule.BusinessLayer;
 
 import java.time.LocalDateTime;
 
 /**
- * This class represents specific item of each product that exist.
- * Each item has an id, and date time expiration.
+ * This class represents specific items of each product that exists.
+ * Each item has an ID, and date-time of expiration.
  */
 public class Item {
     private int id;

@@ -1,18 +1,21 @@
-package PresentationLayer.Options;
+package InventoryModule.PresentationLayer.Options;
 
-import PresentationLayer.CommandLineInterface;
-import PresentationLayer.ProductDTO;
+import InventoryModule.PresentationLayer.CommandLineInterface;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
- * This class represent the options menu of the reports.
- * The menu contains all the function that required:
- * Get report, List of all reports, generate report and remove report.
- * The instruction of this class can be found in the attached document.
+ * This class represents the options menu for Reports.
+ *
+ * It displays a list of the various functions that a user can perform with Reports
+ * and prompts the user for their selection of which function to activate.
+ *
+ * The listed functions include - Get a Report, List all Discounts, Generate a Report and Remove a Report.
+ *
+ * Once the user has selected a function, the class then executes the required activity accordingly.
  */
 
+// Display the Report's list of functions and prompt the user for their selection.
 public class ReportsOptionsMenu extends OptionsMenu{
     public ReportsOptionsMenu(CommandLineInterface parentCLI) {
         super(parentCLI);
@@ -30,7 +33,9 @@ public class ReportsOptionsMenu extends OptionsMenu{
     }
 
     /**
-     * This function uses to get details of report by the ID of the report
+     * Prompt the user for the Report ID and then proceed to retrieve and display the Report's details accordingly
+     * Note that a report must first be generated before it can be retrieved.
+     * After generating a report use the list report function to see the RID that was created for the report.
      */
     public void getReport(){
         System.out.println("Please enter the report id for the report you wish to display:");
@@ -39,7 +44,7 @@ public class ReportsOptionsMenu extends OptionsMenu{
     }
 
     /**
-     * This function uses to get list of all the reports that exist
+     * Display a list of all the Reports that were generated
      */
     public void getReportList(){
         ArrayList<String> stringList = parentCLI.getFacade().getReportList();
@@ -48,12 +53,16 @@ public class ReportsOptionsMenu extends OptionsMenu{
     }
 
     /**
-     * This function uses to generate a new report
-     * It's require to insert the type of the report, and the details by the type.
-     * For stock report it's require category ID and product ID.
+     * This function prompts the user for the input required to generate a new report
+     *
+     * It requires to enter the type of the report, and then the report's details based on its type.
+     *
+     * For stock reports it requires a category ID and a product ID.
+     *
+     * After being generated successfully the report is stored with a unique RID
      */
     public void generateReport(){
-        //Prompt for report type (stock or invalids)
+        //Prompt for report type (stock, low stock or invalids)
         System.out.println("Report type?\n1 => Stock\n2 => Low Stock\n3 => Invalids");
         int choice = in.nextInt();
         in.nextLine();
@@ -99,16 +108,26 @@ public class ReportsOptionsMenu extends OptionsMenu{
                 System.out.println(invalidsReport);
                 break;
             default:
-                System.out.println("Invalid choice.");
+                System.out.println("Invalid Report Type choice.");
         }
     }
 
     /**
-     * This function uses to remove report by ID
+     * This function prompts the user to identify an existing report by entering it's ID,
+     * and then proceeds to remove the report by calling the Facade function
      */
     public void removeReport(){
         System.out.println("Please enter the report id for the report you wish to remove:");
         int rid = in.nextInt();
-        parentCLI.getFacade().removeReport(rid);
+        System.out.println("Are you sure you want to remove the report? Enter \"y\" to remove.");
+        String verify = in.next().trim();
+        if (verify.equals("y")) {
+           // Remove the report by calling the Facade function with the data the user just entered.
+           parentCLI.getFacade().removeReport(rid);
+            System.out.println("The report was removed successfully.");
+        }
+        else {
+            System.out.println("Report removal was cancelled.");
+        }
     }
 }

@@ -1,11 +1,9 @@
-package BusinessLayer;
-
-import PresentationLayer.CategoryDTO;
+package InventoryModule.BusinessLayer;
 
 /**
  * This class represents the category of the product.
- * Each product belong to category, sub category, and sub sub category.
- * Each category has a "cid" (stand for category ID), and a name.
+ * Each product belongs to a category, sub category, and optional super category.
+ * Each category has a unique "CID" (which stands for category ID), and name.
  */
 public class Category {
     private int cid;

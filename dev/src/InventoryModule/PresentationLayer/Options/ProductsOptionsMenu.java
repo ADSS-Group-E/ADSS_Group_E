@@ -1,20 +1,25 @@
-package PresentationLayer.Options;
+package InventoryModule.PresentationLayer.Options;
 
-import PresentationLayer.CommandLineInterface;
-import PresentationLayer.ProductDTO;
+import InventoryModule.PresentationLayer.CommandLineInterface;
+import InventoryModule.PresentationLayer.ProductDTO;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
- * This class represents the options menu of the products.
- * The menu contains all the function that required:
- * Get product, List of all products, Add product, remove product, add item and remove item.
- * The instruction of this class can be found in the attached document.
+ * This class represents the options menu for Products.
+ *
+ * It displays a list of the various functions that a user can perform with Products
+ * and prompts the user for their selection of which function to activate.
+ *
+ * The listed functions include - Get a product, List all products, Add a product, Remove a product,
+ * add an item and remove an item.
+ *
+ * Once the user has selected a function, the class then executes the required activity accordingly.
  */
 
+// Display the Products list of functions and prompt the user for their selection.
 public class ProductsOptionsMenu extends OptionsMenu{
     public ProductsOptionsMenu(CommandLineInterface parentCLI) {
         super(parentCLI);
@@ -29,7 +34,7 @@ public class ProductsOptionsMenu extends OptionsMenu{
     }
 
     /**
-     * This function uses to get details of product by the ID of the product
+     * Prompt the user for the Product ID and then proceed to retrieve and display the product's details accordingly
      */
     public void getProduct(){
         System.out.println("Please enter the product id for the product you wish to display:");
@@ -39,7 +44,7 @@ public class ProductsOptionsMenu extends OptionsMenu{
     }
 
     /**
-     * This function uses to get list of all the products that exist
+     * Display a list of all the products that exist
      */
     public void getProductList(){
         ArrayList<ProductDTO> DTOlist = parentCLI.getFacade().getProductList();
@@ -48,9 +53,12 @@ public class ProductsOptionsMenu extends OptionsMenu{
     }
 
     /**
-     * This function uses to add a new product.
-     * It's require to insert ID, name, store location, storage location, manufacturer, buying and selling price
-     * minimum amount, and catogory of the product.
+     * This function adds a new product by prompting the user to enter the required information one field at a time.
+     *
+     * The required data includes Product ID, name, store location, storage location, manufacturer,
+     * buying and selling price, minimum amount and product category.
+     *
+     * Once entered, the Facade function is called to save the newly input product information.
      */
     public void addProduct(){
 
@@ -85,11 +93,14 @@ public class ProductsOptionsMenu extends OptionsMenu{
         System.out.println("Category ID:");
         int categoryId = in.nextInt();
 
+        // Add the new product by calling the Facade function with the data the user just entered.
         parentCLI.getFacade().addProduct(new ProductDTO(pid, name, storageLocation, storeLocation , manufacturer, buyingPrice, sellingPrice, minAmount,categoryId));
+        System.out.println("The new product was added successfully.");
     }
 
     /**
-     * This function uses to remove product by ID
+     * This function prompts the user to end the ID of a product they wish to remove,
+     * and then proceeds to remove the product by calling the Facade function
      */
     public void removeProduct(){
         System.out.println("Please enter the product id for the product you wish to remove:");
@@ -97,17 +108,23 @@ public class ProductsOptionsMenu extends OptionsMenu{
         System.out.println("Are you sure you want to remove the product? Enter \"y\" to remove.");
         String verify = in.next().trim();
         if (verify.equals("y")) {
+            // Remove the product by calling the Facade function with the ID the user just entered.
             parentCLI.getFacade().removeProduct(pid);
+            System.out.println("The product was removed successfully.");
         }
         else {
-            System.out.println("Cancelled.");
+            System.out.println("Product removal was cancelled.");
         }
     }
 
     /**
-     * This function uses to add a new item.
-     * It's require to insert PRODUCT ID, ITEM ID and expiration date.
+     * This function adds a new item by prompting the user to enter the required information one field at a time.
+     *
+     * The required data includes Product ID, Item ID, Expiration date (Year, month, day) and the item's location.
+     *
+     * Once entered, the Facade function is called to save the newly input item information.
      */
+
     public void addItem(){
         System.out.println("Please fill out the details for the new discount when prompted and press enter.");
 
@@ -126,24 +143,31 @@ public class ProductsOptionsMenu extends OptionsMenu{
         System.out.println("Expiration Day:");
         int expirationDay = in.nextInt();
 
+        //Convert the entered data into a valid expiration date.
         LocalDateTime expiration = LocalDate.of(expirationYear,expirationMonth,expirationDay).atStartOfDay();
 
+        //Prompt the user for the item's location so it can be created accordingly
         System.out.println("Item location?\n1 => Store\n2 => Storage");
         int choice = in.nextInt();
+
+        // Add the new item by calling the Facade function with the data the user just entered.
         switch (choice){
             case 1:
                 parentCLI.getFacade().addItemToStore(pid,id,expiration);
+                System.out.println("The new item was added successfully.");
                 break;
             case 2:
                 parentCLI.getFacade().addItemToStorage(pid,id,expiration);
+                System.out.println("The new item was added successfully.");
                 break;
             default:
-                System.out.println("Invalid choice.");
+                System.out.println("Invalid item location choice.");
         }
     }
 
     /**
-     * This function uses to remove item by product ID and item ID
+     * This function prompts the user to identify an existing item by entering it's Product ID and Item ID,
+     * and then proceeds to remove the item by calling the Facade function
      */
     public void removeItem(){
         System.out.println("Please enter the PRODUCT ID of the item you wish to remove:");
@@ -153,10 +177,12 @@ public class ProductsOptionsMenu extends OptionsMenu{
         System.out.println("Are you sure you want to remove the item? Enter \"y\" to remove.");
         String verify = in.next().trim();
         if (verify.equals("y")) {
+            // Remove the item by calling the Facade function with the data the user just entered.
             parentCLI.getFacade().removeItem(pid,id);
+            System.out.println("The item was removed successfully.");
         }
         else {
-            System.out.println("Cancelled.");
+            System.out.println("Item removal was cancelled.");
         }
     }
 }

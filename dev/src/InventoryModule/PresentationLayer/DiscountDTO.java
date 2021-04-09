@@ -1,15 +1,13 @@
-package PresentationLayer;
+package InventoryModule.PresentationLayer;
 
-import BusinessLayer.Discount;
-import BusinessLayer.Product;
+import InventoryModule.BusinessLayer.Discount;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 /**
- * This class represents discountDTO.
- * A DTO is an object that is used to encapsulate data,
- * and send it from one subsystem of an application to another.
+ * This class represents the DiscountDTO.
+ * A DTO is an object that is used to encapsulate data and send it from one subsystem of an application to another.
  */
 
 public class DiscountDTO {

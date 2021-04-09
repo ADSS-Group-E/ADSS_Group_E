@@ -1,21 +1,23 @@
-package PresentationLayer.Options;
+package InventoryModule.PresentationLayer.Options;
 
-import BusinessLayer.Product;
-import PresentationLayer.CommandLineInterface;
+import InventoryModule.PresentationLayer.CommandLineInterface;
 
 import java.util.Scanner;
 
 /**
  * This class represents the main menu of the system.
- * The menu contains all the required options.
- * Products, categories, discounts and reports.
- * The instruction of this class can be found in the attached document.
- */
+ *
+ * It lists the four main modules - products, categories, discounts and reports
+ * and prompts the user to enter their selection accordingly.
+ *
+ * It then activates the next sub-menu of the system based on the user's selection.
+ *  */
 
 public class MainOptionsMenu extends OptionsMenu{
     public MainOptionsMenu(CommandLineInterface parentCLI) {
         super(parentCLI);
 
+        // Prompt the user for their module selection
         Scanner in = new Scanner(System.in);
         options.put(1, new Option( "Products",() -> {
             parentCLI.getProductsOptionsMenu().enter();
@@ -30,7 +32,7 @@ public class MainOptionsMenu extends OptionsMenu{
             parentCLI.getReportsOptionsMenu().enter();
         }));
         options.put(5, new Option( "Quit",() -> {
-            System.out.println("Exiting.");
+            System.out.println("Exiting. Thank you for using our system.");
             System.exit(0);
         }));
     }
