@@ -37,7 +37,7 @@ public class Facade {
     }
 
     public ArrayList<ProductDTO> getProductList(){
-        ArrayList<ProductDTO> DTOlist = new ArrayList<ProductDTO>();
+        ArrayList<ProductDTO> DTOlist = new ArrayList<>();
         //Turn products into DTOs
         ArrayList<Product> productList = pCont.getList();
         productList.forEach((product)-> DTOlist.add(new ProductDTO(product)));
@@ -105,10 +105,17 @@ public class Facade {
         return report.toString();
     }
 
+    public String generateLowStockReport(){
+        Report report = rCont.generateLowStockReport(pCont.getList());
+        return report.toString();
+    }
+
     public String generateInvalidsReport(){
         Report report = rCont.generateInvalidsReport(pCont.getList());
         return report.toString();
     }
+
+
 
     public String getReport(int rid){
         return rCont.getReport(rid).toString();

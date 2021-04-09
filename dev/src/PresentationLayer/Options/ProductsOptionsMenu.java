@@ -2,6 +2,9 @@ package PresentationLayer.Options;
 
 import PresentationLayer.CommandLineInterface;
 import PresentationLayer.ProductDTO;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -60,60 +63,72 @@ public class ProductsOptionsMenu extends OptionsMenu{
         }));
 
         options.put(i++, new Option( "Remove product",() -> {
-            // TODO Check this works
             Scanner in = new Scanner(System.in);
             System.out.println("Please enter the product id for the product you wish to remove:");
             int pid = in.nextInt();
-            System.out.println("Are you sure you want to remove the product? type \"1\" to remove.");
-            int verify = in.nextInt();
-            if (verify == 1) {
+            System.out.println("Are you sure you want to remove the product? Enter \"y\" to remove.");
+            String verify = in.next().trim();
+            if (verify.equals("y")) {
                 parentCLI.getFacade().removeProduct(pid);
             }
             else {
-                System.out.println("Product did not removed");
+                System.out.println("Cancelled.");
             }
         }));
 
         options.put(i++, new Option( "Add item",() -> {
             // TODO Check this
             Scanner in = new Scanner(System.in);
-            System.out.println("Please enter the PRODUCT id of the item you wish to add:");
+            System.out.println("Please fill out the details for the new discount when prompted and press enter.");
+
+            System.out.println("Product ID:");
             int pid = in.nextInt();
-            System.out.println("Please enter the ITEM id of the item you wish to add:");
+
+            System.out.println("Item ID:");
             int id = in.nextInt();
-            System.out.println("Please enter the expiration date of the item you wish to add by the format dd-mm-yyyy:");
-            String expiration = in.nextLine();
-            // TODO get date from user and insert to product
-            // Item item = new Item(pid, dateTime);
-            System.out.println("Do you add the item to the sore or to the storage? type \"1\" for store, \"2\" for storage");
-            /*
-            int storeStorage = in.nextInt();
-            if (storeStorage == 1) {
-                 parentCLI.getFacade().addItemToStore(pid, id, dateTime);
-             }
-             else if (storeStorage == 2) {
-                 parentCLI.getFacade().addItemToStorage(pid, id, dateTime);
-             }
-            System.out.println("The item id is " + id + "and the expiration date is: " + dateTime);
-             */
+
+            System.out.println("Expiration Year:");
+            int expirationYear = in.nextInt();
+
+            System.out.println("Expiration Month:");
+            int expirationMonth = in.nextInt();
+
+            System.out.println("Expiration Day:");
+            int expirationDay = in.nextInt();
+
+            LocalDateTime expiration = LocalDate.of(expirationYear,expirationMonth,expirationDay).atStartOfDay();
+
+            System.out.println("Item location?\n1 => Store\n2 => Storage");
+            int choice = in.nextInt();
+            switch (choice){
+                case 1:
+                    parentCLI.getFacade().addItemToStore(pid,id,expiration);
+                    break;
+                case 2:
+                    parentCLI.getFacade().addItemToStorage(pid,id,expiration);
+                    break;
+                default:
+                    System.out.println("Invalid choice.");
+            }
         }));
 
         options.put(i++, new Option( "Remove item",() -> {
             // TODO Check this
             Scanner in = new Scanner(System.in);
-            System.out.println("Please enter the PRODUCT id of the item you wish to remove:");
+            System.out.println("Please enter the PRODUCT ID of the item you wish to remove:");
             int pid = in.nextInt();
-            System.out.println("Please enter the id of the item you wish to remove:");
+            System.out.println("Please enter the ITEM ID of the item you wish to remove:");
             int id = in.nextInt();
-            System.out.println("Are you sure you want to remove the product? type \"1\" to remove.");
-            int verify = in.nextInt();
-            if (verify == 1) {
-                parentCLI.getFacade().removeItem(pid, id);
+            System.out.println("Are you sure you want to remove the item? Enter \"y\" to remove.");
+            String verify = in.next().trim();
+            if (verify.equals("y")) {
+                parentCLI.getFacade().removeItem(pid,id);
             }
             else {
-                System.out.println("Product did not removed");
+                System.out.println("Cancelled.");
             }
         }));
+
         options.put(i, new Option( "Back",() -> {
             System.out.println("Going back.");
             goBack=true;

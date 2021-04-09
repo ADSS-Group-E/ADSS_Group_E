@@ -26,7 +26,7 @@ public class ReportsOptionsMenu extends OptionsMenu{
 
         options.put(i++, new Option("Generate report", () -> {
             //Prompt for report type (stock or invalids)
-            System.out.println("Enter 1 for stock report, 2 for invalids report");
+            System.out.println("Report type?\n1 => Stock\n2 => Low Stock\n3 => Invalids");
             int choice = in.nextInt();
             in.nextLine();
             switch (choice){
@@ -62,6 +62,10 @@ public class ReportsOptionsMenu extends OptionsMenu{
                     System.out.println(stockReport);
                     break;
                 case 2:
+                    String lowStockReport = parentCLI.getFacade().generateLowStockReport();
+                    System.out.println(lowStockReport);
+                    break;
+                case 3:
                     //Invalids report
                     String invalidsReport = parentCLI.getFacade().generateInvalidsReport();
                     System.out.println(invalidsReport);

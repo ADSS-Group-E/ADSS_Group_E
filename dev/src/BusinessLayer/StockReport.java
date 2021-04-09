@@ -16,12 +16,12 @@ public class StockReport extends Report {
     }
 
     private static String formatAsRecord(Product product){
-        return String.format("%-10d %-20s %-10d %-10d",product.getPid(),product.getName(), product.getAmountInStore(), product.getAmountInStorage());
+        return String.format("%-10d %-20s %-15d %-15d %-15d %-15d",product.getPid(),product.getName(), product.getAmountInStore(), product.getAmountInStorage(),product.getAmountInStore()+product.getAmountInStorage(),product.getMinAmount());
     }
 
     @Override
     protected String headerRow() {
-        return String.format("%-10s %-20s %-10s %-10s","PID","Name","In Store","In Storage");
+        return String.format("%-10s %-20s %-15s %-15s %-15s %-15s","PID","Name","In Store","In Storage", "Total Stock", "Min Needed");
     }
 
     @Override

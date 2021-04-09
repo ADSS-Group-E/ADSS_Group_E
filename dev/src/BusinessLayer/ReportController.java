@@ -38,4 +38,11 @@ public class ReportController {
     public void removeReport(int rid) {
         reports.remove(rid);
     }
+
+    public Report generateLowStockReport(ArrayList<Product> products) {
+        LowStockReport report = new LowStockReport(nextRid, products);
+        reports.put(nextRid,report);
+        nextRid++;
+        return report;
+    }
 }
