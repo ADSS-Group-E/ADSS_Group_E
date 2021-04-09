@@ -6,7 +6,7 @@ public class Item {
     private int quantity;
     private int supplierCN;
 
-    Item(String name, int price, int quantity, int supplierCN) {
+    public Item(String name, int price, int quantity, int supplierCN) {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
@@ -25,10 +25,20 @@ public class Item {
         this.quantity = quantity;
     }
 
-    int getQuantity() { return quantity; }
+    public int getQuantity() { return quantity; }
 
-    int getPrice() { return price; }
+    public int getPrice() { return price; }
 
-    String getName() { return name; }
+    public String getName() { return name; }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Item){
+            Item item = (Item)obj;
+            return item.supplierCN == supplierCN & item.quantity == quantity & item.price == price
+                    & item.name.equals(name);
+        }
+        else return false;
+    }
 }
 

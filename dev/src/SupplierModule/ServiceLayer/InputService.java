@@ -18,6 +18,7 @@ final class InputService {//The class controls the input received from the user
     }
 
     String next(String message){
+        //goes in a loop to get String and prints the message we provided each time
         boolean retry = true;
         String nextString = "";
         while (retry) {
@@ -36,6 +37,7 @@ final class InputService {//The class controls the input received from the user
     }
 
     int nextInt(String message){
+        //goes in a loop to get int and prints the message we provided each time
         boolean retry = true;
         int nextInt = 0;
         while (retry) {
@@ -53,6 +55,7 @@ final class InputService {//The class controls the input received from the user
     }
 
     boolean nextBoolean(String message){
+        //goes in a loop to get boolean and prints the message we provided each time
         boolean retry = true;
         boolean nextBool = false;
         while (retry) {

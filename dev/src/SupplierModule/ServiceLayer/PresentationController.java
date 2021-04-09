@@ -11,65 +11,68 @@ class PresentationController {
     public static void main(String[] args) {
         InputService in = InputService.getInstance();
         OutputService out = OutputService.getInstance();
-        ServiceController service = ServiceController.getInstance();
-        service.initialize();
-        final int numOfOptions = showOptions();
+        ServiceController service = ServiceController.getInstance(); //initializes empty objects
+        boolean intializeData = in.nextBoolean("Initialize Data? true/false: "); //ask user if to import existing data
+        if (intializeData) //if yes
+            service.initialize(); //import existing data
+        PresentationHandler.getInstance().showOptions(); //show the user his menu
         //show user his options
-        int input = in.nextInt("");
+        int input = in.nextInt(""); //gets menu option from user
         while (true) {
             //decrypts input
             switch (input) {
                 case (0): {//register supplier
+                    //get supplier information
                     String name = in.next("Enter supplier name: ");
                     int companyNumber = in.nextInt("Enter company number: ");
                     String paymentMethod = in.next("Enter payment method: ");
                     String bankAccount = in.next("Enter bank account: ");
-                    ArrayList<String[]> items = createItemList();
-                    ArrayList<String[]> contacts = createContactList();
-                    boolean hasQuantityWriter = manageQuantityWriter();
-                    if (!hasQuantityWriter)
-                        service.register(name, companyNumber, paymentMethod, bankAccount, items, contacts);
-                    else {
-                        int regCostumer = in.nextInt("Regular costumer discount: %");
-                        while (regCostumer >= service.getMaxDiscount()) {
+                    ArrayList<String[]> items = PresentationHandler.getInstance().createItemList(); //creates item list
+                    ArrayList<String[]> contacts = PresentationHandler.getInstance().createContactList(); //creates contact list
+                    boolean hasQuantityWriter = PresentationHandler.getInstance().manageQuantityWriter(); //asks if Quantity Writer is needed
+                    if (!hasQuantityWriter) //if not
+                        service.register(name, companyNumber, paymentMethod, bankAccount, items, contacts); //register without him
+                    else { //if does need quantity writer
+                        int regCostumer = in.nextInt("Regular costumer discount: %"); //asks for discount given to a regular costumer
+                        while (regCostumer >= service.getMaxDiscount()) { //while the max discount is illegal
                             out.println("Please try again.");
-                            regCostumer = in.nextInt("Regular costumer discount: %");
+                            regCostumer = in.nextInt("Regular costumer discount: %"); //try again
                         }
-                        int minPrice = in.nextInt("Minimum buy price for discount: ");
-                        HashMap<Integer, Integer> discountSteps = createDiscountList();
-                        service.register(name, companyNumber, paymentMethod, bankAccount, items, contacts, regCostumer, minPrice, discountSteps);
+                        int minPrice = in.nextInt("Minimum buy price for discount: "); //minimum order price for discount to happen
+                        HashMap<Integer, Integer> discountSteps = PresentationHandler.getInstance().createDiscountList(); //creates a discount list
+                        service.register(name, companyNumber, paymentMethod, bankAccount, items, contacts, regCostumer, minPrice, discountSteps); //registers the supplier
                     }
                     break;
                 }
-                case (1): {//order
-                    if (showSupplierInfo()) {
+                case (1): {//create order
+                    if (PresentationHandler.getInstance().showSupplierInfo()) { //if there are no suppliers to order from skip the case
                         ArrayList<String> supplierItems = null;
-                        while (supplierItems == null) {
+                        while (supplierItems == null) { //while the supplier number is illegal
                             input = in.nextInt("Enter number of the supplier: ");
                             supplierItems = service.getItemsFromSupplier(input);
                         }
-                        boolean constantDelivery = in.nextBoolean("\nConstant Delivery? true/false ");
-                        boolean needsDelivery = in.nextBoolean("In need of delivery? true/false ");
+                        boolean constantDelivery = in.nextBoolean("\nConstant Delivery? true/false "); //constant delivery?
+                        boolean needsDelivery = in.nextBoolean("In need of delivery? true/false "); //if the costumer needs us to transfer his items
                         out.println("\nSupplier items: ");
-                        out.println(showSupplierItems(supplierItems));
-                        ArrayList<String[]> items = createItemList(input);
-                        out.println("Total Order price: " + service.createOrder(input, needsDelivery, constantDelivery, items) + "");
+                        out.println(PresentationHandler.getInstance().showSupplierItems(supplierItems)); //show the supplier items
+                        ArrayList<String[]> items = PresentationHandler.getInstance().createItemList(input); //create item list
+                        out.println("Total Order price: " + service.createOrder(input, needsDelivery, constantDelivery, items) + ""); //create order and print it's total price
                         break;
                     }
                 }
-                case (2): {//
-                    ArrayList<String[]> orders = service.getRegularOrdersToStrings();
+                case (2): { //get orders that come on a weekly basis
+                    ArrayList<String[]> orders = service.getRegularOrdersToStrings(); //gets data from the system
                     for (String[] order : orders) {
-                        for (String s : order) {
+                        for (String s : order) { //print all orders
                             out.println(s);
                         }
                     }
                     break;
                 }
                 case (3): {
-                    ArrayList<String[]> orders = service.getRegularItems();
-                    if (orders.size() != 0) {
-                        for (int i = 0; i < orders.size(); i++) {
+                    ArrayList<String[]> orders = service.getAllItems(); //gets all items
+                    if (orders.size() != 0) { //if there are no orders the case skips
+                        for (int i = 0; i < orders.size(); i++) { //prints all of the items
                             String[] item = orders.get(i);
                             out.println(i + ") [Supplier Number: " + item[0] + "\n" +
                                     "Name: " + item[3] + "\n" +
@@ -78,21 +81,21 @@ class PresentationController {
                         }
                         int orderNumber = in.nextInt("Select an item Number: ");
                         int newQuantity = in.nextInt("Enter new quantity you wish to order for the item you chose: ");
-                        if (orderNumber >= 0 && orderNumber < orders.size()) {
+                        if (orderNumber >= 0 && orderNumber < orders.size()) { //get order number
                             String[] orderToChange = orders.get(orderNumber);
                             if (!service.updateOrderItemQuantity(Integer.parseInt(orderToChange[0]), Integer.parseInt(orderToChange[1]),
-                                    Integer.parseInt(orderToChange[2]), newQuantity)) {
-                                out.println("The new quantity is illegal");
+                                    Integer.parseInt(orderToChange[2]), newQuantity)) { //if can't update
+                                out.println("The new quantity is illegal"); //the new quantity is illegal
                             }
-                        } else {
+                        } else { //illegal item number
                             out.println("The item number is illegal");
                         }
                         break;
                     }
                 }
                 case (4): {
-                    ArrayList<String[]> orders = service.getRegularItems();
-                    if (orders.size() != 0) {
+                    ArrayList<String[]> orders = service.getAllItems(); //gets all items
+                    if (orders.size() != 0) { //if there are no order we skip the case
                         for (int i = 0; i < orders.size(); i++) {
                             String[] item = orders.get(i);
                             out.println(i + ") [Supplier Number: " + item[0] + "\n" +
@@ -113,183 +116,8 @@ class PresentationController {
                     }
                 }
             }
-            showOptions();
+            PresentationHandler.getInstance().showOptions();
             input = in.nextInt("");
         }
-    }
-
-    private static ArrayList<String[]> createItemList(int supplierNum) {
-        ArrayList<String[]> list = new ArrayList<>();
-        String ans = "Y";
-        while (!ans.equalsIgnoreCase("N")) {
-            if (ans.equalsIgnoreCase("Y")) {
-                int number;
-                String[] item;
-                OutputService.getInstance().println("\nItems: ");
-                number = InputService.getInstance().nextInt("Enter Item Number: ");
-                int quantity;
-                quantity = InputService.getInstance().nextInt("Enter Item quantity: ");
-                item = ServiceController.getInstance().getSpecificItem(supplierNum, number);
-                while (!ServiceController.getInstance().updateSellerItemQuantity(supplierNum, number, quantity) || item.length != 4) {
-                    OutputService.getInstance().println("Please try again.");
-                    number = InputService.getInstance().nextInt("Enter Item Number: ");
-                    quantity = InputService.getInstance().nextInt("Enter Item quantity: ");
-                    item = ServiceController.getInstance().getSpecificItem(supplierNum, number);
-                }
-                String[] order = {item[0], item[1], (quantity) + "", item[3]};
-                boolean notExists = true;
-                for (String[] existingOrder : list) {
-                    if (existingOrder[0].equals(order[0])) {
-                        notExists = false;
-                        break;
-                    }
-                }
-                if (notExists)
-                    list.add(order);
-                else {
-                    OutputService.getInstance().println("This item already exists.");
-                }
-                OutputService.getInstance().println("Add another Item? N/Y ");
-            }
-            else {
-                OutputService.getInstance().println("please try again");
-            }
-            ans = InputService.getInstance().next("");
-        }
-        return list;
-    }
-
-    private static ArrayList<String[]> createItemList() {
-        ArrayList<String[]> list = new ArrayList<>();
-        String ans = "Y";
-        OutputService.getInstance().println("Items: ");
-        while (!ans.equalsIgnoreCase("N")) {
-            if (ans.equalsIgnoreCase("Y")) {
-                OutputService.getInstance().println("Existing items:");
-                for(String[] item : list) {
-                    OutputService.getInstance().println("[Name: " + item[0] + "]");
-                }
-                String name = InputService.getInstance().next("Enter Item Name: ");
-                String[] equalBy = {name};
-                if (ServiceController.getInstance().contains(equalBy, list)) {
-                    OutputService.getInstance().println("This item already exists.");
-                }
-                else {
-                    String price = InputService.getInstance().nextInt("Enter Item price: ") + "";
-                    String quantity = InputService.getInstance().nextInt("Enter Item quantity: ") + "";
-                    String supplierCN = InputService.getInstance().nextInt("Enter Item catalog number: ") + "";
-                    String[] order = {name, price, quantity, supplierCN};
-                    list.add(order);
-                }
-                OutputService.getInstance().println("Add another Item? N/Y ");
-            }
-            else {
-                OutputService.getInstance().println("please try again");
-            }
-            ans = InputService.getInstance().next("");
-        }
-        return list;
-    }
-
-    private static ArrayList<String[]> createContactList() {
-        ArrayList<String[]> list = new ArrayList<>();
-        String ans = "Y";
-        while (!ans.equalsIgnoreCase("N")) {
-            if (ans.equalsIgnoreCase("Y")) {
-                OutputService.getInstance().println("Existing contacts: ");
-                for (String[] contact : list) {
-                    OutputService.getInstance().println("[Name: " + contact[0] + ", Email: " + contact[1] + "]");
-                }
-                String name = InputService.getInstance().next("Enter Contact Name: ");
-                String email = InputService.getInstance().next("Enter Contact Email: ");
-                String[] item = {name, email};
-                if (!ServiceController.getInstance().contains(item, list))
-                    list.add(item);
-                else {
-                    OutputService.getInstance().println("This contact already exists.");
-                }
-                OutputService.getInstance().print("Add another Contact? N/Y ");
-            }
-            else {
-                OutputService.getInstance().println("Please try again.\n");
-            }
-            ans = InputService.getInstance().next("");
-        }
-        return list;
-    }
-
-    private static HashMap<Integer, Integer> createDiscountList() {
-        int maxDiscount = ServiceController.getInstance().getMaxDiscount();
-        HashMap<Integer, Integer> map = new HashMap<>();
-        String ans = InputService.getInstance().next("Add discount steps? N/Y ");
-        while (!ans.equalsIgnoreCase("N")) {
-            if (ans.equalsIgnoreCase("Y")) {
-                OutputService.getInstance().println("Existing discounts: ");
-                for (Integer i : map.keySet()) {
-                    OutputService.getInstance().println("[Price: " + i + ", Discount: %" + map.get(i) + "]");
-                }
-                int cash = InputService.getInstance().nextInt("Enter amount of money: ");
-                while (map.containsKey(cash)) {
-                    OutputService.getInstance().println("Please try again.");
-                    cash = InputService.getInstance().nextInt("Enter amount of money: %");
-                }
-                int discount = InputService.getInstance().nextInt("Enter amount of discount: %");
-                while (discount >= ServiceController.getInstance().getMaxDiscount()) {
-                    OutputService.getInstance().println("amount must be between 0-" + (ServiceController.getInstance().getMaxDiscount() - 1));
-                    OutputService.getInstance().println("Please try again.");
-                    discount = InputService.getInstance().nextInt("Enter amount of discount: %");
-                }
-                    map.put(cash, discount);
-                    OutputService.getInstance().print("Add another step? N/Y ");
-            }
-            else {
-                OutputService.getInstance().println("Please try again.");
-            }
-            ans = InputService.getInstance().next("");
-        }
-        return map;
-    }
-
-    private static boolean showSupplierInfo(){
-        ArrayList<String[]> sups = ServiceController.getInstance().getSuppliersInfo();
-        if (sups.size() == 0) return false;
-        for (int i = 0; i < sups.size(); i++) {
-            OutputService.getInstance().println(i + ": " + Arrays.toString(sups.get(i)));
-        }
-        return true;
-    }
-
-    private static boolean manageQuantityWriter(){
-        String ny = InputService.getInstance().next("Do you need a Quantity Writer? N/Y ");
-        while (!ny.equalsIgnoreCase("N")) {
-            if (ny.equalsIgnoreCase("Y")) {
-                //add quantity writer
-                return true;
-            }
-            ny = InputService.getInstance().next("Please try again");
-        }
-        //not to add
-        return false;
-    }
-
-    private static int showOptions(){
-        String[] options = new String[]{
-          "Add Supplier", "Create Order", "Get Weekly Orders", "Update Order Item Quantity", "Delete Item From Order"
-        };
-        OutputService.getInstance().println("Menu:");
-        for(int i = 0; i < options.length; i++){
-            OutputService.getInstance().println(i + ") " + options[i]);
-        }
-        return options.length;
-    }
-
-    private static String showSupplierItems(ArrayList<String> items) {
-        StringBuilder result = new StringBuilder();
-        int i;
-        for (i = 0; i < items.size() - 1; i++) {
-            result.append(i).append(": ").append(items.get(i)).append("\n\n");
-        }
-        result.append(i).append(": ").append(items.get(i));
-        return result.toString();
     }
 }

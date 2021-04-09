@@ -6,32 +6,32 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-class Order {
+public class Order {
     private boolean constantDelivery;
     private boolean needsDelivery;
     private List<Item> orderItems;
     private ZonedDateTime date;
 
-    Order(boolean constantDelivery, boolean needsDelivery, List<Item> orderItems) {
+    public Order(boolean constantDelivery, boolean needsDelivery, List<Item> orderItems) {
         this.constantDelivery = constantDelivery;
         this.needsDelivery = needsDelivery;
         this.orderItems = orderItems;
         this.date = ZonedDateTime.now();
     }
 
-    boolean isConstantDelivery() {
+    public boolean isConstantDelivery() {
         return constantDelivery;
     }
 
-    boolean isNeedsDelivery() {
+    public boolean isNeedsDelivery() {
         return needsDelivery;
     }
 
-    List<Item> getOrderItems() {
+    public List<Item> getOrderItems() {
         return orderItems;
     }
 
-    void setOrderItems(List<Item> orderItems) {
+    public void setOrderItems(List<Item> orderItems) {
         this.orderItems = orderItems;
     }
 

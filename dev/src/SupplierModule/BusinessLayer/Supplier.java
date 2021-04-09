@@ -13,7 +13,7 @@ class Supplier {
     private String paymentMethod;
     private String name;
 
-    Supplier(String name, int companyNumber, String bankAccount, String paymentMethod, List<Item> items,
+    Supplier(String name, int companyNumber, String paymentMethod, String bankAccount, List<Item> items,
              List<Contact> contacts, QuantityWriter quantityWriter) {
         this.name = name;
         this.companyNumber = companyNumber;
@@ -49,6 +49,10 @@ class Supplier {
         return paymentMethod;
     }
 
+    String getBankAccount(){
+        return bankAccount;
+    }
+
     String getName() {
         return name;
     }
@@ -58,12 +62,16 @@ class Supplier {
     List<Item> getItems() { return items; }
 
     int calcPrice(Order order) {
-        if (quantityWriter == null) {
+        if (quantityWriter == null) { //if quantity writer doesn't exist
             return order.getPrice();
         }
-        else {
+        else { //else get price
             return quantityWriter.calcPrice(order.getPrice());
         }
+    }
+
+    public QuantityWriter getQuantityWriter(){
+        return quantityWriter;
     }
 }
 

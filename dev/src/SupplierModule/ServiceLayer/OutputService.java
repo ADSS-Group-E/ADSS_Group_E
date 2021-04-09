@@ -14,9 +14,9 @@ final class OutputService {//The class controls the output sent to the user
 
     void println(String arg){
         System.out.println(arg);
-    }
+    } //println
 
     void print(String arg) {
         System.out.print(arg);
-    }
+    } //print
 }
