@@ -7,17 +7,18 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
 
-//TODO Maybe move lambdas in options menus to their own functions to ease documentation
 public abstract class OptionsMenu {
     protected TreeMap<Integer,Option> options;
     protected CommandLineInterface parentCLI;
     protected boolean goBack;
+    protected Scanner in;
 
     public OptionsMenu(CommandLineInterface parentCLI) {
 
         options = new TreeMap<>();
         this.parentCLI = parentCLI;
         goBack=false;
+        in = new Scanner(System.in);
     }
 
     /*
