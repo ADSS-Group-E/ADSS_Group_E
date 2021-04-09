@@ -36,4 +36,13 @@ public class DiscountController {
             discounts.put(discount.getDid(), discount);
         }
     }
+
+    public void removeDiscount(int did) {
+        if (discounts.containsKey(did)) {
+            discounts.remove(did);
+        }
+        else {
+            throw new IllegalArgumentException("Discount ID does not exist");
+        }
+    }
 }

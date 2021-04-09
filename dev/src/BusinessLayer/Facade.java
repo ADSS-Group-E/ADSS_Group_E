@@ -174,4 +174,6 @@ public class Facade {
 
 
     }
+
+    public void removeDiscount(int did) {dCont.removeDiscount(did); }
 }

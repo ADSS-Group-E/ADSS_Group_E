@@ -30,7 +30,6 @@ public class DiscountsOptionsMenu extends OptionsMenu{
         }));
 
         options.put(i++, new Option("Add discount", () -> {
-            //TODO implement
             Scanner in = new Scanner(System.in);
             System.out.println("Discount type?\n1 => Buying\n2 => Selling");
             int choice = in.nextInt();
@@ -118,7 +117,17 @@ public class DiscountsOptionsMenu extends OptionsMenu{
         }));
 
         options.put(i++, new Option("Remove discount", () -> {
-            //TODO implement
+            Scanner in = new Scanner(System.in);
+            System.out.println("Please enter the discount id you wish to remove:");
+            int did = in.nextInt();
+            System.out.println("Are you sure you want to remove the discount? Enter \"y\" to remove.");
+            String verify = in.next().trim();
+            if (verify.equals("y")) {
+                parentCLI.getFacade().removeDiscount(did);
+            }
+            else {
+                System.out.println("Cancelled.");
+            }
         }));
 
         options.put(i, new Option( "Back",() -> {

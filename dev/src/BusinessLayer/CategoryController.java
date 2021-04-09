@@ -58,7 +58,7 @@ public class CategoryController {
             categories.remove(cid);
         }
         else {
-            throw new IllegalArgumentException("Product pid is not exist");
+            throw new IllegalArgumentException("Category ID does not exist");
         }
     }
 }

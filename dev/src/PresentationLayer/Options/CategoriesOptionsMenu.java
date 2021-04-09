@@ -50,11 +50,11 @@ public class CategoriesOptionsMenu extends OptionsMenu{
         options.put(i++, new Option( "Remove category",() -> {
             Scanner in = new Scanner(System.in);
             System.out.println("Please enter the category id you wish to remove:");
-            int pid = in.nextInt();
-            System.out.println("Are you sure you want to remove the category? type \"y\" to remove.");
+            int cid = in.nextInt();
+            System.out.println("Are you sure you want to remove the category? Enter \"y\" to remove.");
             String verify = in.next().trim();
             if (verify.equals("y")) {
-                parentCLI.getFacade().removeCategory(pid);
+                parentCLI.getFacade().removeCategory(cid);
             }
             else {
                 System.out.println("Cancelled.");
