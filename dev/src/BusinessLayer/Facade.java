@@ -9,6 +9,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+/**
+ * This class represents the facade of the project.
+ * the purpose of the facade is to hide the complexities of the system
+ * and provides an interface to the client using which the client can access the system.
+ */
 public class Facade {
     private ProductController pCont;
     private ReportController rCont;
