@@ -13,8 +13,28 @@ public class Main {
     private static Facade facade = Facade.getInstance();
 
     public static void main(String[] args) {
-        systemInitialize();
+        System.out.println("Welcome to Super Lee's System");
+        System.out.println("Do you want the system to be initialized? \n Enter Y/N");
+        String ans = reader.next();
+        while (ans!="n" || ans!="N" || ans!="y"||ans!="Y"){
+            System.out.println("Please enter Y for Yes or N for No");
+            ans = reader.next();
+        }
+        if(ans.equals("y") || ans.equals("Y")){
+            systemInitialize();
+            system();
+        }
+        else {
+            createSystem();
+        }
 
+    }
+
+    private static void createSystem() {
+        Menu.menuForCreate();
+    }
+
+    private static void system(){
         System.out.println(LocalDate.now());
         System.out.println("Welcome to Super Lee's System, please enter your ID in order to log in");
         String ID = reader.next();
@@ -36,7 +56,11 @@ public class Main {
         else {
             Menu.otherWorkerMenu(workerDTO,branchID);
         }
+
     }
+
+
+
 
     private static ShiftTypeDTO createShiftType(String type) {
         if (type.equals("M") || type.equals("m"))
