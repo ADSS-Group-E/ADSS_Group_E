@@ -16,7 +16,7 @@ public class Main {
         System.out.println("Welcome to Super Lee's System");
         System.out.println("Do you want the system to be initialized? \n Enter Y/N");
         String ans = reader.next();
-        while (ans!="n" || ans!="N" || ans!="y"||ans!="Y"){
+        while (!(ans.equals("n") || ans.equals("N") || ans.equals("Y")||ans.equals("y"))){
             System.out.println("Please enter Y for Yes or N for No");
             ans = reader.next();
         }
@@ -38,24 +38,48 @@ public class Main {
         System.out.println(LocalDate.now());
         System.out.println("Welcome to Super Lee's System, please enter your ID in order to log in");
         String ID = reader.next();
-        WorkerDTO workerDTO = facade.findDTOWorkerByID(ID);
-        while (workerDTO == null) {
-            System.out.println("There is no worker with such ID please enter new ID");
-            ID = reader.next();
-            workerDTO = facade.findDTOWorkerByID(ID);
-        }
-        int branchID = facade.findBranchByWorker(workerDTO).getBranchID();
-        List<QualificationsDTO> qualifications = facade.getWorkerQualifications(workerDTO);
-        if (qualifications.contains(QualificationsDTO.BranchManager)) {
-            Menu.branchManagerMenu(workerDTO,branchID);
+        ResponseT<WorkerDTO>workerDTOResponseT=facade.findDTOWorkerByID(ID);
+        if(workerDTOResponseT.isErrorOccurred())
+            System.out.println(workerDTOResponseT.getErrorMessage());
+        else{
+            WorkerDTO workerDTO = workerDTOResponseT.getValue();
+            while (workerDTO == null) {
+                //System.out.println("There is no worker with such ID please enter new ID");
+                ID = reader.next();
+                workerDTOResponseT=facade.findDTOWorkerByID(ID);
+                if(workerDTOResponseT.isErrorOccurred())
+                    System.out.println(workerDTOResponseT.getErrorMessage());
+                else{
+                    workerDTO =workerDTOResponseT.getValue();
+                }
 
-        } else if (workerDTO.getQualifications().contains(QualificationsDTO.Human_Resources_Director)) {
-            Menu.HRDMenu(workerDTO,branchID);
+            }
+            ResponseT<BranchDTO>branchDTOResponseT=facade.findBranchByWorker(workerDTO);
+            if(branchDTOResponseT.isErrorOccurred())
+                System.out.println(branchDTOResponseT.getErrorMessage());
+            else{
+
+                ResponseT<List<QualificationsDTO>> listResponseT=facade.getWorkerQualifications(workerDTO);
+                if(listResponseT.isErrorOccurred())
+                    System.out.println(listResponseT.getErrorMessage());
+                else{
+                    List<QualificationsDTO> qualifications = listResponseT.getValue();
+                    if (qualifications.contains(QualificationsDTO.BranchManager)) {
+                        Menu.branchManagerMenu(workerDTO,branchDTOResponseT.getValue().getBranchID());
+
+                    } else if (workerDTO.getQualifications().contains(QualificationsDTO.Human_Resources_Director)) {
+                        Menu.HRDMenu(workerDTO,branchDTOResponseT.getValue().getBranchID());
+
+                    }
+                    else {
+                        Menu.otherWorkerMenu(workerDTO,branchDTOResponseT.getValue().getBranchID());
+                    }
+                }
+
+            }
 
         }
-        else {
-            Menu.otherWorkerMenu(workerDTO,branchID);
-        }
+
 
     }
 

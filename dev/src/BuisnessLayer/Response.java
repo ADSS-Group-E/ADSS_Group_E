@@ -1,36 +1,24 @@
 package BuisnessLayer;
 
-public class Response<T> {
+public class Response {
+    private String ErrorMessage;
+    public Response(){
+        ErrorMessage="";
+    }
 
-    private T value;
-    private String errorMessage;
+    public Response(String errorMessage){
+        ErrorMessage=errorMessage;
+    }
 
-    public  Response(T value, String errorMessage){
-        this.value=value;
-        this.errorMessage=errorMessage;
+    public boolean isErrorOccurred(){
+        return ErrorMessage!=null&&ErrorMessage!="";
     }
 
     public String getErrorMessage() {
-        return errorMessage;
-    }
-
-    public T getValue() {
-        return value;
-    }
-
-    public void setValue(T value) {
-        this.value = value;
+        return ErrorMessage;
     }
 
     public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
-    }
-
-    @Override
-    public String toString() {
-        return "Response{" +
-                "value=" + value +
-                ", errorMessage='" + errorMessage + '\'' +
-                '}';
+        ErrorMessage = errorMessage;
     }
 }
