@@ -1,5 +1,7 @@
 package BuisnessLayer;
 
+import javafx.util.converter.LocalDateTimeStringConverter;
+
 import java.time.LocalDate;
 import java.util.*;
 
@@ -16,12 +18,19 @@ public class ShiftController {
         shiftDemandsHashMap=new HashMap<>();
     }
 
-    public void addShiftDemands(int branchID,ShiftDemands[][] shiftDemands){
+    /*public void addShiftDemands(int branchID,ShiftDemands[][] shiftDemands){
         shiftDemandsHashMap.remove(branchID);
         shiftDemandsHashMap.put(branchID,shiftDemands);
-    }
+    }*/
 
     public void addShiftDemands(int branchID,LocalDate date,ShiftType shiftType,ShiftDemands shiftDemands){
+        if(!shiftDemandsHashMap.containsKey(branchID))
+            throw new IllegalArgumentException("Cant add shift demands to shift that isn't exist");
+        LocalDate upperLimit=LocalDate.now().plusDays(7);
+        if(date.compareTo(LocalDate.now())<0)
+            throw new IllegalArgumentException("Can't create a shift demands to shift with date that already passed");
+        if(date.compareTo(upperLimit)>0)
+            throw new IllegalArgumentException("Can't create a shift demands that is so far. The system can create a shift demands that is within the next week");
         int type=shiftType==ShiftType.Morning ? 0 : 1;
         shiftDemandsHashMap.get(branchID)[date.getDayOfWeek().getValue()-1][type]=shiftDemands;
     }
@@ -42,22 +51,21 @@ public class ShiftController {
     }
 
     public void addBranch(int branchID) {
-        boolean isFound = false;
-        isFound=weeklyAssignment.containsKey(branchID);
-
-        if (!isFound) {
-            Shift[][] shifts = new Shift[7][2];
-            ShiftDemands[][] shiftDemands=new ShiftDemands[7][2];
-            for(int i=0;i<7;i++){
-                for(int j=0;j<2;j++){
-                    shifts[i][j]=null;
-                    shiftDemands[i][j]=null;
-                }
+        boolean isFound ;
+        isFound = weeklyAssignment.containsKey(branchID);
+        if (isFound)
+            throw new IllegalArgumentException("Can't add a branch that is already exists");
+        Shift[][] shifts = new Shift[7][2];
+        ShiftDemands[][] shiftDemands = new ShiftDemands[7][2];
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 2; j++) {
+                shifts[i][j] = null;
+                shiftDemands[i][j] = null;
             }
-            weeklyAssignment.put(branchID,shifts);
-            weeklyAssignmentsHistory.put(branchID,new LinkedList<Shift[][]>());
-            shiftDemandsHashMap.put(branchID,shiftDemands);
         }
+        weeklyAssignment.put(branchID, shifts);
+        weeklyAssignmentsHistory.put(branchID, new LinkedList<Shift[][]>());
+        shiftDemandsHashMap.put(branchID, shiftDemands);
     }
 
     public void printWorkersAtShift(int branchID,LocalDate date,ShiftType shiftType){
@@ -68,6 +76,9 @@ public class ShiftController {
     }
 
     public void removeBranch(int branchID) {
+        if(!weeklyAssignment.containsKey(branchID))
+            throw new IllegalArgumentException("cant remove the branch you entered from ShiftController because it is not exist");
+
         if(!weeklyAssignmentsHistory.get(branchID).contains(weeklyAssignment.get(branchID)))
             weeklyAssignmentsHistory.get(branchID).add(weeklyAssignment.get(branchID));
         weeklyAssignment.remove(branchID);
@@ -190,6 +201,7 @@ public class ShiftController {
     public void createWeeklyAssignment(int branchID, LocalDate startDate,List<Worker>workers ,Worker branchManager) {
         updateHistory(branchID);
         ShiftDemands[][] shiftDemands = shiftDemandsHashMap.get(branchID);
+
         ShiftType type;
         for(int i=0;i<7;i++){
             List<Worker>ableToWork=new LinkedList<>(workers);
@@ -213,6 +225,9 @@ public class ShiftController {
 
 
     public void printWeeklyAssignment(int branchID, LocalDate date) {
+        if(!weeklyAssignment.containsKey(branchID))
+            throw new IllegalArgumentException("Cant print a branch that isn't exist");
+
         Shift[][] shifts = null;
         if(weeklyAssignment.get(branchID)[0][0].getDate().equals(date))
             shifts = weeklyAssignment.get(branchID);
@@ -225,7 +240,7 @@ public class ShiftController {
                 }
             }
             if (shifts == null)
-                System.out.println("There is no weekly assignment in this date");
+                throw new IllegalArgumentException("There is no weekly assignment in this date");
             else
                 for (Shift[] sh : shifts)
                     System.out.println(sh.toString());

@@ -51,15 +51,22 @@ public class BranchController {
     }
 
     public void addBranch(int branchID,Worker branchManager,Worker activeHRD){
+        if(getBranch(branchID)!=null)
+            throw new IllegalArgumentException("Cant create a branch that is already exists");
         if(!branchManager.getQualifications().contains(Qualifications.BranchManager))
-            throw new IllegalArgumentException("The worker you entered is not qualified as a branch manager");
+            throw new IllegalArgumentException("The worker you entered as branch manager is not qualified as a branch manager");
         if(!activeHRD.getQualifications().contains(Qualifications.Human_Resources_Director))
-            throw new IllegalArgumentException("The worker you entered is not qualified as a HRD");
+            throw new IllegalArgumentException("The worker you entered as HRD is not qualified as a HRD");
+        if(branchManager.getID().equals(activeHRD.getID()))
+            throw new IllegalArgumentException("The branch manager and the HRD can't be the same person");
         Branch branch=new Branch(branchID,branchManager,activeHRD);
         branchList.add(branch);
     }
 
     public void removeBranch(int branchID){
+        if(getBranch(branchID)==null)
+            throw new IllegalArgumentException("cant remove the branch you entered from BranchController because it is not exist");
+
         for(Branch b : branchList){
             if(b.getBranchID()==branchID)
                 branchList.remove(b);
@@ -85,6 +92,8 @@ public class BranchController {
 
 
     public void addWorker(Worker worker,int branchID){
+        if(getBranch(branchID)==null)
+            throw new IllegalArgumentException("cant add worker to a branch that never been created");
         boolean found=false;
         Worker w1 = getBranch(branchID).FindWorker(worker.getID());
         if(w1!=null&& !worker.equals(w1))
@@ -96,7 +105,7 @@ public class BranchController {
             isLegalBranch(branchID);
             w1 = getBranch(branchID).FindFormerWorker(worker.getID());
             if(w1!=null&& !worker.equals(w1))
-                throw new IllegalArgumentException("Different workers with same ID");
+                throw new IllegalArgumentException("Can't add this worker,there is already a worker with this ID but with different details");
             else if(w1!=null&& worker.equals(w1)) {
                 getBranch(branchID).getFormerWorkers().remove(w1);
                 getBranch(branchID).addWorker(worker);
@@ -112,6 +121,9 @@ public class BranchController {
 
     public void removeWorker(Worker worker,int branchID){
         Boolean isRemoved=getBranch(branchID).getWorkersList().remove(worker);
+        if(!isRemoved)
+            throw new IllegalArgumentException("cant remove the worker because the worker is not in exist in this branch");
+
         if(isRemoved){
             getBranch(branchID).getFormerWorkers().add(worker);
         }

@@ -25,7 +25,7 @@ public class Facade {
         return instance;
     }
 
-    public void addShiftDemands(int branchID, ShiftDemandsDTO[][] shiftDemandsDTO) {
+    /*public void addShiftDemands(int branchID, ShiftDemandsDTO[][] shiftDemandsDTO) {
         ShiftDemands[][] shiftDemands = new ShiftDemands[7][2];
         for (int i = 0; i < 7; i++) {
             for (int j = 0; j < 2; j++) {
@@ -34,99 +34,180 @@ public class Facade {
             shiftController.addShiftDemands(branchID, shiftDemands);
         }
     }
-
-    public void addShiftDemands(int branchID, LocalDate date, ShiftTypeDTO shiftType, ShiftDemandsDTO shiftDemands) {
-        shiftController.addShiftDemands(branchID, date, convertShiftTypeToBusiness(shiftType), convertShiftDemandsToBusiness(shiftDemands));
+*/
+    public Response addShiftDemands(int branchID, LocalDate date, ShiftTypeDTO shiftType, ShiftDemandsDTO shiftDemands) {
+        try {
+            shiftController.addShiftDemands(branchID, date, convertShiftTypeToBusiness(shiftType), convertShiftDemandsToBusiness(shiftDemands));
+        }catch(Exception e){
+            return new Response(e.getMessage());
+        }
+        return new Response();
     }
 
-    public void resetShiftDemands(int branchID) {
+    public Response resetShiftDemands(int branchID) {
         shiftController.resetShiftDemands(branchID);
+        return new Response();
     }
 
-    public void addBranch(int branchID, WorkerDTO branchManager, WorkerDTO activeHRD) {
-        if (!branchManager.getQualifications().contains(QualificationsDTO.BranchManager))
-            throw new IllegalArgumentException("The worker you sent is not a branch manager");
-
-        branchController.addBranch(branchID, convertWorkerToBusiness(branchManager), convertWorkerToBusiness(activeHRD));
-        shiftController.addBranch(branchID);
-        addWorker(branchManager, branchID);
-        addWorker(activeHRD, branchID);
+    public Response addBranch(int branchID, WorkerDTO branchManager, WorkerDTO activeHRD) {
+        try {
+            branchController.addBranch(branchID, convertWorkerToBusiness(branchManager), convertWorkerToBusiness(activeHRD));
+            shiftController.addBranch(branchID);
+            addWorker(branchManager, branchID);
+            addWorker(activeHRD, branchID);
+        }catch(Exception e){
+            return new Response(e.getMessage());
+        }
+        return new Response();
     }
 
-    public BranchDTO getBranch(int ID) {
-        return convertBranchToDTO(branchController.getBranch(ID));
+    public ResponseT<BranchDTO> getBranch(int ID) {
+        if(branchController.getBranch(ID)==null)
+            return new ResponseT<BranchDTO>(null,"The branch you searched is not exist");
+        return new ResponseT<BranchDTO>(convertBranchToDTO(branchController.getBranch(ID)));
     }
 
-    public void addWorker(WorkerDTO worker, int branchID) {
-        branchController.addWorker(convertWorkerToBusiness(worker), branchID);
+    public Response addWorker(WorkerDTO worker, int branchID) {
+        try {
+            branchController.addWorker(convertWorkerToBusiness(worker), branchID);
+        }catch(Exception e){
+            return new Response(e.getMessage());
+        }
+        return new Response();
     }
 
-    public void removeWorker(WorkerDTO worker, int branchID) {
+    public Response removeWorker(WorkerDTO worker, int branchID) {
+        try{
         branchController.removeWorker(convertWorkerToBusiness(worker), branchID);
+        }catch(Exception e){
+           return new Response(e.getMessage());
+        }
+        return new Response();
     }
 
-    public void removeBranch(int branchID) {
-        branchController.removeBranch(branchID);
-        shiftController.removeBranch(branchID);
+    public Response removeBranch(int branchID) {
+        try {
+            branchController.removeBranch(branchID);
+            shiftController.removeBranch(branchID);
+        }catch(Exception e){
+            return new Response(e.getMessage());
+        }
+        return new Response();
     }
 
-    public List<ShiftDTO> getHistory(int branchID) {
+  /*  public List<ShiftDTO> getHistory(int branchID) {
         return convertListOfShiftsToDTO(branchController.getBranch(branchID).getWeeklyAssignmentsHistory());
     }
 
-    public ShiftDTO getShift(int branchID, LocalDate date, ShiftTypeDTO shiftType) {
-        return convertShiftToDTO(shiftController.getShift(branchID, date, convertShiftTypeToBusiness(shiftType)));
+   */
+
+    public ResponseT<ShiftDTO> getShift(int branchID, LocalDate date, ShiftTypeDTO shiftType) {
+        try {
+            shiftController.getShift(branchID, date, convertShiftTypeToBusiness(shiftType));
+        }catch(Exception e){
+            return new ResponseT<ShiftDTO>(convertShiftToDTO(shiftController.getShift(branchID, date, convertShiftTypeToBusiness(shiftType))),e.getMessage());
+        }
+        return new ResponseT<ShiftDTO>(convertShiftToDTO(shiftController.getShift(branchID, date, convertShiftTypeToBusiness(shiftType))));
     }
 
-    public void createWeeklyAssignment(int branchID, LocalDate startDate, WorkerDTO branchManager) {
-        shiftController.createWeeklyAssignment(branchID, startDate, branchController.getBranch(branchID).getWorkersList(),convertWorkerToBusiness(branchManager));
+    public Response createWeeklyAssignment(int branchID, LocalDate startDate, WorkerDTO branchManager) {
+        try {
+            shiftController.createWeeklyAssignment(branchID, startDate, branchController.getBranch(branchID).getWorkersList(), convertWorkerToBusiness(branchManager));
+        }catch(Exception e){
+            return new Response(e.getMessage());
+        }
+        return new Response();
     }
 
-    public void workerReplacement(int branchID, LocalDate date1, ShiftTypeDTO shiftType1, LocalDate date2, ShiftTypeDTO shiftType2, WorkerDTO worker1, WorkerDTO worker2, WorkerDTO branchManager) {
-        shiftController.workerReplacement(branchID, date1,convertShiftTypeToBusiness(shiftType1), date2,convertShiftTypeToBusiness(shiftType2),convertWorkerToBusiness(worker1),convertWorkerToBusiness(worker2),convertWorkerToBusiness(branchManager));
+    public Response workerReplacement(int branchID, LocalDate date1, ShiftTypeDTO shiftType1, LocalDate date2, ShiftTypeDTO shiftType2, WorkerDTO worker1, WorkerDTO worker2, WorkerDTO branchManager) {
+        try {
+            shiftController.workerReplacement(branchID, date1, convertShiftTypeToBusiness(shiftType1), date2, convertShiftTypeToBusiness(shiftType2), convertWorkerToBusiness(worker1), convertWorkerToBusiness(worker2), convertWorkerToBusiness(branchManager));
+        }catch (Exception e){
+            return new Response(e.getMessage());
+        }
+        return new Response();
     }
 
-    public WorkerDTO findDTOWorker(int branchID, String workerID) {
-        return convertWorkerToDTO(branchController.findWorker(branchID, workerID));
+    public ResponseT<WorkerDTO> findDTOWorker(int branchID, String workerID) {
+        try {
+            branchController.findWorker(branchID, workerID);
+        }catch(Exception e){
+            return new ResponseT<WorkerDTO>(convertWorkerToDTO(branchController.findWorker(branchID, workerID)),e.getMessage());
+        }
+        return new ResponseT<WorkerDTO>(convertWorkerToDTO(branchController.findWorker(branchID, workerID)));
     }
     private Worker findBusinessWorker(int branchID, String workerID) {
         return branchController.findWorker(branchID, workerID);
     }
 
-    public WorkerDTO findDTOWorkerByID(String workerID) {
-        return convertWorkerToDTO(branchController.findWorkerByID(workerID));
+    public ResponseT<WorkerDTO> findDTOWorkerByID(String workerID) {
+        try{
+            branchController.findWorkerByID(workerID);
+        }catch(Exception e){
+            return new ResponseT<WorkerDTO>(null,e.getMessage());
+        }
+        return new ResponseT<WorkerDTO>(convertWorkerToDTO(branchController.findWorkerByID(workerID)));
     }
     private Worker findBusinessWorkerByID(String workerID) {
         return branchController.findWorkerByID(workerID);
     }
 
-    public void printWorkersAtShift(int branchID, LocalDate date, ShiftTypeDTO shiftType) {
-        shiftController.printWorkersAtShift(branchID, date,convertShiftTypeToBusiness(shiftType));
+    public Response printWorkersAtShift(int branchID, LocalDate date, ShiftTypeDTO shiftType) {
+        try{
+            shiftController.printWorkersAtShift(branchID, date,convertShiftTypeToBusiness(shiftType));
+        }catch(Exception e){
+            return new Response(e.getMessage());
+        }
+        return new Response();
     }
 
-    public void showWorkers(int branchID) {
-        branchController.showWorkers(branchID);
+    public Response showWorkers(int branchID) {
+        try {
+            branchController.showWorkers(branchID);
+        }catch(Exception e){
+            return new Response(e.getMessage());
+        }
+        return new Response();
     }
 
-    public List<QualificationsDTO> getWorkerQualifications(WorkerDTO worker) {
-
-        return convertListQualificationsToDTO(branchController.getWorkerQualifications(convertWorkerToBusiness(worker)));
+    public ResponseT<List<QualificationsDTO>> getWorkerQualifications(WorkerDTO worker) {
+        try{
+            branchController.getWorkerQualifications(convertWorkerToBusiness(worker));
+        }catch(Exception e){
+            return new ResponseT<>(null,e.getMessage());
+        }
+        return new ResponseT<>(convertListQualificationsToDTO(branchController.getWorkerQualifications(convertWorkerToBusiness(worker))));
     }
 
-    public void printWorker(WorkerDTO worker) {
-        System.out.println(convertWorkerToBusiness(worker).toString());
+    public Response printWorker(WorkerDTO worker) {
+        try {
+            System.out.println(convertWorkerToBusiness(worker).toString());
+        }catch(Exception e){
+            return new Response(e.getMessage());
+        }
+        return new Response();
     }
 
-    public List<Worker> getQualification(Shift shift, Qualifications qualifications) {
+    /*public List<Worker> getQualification(Shift shift, Qualifications qualifications) {
         return shift.getWorkers().get(qualifications);
+    }*/
+
+    public ResponseT<WorkerDTO> getShiftManager(ShiftDTO shift) {
+        try{
+            shift.getShiftManager();
+        }catch(Exception e){
+            return new ResponseT<>(shift.getShiftManager(),e.getMessage());
+        }
+        return new ResponseT<>(shift.getShiftManager());
     }
 
-    public WorkerDTO getShiftManager(ShiftDTO shift) {
-        return shift.getShiftManager();
-    }
-
-    public void printWorkersByQualification(QualificationsDTO qualifications, ShiftDTO shift) {
-        convertShiftToBusiness(shift).printWorkersByQualification(convertQualificationsToBusiness(qualifications));
+    public Response printWorkersByQualification(QualificationsDTO qualifications, ShiftDTO shift) {
+        try {
+            convertShiftToBusiness(shift).printWorkersByQualification(convertQualificationsToBusiness(qualifications));
+        }catch(Exception e){
+            return new Response(e.getMessage());
+        }
+        return new Response();
     }
 
     public ShiftDemandsDTO[][] getShiftDemandsDTO(int branchID, LocalDate date_) {
@@ -155,93 +236,110 @@ public class Facade {
         shiftController.createWeeklyAssignment(branchID, startDate, workers, branchManager);
     }
 
-    public void printWeeklyAssignment(int branchID, LocalDate date) {
-        shiftController.printWeeklyAssignment(branchID, date);
+    public Response printWeeklyAssignment(int branchID, LocalDate date) {
+        try {
+            shiftController.printWeeklyAssignment(branchID, date);
+        }catch(Exception e){
+            return new Response(e.getMessage());
+        }
+        return new Response();
     }
 
-    public BranchDTO findBranchByWorker(WorkerDTO worker) {
-        return convertBranchToDTO(branchController.findBranchByWorker(worker.getID()));
+    public ResponseT<BranchDTO> findBranchByWorker(WorkerDTO worker) {
+        try{
+            branchController.findBranchByWorker(worker.getID());
+        }catch(Exception e){
+            return new ResponseT<>(null,e.getMessage());
+        }
+        return new ResponseT<>(convertBranchToDTO(branchController.findBranchByWorker(worker.getID())));
     }
 
-    public void setWorkerFirstName(String WorkerID,String newFirstName) {
+    public Response setWorkerFirstName(String WorkerID,String newFirstName) {
         try{
             findBusinessWorkerByID(WorkerID).setFirstName(newFirstName);
         }catch(Exception e){
-
+            return new Response(e.getMessage());
         }
+        return new Response();
     }
-    public void setWorkerLastName(String lastName, String ID) {
+
+
+    public Response setWorkerLastName(String lastName, String ID) {
         try{
             findBusinessWorkerByID(ID).setLastName(lastName);
         }catch(Exception e){
-
+            return new Response(e.getMessage());
         }
+        return new Response();
     }
 
 
-    public void setBankAccount(BankAccountDTO bankAccount, String WorkerID) {
+    public Response setBankAccount(BankAccountDTO bankAccount, String WorkerID) {
         try{
             findBusinessWorkerByID(WorkerID).setBankAccount(convertBankAccountToBusiness(bankAccount));
         }catch(Exception e){
-
+            return new Response(e.getMessage());
         }
+        return new Response();
     }
 
-    public BankAccountDTO getWorkerBankAccount(String WorkerID) {
+    public ResponseT<BankAccountDTO> getWorkerBankAccount(String WorkerID) {
       BankAccountDTO bankAccount = null;
         try{
             bankAccount = convertBankAccountToDTO(findBusinessWorkerByID(WorkerID).getBankAccount());
-      }
-        catch (Exception e){
-
         }
-        return bankAccount;
+        catch (Exception e){
+            return new ResponseT<>(null,e.getMessage());
+        }
+        return new ResponseT<>(bankAccount);
     }
 
-    public void setHiringConditions(HiringConditionsDTO hiringConditions, String WorkerID) {
+    public Response setHiringConditions(HiringConditionsDTO hiringConditions, String WorkerID) {
         try{
             findBusinessWorkerByID(WorkerID).setHiringConditions(convertHiringConditionsToBusiness(hiringConditions));
         }catch(Exception e){
-
+            return new Response(e.getMessage());
         }
+        return new Response();
     }
 
-    public HiringConditionsDTO getWorkerHiringConditions(String WorkerID) {
-        HiringConditionsDTO hiringConditionsDTO = null;
+    public ResponseT<HiringConditionsDTO> getWorkerHiringConditions(String WorkerID) {
+        HiringConditionsDTO hiringConditionsDTO;
         try{
             hiringConditionsDTO = convertHiringConditionsToDTO(findBusinessWorkerByID(WorkerID).getHiringConditions());
         }
         catch (Exception e){
-
+            return new ResponseT<>(null,e.getMessage());
         }
-        return hiringConditionsDTO;
+        return new ResponseT<>(hiringConditionsDTO);
     }
 
-    public String getWorkerFirstName(String WorkerID) {
-        String name = null;
+    public ResponseT<String> getWorkerFirstName(String WorkerID) {
+        String name;
         try{
              name = findBusinessWorkerByID(WorkerID).getFirstName();
         }catch(Exception e){
-
+            return new ResponseT<>(null,e.getMessage());
         }
-       return name;
+       return new ResponseT<>(findBusinessWorkerByID(WorkerID).getFirstName());
     }
 
-    public String getWorkerLastName(String ID) {
-        String name = null;
+    public ResponseT<String> getWorkerLastName(String ID) {
+        String name;
         try{
             name = findBusinessWorkerByID(ID).getLastName();
         }catch(Exception e){
-
+            return new ResponseT<>(null,e.getMessage());
         }
-        return name;
+        return new ResponseT<>(name);
     }
-    public void setWorkerQualifications(List<QualificationsDTO> qualifications, String ID) {
+    public Response setWorkerQualifications(List<QualificationsDTO> qualifications, String ID) {
         try{
             findBusinessWorkerByID(ID).setQualifications(convertListQualificationsToBusiness(qualifications));
         }catch(Exception e){
-
+            return new Response(e.getMessage());
         }
+        return new Response();
     }
 
     public void isExistingWorker(String ID){
@@ -249,8 +347,13 @@ public class Facade {
             throw new IllegalArgumentException("The worker: "+ ID + " is already exist in the system");
     }
 
-    public WorkerDTO findWorkerBySerialNumber(int branchID, int serialNum){
-        return convertWorkerToDTO(branchController.getBranch(branchID).getWorkersList().get(serialNum));
+    public ResponseT<WorkerDTO> findWorkerBySerialNumber(int branchID, int serialNum){
+        try{
+            branchController.getBranch(branchID).getWorkersList().get(serialNum);
+        }catch(Exception e){
+            return new ResponseT<>(null,e.getMessage());
+        }
+        return new ResponseT<>(convertWorkerToDTO(branchController.getBranch(branchID).getWorkersList().get(serialNum)));
     }
 
 
@@ -442,30 +545,56 @@ public class Facade {
     }
 
 
-    public void setAvailableWorkDays(int branchID,WorkerDTO workerDTO, AvailableWorkDaysDTO availableWorkDaysDTO) {
+    public Response setAvailableWorkDays(int branchID,WorkerDTO workerDTO, AvailableWorkDaysDTO availableWorkDaysDTO) {
         try{
             findBusinessWorker(branchID,workerDTO.getID()).setAvailableWorkDays(convertAvailableWorkDaysToBusiness(availableWorkDaysDTO));
         }catch(Exception e){
-
+            return new Response(e.getMessage());
         }
+        return new Response();
     }
 
-    public void isLegalBranch(int branchID){
-        branchController.isLegalBranch(branchID);
+    public Response isLegalBranch(int branchID){
+        try {
+            branchController.isLegalBranch(branchID);
+        }catch(Exception e){
+            return new Response(e.getMessage());
+        }
+        return new Response();
     }
 
-    public void isLegalWorker(String workerID){
-        branchController.isLegalWorker(workerID);
+    public Response isLegalWorker(String workerID){
+        try{
+            branchController.isLegalWorker(workerID);
+        }catch(Exception e){
+            return new Response(e.getMessage());
+        }
+        return new Response();
     }
 
-    public Boolean isAManager(String ID) {
-        return findBusinessWorkerByID(ID).getQualifications().contains(Qualifications.BranchManager);
+    public ResponseT<Boolean> isAManager(String ID) {
+        try{
+            findBusinessWorkerByID(ID).getQualifications().contains(Qualifications.BranchManager);
+        }catch(Exception e){
+            return new ResponseT<>(null,e.getMessage());
+        }
+        return new ResponseT<>(findBusinessWorkerByID(ID).getQualifications().contains(Qualifications.BranchManager));
     }
-    public void addQualification(String ID, QualificationsDTO q){
-        findBusinessWorkerByID(ID).getQualifications().add(convertQualificationsToBusiness(q));
+    public Response addQualification(String ID, QualificationsDTO q){
+        try{
+            findBusinessWorkerByID(ID).getQualifications().add(convertQualificationsToBusiness(q));
+        }catch(Exception e){
+            return new Response(e.getMessage());
+        }
+        return new Response();
     }
 
-    public boolean isHRD(String id) {
-        return findBusinessWorkerByID(id).getQualifications().contains(Qualifications.Human_Resources_Director);
+    public ResponseT<Boolean> isHRD(String id) {
+        try{
+            findBusinessWorkerByID(id).getQualifications().contains(Qualifications.Human_Resources_Director);
+        }catch(Exception e){
+            return new ResponseT<>(null,e.getMessage());
+        }
+        return new ResponseT<>(findBusinessWorkerByID(id).getQualifications().contains(Qualifications.Human_Resources_Director));
     }
 }
