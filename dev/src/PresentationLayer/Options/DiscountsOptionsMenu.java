@@ -130,9 +130,6 @@ public class DiscountsOptionsMenu extends OptionsMenu{
             }
         }));
 
-        options.put(i, new Option( "Back",() -> {
-            System.out.println("Going back.");
-            goBack=true;
-        }));
+        options.put(i, new Option( "Back", this::back));
     }
 }

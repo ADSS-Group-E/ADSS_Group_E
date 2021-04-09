@@ -48,4 +48,9 @@ public abstract class OptionsMenu {
         }
         goBack = false;
     }
+
+    protected void back(){
+        System.out.println("Going back.");
+        goBack=true;
+    }
 }

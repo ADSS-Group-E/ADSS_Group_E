@@ -83,9 +83,6 @@ public class ReportsOptionsMenu extends OptionsMenu{
             parentCLI.getFacade().removeReport(rid);
         }));
 
-        options.put(i, new Option( "Back",() -> {
-            System.out.println("Going back.");
-            goBack=true;
-        }));
+        options.put(i, new Option( "Back", this::back));
     }
 }
