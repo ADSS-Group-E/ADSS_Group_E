@@ -302,7 +302,7 @@ public class Menu {
             System.out.println("3) Display current day shift assignment by branch ID");
             System.out.println("4) Display shift assignment by date and by branch ID");
             System.out.println("5) Search worker by worker ID");
-            System.out.println("6) Display workers by Qualification and by branch ID");
+            System.out.println("6) Display workers by Qualification, shift and by branch ID");
             System.out.println("7) Display weekly assignment by branchID and by date");
             System.out.println("8) Display personal details of a worker by his ID");
             System.out.println("9) Display your personal details \n");
@@ -412,7 +412,7 @@ public class Menu {
             System.out.println("5) Display current day shift assignment by branch ID");
             System.out.println("6) Display shift assignment by date and by branch ID");
             System.out.println("7) Search worker by Branch ID and by  worker ID");
-            System.out.println("8) Display workers by Qualification and by branch ID");
+            System.out.println("8) Display workers by Qualification, shift and by branch ID");
             System.out.println("9) Display weekly assignment by branchID and by date");
             System.out.println("10) Update worker's details");
             System.out.println("11) Display your personal details ");

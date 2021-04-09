@@ -114,10 +114,7 @@ public class BranchController {
                 getBranch(branchID).addWorker(worker);
 
         }
-
-
     }
-
 
     public void removeWorker(Worker worker,int branchID){
         Boolean isRemoved=getBranch(branchID).getWorkersList().remove(worker);

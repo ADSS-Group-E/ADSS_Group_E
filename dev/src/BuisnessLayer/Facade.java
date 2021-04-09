@@ -104,6 +104,7 @@ public class Facade {
     public ResponseT<ShiftDTO> getShift(int branchID, LocalDate date, ShiftTypeDTO shiftType) {
         try {
             shiftController.getShift(branchID, date, convertShiftTypeToBusiness(shiftType));
+            convertShiftToDTO(shiftController.getShift(branchID, date, convertShiftTypeToBusiness(shiftType)));
         }catch(Exception e){
             return new ResponseT<ShiftDTO>(convertShiftToDTO(shiftController.getShift(branchID, date, convertShiftTypeToBusiness(shiftType))),e.getMessage());
         }
@@ -135,6 +136,7 @@ public class Facade {
     public ResponseT<WorkerDTO> findDTOWorker(int branchID, String workerID) {
         try {
             branchController.findWorker(branchID, workerID);
+            convertWorkerToDTO(branchController.findWorker(branchID, workerID));
         }catch(Exception e){
             return new ResponseT<WorkerDTO>(convertWorkerToDTO(branchController.findWorker(branchID, workerID)),e.getMessage());
         }
@@ -146,7 +148,7 @@ public class Facade {
 
     public ResponseT<WorkerDTO> findDTOWorkerByID(String workerID) {
         try{
-            branchController.findWorkerByID(workerID);
+            convertWorkerToDTO(branchController.findWorkerByID(workerID));
         }catch(Exception e){
             return new ResponseT<WorkerDTO>(null,e.getMessage());
         }
@@ -177,6 +179,7 @@ public class Facade {
     public ResponseT<List<QualificationsDTO>> getWorkerQualifications(WorkerDTO worker) {
         try{
             branchController.getWorkerQualifications(convertWorkerToBusiness(worker));
+            convertListQualificationsToDTO(branchController.getWorkerQualifications(convertWorkerToBusiness(worker)));
         }catch(Exception e){
             return new ResponseT<>(null,e.getMessage());
         }
@@ -252,6 +255,7 @@ public class Facade {
     public ResponseT<BranchDTO> findBranchByWorker(WorkerDTO worker) {
         try{
             branchController.findBranchByWorker(worker.getID());
+            convertBranchToDTO(branchController.findBranchByWorker(worker.getID()));
         }catch(Exception e){
             return new ResponseT<>(null,e.getMessage());
         }
@@ -507,6 +511,8 @@ public class Facade {
     }
 
     private WorkerDTO convertWorkerToDTO(Worker worker){
+        if(worker==null)
+            throw new IllegalArgumentException("There is no such worker");
         List<QualificationsDTO>list=new ArrayList<>();
         for(Qualifications q:worker.getQualifications()){
             list.add(convertQualificationsToDTO(q));

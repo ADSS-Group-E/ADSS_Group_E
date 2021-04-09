@@ -210,6 +210,7 @@ public class Main {
         qualificationsDTO1.add(QualificationsDTO.Assistant);
         qualificationsDTO1.add(QualificationsDTO.Storekeeper);
 
+
         List<QualificationsDTO> qualificationsDTO2 = new LinkedList<>();
         qualificationsDTO2.add(QualificationsDTO.Human_Resources_Director);
         qualificationsDTO2.add(QualificationsDTO.Guard);
@@ -237,6 +238,7 @@ public class Main {
         qualificationsDTO6.add(QualificationsDTO.Guard);
         qualificationsDTO6.add(QualificationsDTO.Assistant);
         qualificationsDTO6.add(QualificationsDTO.ShiftManager);
+
 
         WorkerDTO branchManager = new WorkerDTO("Yoad", "Ohayon", "323079103", bankAccountDTO1, startDate1, hiringConditionsDTO1, availableWorkDaysDTO1, qualificationsDTO1);
         WorkerDTO HRD = new WorkerDTO("Omer", "Shitrit", "208060210", bankAccountDTO2, startDate2, hiringConditionsDTO2, availableWorkDaysDTO2, qualificationsDTO5);
@@ -288,11 +290,35 @@ public class Main {
         facade.addWorker(workerDTO21, 1);
         facade.addWorker(workerDTO22, 1);
         facade.addWorker(workerDTO23, 1);
+        
+/*        LocalDate ld = LocalDate.of(2021, 6, 3);
 
+        ShiftDemandsDTO shiftDemandsDTO1 = new ShiftDemandsDTO(ld, 2, 1, 1, 1, 1);
+
+        WorkerDTO HRD1 = workerDTO5;
+        List<WorkerDTO> cashiers = new ArrayList<>();
+        cashiers.add();
+        cashiers.add();
+
+        WorkerDTO Assistant = workerDTO23;
+
+        List<WorkerDTO> Storekeeper = new ArrayList<>();
+        Storekeeper.add(workerDTO4);
+
+        List<WorkerDTO> Guard = new ArrayList<>();
+        Guard.add();
+
+        List<WorkerDTO> Arranger = new ArrayList<>();
+        Arranger.add(workerDTO1);
+
+        ShiftDTO shift1 = new ShiftDTO();
+        Human_Resources_Director Assistant Storekeeper Guard Arranger*/
     }
-    public static Facade createBasicFacade() {
-        return Facade.getInstance();
-    }
+
+        public static Facade createBasicFacade () {
+            return Facade.getInstance();
+        }
+
 
 
 }
