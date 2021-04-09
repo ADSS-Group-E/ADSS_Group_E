@@ -52,10 +52,6 @@ public class Facade {
         pCont.getProduct(pid).addItemToStorage(id,expiration);
     }
 
-    public void addProduct (int pid, String name, String storageLocation, String storeLocation, int amountInStorage, int amountInStore, String manufacturer, double buyingPrice, double sellingPrice, int minAmount, Category category, Category subCategory, Category subSubCategory) {
-        pCont.addProduct(pid, name, storageLocation, storeLocation, amountInStorage, amountInStore, manufacturer, buyingPrice, sellingPrice, minAmount, category, subCategory, subSubCategory);
-    }
-
     public void removeProduct(int pid) {
         pCont.removeProduct(pid);
     }

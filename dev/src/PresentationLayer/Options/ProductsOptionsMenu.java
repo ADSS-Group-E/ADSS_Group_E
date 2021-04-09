@@ -24,32 +24,39 @@ public class ProductsOptionsMenu extends OptionsMenu{
         }));
 
         options.put(i++, new Option( "Add product",() -> {
-            //TODO Complete this
+            //TODO Validate input
             Scanner in = new Scanner(System.in);
-            System.out.println("Please enter the pid and the name of the product you wish to add");
-            int pid = in.nextInt();
-            String name = in.nextLine();
-            System.out.println("Please enter the storage location and the store location of the product you wish to add");
-            String storageLocation = in.nextLine();
-            String storeLocation = in.nextLine();
-            System.out.println("Please enter the amount in storage and amount in store of the product you wish to add");
-            int amountInStorage = in.nextInt();
-            int amountInStore = in.nextInt();
-            System.out.println("Please enter the manufacturer of the product you wish to add");
-            String manufacturer = in.nextLine();
-            System.out.println("Please enter the buying price and the selling price of the product you wish to add");
-            double buyingPrice = in.nextDouble();
-            double sellingPrice = in.nextDouble();
-            System.out.println("Please enter the minimum amount of the product you wish to add");
-            int minAmount = in.nextInt();
-            System.out.println("Please enter the cid of the category of the product you wish to add");
-            int CIDCategory = in.nextInt();
-            System.out.println("Please enter the cid of the SUB category of the product you wish to add");
-            int CIDSubCategory = in.nextInt();
-            System.out.println("Please enter the cid of the SUB SUB category of the product you wish to add");
-            int CIDSubSubCategory = in.nextInt();
+            System.out.println("Please fill out the details for the new product when prompted and press enter.");
 
-            // parentCLI.getFacade().addProduct(pid, name, storageLocation, storeLocation, amountInStorage, amountInStore, manufacturer, buyingPrice, sellingPrice, minAmount, , , );
+            System.out.println("ID:");
+            int pid = in.nextInt();
+
+            in.nextLine();
+            System.out.println("Name:");
+            String name = in.nextLine();
+
+            System.out.println("Storage Location:");
+            String storageLocation = in.nextLine();
+
+            System.out.println("Store Location:");
+            String storeLocation = in.nextLine();
+
+            System.out.println("Manufacturer:");
+            String manufacturer = in.nextLine();
+
+            System.out.println("Buying Price:");
+            double buyingPrice = in.nextDouble();
+
+            System.out.println("Selling Price:");
+            double sellingPrice = in.nextDouble();
+
+            System.out.println("Minimum Amount:");
+            int minAmount = in.nextInt();
+
+            System.out.println("Category ID:");
+            int categoryId = in.nextInt();
+
+            parentCLI.getFacade().addProduct(new ProductDTO(pid, name, storageLocation, storeLocation , manufacturer, buyingPrice, sellingPrice, minAmount,categoryId));
         }));
 
         options.put(i++, new Option( "Remove product",() -> {
