@@ -1,10 +1,6 @@
-package BuisnessLayer;
+package PresentationLayer;
 
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.HashMap;
-
-public class AvailableWorkDays {
+public class AvailableWorkDaysDTO {
     private Boolean favoriteShifts[][];
 
     private Boolean cantWork[][];
@@ -13,39 +9,23 @@ public class AvailableWorkDays {
         return favoriteShifts;
     }
 
-    public void setFavoriteShifts(Boolean[][] favoriteShifts) {
+    public AvailableWorkDaysDTO(Boolean[][] favoriteShifts, Boolean[][] cantWork) {
         this.favoriteShifts = favoriteShifts;
+        this.cantWork = cantWork;
     }
 
     public Boolean[][] getCantWork() {
         return cantWork;
     }
 
+    public void setFavoriteShifts(Boolean[][] favoriteShifts) {
+        this.favoriteShifts = favoriteShifts;
+    }
+
     public void setCantWork(Boolean[][] cantWork) {
         this.cantWork = cantWork;
     }
 
-    public AvailableWorkDays() {
-        favoriteShifts=new Boolean[7][2];
-        cantWork=new Boolean[7][2];
-        for(int i=0;i<7;i++) {
-            for (int j = 0; j < 2; j++) {
-                favoriteShifts[i][j] = false;
-                cantWork[i][j] = false;
-            }
-        }
-    }
-    public AvailableWorkDays(Boolean[][] favoriteShifts, Boolean[][] cantWork) {
-        this.cantWork=new Boolean[7][2];
-        this.favoriteShifts=new Boolean[7][2];
-        for(int i=0;i<7;i++){
-            for(int j=0;j<2;j++){
-                this.cantWork[i][j]=cantWork[i][j];
-                this.favoriteShifts[i][j]=favoriteShifts[i][j];
-            }
-        }
-    }
-    @Override
     public String toString() {
         String string = "AvailableWorkDays: ";
         String days[] = new String[7];

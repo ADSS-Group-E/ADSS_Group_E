@@ -1,9 +1,11 @@
 package BuisnessLayer;
 
+
+
+import jdk.internal.util.xml.impl.Pair;
+
 import java.time.LocalDate;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Shift {
     private LocalDate date;
@@ -12,8 +14,24 @@ public class Shift {
     private EnumMap<Qualifications,List<Worker>> workers;
     private Worker shiftManager;
 
+    public int getBranchID() {
+        return branchID;
+    }
+
+    private int branchID;
+
     public EnumMap<Qualifications, List<Worker>> getWorkers() {
         return workers;
+    }
+
+    public void printWorkersByQualification(Qualifications qualifications){
+       List<Worker>workerList= workers.get(qualifications);
+       int index=1;
+        System.out.println("The "+ qualifications.name()+ "of this shift are:");
+        for(Worker w : workerList) {
+            System.out.println(index + ") name:" + w.getFirstName() + " " + w.getLastName() + "ID:" + w.getID());
+            index++;
+        }
     }
 
     public void printWorkersAtShift(){
@@ -88,7 +106,8 @@ public class Shift {
         this.shiftManager = shiftManager;
     }
 
-    public Shift(LocalDate date, ShiftType type, ShiftDemands demands, List<Worker> cashiers, List<Worker> storeKeepers, List<Worker> arrangers, List<Worker> guards, List<Worker> assistants, Worker shiftManager) {
+    public Shift(LocalDate date, ShiftType type, ShiftDemands demands, List<Worker> cashiers, List<Worker> storeKeepers, List<Worker> arrangers, List<Worker> guards, List<Worker> assistants, Worker shiftManager, int branchID) {
+        workers = new EnumMap<Qualifications, List<Worker>>(Qualifications.class);
         this.date = date;
         this.type = type;
         this.demands = demands;
@@ -98,6 +117,7 @@ public class Shift {
         setGuards(guards);
         setStoreKeepers(storeKeepers);
         this.shiftManager = shiftManager;
+        this.branchID = branchID;
     }
 
     public LocalDate getDate() {
@@ -131,5 +151,22 @@ public class Shift {
                 return qualifications;
         }
         return null;
+    }
+
+    @Override
+    public String toString() {
+        String st = type + " shift at " + "date=" + date +
+                ", shift demands=" + demands +
+                ", shiftManager=" + shiftManager +
+                ", branchID= " + branchID;
+         int i =1;
+        for(Qualifications qualifications : Qualifications.values()){
+            st = st + "works as "+qualifications.name()+":";
+            for( Worker worker : workers.get(qualifications)){
+                st = st+ i+") name:"+worker.getFirstName()+" "+worker.getLastName()+"ID:"+worker.getID();
+                i++;
+            }
+        }
+    return st;
     }
 }

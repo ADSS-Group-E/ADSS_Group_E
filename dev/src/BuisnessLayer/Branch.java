@@ -1,5 +1,6 @@
 package BuisnessLayer;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -44,6 +45,7 @@ public class Branch {
         }
     }
 
+
     public Branch(int branchID, Worker branchManager, Worker activeHRD, List<Shift> weeklyAssignmentsHistory, List<Worker> workersList, Shift[][] assignmentsBoard) {
         this.branchID = branchID;
         if(!branchManager.getQualifications().contains(Qualifications.BranchManager))
@@ -65,6 +67,31 @@ public class Branch {
         }
 
         this.assignmentsBoard = assignmentsBoard;
+        this.formerWorkers=new ArrayList<>();
+    }
+
+    public Branch(int branchID, Worker branchManager, Worker activeHRD, List<Shift> weeklyAssignmentsHistory, List<Worker> workersList, List<Worker> formerWorkers, Shift[][] assignmentsBoard) {
+        this.branchID = branchID;
+        if(!branchManager.getQualifications().contains(Qualifications.BranchManager))
+            branchManager.getQualifications().add(Qualifications.BranchManager);
+        this.branchManager = branchManager;
+
+        if(!activeHRD.getQualifications().contains(Qualifications.Human_Resources_Director))
+            activeHRD.getQualifications().add(Qualifications.Human_Resources_Director);
+        this.activeHRD = activeHRD;
+
+        this.weeklyAssignmentsHistory = weeklyAssignmentsHistory;
+        this.workersList = workersList;
+
+        this.assignmentsBoard=new Shift[7][2];
+        for(int i=0;i<assignmentsBoard.length;i++){
+            for(int j=0;j<assignmentsBoard[i].length;j++){
+                this.assignmentsBoard[i][j]=assignmentsBoard[i][j];
+            }
+        }
+
+        this.assignmentsBoard = assignmentsBoard;
+        this.formerWorkers = formerWorkers;
     }
 
     public void showWorkers(){

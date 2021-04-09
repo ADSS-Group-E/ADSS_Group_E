@@ -74,15 +74,26 @@ public class BranchController {
         return null;
     }
 
+    public void isLegalBranch(int branchID){
+        if(getBranch(branchID)==null)
+            throw new IllegalArgumentException("The branch ID: "+ branchID +" is not exist in the system");
+    }
+    public void isLegalWorker(String workerID){
+        if(findWorkerByID(workerID)==null)
+            throw new IllegalArgumentException("The worker ID: "+ workerID +" is not exist in the system");
+    }
+
+
     public void addWorker(Worker worker,int branchID){
         boolean found=false;
         Worker w1 = getBranch(branchID).FindWorker(worker.getID());
         if(w1!=null&& !worker.equals(w1))
             throw new IllegalArgumentException("Different workers with same ID");
         else if(w1!=null&& worker.equals(w1)){
-            System.out.println("You tried to add a worker that is already exists so we just update the avilable days of it");
+            System.out.println("You tried to add a worker that is already exists so we just update the available days of it");
             w1.setAvailableWorkDays(worker.getAvailableWorkDays());
         }else {
+            isLegalBranch(branchID);
             w1 = getBranch(branchID).FindFormerWorker(worker.getID());
             if(w1!=null&& !worker.equals(w1))
                 throw new IllegalArgumentException("Different workers with same ID");
