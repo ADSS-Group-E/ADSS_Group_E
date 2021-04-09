@@ -6,6 +6,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * This class represents Products.
+ * Each product has his details. like name, location, price, category and more.
+ */
 public class Product {
     private int pid;
     private String name;
@@ -21,6 +25,7 @@ public class Product {
     private Discount buyingDiscount;
     private Discount sellingDiscount;
 
+    // Getters
     public int getPid() {
         return pid;
     }
@@ -65,7 +70,7 @@ public class Product {
         return category;
     }
 
-
+    // Constructors
     public Product(int pid, String name, String storageLocation, String storeLocation, String manufacturer, double buyingPrice, double sellingPrice, int minAmount, BusinessLayer.Category category, BusinessLayer.Category subCategory, BusinessLayer.Category subSubCategory) {
         this.pid = pid;
         this.name = name;
@@ -96,6 +101,8 @@ public class Product {
     }
 
     // TODO check id before entering new item
+
+    // Adders
     public void addItemToStore(int id, LocalDateTime expiration){
         store.put(id, new Item(id,expiration));
     }
@@ -104,6 +111,7 @@ public class Product {
         storage.put(id, new Item(id,expiration));
     }
 
+    // Setters
     public void setBuyingDiscount(Discount buyingDiscount) {
         // Remove the listing from the discount object of the previous discount
         if (this.buyingDiscount != null){
@@ -120,6 +128,7 @@ public class Product {
         this.sellingDiscount = sellingDiscount;
     }
 
+    // More getters
     public double getBuyingPriceAfterDiscount(){
         if (buyingDiscount !=null && buyingDiscount.discountValid()){
             return (1- buyingDiscount.getDiscountPercent()) * buyingPrice;
@@ -172,6 +181,7 @@ public class Product {
         return expiredItems;
     }
 
+    // Remover
     public void removeItem(int id) {
         storage.remove(id);
         store.remove(id);

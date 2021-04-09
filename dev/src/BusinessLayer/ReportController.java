@@ -3,6 +3,11 @@ package BusinessLayer;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * This class represents the report controller.
+ * All the reports are in Hash Map that contain rid as the key, and the rest of the fields as the value.
+ */
+
 public class ReportController {
     private HashMap<Integer,Report> reports;
     private int nextRid;

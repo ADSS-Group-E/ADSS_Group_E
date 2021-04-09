@@ -4,8 +4,8 @@ import PresentationLayer.CategoryDTO;
 
 /**
  * This class represents the category of the product.
- * Every product belong to category, sub category, and sub sub category.
- * Every category has a "cid" (stand for category ID), and a name.
+ * Each product belong to category, sub category, and sub sub category.
+ * Each category has a "cid" (stand for category ID), and a name.
  */
 public class Category {
     private int cid;

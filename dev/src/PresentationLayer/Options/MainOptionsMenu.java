@@ -5,6 +5,13 @@ import PresentationLayer.CommandLineInterface;
 
 import java.util.Scanner;
 
+/**
+ * This class represents the main menu of the system.
+ * The menu contains all the required options.
+ * Products, categories, discounts and reports.
+ * The instruction of this class can be found in the attached document.
+ */
+
 public class MainOptionsMenu extends OptionsMenu{
     public MainOptionsMenu(CommandLineInterface parentCLI) {
         super(parentCLI);

@@ -3,6 +3,10 @@ package BusinessLayer;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * This class represents the product controller.
+ * All the products are in Hash Map that contain pid as the key, and the rest of the fields as the value.
+ */
 public class ProductController {
     private HashMap<Integer,Product> products;
 
@@ -10,10 +14,12 @@ public class ProductController {
         this.products = new HashMap<>();
     }
 
+    // Getter
     public Product getProduct(int pid){
         return products.get(pid);
     }
 
+    // Adders
     public void addProduct(Product product){
         if (products.containsKey(product.getPid())) {
             throw new IllegalArgumentException("Product pid already exist");
@@ -30,6 +36,7 @@ public class ProductController {
         }
     }
 
+    // Remover
     public void removeProduct (int pid) {
         if (products.containsKey(pid)) {
             products.remove(pid);
@@ -39,10 +46,12 @@ public class ProductController {
         }
     }
 
+    // Checks if the pid already exist
     public boolean isExist(int pid) {
         return products.containsKey(pid);
     }
 
+    // More getters
     public ArrayList<Product> getList() {
         ArrayList<Product> list = new ArrayList<Product>(products.values());
         return list;
@@ -58,4 +67,3 @@ public class ProductController {
         return productsOfCategory;
     }
 }
-// check, remove, list

@@ -3,6 +3,12 @@ package PresentationLayer;
 import BusinessLayer.Category;
 import BusinessLayer.Product;
 
+/**
+ * This class represents productDTO.
+ * A DTO is an object that is used to encapsulate data,
+ * and send it from one subsystem of an application to another.
+ */
+
 public class ProductDTO {
     private int pid;
     private String name;
@@ -18,6 +24,7 @@ public class ProductDTO {
     private int minAmount;
     private int categoryId;
 
+    // Getters
     public int getPid() {
         return pid;
     }
@@ -62,6 +69,7 @@ public class ProductDTO {
         return categoryId;
     }
 
+    // Constructors
     public ProductDTO(int pid, String name, String storageLocation, String storeLocation, String manufacturer, double buyingPrice, double sellingPrice, int minAmount, int categoryId) {
         this.pid = pid;
         this.name = name;
@@ -94,6 +102,7 @@ public class ProductDTO {
         this.categoryId = other.getCategory().getCid();
     }
 
+    // Print
     public String toString(){
         return  "PID:                           " + pid + "\n" +
                 "Name:                          " + name + "\n" +

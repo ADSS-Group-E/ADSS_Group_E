@@ -8,6 +8,13 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * This class represents the options menu of the products.
+ * The menu contains all the function that required:
+ * Get product, List of all products, Add product, remove product, add item and remove item.
+ * The instruction of this class can be found in the attached document.
+ */
+
 public class ProductsOptionsMenu extends OptionsMenu{
     public ProductsOptionsMenu(CommandLineInterface parentCLI) {
         super(parentCLI);
@@ -21,6 +28,9 @@ public class ProductsOptionsMenu extends OptionsMenu{
         options.put(i, new Option( "Back", this::back));
     }
 
+    /**
+     * This function uses to get details of product by the ID of the product
+     */
     public void getProduct(){
         System.out.println("Please enter the product id for the product you wish to display:");
         int pid = in.nextInt();
@@ -28,12 +38,20 @@ public class ProductsOptionsMenu extends OptionsMenu{
         System.out.println(product);
     }
 
+    /**
+     * This function uses to get list of all the products that exist
+     */
     public void getProductList(){
         ArrayList<ProductDTO> DTOlist = parentCLI.getFacade().getProductList();
         System.out.printf("%-10s %s%n", "PID","Name");
         DTOlist.forEach((DTO)->System.out.printf("%-10s %s%n", DTO.getPid(),DTO.getName()));
     }
 
+    /**
+     * This function uses to add a new product.
+     * It's require to insert ID, name, store location, storage location, manufacturer, buying and selling price
+     * minimum amount, and catogory of the product.
+     */
     public void addProduct(){
 
         //TODO Validate input
@@ -70,6 +88,9 @@ public class ProductsOptionsMenu extends OptionsMenu{
         parentCLI.getFacade().addProduct(new ProductDTO(pid, name, storageLocation, storeLocation , manufacturer, buyingPrice, sellingPrice, minAmount,categoryId));
     }
 
+    /**
+     * This function uses to remove product by ID
+     */
     public void removeProduct(){
         System.out.println("Please enter the product id for the product you wish to remove:");
         int pid = in.nextInt();
@@ -83,6 +104,10 @@ public class ProductsOptionsMenu extends OptionsMenu{
         }
     }
 
+    /**
+     * This function uses to add a new item.
+     * It's require to insert PRODUCT ID, ITEM ID and expiration date.
+     */
     public void addItem(){
         System.out.println("Please fill out the details for the new discount when prompted and press enter.");
 
@@ -117,6 +142,9 @@ public class ProductsOptionsMenu extends OptionsMenu{
         }
     }
 
+    /**
+     * This function uses to remove item by product ID and item ID
+     */
     public void removeItem(){
         System.out.println("Please enter the PRODUCT ID of the item you wish to remove:");
         int pid = in.nextInt();

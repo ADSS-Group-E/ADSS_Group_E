@@ -6,6 +6,12 @@ import BusinessLayer.Product;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+/**
+ * This class represents discountDTO.
+ * A DTO is an object that is used to encapsulate data,
+ * and send it from one subsystem of an application to another.
+ */
+
 public class DiscountDTO {
     private int did;
     private String name;
@@ -15,6 +21,7 @@ public class DiscountDTO {
     private ArrayList<Integer> pids;
     private String type;
 
+    // Getters
     public int getDid() {
         return did;
     }
@@ -43,6 +50,7 @@ public class DiscountDTO {
         return type;
     }
 
+    // Constructors
     public DiscountDTO(int did, String name, double discountPercent, LocalDateTime startDate, LocalDateTime endDate, ArrayList<Integer> pids, String type) {
         this.did = did;
         this.name = name;
@@ -66,6 +74,7 @@ public class DiscountDTO {
         });
     }
 
+    // Print
     public String toString(){
         return  "DID:                " + did + "\n" +
                 "Name:               " + name + "\n" +

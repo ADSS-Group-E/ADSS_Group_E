@@ -32,6 +32,7 @@ public class Facade {
         pCont.addProduct(new Product(newProduct, cCont.getCategory(newProduct.getCategoryId())));
     }
 
+    // Getters
     public ProductDTO getProduct(int pid){
         return new ProductDTO(pCont.getProduct(pid));
     }
@@ -44,6 +45,7 @@ public class Facade {
         return DTOlist;
     }
 
+    // Adders
     public void addItemToStore(int pid, int id, LocalDateTime expiration){
         pCont.getProduct(pid).addItemToStore(id,expiration);
     }
@@ -52,6 +54,7 @@ public class Facade {
         pCont.getProduct(pid).addItemToStorage(id,expiration);
     }
 
+    // Removers
     public void removeProduct(int pid) {
         pCont.removeProduct(pid);
     }
@@ -61,6 +64,8 @@ public class Facade {
     }
 
     // --------------- CATEGORIES --------------
+
+    // Adders
     public void addCategory(CategoryDTO newCategory){
         if (newCategory.getSuperCategoryId()==-1){
             cCont.addCategory(new Category(newCategory.getCid(),newCategory.getName()));
@@ -74,6 +79,7 @@ public class Facade {
         cCont.addCategory(cid, name);
     }
 
+    // Getters
     public CategoryDTO getCategory(int cid) {
         return new CategoryDTO(cCont.getCategory(cid));
     }
@@ -86,12 +92,15 @@ public class Facade {
         return DTOlist;
     }
 
+    // Remover
     public void removeCategory(int cid) {
         cCont.removeCategory(cid);
     }
 
 
     // --------- REPORTS ------------
+
+    // Generators
     public String generateStockReport(ArrayList<Integer> cids, ArrayList<Integer> pids){
         HashSet<Product> products =  new HashSet<>();
         cids.forEach((cid)->{
@@ -117,9 +126,11 @@ public class Facade {
 
 
 
+    // Getters
     public String getReport(int rid){
         return rCont.getReport(rid).toString();
     }
+
     public ArrayList<String> getReportList(){
         ArrayList<String> stringList = new ArrayList<>();
         //Turn products into DTOs
@@ -131,12 +142,15 @@ public class Facade {
         return stringList;
     }
 
+    // Remover
     public void removeReport(int rid){
         rCont.removeReport(rid);
     }
 
+
     // ------- DISCOUNTS --------
 
+    // Getters
     public DiscountDTO getDiscount(int did){
         return new DiscountDTO(dCont.getDiscount(did));
     }
@@ -149,6 +163,19 @@ public class Facade {
         return DTOlist;
     }
 
+    // Adder
+
+    /**
+     * This function add discount to specific products or specific categories, by choise.
+     * @param did discount ID
+     * @param name of the discount
+     * @param discountPercent The value of the discount
+     * @param startDate
+     * @param endDate
+     * @param cids category ID
+     * @param pids product ID
+     * @param type buying or selling
+     */
     public void addDiscount(int did, String name, double discountPercent, LocalDateTime startDate, LocalDateTime endDate, ArrayList<Integer> cids, ArrayList<Integer> pids ,String type){
         HashSet<Product> productsNoRep =  new HashSet<>();
         cids.forEach((cid)->{
@@ -178,5 +205,6 @@ public class Facade {
 
     }
 
+    // Remover
     public void removeDiscount(int did) {dCont.removeDiscount(did); }
 }

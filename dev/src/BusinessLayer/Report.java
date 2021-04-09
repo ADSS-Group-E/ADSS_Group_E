@@ -6,6 +6,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+/**
+ * This class represents interface of report.
+ * There is two kinds of report; Invalid report, and Stock report.
+ * Each report has a rid (Stand for Report ID), and local date time of created report.
+ * It's used to track products that are invalid or about to run out of stack, and to prevent wasting products.
+ */
+
 public abstract class Report {
     protected int rid;
     protected LocalDateTime created;

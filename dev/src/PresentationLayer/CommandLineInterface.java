@@ -9,6 +9,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
+/**
+ * This class represents the command line interface
+ */
 public class CommandLineInterface {
 
 
@@ -23,6 +26,7 @@ public class CommandLineInterface {
         return facade;
     }
 
+    // Getters
     public MainOptionsMenu getMainOptionsMenu() {
         return mainOptionsMenu;
     }

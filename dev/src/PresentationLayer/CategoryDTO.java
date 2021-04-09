@@ -2,11 +2,18 @@ package PresentationLayer;
 
 import BusinessLayer.Category;
 
+/**
+ * This class represents categoryDTO.
+ * A DTO is an object that is used to encapsulate data,
+ * and send it from one subsystem of an application to another.
+ */
+
 public class CategoryDTO {
     private int cid;
     private String name;
     private int superCategoryId;
 
+    // Constructors
     public CategoryDTO(int cid, String name) {
         this(cid,name,-1);
     }
@@ -28,6 +35,7 @@ public class CategoryDTO {
         }
     }
 
+    // Getters
     public int getCid() {
         return cid;
     }
@@ -40,6 +48,7 @@ public class CategoryDTO {
         return superCategoryId;
     }
 
+    // Print
     public String toString() {
         String s =  "CID:                " + cid + "\n" +
                     "Name:               " + name + "\n";

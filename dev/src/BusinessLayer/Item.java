@@ -2,6 +2,10 @@ package BusinessLayer;
 
 import java.time.LocalDateTime;
 
+/**
+ * This class represents specific item of each product that exist.
+ * Each item has an id, and date time expiration.
+ */
 public class Item {
     private int id;
     private LocalDateTime expiration;
