@@ -31,7 +31,7 @@ public class DiscountController {
      */
     public void addDiscount(Discount discount){
         if (discounts.containsKey(discount.getDid())) {
-            throw new IllegalArgumentException("Discount ID already exist");
+            throw new IllegalArgumentException("Discount ID already exists.");
         } else {
             discounts.put(discount.getDid(), discount);
         }

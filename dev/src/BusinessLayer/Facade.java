@@ -146,18 +146,32 @@ public class Facade {
         return DTOlist;
     }
 
-    public void addDiscount(DiscountDTO discountDTO){
-        ArrayList<Product> products = new ArrayList<>();
-        discountDTO.getPids().forEach((pid)->{
-            products.add(pCont.getProduct(pid));
+    public void addDiscount(int did, String name, double discountPercent, LocalDateTime startDate, LocalDateTime endDate, ArrayList<Integer> cids, ArrayList<Integer> pids ,String type){
+        HashSet<Product> productsNoRep =  new HashSet<>();
+        cids.forEach((cid)->{
+            productsNoRep.addAll(pCont.getAllProductsOfCategory(cCont.getCategory(cid)));
         });
+        pids.forEach((pid)->{
+            productsNoRep.add(pCont.getProduct(pid));
+        });
+        ArrayList<Product> products = new ArrayList<>(productsNoRep);
 
-        if (discountDTO.getType().equals("Buying")){
-            dCont.addDiscount(Discount.DiscountForBuying(discountDTO,products));
+        DiscountDTO discountDTO = new DiscountDTO(did, name, discountPercent, startDate, endDate, pids, type);
+
+        try{
+            if (discountDTO.getType().equals("Buying")){
+                dCont.addDiscount(Discount.DiscountForBuying(discountDTO,products));
+            }
+            else
+            {
+                dCont.addDiscount(Discount.DiscountForSelling(discountDTO,products));
+            }
         }
-        else
-        {
-            dCont.addDiscount(Discount.DiscountForSelling(discountDTO,products));
+        catch(IllegalArgumentException e){
+            System.out.println(e.getMessage());
+            System.out.println("Discount not added.");
         }
+
+
     }
 }

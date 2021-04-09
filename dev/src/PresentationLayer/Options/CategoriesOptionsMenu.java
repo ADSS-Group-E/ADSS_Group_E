@@ -30,7 +30,7 @@ public class CategoriesOptionsMenu extends OptionsMenu{
 
         options.put(i++, new Option( "Add category",() -> {
             Scanner in = new Scanner(System.in);
-            System.out.println("Please enter the cid of the category you wish to add");
+            System.out.println("Please enter the ID of the category you wish to add");
             int cid = in.nextInt();
             in.nextLine();
             System.out.println("Please enter the name of the category you wish to add");

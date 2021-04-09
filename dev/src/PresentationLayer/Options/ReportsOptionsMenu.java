@@ -51,7 +51,7 @@ public class ReportsOptionsMenu extends OptionsMenu{
                     for (String pid : lineVector) {
                         try{
                             if (!pid.equals(""))
-                                cids.add(Integer.parseInt(pid));
+                                pids.add(Integer.parseInt(pid));
                         }
                         catch (NumberFormatException e){
                             System.out.println("Invalid input - " + e.getMessage());
