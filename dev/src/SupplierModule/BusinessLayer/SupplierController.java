@@ -19,16 +19,44 @@ public class SupplierController {
         data = new DataController();
     }
 
+    public void initialize() {
+        suppliers = new ArrayList<>();
+        data = new DataController();
+        ArrayList<String[]> supplierOneItems = new ArrayList<>();//supplier one items
+        supplierOneItems.add(new String[]{"Corn", 10 + "", 1500 + "", 5554 + ""});
+        supplierOneItems.add(new String[]{"Popcorn", 20 + "", 500 + "", 5666 + ""});
+        supplierOneItems.add(new String[]{"Candy Corn", 30 + "", 200 + "", 8989 + ""});
+        ArrayList<String[]> supplierTwoItems = new ArrayList<>();//supplier two items
+        supplierTwoItems.add(new String[]{"Hot Dog", 10 + "", 1500 + "", 100 + ""});
+        supplierTwoItems.add(new String[]{"Corn Dog", 20 + "", 500 + "", 206 + ""});
+        supplierTwoItems.add(new String[]{"Dog", 3000 + "", 10 + "", 5041 + ""});
+        ArrayList<String[]> contacts = new ArrayList<>();
+        contacts.add(new String[]{"Tzahi", "tzahi@tzahi.com"});
+        HashMap<Integer, Integer> discounts = new HashMap<>();
+        discounts.put(1000, 10);
+        discounts.put(2000, 15);
+        discounts.put(4000, 20);
+        register("Amazon", 10, "Cheque", "8145441/24", supplierOneItems, contacts, 3000, 500, discounts);
+        register("Google", 54, "Paypal", "15144/455", supplierTwoItems, contacts, 500, 500, discounts);
+        ArrayList<String[]> orderItems = new ArrayList<>();
+        orderItems.add(new String[]{"Candy Corn", 30 + "", 100 + "", 8989 + ""});
+        createOrder(0, false, true, orderItems);
+        ArrayList<String[]> orderItems2 = new ArrayList<>();
+        orderItems.add(new String[]{"Dog", 3000 + "", 1 + "", 5041 + ""});
+        createOrder(1, true, true, orderItems2);
+    }
+
     public ArrayList<String[]> getSuppliersInfo() {
         ArrayList<String[]> suppliersInfo = new ArrayList<>();
         for (Supplier supplier : suppliers) {
-            String[] info = {supplier.getName(), supplier.getCompanyNumber(), supplier.getPaymentMethod()};
+            String[] info = {supplier.getName(), supplier.getCompanyNumber(), supplier.getPaymentMethod(), supplier.getBankAccount()};
             suppliersInfo.add(info);
         }
         return suppliersInfo;
     }
 
-    public void register(String name, int companyNumber, String paymentMethod, String bankAccount, ArrayList<String[]> items, ArrayList<String[]> contacts){
+    public void register(String name, int companyNumber, String paymentMethod,
+                 String bankAccount, ArrayList<String[]> items, ArrayList<String[]> contacts){
         Item[] realItems = new Item[items.size()];
         Contact[] realContacts = new Contact[contacts.size()];
         for(int i = 0; i < realItems.length; i++){
@@ -81,7 +109,7 @@ public class SupplierController {
         return regOrders;
     }
 
-    public ArrayList<String[]> getRegularItems() {
+    public ArrayList<String[]> getAllItems() {
         ArrayList<String[]> regItems = new ArrayList<>();
         for (int supplierNum = 0; supplierNum < suppliers.size(); supplierNum++) {
             ArrayList<Order> tempOrders = suppliers.get(supplierNum).getOrders();
@@ -168,6 +196,14 @@ public class SupplierController {
             regOrders.add(item.toString());
         }
         return regOrders;
+    }
+
+    public QuantityWriter getQuantityWriter(int idx){
+        return suppliers.get(idx).getQuantityWriter();
+    }
+
+    public Order getOrderFromSupplier(int supIdx, int orderIdx){
+        return suppliers.get(supIdx).getOrders().get(orderIdx);
     }
 
     public int getMaxDiscount() {
