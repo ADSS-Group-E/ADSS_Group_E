@@ -346,9 +346,10 @@ public class Facade {
         return new Response();
     }
 
-    public void isExistingWorker(String ID){
+    public Response isExistingWorker(String ID){
         if(findDTOWorkerByID(ID)!=null)
-            throw new IllegalArgumentException("The worker: "+ ID + " is already exist in the system");
+            return new Response("The worker: "+ ID + " is already exist in the system");
+        return new Response();
     }
 
     public ResponseT<WorkerDTO> findWorkerBySerialNumber(int branchID, int serialNum){
