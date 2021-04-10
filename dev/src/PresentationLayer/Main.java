@@ -308,6 +308,46 @@ public class Main {
 //            }
 //        }
 
+/*
+        LocalDate ld = LocalDate.now();
+
+        ShiftDemandsDTO shiftDemandsDTO1 = new ShiftDemandsDTO(ld, 2, 1, 1, 1, 1);
+
+        WorkerDTO HRD1 = workerDTO5;
+
+        List<WorkerDTO> cashiers = new ArrayList<>();
+        cashiers.add(workerDTO2);
+        cashiers.add(workerDTO4);
+
+        List <WorkerDTO> Assistant = new ArrayList<>();
+        Assistant.add(workerDTO23);
+
+        List<WorkerDTO> Storekeeper = new ArrayList<>();
+        Storekeeper.add(workerDTO4);
+
+        List<WorkerDTO> Guard = new ArrayList<>();
+        Guard.add(workerDTO5);
+
+        List<WorkerDTO> Arranger = new ArrayList<>();
+        Arranger.add(workerDTO1);
+
+        ShiftTypeDTO st = ShiftTypeDTO.Morning;
+
+        EnumMap<Qualifications,List<Worker>> enumMap = new EnumMap<Qualifications, List<Worker>>(Qualifications.class);
+
+        ShiftDTO shift1 = new ShiftDTO(LocalDate.now(),st,shiftDemandsDTO1,cashiers,Storekeeper,Arranger,Guard,Assistant,branchManager,1);
+        Response response=facade.addShiftDemands(1,LocalDate.now(),st,shiftDemandsDTO1);
+        if(response.isErrorOccurred())
+            System.out.println(response.getErrorMessage());
+        else{
+            ResponseT<ShiftDemandsDTO> responseT=facade.getShiftDemands(LocalDate.now(),1,st);
+            if(response.isErrorOccurred()){
+                System.out.println(responseT.getErrorMessage());
+            }else{
+                System.out.println("This is the shift demand you entered:");
+                System.out.println(responseT.getValue());
+            }
+        }*/
 
     }
 }

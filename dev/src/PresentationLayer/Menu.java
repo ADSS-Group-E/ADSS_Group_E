@@ -543,7 +543,7 @@ public class Menu {
             System.out.println("10) Update worker's details");
             System.out.println("11) Display your personal details ");
             System.out.println("12) Add new branch");
-            System.out.println("13) Add new qualifications by worker ID (deleting the former qualifications)");
+            System.out.println("13) Add new qualifications by worker ID ");
             System.out.println("14) Display personal details of a worker by his ID");
             System.out.println("15) Display workers by branch ID \n");
 
@@ -1235,7 +1235,7 @@ public class Menu {
             System.out.println("10) Update worker's details");
             System.out.println("11) Display personal details of a worker by his ID ");
             System.out.println("12) Add new branch");
-            System.out.println("13) Add new qualifications by worker ID (deleting the former qualifications)\n");
+            System.out.println("13) Add new qualifications by worker ID\n");
 
             System.out.println("For exit press 0 and for logging the system as a worker press -1");
             menu = reader.nextInt();
