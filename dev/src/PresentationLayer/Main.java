@@ -232,6 +232,7 @@ public class Main {
         qualificationsDTO5.add(QualificationsDTO.Storekeeper);
         qualificationsDTO5.add(QualificationsDTO.Guard);
         qualificationsDTO5.add(QualificationsDTO.Assistant);
+        qualificationsDTO5.add(QualificationsDTO.Cashier);
 
 
         List<QualificationsDTO> qualificationsDTO6 = new LinkedList<>();
@@ -240,6 +241,7 @@ public class Main {
         qualificationsDTO6.add(QualificationsDTO.Guard);
         qualificationsDTO6.add(QualificationsDTO.Assistant);
         qualificationsDTO6.add(QualificationsDTO.ShiftManager);
+        qualificationsDTO6.add(QualificationsDTO.Cashier);
 
 
         WorkerDTO branchManager = new WorkerDTO("Yoad", "Ohayon", "323079103", bankAccountDTO1, hiringConditionsDTO1, availableWorkDaysDTO1, qualificationsDTO1);
@@ -256,16 +258,16 @@ public class Main {
         WorkerDTO workerDTO11 = new WorkerDTO("Eren", "Ben David", "209509970", bankAccountDTO13, hiringConditionsDTO13, availableWorkDaysDTO4, qualificationsDTO5);
         WorkerDTO workerDTO12 = new WorkerDTO("Or", "Efraim", "326556129", bankAccountDTO14, hiringConditionsDTO14, availableWorkDaysDTO1, qualificationsDTO6);
         WorkerDTO workerDTO13 = new WorkerDTO("Bar", "Zomer", "332545111", bankAccountDTO15, hiringConditionsDTO15, availableWorkDaysDTO2, qualificationsDTO2);
-        WorkerDTO workerDTO14 = new WorkerDTO("Ido", "Barak", "289774534", bankAccountDTO16,  hiringConditionsDTO16, availableWorkDaysDTO5, qualificationsDTO3);
-        WorkerDTO workerDTO15 = new WorkerDTO("Daniel", "maymon", "339342302", bankAccountDTO17,  hiringConditionsDTO17, availableWorkDaysDTO9, qualificationsDTO5);
-        WorkerDTO workerDTO16 = new WorkerDTO("Kobi", "Swissa", "290842543", bankAccountDTO18,  hiringConditionsDTO18, availableWorkDaysDTO6, qualificationsDTO6);
-        WorkerDTO workerDTO17 = new WorkerDTO("Ben", "Cohen", "333232987", bankAccountDTO19,  hiringConditionsDTO19, availableWorkDaysDTO3, qualificationsDTO1);
-        WorkerDTO workerDTO18 = new WorkerDTO("Baruch", "Tzion", "279587570", bankAccountDTO20,  hiringConditionsDTO20, availableWorkDaysDTO4, qualificationsDTO4);
-        WorkerDTO workerDTO19 = new WorkerDTO("Moses", "Efraim", "321642111", bankAccountDTO21,  hiringConditionsDTO21, availableWorkDaysDTO1, qualificationsDTO2);
+        WorkerDTO workerDTO14 = new WorkerDTO("Ido", "Barak", "289774534", bankAccountDTO16, hiringConditionsDTO16, availableWorkDaysDTO5, qualificationsDTO3);
+        WorkerDTO workerDTO15 = new WorkerDTO("Daniel", "maymon", "339342302", bankAccountDTO17, hiringConditionsDTO17, availableWorkDaysDTO9, qualificationsDTO5);
+        WorkerDTO workerDTO16 = new WorkerDTO("Kobi", "Swissa", "290842543", bankAccountDTO18, hiringConditionsDTO18, availableWorkDaysDTO6, qualificationsDTO6);
+        WorkerDTO workerDTO17 = new WorkerDTO("Ben", "Cohen", "333232987", bankAccountDTO19, hiringConditionsDTO19, availableWorkDaysDTO3, qualificationsDTO1);
+        WorkerDTO workerDTO18 = new WorkerDTO("Baruch", "Tzion", "279587570", bankAccountDTO20, hiringConditionsDTO20, availableWorkDaysDTO4, qualificationsDTO4);
+        WorkerDTO workerDTO19 = new WorkerDTO("Moses", "Efraim", "321642111", bankAccountDTO21, hiringConditionsDTO21, availableWorkDaysDTO1, qualificationsDTO2);
         WorkerDTO workerDTO20 = new WorkerDTO("Shalom", "Brefman", "205123654", bankAccountDTO22, hiringConditionsDTO22, availableWorkDaysDTO2, qualificationsDTO5);
-        WorkerDTO workerDTO21 = new WorkerDTO("Barak", "Bar", "226134562", bankAccountDTO23,  hiringConditionsDTO23, availableWorkDaysDTO5, qualificationsDTO3);
-        WorkerDTO workerDTO22 = new WorkerDTO("Avi", "Ohayon", "325431754", bankAccountDTO24,  hiringConditionsDTO24, availableWorkDaysDTO9, qualificationsDTO5);
-        WorkerDTO workerDTO23 = new WorkerDTO("Dganit", "Refeli", "298764234", bankAccountDTO25,  hiringConditionsDTO25, availableWorkDaysDTO6, qualificationsDTO6);
+        WorkerDTO workerDTO21 = new WorkerDTO("Barak", "Bar", "226134562", bankAccountDTO23, hiringConditionsDTO23, availableWorkDaysDTO5, qualificationsDTO3);
+        WorkerDTO workerDTO22 = new WorkerDTO("Avi", "Ohayon", "325431754", bankAccountDTO24, hiringConditionsDTO24, availableWorkDaysDTO9, qualificationsDTO5);
+        WorkerDTO workerDTO23 = new WorkerDTO("Dganit", "Refeli", "298764234", bankAccountDTO25, hiringConditionsDTO25, availableWorkDaysDTO6, qualificationsDTO6);
 
         facade.addBranch(1, branchManager, HRD);
         facade.addWorker(workerDTO1, 1);
@@ -292,29 +294,48 @@ public class Main {
         facade.addWorker(workerDTO22, 1);
         facade.addWorker(workerDTO23, 1);
 
-/*        LocalDate ld = LocalDate.of(2021, 6, 3);
+
+        LocalDate ld = LocalDate.now();
 
         ShiftDemandsDTO shiftDemandsDTO1 = new ShiftDemandsDTO(ld, 2, 1, 1, 1, 1);
 
         WorkerDTO HRD1 = workerDTO5;
-        List<WorkerDTO> cashiers = new ArrayList<>();
-        cashiers.add();
-        cashiers.add();
 
-        WorkerDTO Assistant = workerDTO23;
+        List<WorkerDTO> cashiers = new ArrayList<>();
+        cashiers.add(workerDTO2);
+        cashiers.add(workerDTO4);
+
+        List <WorkerDTO> Assistant = new ArrayList<>();
+        Assistant.add(workerDTO23);
 
         List<WorkerDTO> Storekeeper = new ArrayList<>();
         Storekeeper.add(workerDTO4);
 
         List<WorkerDTO> Guard = new ArrayList<>();
-        Guard.add();
+        Guard.add(workerDTO5);
 
         List<WorkerDTO> Arranger = new ArrayList<>();
         Arranger.add(workerDTO1);
 
-        ShiftDTO shift1 = new ShiftDTO();
-        Human_Resources_Director Assistant Storekeeper Guard Arranger*/
+        ShiftTypeDTO st = ShiftTypeDTO.Morning;
+
+        EnumMap<Qualifications,List<Worker>> enumMap = new EnumMap<Qualifications, List<Worker>>(Qualifications.class);
+
+        ShiftDTO shift1 = new ShiftDTO(LocalDate.now(),st,shiftDemandsDTO1,cashiers,Storekeeper,Arranger,Guard,Assistant,branchManager,1);
+        Response response=facade.addShiftDemands(1,LocalDate.now(),st,shiftDemandsDTO1);
+        if(response.isErrorOccurred())
+            System.out.println(response.getErrorMessage());
+        else{
+            ResponseT<ShiftDemandsDTO> responseT=facade.getShiftDemands(LocalDate.now(),1,st);
+            if(response.isErrorOccurred()){
+                System.out.println(responseT.getErrorMessage());
+            }else{
+                System.out.println("This is the shift demand you entered:");
+                System.out.println(responseT.getValue());
+            }
+        }
     }
+
 
         public static Facade createBasicFacade () {
             return Facade.getInstance();

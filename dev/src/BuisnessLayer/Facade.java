@@ -383,6 +383,8 @@ public class Facade {
     }
 
     private List<WorkerDTO> convertListOfWorkersToDTO(List<Worker> workers){
+      if(workers == null)
+          return null;
         List<WorkerDTO> list=new ArrayList<>();
         for(Worker worker: workers)
             list.add(convertWorkerToDTO(worker));
@@ -390,6 +392,8 @@ public class Facade {
     }
 
     private List<ShiftDTO> convertListOfShiftsToDTO(List<Shift> shifts){
+        if(shifts == null)
+            return null;
         List<ShiftDTO> list=new ArrayList<>();
         for(Shift shift: shifts)
             list.add(convertShiftToDTO(shift));
@@ -397,6 +401,8 @@ public class Facade {
     }
 
     private List<Shift> convertListOfShiftsToBusiness(List<ShiftDTO> shifts){
+        if(shifts == null)
+            return null;
         List<Shift> list=new ArrayList<>();
         for(ShiftDTO shift: shifts)
             list.add(convertShiftToBusiness(shift));
@@ -404,6 +410,8 @@ public class Facade {
     }
 
     private List<Worker> convertListOfWorkersToBusiness(List<WorkerDTO> workers){
+        if(workers == null)
+            return null;
         List<Worker> list=new ArrayList<>();
         for(WorkerDTO worker: workers)
             list.add(convertWorkerToBusiness(worker));
@@ -411,6 +419,8 @@ public class Facade {
     }
 
     private ShiftDTO[][] convertShiftDArrayToDTO(Shift[][] shifts){
+        if(shifts == null)
+            return null;
         ShiftDTO[][] shiftDTOS=new ShiftDTO[7][2];
         for(int i=0;i<shifts.length;i++){
             for(int j=0;j<shifts[i].length;j++){
@@ -423,6 +433,8 @@ public class Facade {
     }
 
     private Shift[][] convertShiftDArrayToBusiness(ShiftDTO[][] shiftDTOS){
+        if(shiftDTOS == null)
+            return null;
         Shift[][] shift=new Shift[7][2];
         for(int i=0;i<shiftDTOS.length;i++){
             for(int j=0;j<shiftDTOS[i].length;i++){
@@ -433,6 +445,8 @@ public class Facade {
     }
 
     private BranchDTO convertBranchToDTO(Branch branch){
+        if(branch == null)
+            return null;
         List<ShiftDTO>weeklyAssignmentHistory=new ArrayList<>();
         for(Shift shift : branch.getWeeklyAssignmentsHistory()){
             weeklyAssignmentHistory.add(convertShiftToDTO(shift));
@@ -443,18 +457,26 @@ public class Facade {
 
 
     private Branch convertBranchToBusiness(BranchDTO branchDTO){
+        if(branchDTO == null)
+            return null;
         return new Branch(branchDTO.getBranchID(),convertWorkerToBusiness(branchDTO.getBranchManager()),convertWorkerToBusiness(branchDTO.getActiveHRD()),convertListOfShiftsToBusiness(branchDTO.getWeeklyAssignmentsHistory()),convertListOfWorkersToBusiness(branchDTO.getWorkersList()),convertListOfWorkersToBusiness(branchDTO.getFormerWorkers()),convertShiftDArrayToBusiness(branchDTO.getAssignmentsBoard()));
     }
 
     private HiringConditionsDTO convertHiringConditionsToDTO(HiringConditions hiringConditions){
+        if(hiringConditions == null)
+            return null;
         return new HiringConditionsDTO(hiringConditions.getSalaryPerHour(), hiringConditions.getFund(), hiringConditions.getVacationDays(), hiringConditions.getSickLeavePerMonth());
     }
 
     private HiringConditions convertHiringConditionsToBusiness(HiringConditionsDTO hiringConditionsDTO){
+        if(hiringConditionsDTO == null)
+            return null;
         return new HiringConditions(hiringConditionsDTO.getSalaryPerHour(), hiringConditionsDTO.getFund(), hiringConditionsDTO.getVacationDays(), hiringConditionsDTO.getSickLeavePerMonth());
     }
 
     private QualificationsDTO convertQualificationsToDTO(Qualifications qualifications){
+        if(qualifications == null)
+            return null;
         for(QualificationsDTO qualificationsDTO:QualificationsDTO.values()){
             if(qualificationsDTO.name().equals(qualifications.name()))
                 return qualificationsDTO;
@@ -463,6 +485,8 @@ public class Facade {
     }
 
     private Qualifications convertQualificationsToBusiness(QualificationsDTO qualificationsDTO){
+        if(qualificationsDTO == null)
+            return null;
         for(Qualifications qualifications:Qualifications.values()){
             if(qualifications.name().equals(qualificationsDTO.name()))
                 return qualifications;
@@ -471,6 +495,8 @@ public class Facade {
     }
 
     private EnumMap<QualificationsDTO,List<WorkerDTO>> convertQualificationEnumToDTO(EnumMap<Qualifications,List<Worker>> enumMap){
+        if(enumMap == null)
+            return null;
        EnumMap<QualificationsDTO,List<WorkerDTO>> enumMapAns = new EnumMap<QualificationsDTO, List<WorkerDTO>>(QualificationsDTO.class);
         for(Qualifications q : Qualifications.values()){
             enumMapAns.put(convertQualificationsToDTO(q),convertListOfWorkersToDTO(enumMap.get(q)));
@@ -478,24 +504,44 @@ public class Facade {
         return enumMapAns;
     }
 
+    public ResponseT<ShiftDemandsDTO>getShiftDemands(LocalDate date,int branchID,ShiftTypeDTO shiftTypeDTO){
+        try{
+            shiftController.getShiftDemands(date,branchID,convertShiftTypeToBusiness(shiftTypeDTO));
+        }catch(Exception e){
+            return new ResponseT<>(null,e.getMessage());
+        }
+        return new ResponseT<>(convertShiftDemandsToDTO(shiftController.getShiftDemands(date,branchID,convertShiftTypeToBusiness(shiftTypeDTO))));
+    }
+
     private ShiftDTO convertShiftToDTO(Shift shift){
-        return new ShiftDTO(shift.getDate(),convertShiftTypeToDTO(shift.getType()),convertShiftDemandsToDTO(shift.getDemands()),convertQualificationEnumToDTO(shift.getWorkers()),convertWorkerToDTO(shift.getShiftManager()),shift.getBranchID());
+        if(shift == null)
+            return null;
+        return new ShiftDTO(shift.getDate(),convertShiftTypeToDTO(shift.getType()),convertShiftDemandsToDTO(shift.getDemands()),convertListOfWorkersToDTO(shift.getCashiers()),convertListOfWorkersToDTO(shift.getStoreKeepers()),convertListOfWorkersToDTO(shift.getArrangers()),convertListOfWorkersToDTO(shift.getGuards()),convertListOfWorkersToDTO(shift.getAssistants()),convertWorkerToDTO(shift.getShiftManager()),shift.getBranchID());
 
     }
 
     private Shift convertShiftToBusiness(ShiftDTO shiftDTO){
+        if(shiftDTO == null)
+            return null;
+
         return new Shift(shiftDTO.getDate(),convertShiftTypeToBusiness(shiftDTO.getType()),convertShiftDemandsToBusiness(shiftDTO.getDemands()),convertListOfWorkersToBusiness(shiftDTO.getWorkers().get(QualificationsDTO.Cashier)),convertListOfWorkersToBusiness(shiftDTO.getWorkers().get(QualificationsDTO.Storekeeper)),convertListOfWorkersToBusiness(shiftDTO.getWorkers().get(QualificationsDTO.Arranger)),convertListOfWorkersToBusiness(shiftDTO.getWorkers().get(QualificationsDTO.Guard)),convertListOfWorkersToBusiness(shiftDTO.getWorkers().get(QualificationsDTO.Assistant)),convertWorkerToBusiness(shiftDTO.getShiftManager()),shiftDTO.getBranchID());
     }
 
     private ShiftDemandsDTO convertShiftDemandsToDTO(ShiftDemands shiftDemands){
+        if(shiftDemands == null)
+            return null;
         return new ShiftDemandsDTO(shiftDemands.getDate(),shiftDemands.getCashierAmount(),shiftDemands.getStoreKeeperAmount(),shiftDemands.getArrangerAmount(),shiftDemands.getGuardAmount(),shiftDemands.getAssistantAmount());
     }
 
     private ShiftDemands convertShiftDemandsToBusiness(ShiftDemandsDTO shiftDemandsDTO){
+        if(shiftDemandsDTO == null)
+            return null;
         return new ShiftDemands(shiftDemandsDTO.getDate(),shiftDemandsDTO.getCashierAmount(),shiftDemandsDTO.getStoreKeeperAmount(),shiftDemandsDTO.getArrangerAmount(),shiftDemandsDTO.getGuardAmount(),shiftDemandsDTO.getAssistantAmount());
     }
 
     private ShiftTypeDTO convertShiftTypeToDTO(ShiftType shiftType){
+        if(shiftType == null)
+            return null;
         for(ShiftTypeDTO shiftTypeDTO : ShiftTypeDTO.values()){
             if(shiftTypeDTO.name().equals(shiftType.name()))
                 return shiftTypeDTO;
@@ -504,6 +550,8 @@ public class Facade {
     }
 
     private ShiftType convertShiftTypeToBusiness(ShiftTypeDTO shiftTypeDTO){
+        if(shiftTypeDTO == null)
+            return null;
         for(ShiftType shiftType : ShiftType.values()){
             if(shiftType.name().equals(shiftTypeDTO.name()))
                 return shiftType;
@@ -512,6 +560,8 @@ public class Facade {
     }
 
     private WorkerDTO convertWorkerToDTO(Worker worker){
+        if(worker == null)
+            return null;
         if(worker==null)
             throw new IllegalArgumentException("There is no such worker");
         List<QualificationsDTO>list=new ArrayList<>();
@@ -522,6 +572,8 @@ public class Facade {
     }
 
     private Worker convertWorkerToBusiness(WorkerDTO workerDTO){
+        if(workerDTO == null)
+            return null;
         List<Qualifications>list=new ArrayList<>();
         for(QualificationsDTO q:workerDTO.getQualifications()){
             list.add(convertQualificationsToBusiness(q));
@@ -530,6 +582,8 @@ public class Facade {
     }
 
     private ShiftDemands[][] convertShiftDemandsToBusiness(ShiftDemandsDTO [][]shiftDemands){
+        if(shiftDemands == null)
+            return null;
         ShiftDemands[][] sd = new ShiftDemands[7][2];
         for(int i=0; i<7 ; i++){
             for(int j=0; j<2 ; j++){
@@ -540,6 +594,8 @@ public class Facade {
     }
 
     private List<QualificationsDTO> convertListQualificationsToDTO(List <Qualifications> qualifications) {
+        if(qualifications == null)
+            return null;
         List<QualificationsDTO> list = new ArrayList<>();
         for (Qualifications q : qualifications) {
             list.add(convertQualificationsToDTO(q));
@@ -548,6 +604,8 @@ public class Facade {
     }
 
     private List<Qualifications> convertListQualificationsToBusiness(List <QualificationsDTO> qualifications) {
+        if(qualifications == null)
+            return null;
         List<Qualifications> list = new ArrayList<>();
         for (QualificationsDTO q : qualifications) {
             list.add(convertQualificationsToBusiness(q));
@@ -557,6 +615,7 @@ public class Facade {
 
 
     public Response setAvailableWorkDays(int branchID,WorkerDTO workerDTO, AvailableWorkDaysDTO availableWorkDaysDTO) {
+
         try{
             findBusinessWorker(branchID,workerDTO.getID()).setAvailableWorkDays(convertAvailableWorkDaysToBusiness(availableWorkDaysDTO));
         }catch(Exception e){

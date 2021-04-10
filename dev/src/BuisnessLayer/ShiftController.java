@@ -244,5 +244,19 @@ public class ShiftController {
                     System.out.println(sh.toString());
             }
         }
+
+    public ShiftDemands getShiftDemands(LocalDate date, int branchID, ShiftType shiftType) {
+        if(!shiftDemandsHashMap.containsKey(branchID))
+            throw new IllegalArgumentException("the branch id is not exist");
+        int type=shiftType==ShiftType.Morning ? 0 : 1;
+        for(int i=0;i<7;i++){
+            for(int j=0;j<2;j++){
+                if(shiftDemandsHashMap.get(branchID)[i]!=null&&shiftDemandsHashMap.get(branchID)[i][j]!=null&&shiftDemandsHashMap.get(branchID)[i][j].getDate().equals(date)){
+                    return shiftDemandsHashMap.get(branchID)[i][type];
+                }
+            }
+        }
+        throw new IllegalArgumentException("didn't found this shift demand");
+    }
     }
 
