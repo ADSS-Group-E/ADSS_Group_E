@@ -292,7 +292,7 @@ public class Main {
         facade.addWorker(workerDTO22, 1);
         facade.addWorker(workerDTO23, 1);
 
-
+/*
         LocalDate ld = LocalDate.now();
 
         ShiftDemandsDTO shiftDemandsDTO1 = new ShiftDemandsDTO(ld, 2, 1, 1, 1, 1);
@@ -331,7 +331,7 @@ public class Main {
                 System.out.println("This is the shift demand you entered:");
                 System.out.println(responseT.getValue());
             }
-        }
+        }*/
     }
 
 
