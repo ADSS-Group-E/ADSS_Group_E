@@ -43,9 +43,28 @@ public class Menu {
               }
             }
         } else {
-            createSystem();
+            int stop=1;
+            int exit=0;
+
+            while (true){
+                stop = createSystemWithoutInitialize(1);
+                if(stop == 0)
+                { System.out.println("Do you want to exit the system, for exit press 0 else press any number to continue");
+                    exit = reader.nextInt();
+                }
+                if(exit == 0)
+                    return;
+                else {
+                    stop =1;
+                    continue;
+                }
+            }
         }
 
+    }
+
+    private static int createSystemWithoutInitialize(int stop) {
+        return Menu.menuForCreate(stop);
     }
 
 
@@ -1185,7 +1204,7 @@ public class Menu {
 
     }
 
-    public static void menuForCreate() {
+    public static int menuForCreate(int menu) {
         while (true) {
             System.out.println("\n Please choose an action, remember the system is not initialized yet so you might want to add new branches and workers");
             System.out.println("1) Create new weekly shifts demands by branch ID,the date of sunday");
@@ -1203,14 +1222,16 @@ public class Menu {
             System.out.println("13) Add new qualifications by worker ID (deleting the former qualifications)\n");
 
             System.out.println("For exit press 0 and for logging the system as a worker press -1");
-            int menu = reader.nextInt();
-            if (menu == 0) break;
+            menu = reader.nextInt();
+            if (menu == 0)
+                return menu;
             else if(menu == -1)
                  system(1);
             while (menu < 1 || menu > 13) {
                 System.out.println("please enter a number between 1-13");
                 System.out.println("For exit press 0");
-                if (menu == 0) break;
+                if (menu == 0)
+                    return menu;
                 menu = reader.nextInt();
             }
 

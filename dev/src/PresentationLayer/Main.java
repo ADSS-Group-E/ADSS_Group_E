@@ -31,9 +31,7 @@ public class Main {
 
     }
 
-    private static void createSystem() {
-        Menu.menuForCreate();
-    }
+
 
     private static void system(){
         System.out.println(LocalDate.now());
