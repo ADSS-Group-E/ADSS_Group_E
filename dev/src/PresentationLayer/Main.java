@@ -35,45 +35,44 @@ public class Main {
         Menu.menuForCreate();
     }
 
-    private static void system(){
+    private static void system() {
         System.out.println(LocalDate.now());
         System.out.println("Welcome to Super Lee's System, please enter your ID in order to log in");
         String ID = reader.next();
-        ResponseT<WorkerDTO>workerDTOResponseT=facade.findDTOWorkerByID(ID);
-        if(workerDTOResponseT.isErrorOccurred())
+        ResponseT<WorkerDTO> workerDTOResponseT = facade.findDTOWorkerByID(ID);
+        if (workerDTOResponseT.isErrorOccurred())
             System.out.println(workerDTOResponseT.getErrorMessage());
-        else{
+        else {
             WorkerDTO workerDTO = workerDTOResponseT.getValue();
             while (workerDTO == null) {
                 //System.out.println("There is no worker with such ID please enter new ID");
                 ID = reader.next();
-                workerDTOResponseT=facade.findDTOWorkerByID(ID);
-                if(workerDTOResponseT.isErrorOccurred())
+                workerDTOResponseT = facade.findDTOWorkerByID(ID);
+                if (workerDTOResponseT.isErrorOccurred())
                     System.out.println(workerDTOResponseT.getErrorMessage());
-                else{
-                    workerDTO =workerDTOResponseT.getValue();
+                else {
+                    workerDTO = workerDTOResponseT.getValue();
                 }
 
             }
-            ResponseT<BranchDTO>branchDTOResponseT=facade.findBranchByWorker(workerDTO);
-            if(branchDTOResponseT.isErrorOccurred())
+            ResponseT<BranchDTO> branchDTOResponseT = facade.findBranchByWorker(workerDTO);
+            if (branchDTOResponseT.isErrorOccurred())
                 System.out.println(branchDTOResponseT.getErrorMessage());
-            else{
+            else {
 
-                ResponseT<List<QualificationsDTO>> listResponseT=facade.getWorkerQualifications(workerDTO);
-                if(listResponseT.isErrorOccurred())
+                ResponseT<List<QualificationsDTO>> listResponseT = facade.getWorkerQualifications(workerDTO);
+                if (listResponseT.isErrorOccurred())
                     System.out.println(listResponseT.getErrorMessage());
-                else{
+                else {
                     List<QualificationsDTO> qualifications = listResponseT.getValue();
                     if (qualifications.contains(QualificationsDTO.BranchManager)) {
-                        Menu.branchManagerMenu(workerDTO,branchDTOResponseT.getValue().getBranchID());
+                        Menu.branchManagerMenu(workerDTO, branchDTOResponseT.getValue().getBranchID());
 
                     } else if (workerDTO.getQualifications().contains(QualificationsDTO.Human_Resources_Director)) {
-                        Menu.HRDMenu(workerDTO,branchDTOResponseT.getValue().getBranchID());
+                        Menu.HRDMenu(workerDTO, branchDTOResponseT.getValue().getBranchID());
 
-                    }
-                    else {
-                        Menu.otherWorkerMenu(workerDTO,branchDTOResponseT.getValue().getBranchID());
+                    } else {
+                        Menu.otherWorkerMenu(workerDTO, branchDTOResponseT.getValue().getBranchID());
                     }
                 }
 
@@ -83,8 +82,6 @@ public class Main {
 
 
     }
-
-
 
 
     private static ShiftTypeDTO createShiftType(String type) {
@@ -172,6 +169,44 @@ public class Main {
         HiringConditionsDTO hiringConditionsDTO24 = new HiringConditionsDTO(12500, "Baillie Gifford China", 5, 6);
         HiringConditionsDTO hiringConditionsDTO25 = new HiringConditionsDTO(15000, "Baillie Gifford China", 25, 7);
 
+
+        List<QualificationsDTO> qualificationsDTO1 = new LinkedList<>();
+        qualificationsDTO1.add(QualificationsDTO.BranchManager);
+        qualificationsDTO1.add(QualificationsDTO.Assistant);
+        qualificationsDTO1.add(QualificationsDTO.Storekeeper);
+
+
+        List<QualificationsDTO> qualificationsDTO2 = new LinkedList<>();
+        qualificationsDTO2.add(QualificationsDTO.Human_Resources_Director);
+        qualificationsDTO2.add(QualificationsDTO.Guard);
+        qualificationsDTO2.add(QualificationsDTO.Assistant);
+        qualificationsDTO2.add(QualificationsDTO.Storekeeper);
+
+        List<QualificationsDTO> qualificationsDTO3 = new LinkedList<>();
+        qualificationsDTO3.add(QualificationsDTO.ShiftManager);
+        qualificationsDTO3.add(QualificationsDTO.Arranger);
+
+        List<QualificationsDTO> qualificationsDTO4 = new LinkedList<>();
+        qualificationsDTO4.add(QualificationsDTO.Human_Resources_Director);
+        qualificationsDTO4.add(QualificationsDTO.Storekeeper);
+        qualificationsDTO4.add(QualificationsDTO.Guard);
+
+        List<QualificationsDTO> qualificationsDTO5 = new LinkedList<>();
+        qualificationsDTO5.add(QualificationsDTO.Human_Resources_Director);
+        qualificationsDTO5.add(QualificationsDTO.Storekeeper);
+        qualificationsDTO5.add(QualificationsDTO.Guard);
+        qualificationsDTO5.add(QualificationsDTO.Assistant);
+        qualificationsDTO5.add(QualificationsDTO.Cashier);
+
+
+        List<QualificationsDTO> qualificationsDTO6 = new LinkedList<>();
+        qualificationsDTO6.add(QualificationsDTO.Human_Resources_Director);
+        qualificationsDTO6.add(QualificationsDTO.Storekeeper);
+        qualificationsDTO6.add(QualificationsDTO.Guard);
+        qualificationsDTO6.add(QualificationsDTO.Assistant);
+        qualificationsDTO6.add(QualificationsDTO.ShiftManager);
+        qualificationsDTO6.add(QualificationsDTO.Cashier);
+
         Boolean favoriteShifts1[][] = new Boolean[][]{{true, false}, {true, true}, {false, false}, {true, true}, {false, true}, {true, false}, {true, true}};
         Boolean favoriteShifts2[][] = new Boolean[][]{{true, false}, {true, true}, {false, true}, {true, true}, {true, true}, {false, false}, {true, true}};
         Boolean favoriteShifts3[][] = new Boolean[][]{{true, true}, {false, false}, {false, false}, {true, true}, {false, true}, {true, false}, {true, true}};
@@ -206,41 +241,6 @@ public class Main {
         AvailableWorkDaysDTO availableWorkDaysDTO9 = new AvailableWorkDaysDTO(favoriteShifts9, cantWork9);
         AvailableWorkDaysDTO availableWorkDaysDTO10 = new AvailableWorkDaysDTO(favoriteShifts10, cantWork10);
 
-        List<QualificationsDTO> qualificationsDTO1 = new LinkedList<>();
-        qualificationsDTO1.add(QualificationsDTO.BranchManager);
-        qualificationsDTO1.add(QualificationsDTO.Assistant);
-        qualificationsDTO1.add(QualificationsDTO.Storekeeper);
-
-
-        List<QualificationsDTO> qualificationsDTO2 = new LinkedList<>();
-        qualificationsDTO2.add(QualificationsDTO.Human_Resources_Director);
-        qualificationsDTO2.add(QualificationsDTO.Guard);
-        qualificationsDTO2.add(QualificationsDTO.Assistant);
-        qualificationsDTO2.add(QualificationsDTO.Storekeeper);
-
-        List<QualificationsDTO> qualificationsDTO3 = new LinkedList<>();
-        qualificationsDTO3.add(QualificationsDTO.ShiftManager);
-        qualificationsDTO3.add(QualificationsDTO.Arranger);
-
-        List<QualificationsDTO> qualificationsDTO4 = new LinkedList<>();
-        qualificationsDTO4.add(QualificationsDTO.Human_Resources_Director);
-        qualificationsDTO4.add(QualificationsDTO.Storekeeper);
-        qualificationsDTO4.add(QualificationsDTO.Guard);
-
-        List<QualificationsDTO> qualificationsDTO5 = new LinkedList<>();
-        qualificationsDTO5.add(QualificationsDTO.Human_Resources_Director);
-        qualificationsDTO5.add(QualificationsDTO.Storekeeper);
-        qualificationsDTO5.add(QualificationsDTO.Guard);
-        qualificationsDTO5.add(QualificationsDTO.Assistant);
-
-
-        List<QualificationsDTO> qualificationsDTO6 = new LinkedList<>();
-        qualificationsDTO6.add(QualificationsDTO.Human_Resources_Director);
-        qualificationsDTO6.add(QualificationsDTO.Storekeeper);
-        qualificationsDTO6.add(QualificationsDTO.Guard);
-        qualificationsDTO6.add(QualificationsDTO.Assistant);
-        qualificationsDTO6.add(QualificationsDTO.ShiftManager);
-
 
         WorkerDTO branchManager = new WorkerDTO("Yoad", "Ohayon", "323079103", bankAccountDTO1, hiringConditionsDTO1, availableWorkDaysDTO1, qualificationsDTO1);
         WorkerDTO HRD = new WorkerDTO("Omer", "Shitrit", "208060210", bankAccountDTO2, hiringConditionsDTO2, availableWorkDaysDTO2, qualificationsDTO5);
@@ -256,16 +256,16 @@ public class Main {
         WorkerDTO workerDTO11 = new WorkerDTO("Eren", "Ben David", "209509970", bankAccountDTO13, hiringConditionsDTO13, availableWorkDaysDTO4, qualificationsDTO5);
         WorkerDTO workerDTO12 = new WorkerDTO("Or", "Efraim", "326556129", bankAccountDTO14, hiringConditionsDTO14, availableWorkDaysDTO1, qualificationsDTO6);
         WorkerDTO workerDTO13 = new WorkerDTO("Bar", "Zomer", "332545111", bankAccountDTO15, hiringConditionsDTO15, availableWorkDaysDTO2, qualificationsDTO2);
-        WorkerDTO workerDTO14 = new WorkerDTO("Ido", "Barak", "289774534", bankAccountDTO16,  hiringConditionsDTO16, availableWorkDaysDTO5, qualificationsDTO3);
-        WorkerDTO workerDTO15 = new WorkerDTO("Daniel", "maymon", "339342302", bankAccountDTO17,  hiringConditionsDTO17, availableWorkDaysDTO9, qualificationsDTO5);
-        WorkerDTO workerDTO16 = new WorkerDTO("Kobi", "Swissa", "290842543", bankAccountDTO18,  hiringConditionsDTO18, availableWorkDaysDTO6, qualificationsDTO6);
-        WorkerDTO workerDTO17 = new WorkerDTO("Ben", "Cohen", "333232987", bankAccountDTO19,  hiringConditionsDTO19, availableWorkDaysDTO3, qualificationsDTO1);
-        WorkerDTO workerDTO18 = new WorkerDTO("Baruch", "Tzion", "279587570", bankAccountDTO20,  hiringConditionsDTO20, availableWorkDaysDTO4, qualificationsDTO4);
-        WorkerDTO workerDTO19 = new WorkerDTO("Moses", "Efraim", "321642111", bankAccountDTO21,  hiringConditionsDTO21, availableWorkDaysDTO1, qualificationsDTO2);
+        WorkerDTO workerDTO14 = new WorkerDTO("Ido", "Barak", "289774534", bankAccountDTO16, hiringConditionsDTO16, availableWorkDaysDTO5, qualificationsDTO3);
+        WorkerDTO workerDTO15 = new WorkerDTO("Daniel", "maymon", "339342302", bankAccountDTO17, hiringConditionsDTO17, availableWorkDaysDTO9, qualificationsDTO5);
+        WorkerDTO workerDTO16 = new WorkerDTO("Kobi", "Swissa", "290842543", bankAccountDTO18, hiringConditionsDTO18, availableWorkDaysDTO6, qualificationsDTO6);
+        WorkerDTO workerDTO17 = new WorkerDTO("Ben", "Cohen", "333232987", bankAccountDTO19, hiringConditionsDTO19, availableWorkDaysDTO3, qualificationsDTO1);
+        WorkerDTO workerDTO18 = new WorkerDTO("Baruch", "Tzion", "279587570", bankAccountDTO20, hiringConditionsDTO20, availableWorkDaysDTO4, qualificationsDTO4);
+        WorkerDTO workerDTO19 = new WorkerDTO("Moses", "Efraim", "321642111", bankAccountDTO21, hiringConditionsDTO21, availableWorkDaysDTO1, qualificationsDTO2);
         WorkerDTO workerDTO20 = new WorkerDTO("Shalom", "Brefman", "205123654", bankAccountDTO22, hiringConditionsDTO22, availableWorkDaysDTO2, qualificationsDTO5);
-        WorkerDTO workerDTO21 = new WorkerDTO("Barak", "Bar", "226134562", bankAccountDTO23,  hiringConditionsDTO23, availableWorkDaysDTO5, qualificationsDTO3);
-        WorkerDTO workerDTO22 = new WorkerDTO("Avi", "Ohayon", "325431754", bankAccountDTO24,  hiringConditionsDTO24, availableWorkDaysDTO9, qualificationsDTO5);
-        WorkerDTO workerDTO23 = new WorkerDTO("Dganit", "Refeli", "298764234", bankAccountDTO25,  hiringConditionsDTO25, availableWorkDaysDTO6, qualificationsDTO6);
+        WorkerDTO workerDTO21 = new WorkerDTO("Barak", "Bar", "226134562", bankAccountDTO23, hiringConditionsDTO23, availableWorkDaysDTO5, qualificationsDTO3);
+        WorkerDTO workerDTO22 = new WorkerDTO("Avi", "Ohayon", "325431754", bankAccountDTO24, hiringConditionsDTO24, availableWorkDaysDTO9, qualificationsDTO5);
+        WorkerDTO workerDTO23 = new WorkerDTO("Dganit", "Refeli", "298764234", bankAccountDTO25, hiringConditionsDTO25, availableWorkDaysDTO6, qualificationsDTO6);
 
         facade.addBranch(1, branchManager, HRD);
         facade.addWorker(workerDTO1, 1);
@@ -292,43 +292,27 @@ public class Main {
         facade.addWorker(workerDTO22, 1);
         facade.addWorker(workerDTO23, 1);
 
-        LocalDate now=LocalDate.now();
-        ShiftTypeDTO shiftTypeDTO=ShiftTypeDTO.Morning;
-        ShiftDemandsDTO shiftDemandsDTO=new ShiftDemandsDTO(now,1,1,1,1,1);
-        facade.addShiftDemands(1,now,shiftTypeDTO,shiftDemandsDTO);
+//
+//        LocalDate now = LocalDate.now();
+//        ShiftTypeDTO shiftTypeDTO = ShiftTypeDTO.Morning;
+//        ShiftDemandsDTO shiftDemandsDTO = new ShiftDemandsDTO(now, 1, 1, 1, 1, 1);
+//        Response response=facade.addShiftDemands(1,now,shiftTypeDTO,shiftDemandsDTO);
+//        if(response.isErrorOccurred())
+//            System.out.println(response.getErrorMessage());
+//        else{
+//            ResponseT<ShiftDemandsDTO>responseT=facade.getShiftDemands(now,1,shiftTypeDTO);
+//            if(responseT.isErrorOccurred())
+//                System.out.println(responseT.getErrorMessage());
+//            else{
+//                System.out.println("The shift demand is:");
+//                System.out.println(responseT.getValue());
+//            }
+//        }
 
 
-/*        LocalDate ld = LocalDate.of(2021, 6, 3);
-
-        ShiftDemandsDTO shiftDemandsDTO1 = new ShiftDemandsDTO(ld, 2, 1, 1, 1, 1);
-
-        WorkerDTO HRD1 = workerDTO5;
-        List<WorkerDTO> cashiers = new ArrayList<>();
-        cashiers.add();
-        cashiers.add();
-
-        WorkerDTO Assistant = workerDTO23;
-
-        List<WorkerDTO> Storekeeper = new ArrayList<>();
-        Storekeeper.add(workerDTO4);
-
-        List<WorkerDTO> Guard = new ArrayList<>();
-        Guard.add();
-
-        List<WorkerDTO> Arranger = new ArrayList<>();
-        Arranger.add(workerDTO1);
-
-        ShiftDTO shift1 = new ShiftDTO();
-        Human_Resources_Director Assistant Storekeeper Guard Arranger*/
     }
-
-        public static Facade createBasicFacade () {
-            return Facade.getInstance();
-        }
-
-
-
 }
+
 
 
 

@@ -59,9 +59,6 @@ public class Menu {
             System.out.println("Creating weekly assignment of the closest week starting from sunday to saturday");
             LocalDate sunday=LocalDate.now();
             switch (sunday.getDayOfWeek().getValue()){
-                case 0:
-                    sunday=sunday.plusDays(7);
-                    break;
                 case 1:
                     sunday=sunday.plusDays(6);
                     break;
@@ -79,6 +76,8 @@ public class Menu {
                     break;
                 case 6:
                     sunday=sunday.plusDays(1);
+                    break;
+                case 7:
                     break;
             }
 
@@ -693,9 +692,6 @@ public class Menu {
                 System.out.println("You are about to create weekly shift demands to the closest week start on sunday");
                 LocalDate date = LocalDate.now();
                 switch (date.getDayOfWeek().getValue()){
-                    case 0:
-                        date=date.plusDays(7);
-                        break;
                     case 1:
                         date=date.plusDays(6);
                         break;
@@ -713,6 +709,8 @@ public class Menu {
                         break;
                     case 6:
                         date=date.plusDays(1);
+                        break;
+                    case 7:
                         break;
                 }
 

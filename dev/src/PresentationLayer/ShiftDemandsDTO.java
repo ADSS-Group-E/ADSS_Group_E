@@ -6,6 +6,19 @@ public class ShiftDemandsDTO {
     private LocalDate date;
     private int cashierAmount;
     private int storeKeeperAmount;
+
+    @Override
+    public String toString() {
+        return "ShiftDemandsDTO{" +
+                "date=" + date +
+                ", cashierAmount=" + cashierAmount +
+                ", storeKeeperAmount=" + storeKeeperAmount +
+                ", arrangerAmount=" + arrangerAmount +
+                ", guardAmount=" + guardAmount +
+                ", assistantAmount=" + assistantAmount +
+                '}';
+    }
+
     private int arrangerAmount;
     private int guardAmount;
     private int assistantAmount;

@@ -22,13 +22,39 @@ public class ShiftController {
     public void addShiftDemands(int branchID,LocalDate date,ShiftType shiftType,ShiftDemands shiftDemands){
         if(!shiftDemandsHashMap.containsKey(branchID))
             throw new IllegalArgumentException("Cant add shift demands to shift that isn't exist");
-        LocalDate upperLimit=LocalDate.now().plusDays(7);
+        /*LocalDate upperLimit=LocalDate.now().plusDays(7);
         if(date.compareTo(LocalDate.now())<0)
             throw new IllegalArgumentException("Can't create a shift demands to shift with date that already passed");
         if(date.compareTo(upperLimit)>0)
             throw new IllegalArgumentException("Can't create a shift demands that is so far. The system can create a shift demands that is within the next week");
-        int type=shiftType==ShiftType.Morning ? 0 : 1;
-        shiftDemandsHashMap.get(branchID)[date.getDayOfWeek().getValue()-1][type]=new ShiftDemands(shiftDemands);
+        */int type=shiftType==ShiftType.Morning ? 0 : 1;
+        int dayOfWeek=date.getDayOfWeek().getValue();
+        int ans=1;
+        switch(dayOfWeek){
+            case 7:
+                ans=1;
+                break;
+            case 6:
+                ans=7;
+                break;
+            case 5:
+                ans=6;
+                break;
+            case 4:
+                ans=5;
+                break;
+            case 3:
+                ans=4;
+                break;
+            case 2:
+                ans=3;
+                break;
+            case 1:
+                ans=2;
+                break;
+
+        }
+        shiftDemandsHashMap.get(branchID)[ans-1][type]=new ShiftDemands(shiftDemands);
     }
 
     public void resetShiftDemands(int branchID){
@@ -248,20 +274,22 @@ public class ShiftController {
             }
         }
 
+
+
     public ShiftDemands getShiftDemands(LocalDate date, int branchID, ShiftType shiftType) {
         if(!shiftDemandsHashMap.containsKey(branchID))
             throw new IllegalArgumentException("the branch id is not exist");
         int type=shiftType==ShiftType.Morning ? 0 : 1;
-        LocalDate date1=date;
         for(int i=0;i<7;i++){
             for(int j=0;j<2;j++){
-                if(shiftDemandsHashMap.get(branchID)[i][j].getDate().equals(date1)){
+                if(shiftDemandsHashMap.get(branchID)[i]!=null&&shiftDemandsHashMap.get(branchID)[i][j]!=null&&shiftDemandsHashMap.get(branchID)[i][j].getDate().equals(date)){
                     return shiftDemandsHashMap.get(branchID)[i][type];
                 }
             }
-            date1=date1.plusDays(1);
         }
         throw new IllegalArgumentException("didn't found this shift demand");
     }
-}
+
+    }
+
 
