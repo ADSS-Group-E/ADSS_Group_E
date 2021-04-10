@@ -83,12 +83,12 @@ public class WorkerDTO {
         this.qualifications = qualifications;
     }
 
-    public WorkerDTO(String firstName, String lastName, String ID, BankAccountDTO bankAccount, LocalDate startWorkingDay, HiringConditionsDTO hiringConditions, AvailableWorkDaysDTO availableWorkDays, List<QualificationsDTO> qualifications) {
+    public WorkerDTO(String firstName, String lastName, String ID, BankAccountDTO bankAccount, HiringConditionsDTO hiringConditions, AvailableWorkDaysDTO availableWorkDays, List<QualificationsDTO> qualifications) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.ID = ID;
         this.bankAccount = bankAccount;
-        this.startWorkingDay = startWorkingDay;
+        this.startWorkingDay = LocalDate.now();
         this.hiringConditions = hiringConditions;
         this.availableWorkDays = availableWorkDays;
         this.qualifications = qualifications;

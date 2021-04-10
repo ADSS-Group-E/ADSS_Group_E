@@ -5,21 +5,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class BranchController {
-    private static BranchController instance=null;
     private List<Branch> branchList;
 
-
-    private BranchController(){
+    public BranchController(){
         branchList=new LinkedList<>();
     }
-
-    public static BranchController getInstance(){
-        if(instance==null){
-            instance=new BranchController();
-        }
-        return instance;
-    }
-
 
     public Worker findWorker(int branchID,String workerID){
         Branch branch=getBranch(branchID);
@@ -32,6 +22,8 @@ public class BranchController {
             if(w!=null)
                 break;
         }
+        if(w==null)
+            throw new IllegalArgumentException("Worker doesnt exist");
         return w;
     }
 
@@ -85,9 +77,13 @@ public class BranchController {
         if(getBranch(branchID)==null)
             throw new IllegalArgumentException("The branch ID: "+ branchID +" is not exist in the system");
     }
-    public void isLegalWorker(String workerID){
+    public void isWorkerExist(String workerID){
         if(findWorkerByID(workerID)==null)
             throw new IllegalArgumentException("The worker ID: "+ workerID +" is not exist in the system");
+    }
+    public void isCurrentWorker(String workerID){
+        if(findWorkerByID(workerID)!=null)
+            throw new IllegalArgumentException("The worker ID: "+ workerID +" already exist in the system");
     }
 
 
@@ -131,5 +127,25 @@ public class BranchController {
     }
 
 
+    public void displayWorkersByBranchID(int brID) {
+        if(getBranch(brID)==null)
+            throw new IllegalArgumentException("Can't display workers of branch that isn't exist");
+        System.out.println("The workers at branch "+brID+" are:");
+        int index=1;
+        System.out.println("1) The Branch manager is: " + "Name:"+getBranch(brID).getBranchManager().getFirstName()+" "+getBranch(brID).getBranchManager().getLastName()+" ID:"+getBranch(brID).getBranchManager().getID() + " Qualifications:"+getBranch(brID).getBranchManager().getQualifications() );
+        System.out.println("2) The HRD is: " +"Name:"+getBranch(brID).getActiveHRD().getFirstName()+" "+getBranch(brID).getActiveHRD().getLastName()+" ID:"+getBranch(brID).getActiveHRD().getID() + " Qualifications:"+getBranch(brID).getActiveHRD().getQualifications());
+        for(Worker worker:getBranch(brID).getWorkersList()){
+            if(!getBranch(brID).getBranchManager().getID().equals(worker.getID()) && !getBranch(brID).getActiveHRD().getID().equals(worker.getID()) )
+            System.out.println(index+") Name:"+worker.getFirstName()+" "+worker.getLastName()+" ID:"+worker.getID() + " Qualifications:"+worker.getQualifications());
+            index++;
+        }
+    }
 
+    public int isAManagerOfBranch(String id) {
+        for(Branch branch : branchList){
+            if(branch.getBranchManager().getID().equals(id))
+                return branch.getBranchID();
+        }
+        throw new IllegalArgumentException("The worker is not an active manager");
+    }
 }

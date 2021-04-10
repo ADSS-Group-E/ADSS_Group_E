@@ -14,8 +14,8 @@ public class Facade {
     private static Facade instance = null;
 
     private Facade() {
-        this.branchController = BranchController.getInstance();
-        this.shiftController = ShiftController.getInstance();
+        this.branchController =new BranchController();
+        this.shiftController = new ShiftController();
     }
 
     public static Facade getInstance() {
@@ -138,7 +138,7 @@ public class Facade {
             branchController.findWorker(branchID, workerID);
             convertWorkerToDTO(branchController.findWorker(branchID, workerID));
         }catch(Exception e){
-            return new ResponseT<WorkerDTO>(convertWorkerToDTO(branchController.findWorker(branchID, workerID)),e.getMessage());
+            return new ResponseT<WorkerDTO>(null,e.getMessage());
         }
         return new ResponseT<WorkerDTO>(convertWorkerToDTO(branchController.findWorker(branchID, workerID)));
     }
@@ -518,7 +518,7 @@ public class Facade {
         for(Qualifications q:worker.getQualifications()){
             list.add(convertQualificationsToDTO(q));
         }
-        return new WorkerDTO(worker.getFirstName(),worker.getLastName(),worker.getID(),convertBankAccountToDTO(worker.getBankAccount()),worker.getStartWorkingDay(),convertHiringConditionsToDTO(worker.getHiringConditions()),convertAvailableWorkDaysToDTO(worker.getAvailableWorkDays()),list);
+        return new WorkerDTO(worker.getFirstName(),worker.getLastName(),worker.getID(),convertBankAccountToDTO(worker.getBankAccount()),convertHiringConditionsToDTO(worker.getHiringConditions()),convertAvailableWorkDaysToDTO(worker.getAvailableWorkDays()),list);
     }
 
     private Worker convertWorkerToBusiness(WorkerDTO workerDTO){
@@ -526,7 +526,7 @@ public class Facade {
         for(QualificationsDTO q:workerDTO.getQualifications()){
             list.add(convertQualificationsToBusiness(q));
         }
-        return new Worker(workerDTO.getFirstName(),workerDTO.getLastName(),workerDTO.getID(),convertBankAccountToBusiness(workerDTO.getBankAccount()),workerDTO.getStartWorkingDay(),convertHiringConditionsToBusiness(workerDTO.getHiringConditions()),convertAvailableWorkDaysToBusiness(workerDTO.getAvailableWorkDays()),list);
+        return new Worker(workerDTO.getFirstName(),workerDTO.getLastName(),workerDTO.getID(),convertBankAccountToBusiness(workerDTO.getBankAccount()),convertHiringConditionsToBusiness(workerDTO.getHiringConditions()),convertAvailableWorkDaysToBusiness(workerDTO.getAvailableWorkDays()),list);
     }
 
     private ShiftDemands[][] convertShiftDemandsToBusiness(ShiftDemandsDTO [][]shiftDemands){
@@ -574,16 +574,33 @@ public class Facade {
         return new Response();
     }
 
-    public Response isLegalWorker(String workerID){
+    public Response isCurrentWorker(String workerID){
         try{
-            branchController.isLegalWorker(workerID);
+            branchController.isCurrentWorker(workerID);
+        }catch(Exception e){
+            return new Response(e.getMessage());
+        }
+       return new Response();
+    }
+
+    public Response isWorkerExist(String workerID){
+        try{
+            branchController.isWorkerExist(workerID);
         }catch(Exception e){
             return new Response(e.getMessage());
         }
         return new Response();
     }
+    public ResponseT<Integer> isAManagerOfBranch(String ID) {
+        try{
+             branchController.isAManagerOfBranch(ID);
+        }catch(Exception e){
+            return new ResponseT<>(-1,e.getMessage());
+        }
+        return new ResponseT<>(branchController.isAManagerOfBranch(ID));
+    }
 
-    public ResponseT<Boolean> isAManager(String ID) {
+    public ResponseT<Boolean> isHasManagerInQualifications(String ID) {
         try{
             findBusinessWorkerByID(ID).getQualifications().contains(Qualifications.BranchManager);
         }catch(Exception e){
@@ -593,7 +610,13 @@ public class Facade {
     }
     public Response addQualification(String ID, QualificationsDTO q){
         try{
-            findBusinessWorkerByID(ID).getQualifications().add(convertQualificationsToBusiness(q));
+            Worker worker=findBusinessWorkerByID(ID);
+            if(q==QualificationsDTO.Human_Resources_Director&&worker.getQualifications().contains(Qualifications.BranchManager))
+                return new Response("HRD can't be branch manager as well ");
+            if(q==QualificationsDTO.BranchManager&&worker.getQualifications().contains(Qualifications.Human_Resources_Director))
+                return new Response("Branch manager can't be HRD as well ");
+            if(!worker.getQualifications().contains(convertQualificationsToBusiness(q)))
+                  findBusinessWorkerByID(ID).getQualifications().add(convertQualificationsToBusiness(q));
         }catch(Exception e){
             return new Response(e.getMessage());
         }
@@ -607,5 +630,14 @@ public class Facade {
             return new ResponseT<>(null,e.getMessage());
         }
         return new ResponseT<>(findBusinessWorkerByID(id).getQualifications().contains(Qualifications.Human_Resources_Director));
+    }
+
+    public Response displayWorkersByBranchID(int brID) {
+        try{
+            branchController.displayWorkersByBranchID(brID);
+        }catch (Exception e){
+            return new Response(e.getMessage());
+        }
+        return new Response();
     }
 }

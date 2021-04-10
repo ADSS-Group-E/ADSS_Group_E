@@ -40,12 +40,12 @@ public class Worker {
         this.availableWorkDays = availableWorkDays;
     }
 
-    public Worker(String firstName, String lastName, String ID, BankAccount bankAccount, LocalDate startWorkingDay, HiringConditions hiringConditions, AvailableWorkDays availableWorkDays, List<Qualifications> qualifications) {
+    public Worker(String firstName, String lastName, String ID, BankAccount bankAccount, HiringConditions hiringConditions, AvailableWorkDays availableWorkDays, List<Qualifications> qualifications) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.ID = ID;
         this.bankAccount = bankAccount;
-        this.startWorkingDay = startWorkingDay;
+        this.startWorkingDay = LocalDate.now();
         this.hiringConditions = hiringConditions;
         this.availableWorkDays = availableWorkDays;
         this.qualifications = qualifications;

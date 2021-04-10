@@ -29,6 +29,14 @@ public class ShiftDemands {
         this.guardAmount = shiftDemandsDTO.getGuardAmount();
         this.assistantAmount = shiftDemandsDTO.getAssistantAmount();
     }
+    public ShiftDemands(ShiftDemands shiftDemandsDTO) {
+        this.date = shiftDemandsDTO.getDate();
+        this.cashierAmount = shiftDemandsDTO.getCashierAmount();
+        this.storeKeeperAmount = shiftDemandsDTO.getStoreKeeperAmount();
+        this.arrangerAmount = shiftDemandsDTO.getArrangerAmount();
+        this.guardAmount = shiftDemandsDTO.getGuardAmount();
+        this.assistantAmount = shiftDemandsDTO.getAssistantAmount();
+    }
 
     public LocalDate getDate() {
         return date;

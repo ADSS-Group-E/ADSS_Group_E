@@ -16,6 +16,39 @@ public class Menu {
     private static final Facade facade = Facade.getInstance();
     private static final Scanner reader = new Scanner(System.in);
 
+    public static void createSystem() {
+        System.out.println("Welcome to Super Lee's System");
+        System.out.println("Do you want the system to be initialized? \n Enter Y/N");
+        String ans = reader.next();
+        while (!(ans.equals("n") || ans.equals("N") || ans.equals("Y") || ans.equals("y"))) {
+            System.out.println("Please enter Y for Yes or N for No");
+            ans = reader.next();
+        }
+        if (ans.equals("y") || ans.equals("Y")) {
+            systemInitialize();
+            int stop=1;
+            int exit=0;
+
+            while (true){
+              stop = system(1);
+              if(stop == 0)
+              { System.out.println("Do you want to exit the system, for exit press 0 else press any number to continue");
+                  exit = reader.nextInt();
+              }
+              if(exit == 0)
+                  return;
+              else {
+                  stop =1;
+                  continue;
+              }
+            }
+        } else {
+            createSystem();
+        }
+
+    }
+
+
     private static void createWeeklyAssignment(WorkerDTO branchManger) {
         System.out.println("Please enter the branch ID");
         int branchID = reader.nextInt();
@@ -23,23 +56,40 @@ public class Menu {
         if(response.isErrorOccurred())
             System.out.println(response.getErrorMessage());
         else{
-            System.out.println("Please enter the date of sunday in order to create shift assignment for this week");
-            LocalDate date_ = createDate();
+            System.out.println("Creating weekly assignment of the closest week starting from sunday to saturday");
+            LocalDate sunday=LocalDate.now();
+            switch (sunday.getDayOfWeek().getValue()){
+                case 0:
+                    sunday=sunday.plusDays(7);
+                    break;
+                case 1:
+                    sunday=sunday.plusDays(6);
+                    break;
+                case 2:
+                    sunday=sunday.plusDays(5);
+                    break;
+                case 3:
+                    sunday=sunday.plusDays(4);
+                    break;
+                case 4:
+                    sunday=sunday.plusDays(3);
+                    break;
+                case 5:
+                    sunday=sunday.plusDays(2);
+                    break;
+                case 6:
+                    sunday=sunday.plusDays(1);
+                    break;
+            }
+
+            System.out.println("next sunday:"+sunday);
+
+            //LocalDate date_ = createDate();
             ShiftDemandsDTO[][] sd;
-            response=facade.createWeeklyAssignment(branchID, date_, branchManger);
+            response=facade.createWeeklyAssignment(branchID, sunday, branchManger);
             if(response.isErrorOccurred())
                 System.out.println(response.getErrorMessage());
         }
-
-       /* if((facade.getShiftDemandsDTO(branchID, date_))==null)
-            sd = null;
-        else{
-            sd = new ShiftDemandsDTO[7][2];
-        for(int i=0 ; i< 7 ; i++){
-            for(int j=0 ; j< 2 ; j++){
-                sd[i][j] = facade.getShiftDemandsDTO(branchID,date_)[i][j];
-            }
-          }*/
 
     }
 
@@ -180,9 +230,9 @@ public class Menu {
     private static void searchWorker() {
         System.out.println("Please enter the ID of the worker");
         String IDForPrint = reader.next();
-        Response isLegalWorker=facade.isLegalWorker(IDForPrint);
-        if(isLegalWorker.isErrorOccurred())
-            System.out.println(isLegalWorker.getErrorMessage());
+        Response workerExist=facade.isWorkerExist(IDForPrint);
+        if(workerExist.isErrorOccurred())
+            System.out.println(workerExist.getErrorMessage());
         else{
             ResponseT<WorkerDTO>workerDTOResponseT=facade.findDTOWorkerByID(IDForPrint);
             if(workerDTOResponseT.isErrorOccurred())
@@ -334,7 +384,7 @@ public class Menu {
     }
 
 
-    public static void branchManagerMenu(WorkerDTO branchManager, int branchID) {
+    public static int branchManagerMenu(WorkerDTO branchManager, int branchID) {
         while (true) {
             System.out.println("\n Welcome " + branchManager.getFirstName() + " " + branchManager.getLastName() + ", the branch manager of branch " + branchID + " please choose an action");
             System.out.println("1) Create new weekly assignment by the date of sunday");
@@ -345,14 +395,18 @@ public class Menu {
             System.out.println("6) Display workers by Qualification, shift and by branch ID");
             System.out.println("7) Display weekly assignment by branchID and by date");
             System.out.println("8) Display personal details of a worker by his ID");
-            System.out.println("9) Display your personal details \n");
+            System.out.println("9) Display your personal details ");
+            System.out.println("10) Display workers by branch ID \n");
 
 
-            System.out.println("For exit press 0");
+            System.out.println("For exit the branch manager menu press 0");
             int menu = reader.nextInt();
+            if(menu==0)
+                return menu;
 
-            while (menu < 1 || menu > 9) {
-                System.out.println("please enter a number between 1-9");
+
+            while (menu < 1 || menu > 10) {
+                System.out.println("please enter a number between 1-10");
                 System.out.println("For exit press 0");
                 menu = reader.nextInt();
             }
@@ -383,7 +437,7 @@ public class Menu {
                 case 8:
                     System.out.println("Please enter worker ID");
                     String ID = reader.next();
-                    Response response=facade.isLegalWorker(ID);
+                    Response response=facade.isWorkerExist(ID);
                     if(response.isErrorOccurred())
                         System.out.println(response.getErrorMessage());
                     displayWorkerPersonalDetails();
@@ -391,15 +445,26 @@ public class Menu {
                 case 9:
                     personalDetailsMenu(branchManager.getID());
                     break;
+                case 10:
+                    displayWorkersByBranchID();
+                    break;
 
             }
         }
     }
 
+    private static void displayWorkersByBranchID() {
+        System.out.println("Please enter the branch ID");
+        int brID = reader.nextInt();
+        Response response= facade.displayWorkersByBranchID(brID);
+        if(response.isErrorOccurred())
+            System.out.println(response.getErrorMessage());
+    }
+
     private static void displayWorkerPersonalDetails() {
             System.out.println("Please enter worker ID");
             String ID = reader.next();
-            Response response=facade.isLegalWorker(ID);
+            Response response=facade.isWorkerExist(ID);
             if(response.isErrorOccurred()){
                 System.out.println(response.getErrorMessage());
             }else{
@@ -445,7 +510,7 @@ public class Menu {
     }
 
 
-    public static void HRDMenu(WorkerDTO HRD, int branchID) {
+    public static int HRDMenu(WorkerDTO HRD, int branchID) {
         while (true) {
             System.out.println("\n Welcome " + HRD.getFirstName() + " " + HRD.getLastName() + ", the HRD of branch " + branchID + " please choose an action:");
             System.out.println("1) Create new weekly shifts demands by branch ID,the date of sunday");
@@ -454,20 +519,22 @@ public class Menu {
             System.out.println("4) Change worker branch");
             System.out.println("5) Display current day shift assignment by branch ID");
             System.out.println("6) Display shift assignment by date and by branch ID");
-            System.out.println("7) Search worker by Branch ID and by  worker ID");
+            System.out.println("7) Search worker by  worker ID");
             System.out.println("8) Display workers by Qualification, shift and by branch ID");
             System.out.println("9) Display weekly assignment by branchID and by date");
             System.out.println("10) Update worker's details");
             System.out.println("11) Display your personal details ");
             System.out.println("12) Add new branch");
             System.out.println("13) Add new qualifications by worker ID (deleting the former qualifications)");
-            System.out.println("14) Display personal details of a worker by his ID\n");
+            System.out.println("14) Display personal details of a worker by his ID");
+            System.out.println("15) Display workers by branch ID \n");
 
-            System.out.println("For exit press 0");
+            System.out.println("For exit the HRD menu press 0");
             int menu = reader.nextInt();
-            if (menu == 0) break;
-            while (menu < 1 || menu > 14) {
-                System.out.println("please enter a number between 1-14");
+            if (menu == 0)
+                return menu;
+            while (menu < 1 || menu > 15) {
+                System.out.println("please enter a number between 1-15");
                 System.out.println("For exit press 0");
                 if (menu == 0) break;
                 menu = reader.nextInt();
@@ -482,7 +549,7 @@ public class Menu {
                     addWorker();
                     break;
                 case 3:
-                    removeWorker();
+                    removeWorker(HRD.getID());
                     break;
                 case 4:
                     changeWorkerBranch();
@@ -517,6 +584,10 @@ public class Menu {
                 case 14:
                     displayWorkerPersonalDetails();
                     break;
+                case 15:
+                    displayWorkersByBranchID();
+                    break;
+
             }
         }
     }
@@ -524,43 +595,58 @@ public class Menu {
     private static void addQualification() {
         System.out.println("Please enter worker ID");
         String ID = reader.next();
-        Response isLegalWorker=facade.isLegalWorker(ID);
-        if(isLegalWorker.isErrorOccurred())
-            System.out.println(isLegalWorker.getErrorMessage());
+        Response workerExist=facade.isWorkerExist(ID);
+        if(workerExist.isErrorOccurred())
+            System.out.println(workerExist.getErrorMessage());
         else{
             ResponseT<WorkerDTO>workerDTOResponseT=facade.findDTOWorkerByID(ID);
             if(workerDTOResponseT.isErrorOccurred())
-                System.out.println(workerDTOResponseT.getValue());
+                System.out.println(workerDTOResponseT.getErrorMessage());
             else{
                 System.out.println("The former qualifications of this worker are: ");
                 System.out.println(workerDTOResponseT.getValue().getQualifications().toString());
-                List<QualificationsDTO> q = createQualifications();
-                for(QualificationsDTO qu : q) {
-                    Response response=facade.addQualification(ID, qu);
-                    if(response.isErrorOccurred())
-                        System.out.println(response.getErrorMessage());
+                System.out.println("select qualification to add from the qualifications by entering its number:");
+                int index=1;
+                for(QualificationsDTO q : QualificationsDTO.values()){
+                    System.out.print(index+"."+q.name()+" ");
+                    index++;
                 }
+                int choose=reader.nextInt();
+                QualificationsDTO toAdd=null;
+                index=1;
+                for(QualificationsDTO q : QualificationsDTO.values()){
+                   if(index==choose)
+                       toAdd=q;
+                   index++;
+                }
+
+                Response response=facade.addQualification(ID,toAdd);
+                if(response.isErrorOccurred())
+                    System.out.println(response.getErrorMessage());
+
             }
 
         }
     }
 
 
-    public static void otherWorkerMenu(WorkerDTO workerDTO, int branchID) {
+    public static int otherWorkerMenu(WorkerDTO workerDTO, int branchID) {
         while (true) {
             System.out.println("\nWelcome " + workerDTO.getFirstName() + " " + workerDTO.getLastName() + " please choose an action");
             System.out.println("1) Create new weekly Available Work days by the date of sunday");
             System.out.println("2) Display current day shift assignment of your branch");
             System.out.println("3) Display the daily shift assignment of your branch by date");
             System.out.println("4) Display weekly assignment by branchID and by date");
-            System.out.println("5) Display your personal details \n");
+            System.out.println("5) Display your personal details ");
+            System.out.println("6) Display workers by branch ID \n");
 
-            System.out.println("For exit press 0");
+            System.out.println("For exit the workers menu press 0");
             int menu = reader.nextInt();
-            if (menu == 0) break;
+            if (menu == 0)
+                return menu;
 
-            while (menu < 1 || menu > 5) {
-                System.out.println("please enter a number between 1-5");
+            while (menu < 1 || menu > 6) {
+                System.out.println("please enter a number between 1-6");
                 System.out.println("For exit press 0");
                 if (menu == 0) break;
                 menu = reader.nextInt();
@@ -568,7 +654,7 @@ public class Menu {
 
             switch (menu) {
                 case 1:
-                    AvailableWorkDaysDTO availableWorkDaysDTO = createAvailableWorkDays();
+                    AvailableWorkDaysDTO availableWorkDaysDTO = createAvailableWorkDays("you");
                     Response response=facade.setAvailableWorkDays(branchID, workerDTO, availableWorkDaysDTO);
                     if(response.isErrorOccurred())
                         System.out.println(response.getErrorMessage());
@@ -585,6 +671,10 @@ public class Menu {
                 case 5:
                     personalDetailsMenu(workerDTO.getID());
                     break;
+                case 6:
+                    displayWorkersByBranchID();
+                    break;
+
             }
         }
     }
@@ -600,8 +690,34 @@ public class Menu {
             if (response.isErrorOccurred())
                 System.out.println(response.getErrorMessage());
             else {
-                System.out.println("Please enter the date of the first shift on sunday");
-                LocalDate date = createDate();
+                System.out.println("You are about to create weekly shift demands to the closest week start on sunday");
+                LocalDate date = LocalDate.now();
+                switch (date.getDayOfWeek().getValue()){
+                    case 0:
+                        date=date.plusDays(7);
+                        break;
+                    case 1:
+                        date=date.plusDays(6);
+                        break;
+                    case 2:
+                        date=date.plusDays(5);
+                        break;
+                    case 3:
+                        date=date.plusDays(4);
+                        break;
+                    case 4:
+                        date=date.plusDays(3);
+                        break;
+                    case 5:
+                        date=date.plusDays(2);
+                        break;
+                    case 6:
+                        date=date.plusDays(1);
+                        break;
+                }
+
+                System.out.println("next sunday:"+date);
+
                 ShiftTypeDTO shiftTypeDTO;
                 for (int i = 0; i < 7; i++) {
                     for (int j = 0; j < 2; j++) {
@@ -639,62 +755,36 @@ public class Menu {
         Response response=facade.addShiftDemands(brID, date, shiftTypeDTO, shiftDemandsDTO);
         if(response.isErrorOccurred())
             System.out.println(response.getErrorMessage());
+        else System.out.println("Created shift demands");
     }
 
     private static void addWorker() {
         System.out.println("Please enter the branch ID");
         int branchID = reader.nextInt();
-        Response response=facade.isLegalBranch(branchID);
-        if(response.isErrorOccurred())
+        Response response = facade.isLegalBranch(branchID);
+        if (response.isErrorOccurred()) {
             System.out.println(response.getErrorMessage());
-        else{
-            System.out.println("Please enter worker ID");
-            String ID = reader.next();
-            response=facade.isLegalWorker(ID);
-            if(response.isErrorOccurred())
-                System.out.println(response.getErrorMessage());
-            else{
-                ResponseT<WorkerDTO>workerDTOResponseT=facade.findDTOWorkerByID(ID);
-                if(workerDTOResponseT.isErrorOccurred())
-                    System.out.println(workerDTOResponseT.getValue());
-                else{
-                    WorkerDTO workerDTO = workerDTOResponseT.getValue();
-                    if(workerDTO !=null){
-                        ResponseT<BranchDTO>branchDTOResponseT=facade.findBranchByWorker(workerDTO);
-                        if(branchDTOResponseT.isErrorOccurred())
-                            System.out.println(branchDTOResponseT.getValue());
-                        else{
-                            if(branchDTOResponseT.getValue().getBranchID()!=branchID){
-                                response=facade.removeWorker(workerDTO,branchDTOResponseT.getValue().getBranchID());
-                                if(response.isErrorOccurred())
-                                    System.out.println(response.getErrorMessage());
-                                else{
-                                    response=facade.addWorker(workerDTO,branchID);
-                                    if(response.isErrorOccurred())
-                                        System.out.println(response.getErrorMessage());
-                                }
-
-                            }
-                            else System.out.println("The worker is already exist in this branch");
-                        }
-
-                    }else{
-                        createWorker(ID,branchID);
-                    }
-                }
-
-            }
+            return;
         }
+
+        System.out.println("Please enter worker ID");
+        String ID = reader.next();
+        response = facade.isWorkerExist(ID);
+        if (!response.isErrorOccurred()) {
+            System.out.println("The worker is already exist");
+            return;
+        }
+        createWorker(ID,branchID);
 
     }
 
     private static void addNewBranch() {
-        WorkerDTO branchManager = null, branchHRD = null;
-        System.out.println("Please enter the branch ID");
+        WorkerDTO branchManager, branchHRD;
+        System.out.println("Please enter new branch ID");
         int branchID = reader.nextInt();
         ResponseT<BranchDTO>branchDTOResponseT=facade.getBranch(branchID);
-        if(branchDTOResponseT.isErrorOccurred())
-            System.out.println(branchDTOResponseT.getErrorMessage());
+        if(!branchDTOResponseT.isErrorOccurred())
+            System.out.println("cant create a branch that is already exist");
         else{
             BranchDTO branchDTO=branchDTOResponseT.getValue();
             if (branchDTO != null)
@@ -702,7 +792,7 @@ public class Menu {
             System.out.println("Do you want to promote an existing worker in another branch to be this new branch manager?");
             System.out.println("Enter Y/N");
             String ans = reader.next();
-            while (ans != "n" || ans != "N" || ans != "y" || ans != "Y") {
+            while (!ans.equals( "n") && !ans.equals("N") && !ans.equals("Y") && !ans.equals("y")) {
                 System.out.println("Please enter Y for Yes or N for No");
                 ans = reader.next();
             }
@@ -710,44 +800,57 @@ public class Menu {
                 System.out.println("Please enter new branch manager");
                 branchManager = createWorkerWithoutAdd();
             } else {
-                System.out.println("Please enter ID of existing worker");
-                String ID = reader.next();
-                Response response=facade.isLegalWorker(ID);
-                if(response.isErrorOccurred())
-                    System.out.println(response.getErrorMessage());
-                else{
-                    ResponseT<WorkerDTO>workerDTOResponseT=facade.findDTOWorkerByID(ID);
-                    if(workerDTOResponseT.isErrorOccurred())
+                Response response;
+                String ID;
+                do {
+                    System.out.println("Please enter ID of existing worker");
+                    ID = reader.next();
+                    response = facade.isWorkerExist(ID);
+                    if (response.isErrorOccurred())
                         System.out.println(response.getErrorMessage());
-                    else{
-                        if (workerDTOResponseT.getValue() == null)
-                            System.out.println("There is no such worker in the System");
-                        else {
-                            ResponseT<Boolean>booleanResponseT=facade.isAManager(ID);
-                            if(booleanResponseT.isErrorOccurred())
-                                System.out.println(booleanResponseT.getErrorMessage());
-                            else{
-                                if(booleanResponseT.getValue())
-                                    System.out.println("The worker: "+ ID+ " is already a manager");
-                                else {
-                                    response=facade.addQualification( ID,QualificationsDTO.BranchManager);
-                                    if(response.isErrorOccurred())
-                                        System.out.println(response.getErrorMessage());
-                                }
-                            }
+                } while (response.isErrorOccurred());
 
-                        }
-                    }
-
+                ResponseT<WorkerDTO> workerDTOResponseT = facade.findDTOWorkerByID(ID);
+                if (workerDTOResponseT.isErrorOccurred()) {
+                    System.out.println(response.getErrorMessage());
+                    return;
+                }
+                if (workerDTOResponseT.getValue() == null) {
+                    System.out.println("There is no such worker in the System");
+                    return;
+                }
+                ResponseT<Integer> integerResponseT = facade.isAManagerOfBranch(ID);
+                if (!integerResponseT.isErrorOccurred()) {
+                    System.out.println("The worker: " +ID + " is already a manager of branch" + integerResponseT.getValue());
+                    return;
                 }
 
+                if(workerDTOResponseT.getValue().getQualifications().contains(QualificationsDTO.Human_Resources_Director)){
+                    System.out.println("The worker is already HRD qualified so the worker can't be a branch manager");
+                    return ;
+                }
+                response = facade.addQualification(ID, QualificationsDTO.BranchManager);
+                if (response.isErrorOccurred()) {
+                    System.out.println(response.getErrorMessage());
+                    return ;
+                }
 
+                ResponseT<WorkerDTO> workerDTOResponseT1=facade.findDTOWorkerByID(ID);
+                if(workerDTOResponseT1.isErrorOccurred()){
+                    System.out.println(workerDTOResponseT1.getErrorMessage());
+                    return;
+                }
+                if(workerDTOResponseT1.getValue()==null){
+                    System.out.println("Worker didn't found");
+                    return ;
+                }
+                branchManager=workerDTOResponseT1.getValue();
             }
 
             System.out.println("Do you want to choose an existing worker that already qualified to be HRD to be this new branch HRD?");
             System.out.println("Enter Y/N");
             ans = reader.next();
-            while (ans != "n" || ans != "N" || ans != "y" || ans != "Y") {
+            while (!ans.equals( "n") && !ans.equals("N") && !ans.equals("Y") && !ans.equals("y")) {
                 System.out.println("Please enter Y for Yes or N for No");
                 ans = reader.next();
             }
@@ -755,46 +858,42 @@ public class Menu {
                 System.out.println("Please enter new branch HRD");
                 branchHRD = createWorkerWithoutAdd();
             } else {
-                System.out.println("Please enter ID of existing worker");
-                String ID = reader.next();
-                Response response=facade.isLegalWorker(ID);
-                if(response.isErrorOccurred())
-                    System.out.println(response.getErrorMessage());
-                else{
-                    ResponseT<WorkerDTO>workerDTOResponseT=facade.findDTOWorkerByID(ID);
-                    if(workerDTOResponseT.isErrorOccurred())
-                        System.out.println(workerDTOResponseT.getErrorMessage());
-                    else{
-                        if (workerDTOResponseT.getValue() == null)
-                            System.out.println("There is no such worker in the System");
-                        else {
-                            ResponseT<Boolean> booleanResponseT=facade.isHRD(ID);
-                            if(booleanResponseT.isErrorOccurred())
-                                System.out.println(booleanResponseT.getValue());
-                            else{
-                                if (!booleanResponseT.getValue())
-                                    System.out.println("The worker: " + ID + " is not qualified of being HRD");
-                                else {
-                                    ResponseT<WorkerDTO>workerDTOResponseT1=facade.findDTOWorkerByID(ID);
-                                    if(workerDTOResponseT1.isErrorOccurred())
-                                        System.out.println(workerDTOResponseT1.getValue());
-                                    else
-                                        branchHRD = workerDTOResponseT1.getValue();
-                                }
-                            }
+                String ID;
+                Response response;
+                do {
+                    System.out.println("Please enter ID of existing worker");
+                    ID = reader.next();
+                    response = facade.isWorkerExist(ID);
+                } while (response.isErrorOccurred());
 
-                        }
-                    }
-
+                ResponseT<WorkerDTO> workerDTOResponseT = facade.findDTOWorkerByID(ID);
+                if (workerDTOResponseT.isErrorOccurred()) {
+                    System.out.println(workerDTOResponseT.getErrorMessage());
+                    return;
+                }
+                if (workerDTOResponseT.getValue() == null) {
+                    System.out.println("There is no such worker in the System");
+                    return;
+                }
+                Boolean isHRD=workerDTOResponseT.getValue().getQualifications().contains(QualificationsDTO.Human_Resources_Director);
+                if (!isHRD) {
+                    System.out.println("The worker: " + ID + " is not qualified of being HRD");
+                    return;
                 }
 
+                branchHRD = workerDTOResponseT.getValue();
 
             }
+            if(branchHRD==null)
+                System.out.println("branchHRD bug");
+            if(branchManager==null)
+                System.out.println("branch manager bug");
 
             if (branchHRD != null && branchManager != null) {
                 Response response=facade.addBranch(branchID, branchManager, branchHRD);
                 if(response.isErrorOccurred())
                     System.out.println(response.getErrorMessage());
+                else System.out.println("Branch successfully created");
             }
 
             else System.out.println("The branch was not created due to illegal branch manager or HRD");
@@ -812,11 +911,10 @@ public class Menu {
         System.out.println("Enter worker last name:");
         lastname = reader.next();
         BankAccountDTO bankAccountDTO = createBankAccount();
-        LocalDate startWorkingDay = createDate();
         HiringConditionsDTO hiringConditionsDTO = createHiringConditions();
-        AvailableWorkDaysDTO availableWorkDaysDTO = createAvailableWorkDays();
+        AvailableWorkDaysDTO availableWorkDaysDTO = createAvailableWorkDays("the worker");
         List<QualificationsDTO> qualifications = createQualifications();
-        WorkerDTO newWorkerDTO = new WorkerDTO(firstname, lastname, ID, bankAccountDTO, startWorkingDay, hiringConditionsDTO, availableWorkDaysDTO, qualifications);
+        WorkerDTO newWorkerDTO = new WorkerDTO(firstname, lastname, ID, bankAccountDTO, hiringConditionsDTO, availableWorkDaysDTO, qualifications);
         Response response=facade.addWorker(newWorkerDTO, branchID);
         if(response.isErrorOccurred())
             System.out.println(response.getErrorMessage());
@@ -835,11 +933,10 @@ public class Menu {
             System.out.println("Enter worker last name:");
             lastname = reader.next();
             BankAccountDTO bankAccountDTO = createBankAccount();
-            LocalDate startWorkingDay = createDate();
             HiringConditionsDTO hiringConditionsDTO = createHiringConditions();
-            AvailableWorkDaysDTO availableWorkDaysDTO = createAvailableWorkDays();
+            AvailableWorkDaysDTO availableWorkDaysDTO = createAvailableWorkDays("the worker");
             List<QualificationsDTO> qualifications = createQualifications();
-            WorkerDTO newWorkerDTO = new WorkerDTO(firstname, lastname, ID, bankAccountDTO, startWorkingDay, hiringConditionsDTO, availableWorkDaysDTO, qualifications);
+            WorkerDTO newWorkerDTO = new WorkerDTO(firstname, lastname, ID, bankAccountDTO, hiringConditionsDTO, availableWorkDaysDTO, qualifications);
             return newWorkerDTO;
         }
 
@@ -857,7 +954,8 @@ public class Menu {
         return new BankAccountDTO(bankName, branch, bankAccount);
     }
 
-    public static AvailableWorkDaysDTO createAvailableWorkDays() {
+
+    public static AvailableWorkDaysDTO createAvailableWorkDays(String person) {
         Boolean[][] available = new Boolean[7][2];
         HashMap<Integer, String> week = new HashMap<Integer, String>();
         week.put(0, "sunday");
@@ -874,7 +972,7 @@ public class Menu {
                 if (j == 0)
                     shift = "Morning";
                 else shift = "Evening";
-                System.out.println("Can you work at day " + week.get(i) + "in shift " + shift + "? Enter Y/N");
+                System.out.println("Can "+ person + " work at " + week.get(i) + " in shift " + shift + "? Enter Y/N");
                 can = reader.next();
                 while (!(can.equals("Y") || can.equals("y") || can.equals("N") || can.equals("n")))
                     can = reader.next();
@@ -891,7 +989,7 @@ public class Menu {
                 if (j == 0)
                     shift = "Morning";
                 else shift = "Evening";
-                System.out.println("Do you prefer to work at day " + week.get(i) + "in shift " + shift + "? Enter Y/N");
+                System.out.println("Do " +person + " prefer to work at " + week.get(i) + " in shift " + shift + "? Enter Y/N");
                 prefer = reader.next();
                 while (!(prefer.equals("Y") || prefer.equals("y") || prefer.equals("N") || prefer.equals("n")))
                     prefer = reader.next();
@@ -922,51 +1020,63 @@ public class Menu {
     }
 
     public static List<QualificationsDTO> createQualifications() {
-        char c;
+        String c;
         List<QualificationsDTO> qualifications = new LinkedList<>();
         for (QualificationsDTO q : QualificationsDTO.values()) {
             do {
                 System.out.println("Do the worker is talented to work as " + q.name() + " Enter Y/N");
-                c = reader.next().charAt(0);
-            } while (c != 'Y' && c != 'y' && c != 'n' && c != 'N');
-            if (c == 'Y' || c == 'y')
-                qualifications.add(q);
+                c = reader.next();
+            } while (!c.equals("Y")  && !c.equals("y") && !c.equals("n") && !c.equals("N"));
+            if (c.equals("Y") || c.equals("y")){
+                if(qualifications.contains(QualificationsDTO.BranchManager)&&QualificationsDTO.Human_Resources_Director.name().equals(q.name()))
+                    System.out.println("The worker is already qualified of being branch manager, he can't be HRD as well");
+                else if (qualifications.contains(QualificationsDTO.Human_Resources_Director)&&QualificationsDTO.BranchManager.name().equals(q.name()))
+                    System.out.println("The worker is already qualified of being HRD, he can't be branch manager as well");
+                else qualifications.add(q);
+            }
         }
         return qualifications;
     }
 
-    private static void removeWorker() {
-        System.out.println("Please enter worker ID");
+    private static void removeWorker(String HRD_ID) {
+        System.out.println("Please enter worker ID to remove");
         String ID = reader.next();
-        Response response=facade.isLegalWorker(ID);
-        if(response.isErrorOccurred())
+        Response response = facade.isWorkerExist(ID);
+        if (response.isErrorOccurred()) {
             System.out.println(response.getErrorMessage());
-        else{
-            ResponseT<WorkerDTO>workerDTOResponseT=facade.findDTOWorkerByID(ID);
-            if(workerDTOResponseT.isErrorOccurred())
-                System.out.println(workerDTOResponseT.getValue());
-            else{
-                WorkerDTO workerDTOToRemove = workerDTOResponseT.getValue();
-                ResponseT<BranchDTO>branchDTOResponseT=facade.findBranchByWorker(workerDTOToRemove);
-                if(branchDTOResponseT.isErrorOccurred())
-                    System.out.println(branchDTOResponseT.getValue());
-                else{
-                    BranchDTO branchDTO= branchDTOResponseT.getValue();
-                    Response response1=facade.removeWorker(workerDTOToRemove, branchDTO.getBranchID());
-                    if(response1.isErrorOccurred())
-                        System.out.println(response1);
-                    else
-                        System.out.println("Removal succeeded");
-                }
+            return;
+        }
+
+        if (HRD_ID.equals(ID)) {
+            System.out.println("You can't remove yourself");
+            return;
+        }
+
+        ResponseT<WorkerDTO> workerDTOResponseT = facade.findDTOWorkerByID(ID);
+        if (workerDTOResponseT.isErrorOccurred())
+            System.out.println(workerDTOResponseT.getValue());
+        else {
+            WorkerDTO workerDTOToRemove = workerDTOResponseT.getValue();
+            ResponseT<BranchDTO> branchDTOResponseT = facade.findBranchByWorker(workerDTOToRemove);
+            if (branchDTOResponseT.isErrorOccurred())
+                System.out.println(branchDTOResponseT.getValue());
+            else {
+                BranchDTO branchDTO = branchDTOResponseT.getValue();
+                Response response1 = facade.removeWorker(workerDTOToRemove, branchDTO.getBranchID());
+                if (response1.isErrorOccurred())
+                    System.out.println(response1);
+                else
+                    System.out.println("Removal succeeded");
             }
         }
+
 
     }
 
     private static void changeWorkerBranch() {
         System.out.println("Please enter worker ID");
         String ID = reader.next();
-        Response response=facade.isLegalWorker(ID);
+        Response response=facade.isWorkerExist(ID);
         if(response.isErrorOccurred())
             System.out.println(response.getErrorMessage());
         else{
@@ -1010,57 +1120,58 @@ public class Menu {
     private static void updateWorkersDetails() {
         System.out.println("Please enter worker ID");
         String ID = reader.next();
-        Response response=facade.isLegalWorker(ID);
+        Response response=facade.isWorkerExist(ID);
         if(response.isErrorOccurred())
             System.out.println(response.getErrorMessage());
         else{
-            System.out.println("Please choose which detail you want to change, if you finish changing press 0");
-            int option = reader.nextInt();
+            int option=1;
             while (option != 0) {
                 System.out.println("1) Reset worker's first name");
                 System.out.println("2) Reset worker's last name");
                 System.out.println("3) Reset worker's bankAccount");
                 System.out.println("4) Reset worker's hiringConditions");
                 System.out.println("5) Reset worker's qualifications");
+                System.out.println("Please choose which detail you want to change, if you finish changing press 0");
+                option= reader.nextInt();
 
                 ResponseT<WorkerDTO>workerDTOResponseT=facade.findDTOWorkerByID(ID);
                 if(workerDTOResponseT.isErrorOccurred())
-                    System.out.println(workerDTOResponseT.getValue());
+                    System.out.println(workerDTOResponseT.getErrorMessage());
                 else {
                     WorkerDTO workerDTO = workerDTOResponseT.getValue();
                     switch (option) {
                         case 1:
-                            System.out.println("The first name of the worker was: " + facade.getWorkerFirstName(ID));
+                            System.out.println("The first name of the worker was: " + workerDTO.getFirstName());
                             System.out.println("Enter the new first name of the worker");
                             String firstName = reader.next();
-                            Response response1=facade.setWorkerFirstName(firstName, ID);
+                            Response response1=facade.setWorkerFirstName(ID,firstName);
                             if(response1.isErrorOccurred())
                                 System.out.println(response1.getErrorMessage());
                             break;
                         case 2:
-                            System.out.println("The Last name of the worker was: " + facade.getWorkerLastName(ID));
+                            System.out.println("The Last name of the worker was: " + workerDTO.getLastName());
                             System.out.println("Enter the new last name of the worker");
                             String lastName = reader.next();
-                            Response response2=facade.setWorkerLastName(lastName, ID);
+                            Response response2=facade.setWorkerLastName(lastName,ID);
                             if(response2.isErrorOccurred())
                                 System.out.println(response2.getErrorMessage());
                             break;
                         case 3:
-                            System.out.println("The Last bank account of the worker was: " + facade.getWorkerBankAccount(ID));
+                            System.out.println("The Last bank account of the worker was: " + workerDTO.getBankAccount());
                             BankAccountDTO bankAccountDTO = createBankAccount();
                             Response response3=facade.setBankAccount(bankAccountDTO, ID);
                             if(response3.isErrorOccurred())
                                 System.out.println(response3.getErrorMessage());
                             break;
                         case 4:
-                            System.out.println("The Last hiring conditions of the worker was: " + facade.getWorkerHiringConditions(ID));
+                            System.out.println("The Last hiring conditions of the worker was: " + workerDTO.getHiringConditions());
                             HiringConditionsDTO hiringConditionsDTO = createHiringConditions();
-                            Response response4=facade.setHiringConditions(hiringConditionsDTO, ID);
+                            Response response4=facade.setHiringConditions(hiringConditionsDTO,ID);
                             if(response4.isErrorOccurred())
                                 System.out.println(response4.getErrorMessage());
                             break;
                         case 5:
-                            System.out.println("The Last qualifications of the worker were: " + facade.getWorkerQualifications(workerDTO));
+                            System.out.println("The Last qualifications of the worker were: " + workerDTO.getQualifications());
                             List<QualificationsDTO> qualifications = createQualifications();
                             Response response5=facade.setWorkerQualifications(qualifications, ID);
                             if(response5.isErrorOccurred())
@@ -1083,7 +1194,7 @@ public class Menu {
             System.out.println("4) Change worker branch");
             System.out.println("5) Display current day shift assignment by branch ID");
             System.out.println("6) Display shift assignment by date and by branch ID");
-            System.out.println("7) Search worker by Branch ID and by  worker ID");
+            System.out.println("7) Search worker by  worker ID");
             System.out.println("8) Display workers by Qualification and by branch ID");
             System.out.println("9) Display weekly assignment by branchID and by date");
             System.out.println("10) Update worker's details");
@@ -1095,7 +1206,7 @@ public class Menu {
             int menu = reader.nextInt();
             if (menu == 0) break;
             else if(menu == -1)
-                 system();
+                 system(1);
             while (menu < 1 || menu > 13) {
                 System.out.println("please enter a number between 1-13");
                 System.out.println("For exit press 0");
@@ -1112,7 +1223,7 @@ public class Menu {
                     addWorker();
                     break;
                 case 3:
-                    removeWorker();
+                    removeWorker("");
                     break;
                 case 4:
                     changeWorkerBranch();
@@ -1148,14 +1259,23 @@ public class Menu {
         }
     }
 
-    private static void system(){
+    private static int system(int s){
+        int stop = 1;
+        if(s == 0){
+            System.out.println("For log out of Super Lee's System PRESS 0 else press any number to continue");
+            int x = reader.nextInt();
+             if(x == 0)
+                 return 0;
+        }
+
         System.out.println(LocalDate.now());
         System.out.println("Welcome to Super Lee's System, please enter your ID in order to log in");
         String ID = reader.next();
         ResponseT<WorkerDTO> workerDTOResponseT=facade.findDTOWorkerByID(ID);
-        if(workerDTOResponseT.isErrorOccurred())
-            System.out.println(workerDTOResponseT.getValue());
-        else{
+        if(workerDTOResponseT.isErrorOccurred()) {
+            System.out.println(workerDTOResponseT.getErrorMessage());
+            stop=0;
+        }else{
             WorkerDTO workerDTO = workerDTOResponseT.getValue();
             while (workerDTO == null) {
                 //System.out.println("There is no worker with such ID please enter new ID");
@@ -1179,20 +1299,21 @@ public class Menu {
                 else{
                     List<QualificationsDTO> qualifications = listResponseT.getValue();
                     if (qualifications.contains(QualificationsDTO.BranchManager)) {
-                        Menu.branchManagerMenu(workerDTO,branchID);
+                        stop = Menu.branchManagerMenu(workerDTO,branchID);
 
                     } else if (workerDTO.getQualifications().contains(QualificationsDTO.Human_Resources_Director)) {
-                        Menu.HRDMenu(workerDTO,branchID);
+                        stop = Menu.HRDMenu(workerDTO,branchID);
 
                     }
                     else {
-                        Menu.otherWorkerMenu(workerDTO,branchID);
+                        stop = Menu.otherWorkerMenu(workerDTO,branchID);
                     }
                 }
 
             }
 
         }
+        return stop;
     }
 }
 

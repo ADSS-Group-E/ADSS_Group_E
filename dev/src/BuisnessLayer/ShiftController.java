@@ -6,22 +6,18 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class ShiftController {
-    private static ShiftController instance = null;
+
     private HashMap<Integer,List<Shift[][]>> weeklyAssignmentsHistory;
     private HashMap<Integer,Shift[][]> weeklyAssignment;
     private HashMap<Integer, ShiftDemands[][]> shiftDemandsHashMap;
 
 
-    private ShiftController() {
+    public ShiftController() {
         weeklyAssignmentsHistory = new HashMap<>();
         weeklyAssignment = new HashMap<>();
         shiftDemandsHashMap=new HashMap<>();
     }
 
-    /*public void addShiftDemands(int branchID,ShiftDemands[][] shiftDemands){
-        shiftDemandsHashMap.remove(branchID);
-        shiftDemandsHashMap.put(branchID,shiftDemands);
-    }*/
 
     public void addShiftDemands(int branchID,LocalDate date,ShiftType shiftType,ShiftDemands shiftDemands){
         if(!shiftDemandsHashMap.containsKey(branchID))
@@ -32,7 +28,7 @@ public class ShiftController {
         if(date.compareTo(upperLimit)>0)
             throw new IllegalArgumentException("Can't create a shift demands that is so far. The system can create a shift demands that is within the next week");
         int type=shiftType==ShiftType.Morning ? 0 : 1;
-        shiftDemandsHashMap.get(branchID)[date.getDayOfWeek().getValue()-1][type]=shiftDemands;
+        shiftDemandsHashMap.get(branchID)[date.getDayOfWeek().getValue()-1][type]=new ShiftDemands(shiftDemands);
     }
 
     public void resetShiftDemands(int branchID){
@@ -41,13 +37,6 @@ public class ShiftController {
                 shiftDemandsHashMap.get(branchID)[i][j]=null;
             }
         }
-    }
-
-    public static ShiftController getInstance() {
-        if (instance == null) {
-            instance=new ShiftController();
-        }
-        return instance;
     }
 
     public void addBranch(int branchID) {
@@ -88,10 +77,12 @@ public class ShiftController {
         int type = shiftType == ShiftType.Morning ? 0:1;
         if(branchManager==null)
             throw new IllegalArgumentException("The shiftAssignment must contains a branchManager");
-        if(shiftDemandsHashMap.containsKey(branchID) &&!shiftDemandsHashMap.get(branchID)[date.getDayOfWeek().getValue()-1][type].getDate().equals(date))
+        if(!shiftDemandsHashMap.containsKey(branchID))
+            throw new IllegalArgumentException("The hash map of demands doesn't contains this branch's demands");
+        if(!shiftDemandsHashMap.get(branchID)[date.getDayOfWeek().getValue()][type].getDate().equals(date))
             throw new IllegalArgumentException("The shift demands of this date is not exist in the system");
-        ShiftDemands shiftDemands = shiftDemandsHashMap.get(branchID)[date.getDayOfWeek().getValue()-1][type];
-        int dayAtWeek = date.getDayOfWeek().getValue()-1;
+        ShiftDemands shiftDemands = shiftDemandsHashMap.get(branchID)[date.getDayOfWeek().getValue()][type];
+        int dayAtWeek = date.getDayOfWeek().getValue();
         int arrangerAmount = shiftDemands.getArrangerAmount();
         int assistantAmount = shiftDemands.getAssistantAmount();
         int cashierAmount = shiftDemands.getCashierAmount();
@@ -166,13 +157,13 @@ public class ShiftController {
         }
     }
 
-    public Shift getShift(int branchID,LocalDate date,ShiftType shiftType){
-        int shift=shiftType==ShiftType.Morning? 0 : 1;
-        for(int i=0;i<7;i++){
-            if(!weeklyAssignment.containsKey(branchID))
-                throw new IllegalArgumentException("The branch ID:"+branchID+" is not exist in the system");
-                if(weeklyAssignment.get(branchID)[i][shift]!=null&&weeklyAssignment.get(branchID)[i][shift].getDate().equals(date))
-                    return weeklyAssignment.get(branchID)[i][shift];
+    public Shift getShift(int branchID,LocalDate date,ShiftType shiftType) {
+        int shift = shiftType == ShiftType.Morning ? 0 : 1;
+        for (int i = 0; i < 7; i++) {
+            if (!weeklyAssignment.containsKey(branchID))
+                throw new IllegalArgumentException("The branch ID:" + branchID + " is not exist in the system");
+            if (weeklyAssignment.get(branchID)[i][shift] != null && weeklyAssignment.get(branchID)[i][shift].getDate().equals(date))
+                return weeklyAssignment.get(branchID)[i][shift];
         }
         return null;
     }

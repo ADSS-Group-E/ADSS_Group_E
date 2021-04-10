@@ -13,7 +13,7 @@ public class Main {
     private static Facade facade = Facade.getInstance();
 
     public static void main(String[] args) {
-        System.out.println("Welcome to Super Lee's System");
+     /*   System.out.println("Welcome to Super Lee's System");
         System.out.println("Do you want the system to be initialized? \n Enter Y/N");
         String ans = reader.next();
         while (!(ans.equals("n") || ans.equals("N") || ans.equals("Y")||ans.equals("y"))){
@@ -26,7 +26,8 @@ public class Main {
         }
         else {
             createSystem();
-        }
+        }*/
+        Menu.createSystem();
 
     }
 
@@ -232,6 +233,7 @@ public class Main {
         qualificationsDTO5.add(QualificationsDTO.Guard);
         qualificationsDTO5.add(QualificationsDTO.Assistant);
 
+
         List<QualificationsDTO> qualificationsDTO6 = new LinkedList<>();
         qualificationsDTO6.add(QualificationsDTO.Human_Resources_Director);
         qualificationsDTO6.add(QualificationsDTO.Storekeeper);
@@ -240,36 +242,35 @@ public class Main {
         qualificationsDTO6.add(QualificationsDTO.ShiftManager);
 
 
-        WorkerDTO branchManager = new WorkerDTO("Yoad", "Ohayon", "323079103", bankAccountDTO1, startDate1, hiringConditionsDTO1, availableWorkDaysDTO1, qualificationsDTO1);
-        WorkerDTO HRD = new WorkerDTO("Omer", "Shitrit", "208060210", bankAccountDTO2, startDate2, hiringConditionsDTO2, availableWorkDaysDTO2, qualificationsDTO5);
-        WorkerDTO workerDTO1 = new WorkerDTO("Gal", "Brown", "207896321", bankAccountDTO3, startDate3, hiringConditionsDTO3, availableWorkDaysDTO3, qualificationsDTO3);
-        WorkerDTO workerDTO2 = new WorkerDTO("Daniel", "Levi", "209456234", bankAccountDTO4, startDate4, hiringConditionsDTO4, availableWorkDaysDTO4, qualificationsDTO4);
-        WorkerDTO workerDTO3 = new WorkerDTO("Shaked", "Ohayon", "209542302", bankAccountDTO5, startDate4, hiringConditionsDTO5, availableWorkDaysDTO5, qualificationsDTO5);
-        WorkerDTO workerDTO4 = new WorkerDTO("Yoav", "Yehuda", "323456123", bankAccountDTO6, startDate5, hiringConditionsDTO6, availableWorkDaysDTO6, qualificationsDTO6);
-        WorkerDTO workerDTO5 = new WorkerDTO("Ehud", "Shamgar", "254987413", bankAccountDTO7, startDate6, hiringConditionsDTO7, availableWorkDaysDTO7, qualificationsDTO4);
-        WorkerDTO workerDTO6 = new WorkerDTO("Yossi", "Bookobza", "209456534", bankAccountDTO8, startDate7, hiringConditionsDTO8, availableWorkDaysDTO8, qualificationsDTO3);
-        WorkerDTO workerDTO7 = new WorkerDTO("Matan", "Sabag", "206342302", bankAccountDTO9, startDate8, hiringConditionsDTO9, availableWorkDaysDTO9, qualificationsDTO1);
-        WorkerDTO workerDTO8 = new WorkerDTO("Avishy", "Yehuda", "320842543", bankAccountDTO10, startDate9, hiringConditionsDTO10, availableWorkDaysDTO10, qualificationsDTO2);
-        WorkerDTO workerDTO9 = new WorkerDTO("Dani", "Lerner", "206894441", bankAccountDTO11, startDate10, hiringConditionsDTO11, availableWorkDaysDTO6, qualificationsDTO4);
-        WorkerDTO workerDTO10 = new WorkerDTO("Raz", "Cohen", "229656234", bankAccountDTO12, startDate11, hiringConditionsDTO12, availableWorkDaysDTO8, qualificationsDTO1);
-        WorkerDTO workerDTO11 = new WorkerDTO("Eren", "Ben David", "209509970", bankAccountDTO13, startDate12, hiringConditionsDTO13, availableWorkDaysDTO4, qualificationsDTO5);
-        WorkerDTO workerDTO12 = new WorkerDTO("Or", "Efraim", "326556129", bankAccountDTO14, startDate1, hiringConditionsDTO14, availableWorkDaysDTO1, qualificationsDTO6);
-        WorkerDTO workerDTO13 = new WorkerDTO("Bar", "Zomer", "332545111", bankAccountDTO15, startDate2, hiringConditionsDTO15, availableWorkDaysDTO2, qualificationsDTO2);
-        WorkerDTO workerDTO14 = new WorkerDTO("Ido", "Barak", "289774534", bankAccountDTO16, startDate3, hiringConditionsDTO16, availableWorkDaysDTO5, qualificationsDTO3);
-        WorkerDTO workerDTO15 = new WorkerDTO("Daniel", "maymon", "339342302", bankAccountDTO17, startDate8, hiringConditionsDTO17, availableWorkDaysDTO9, qualificationsDTO5);
-        WorkerDTO workerDTO16 = new WorkerDTO("Kobi", "Swissa", "290842543", bankAccountDTO18, startDate5, hiringConditionsDTO18, availableWorkDaysDTO6, qualificationsDTO6);
-        WorkerDTO workerDTO17 = new WorkerDTO("Ben", "Cohen", "333232987", bankAccountDTO19, startDate6, hiringConditionsDTO19, availableWorkDaysDTO3, qualificationsDTO1);
-        WorkerDTO workerDTO18 = new WorkerDTO("Baruch", "Tzion", "279587570", bankAccountDTO20, startDate12, hiringConditionsDTO20, availableWorkDaysDTO4, qualificationsDTO4);
-        WorkerDTO workerDTO19 = new WorkerDTO("Moses", "Efraim", "321642111", bankAccountDTO21, startDate7, hiringConditionsDTO21, availableWorkDaysDTO1, qualificationsDTO2);
-        WorkerDTO workerDTO20 = new WorkerDTO("Shalom", "Brefman", "205123654", bankAccountDTO22, startDate2, hiringConditionsDTO22, availableWorkDaysDTO2, qualificationsDTO5);
-        WorkerDTO workerDTO21 = new WorkerDTO("Barak", "Bar", "226134562", bankAccountDTO23, startDate3, hiringConditionsDTO23, availableWorkDaysDTO5, qualificationsDTO3);
-        WorkerDTO workerDTO22 = new WorkerDTO("Avi", "Ohayon", "325431754", bankAccountDTO24, startDate8, hiringConditionsDTO24, availableWorkDaysDTO9, qualificationsDTO5);
-        WorkerDTO workerDTO23 = new WorkerDTO("Dganit", "Refeli", "298764234", bankAccountDTO25, startDate5, hiringConditionsDTO25, availableWorkDaysDTO6, qualificationsDTO6);
+        WorkerDTO branchManager = new WorkerDTO("Yoad", "Ohayon", "323079103", bankAccountDTO1, hiringConditionsDTO1, availableWorkDaysDTO1, qualificationsDTO1);
+        WorkerDTO HRD = new WorkerDTO("Omer", "Shitrit", "208060210", bankAccountDTO2, hiringConditionsDTO2, availableWorkDaysDTO2, qualificationsDTO5);
+        WorkerDTO workerDTO1 = new WorkerDTO("Gal", "Brown", "207896321", bankAccountDTO3, hiringConditionsDTO3, availableWorkDaysDTO3, qualificationsDTO3);
+        WorkerDTO workerDTO2 = new WorkerDTO("Daniel", "Levi", "209456234", bankAccountDTO4, hiringConditionsDTO5, availableWorkDaysDTO5, qualificationsDTO5);
+        WorkerDTO workerDTO4 = new WorkerDTO("Yoav", "Yehuda", "323456123", bankAccountDTO6, hiringConditionsDTO6, availableWorkDaysDTO6, qualificationsDTO6);
+        WorkerDTO workerDTO5 = new WorkerDTO("Ehud", "Shamgar", "254987413", bankAccountDTO7, hiringConditionsDTO7, availableWorkDaysDTO7, qualificationsDTO4);
+        WorkerDTO workerDTO6 = new WorkerDTO("Yossi", "Bookobza", "209456534", bankAccountDTO8, hiringConditionsDTO8, availableWorkDaysDTO8, qualificationsDTO3);
+        WorkerDTO workerDTO7 = new WorkerDTO("Matan", "Sabag", "206342302", bankAccountDTO9, hiringConditionsDTO9, availableWorkDaysDTO9, qualificationsDTO1);
+        WorkerDTO workerDTO8 = new WorkerDTO("Avishy", "Yehuda", "320842543", bankAccountDTO10, hiringConditionsDTO10, availableWorkDaysDTO10, qualificationsDTO2);
+        WorkerDTO workerDTO9 = new WorkerDTO("Dani", "Lerner", "206894441", bankAccountDTO11, hiringConditionsDTO11, availableWorkDaysDTO6, qualificationsDTO4);
+        WorkerDTO workerDTO10 = new WorkerDTO("Raz", "Cohen", "229656234", bankAccountDTO12, hiringConditionsDTO12, availableWorkDaysDTO8, qualificationsDTO1);
+        WorkerDTO workerDTO11 = new WorkerDTO("Eren", "Ben David", "209509970", bankAccountDTO13, hiringConditionsDTO13, availableWorkDaysDTO4, qualificationsDTO5);
+        WorkerDTO workerDTO12 = new WorkerDTO("Or", "Efraim", "326556129", bankAccountDTO14, hiringConditionsDTO14, availableWorkDaysDTO1, qualificationsDTO6);
+        WorkerDTO workerDTO13 = new WorkerDTO("Bar", "Zomer", "332545111", bankAccountDTO15, hiringConditionsDTO15, availableWorkDaysDTO2, qualificationsDTO2);
+        WorkerDTO workerDTO14 = new WorkerDTO("Ido", "Barak", "289774534", bankAccountDTO16,  hiringConditionsDTO16, availableWorkDaysDTO5, qualificationsDTO3);
+        WorkerDTO workerDTO15 = new WorkerDTO("Daniel", "maymon", "339342302", bankAccountDTO17,  hiringConditionsDTO17, availableWorkDaysDTO9, qualificationsDTO5);
+        WorkerDTO workerDTO16 = new WorkerDTO("Kobi", "Swissa", "290842543", bankAccountDTO18,  hiringConditionsDTO18, availableWorkDaysDTO6, qualificationsDTO6);
+        WorkerDTO workerDTO17 = new WorkerDTO("Ben", "Cohen", "333232987", bankAccountDTO19,  hiringConditionsDTO19, availableWorkDaysDTO3, qualificationsDTO1);
+        WorkerDTO workerDTO18 = new WorkerDTO("Baruch", "Tzion", "279587570", bankAccountDTO20,  hiringConditionsDTO20, availableWorkDaysDTO4, qualificationsDTO4);
+        WorkerDTO workerDTO19 = new WorkerDTO("Moses", "Efraim", "321642111", bankAccountDTO21,  hiringConditionsDTO21, availableWorkDaysDTO1, qualificationsDTO2);
+        WorkerDTO workerDTO20 = new WorkerDTO("Shalom", "Brefman", "205123654", bankAccountDTO22, hiringConditionsDTO22, availableWorkDaysDTO2, qualificationsDTO5);
+        WorkerDTO workerDTO21 = new WorkerDTO("Barak", "Bar", "226134562", bankAccountDTO23,  hiringConditionsDTO23, availableWorkDaysDTO5, qualificationsDTO3);
+        WorkerDTO workerDTO22 = new WorkerDTO("Avi", "Ohayon", "325431754", bankAccountDTO24,  hiringConditionsDTO24, availableWorkDaysDTO9, qualificationsDTO5);
+        WorkerDTO workerDTO23 = new WorkerDTO("Dganit", "Refeli", "298764234", bankAccountDTO25,  hiringConditionsDTO25, availableWorkDaysDTO6, qualificationsDTO6);
 
         facade.addBranch(1, branchManager, HRD);
         facade.addWorker(workerDTO1, 1);
         facade.addWorker(workerDTO2, 1);
-        facade.addWorker(workerDTO3, 1);
+        //facade.addWorker(workerDTO3, 1);
         facade.addWorker(workerDTO4, 1);
         facade.addWorker(workerDTO5, 1);
         facade.addWorker(workerDTO6, 1);
@@ -290,7 +291,7 @@ public class Main {
         facade.addWorker(workerDTO21, 1);
         facade.addWorker(workerDTO22, 1);
         facade.addWorker(workerDTO23, 1);
-        
+
 /*        LocalDate ld = LocalDate.of(2021, 6, 3);
 
         ShiftDemandsDTO shiftDemandsDTO1 = new ShiftDemandsDTO(ld, 2, 1, 1, 1, 1);
