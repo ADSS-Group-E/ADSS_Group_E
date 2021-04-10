@@ -13,12 +13,12 @@ public class Shift {
     private ShiftDemands demands;
     private EnumMap<Qualifications,List<Worker>> workers;
     private Worker shiftManager;
+    private int branchID;
+
 
     public int getBranchID() {
         return branchID;
     }
-
-    private int branchID;
 
     public EnumMap<Qualifications, List<Worker>> getWorkers() {
         return workers;

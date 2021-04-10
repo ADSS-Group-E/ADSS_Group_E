@@ -292,6 +292,12 @@ public class Main {
         facade.addWorker(workerDTO22, 1);
         facade.addWorker(workerDTO23, 1);
 
+        LocalDate now=LocalDate.now();
+        ShiftTypeDTO shiftTypeDTO=ShiftTypeDTO.Morning;
+        ShiftDemandsDTO shiftDemandsDTO=new ShiftDemandsDTO(now,1,1,1,1,1);
+        facade.addShiftDemands(1,now,shiftTypeDTO,shiftDemandsDTO);
+
+
 /*        LocalDate ld = LocalDate.of(2021, 6, 3);
 
         ShiftDemandsDTO shiftDemandsDTO1 = new ShiftDemandsDTO(ld, 2, 1, 1, 1, 1);

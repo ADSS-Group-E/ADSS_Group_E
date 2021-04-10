@@ -719,6 +719,8 @@ public class Menu {
                 System.out.println("next sunday:"+date);
 
                 ShiftTypeDTO shiftTypeDTO;
+                int cashierAmount=0,storeKeeperAmount=0,arrangerAmount=0,guardAmount=0,assistantAmount=0;
+                ShiftDemandsDTO shiftDemandsDTO=null;
                 for (int i = 0; i < 7; i++) {
                     for (int j = 0; j < 2; j++) {
                         if (j == 0) {
@@ -728,7 +730,23 @@ public class Menu {
                             System.out.println("enter evening shift of " + date);
                             shiftTypeDTO = ShiftTypeDTO.Evening;
                         }
-                        createShiftDemands(date, brID, shiftTypeDTO);
+
+                        System.out.println("Please enter cashiers amount");
+                        cashierAmount = reader.nextInt();
+                        System.out.println("Please enter storeKeepers amount");
+                        storeKeeperAmount = reader.nextInt();
+                        System.out.println("Please enter arrangers amount");
+                        arrangerAmount = reader.nextInt();
+                        System.out.println("Please enter guards amount");
+                        guardAmount = reader.nextInt();
+                        System.out.println("Please enter assistants amount");
+                        assistantAmount = reader.nextInt();
+                        shiftDemandsDTO=new ShiftDemandsDTO(date,cashierAmount,storeKeeperAmount,arrangerAmount,guardAmount,assistantAmount);
+                        Response response1=facade.addShiftDemands(brID,date,shiftTypeDTO,shiftDemandsDTO);
+                        if(response1.isErrorOccurred()) {
+                            System.out.println(response1.getErrorMessage());
+                            return ;
+                        }
                     }
                     date = date.plusDays(1);
                 }

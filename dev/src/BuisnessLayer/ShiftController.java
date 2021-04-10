@@ -240,9 +240,28 @@ public class ShiftController {
             if (shifts == null)
                 throw new IllegalArgumentException("There is no weekly assignment in this date");
             else
-                for (Shift[] sh : shifts)
-                    System.out.println(sh.toString());
+                for (int i=0;i<7;i++){
+                    for(int j=0;j<2;j++){
+                        System.out.println(shifts[i][j]);
+                    }
+                }
             }
         }
+
+    public ShiftDemands getShiftDemands(LocalDate date, int branchID, ShiftType shiftType) {
+        if(!shiftDemandsHashMap.containsKey(branchID))
+            throw new IllegalArgumentException("the branch id is not exist");
+        int type=shiftType==ShiftType.Morning ? 0 : 1;
+        LocalDate date1=date;
+        for(int i=0;i<7;i++){
+            for(int j=0;j<2;j++){
+                if(shiftDemandsHashMap.get(branchID)[i][j].getDate().equals(date1)){
+                    return shiftDemandsHashMap.get(branchID)[i][type];
+                }
+            }
+            date1=date1.plusDays(1);
+        }
+        throw new IllegalArgumentException("didn't found this shift demand");
     }
+}
 

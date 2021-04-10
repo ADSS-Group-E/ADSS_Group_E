@@ -5,12 +5,10 @@ import PresentationLayer.*;
 import java.time.LocalDate;
 import java.util.*;
 
-import static PresentationLayer.Main.createDate;
-
 public class Facade {
 
-    private BranchController branchController;
-    private ShiftController shiftController;
+    private final BranchController branchController;
+    private final ShiftController shiftController;
     private static Facade instance = null;
 
     private Facade() {
@@ -120,6 +118,15 @@ public class Facade {
         return new Response();
     }
 
+    public ResponseT<ShiftDemandsDTO>getShiftDemands(LocalDate date,int branchID,ShiftTypeDTO shiftTypeDTO){
+        try{
+            shiftController.getShiftDemands(date,branchID,convertShiftTypeToBusiness(shiftTypeDTO));
+        }catch(Exception e){
+            return new ResponseT<>(null,e.getMessage());
+        }
+        return new ResponseT<>(convertShiftDemandsToDTO(shiftController.getShiftDemands(date,branchID,convertShiftTypeToBusiness(shiftTypeDTO))));
+    }
+
     public Response workerReplacement(int branchID, LocalDate date1, ShiftTypeDTO shiftType1, LocalDate date2, ShiftTypeDTO shiftType2, WorkerDTO worker1, WorkerDTO worker2, WorkerDTO branchManager) {
         try {
             if(branchController.getBranch(branchID).FindWorker(convertWorkerToBusiness(worker1))==null)
@@ -138,9 +145,9 @@ public class Facade {
             branchController.findWorker(branchID, workerID);
             convertWorkerToDTO(branchController.findWorker(branchID, workerID));
         }catch(Exception e){
-            return new ResponseT<WorkerDTO>(null,e.getMessage());
+            return new ResponseT<>(null,e.getMessage());
         }
-        return new ResponseT<WorkerDTO>(convertWorkerToDTO(branchController.findWorker(branchID, workerID)));
+        return new ResponseT<>(convertWorkerToDTO(branchController.findWorker(branchID, workerID)));
     }
     private Worker findBusinessWorker(int branchID, String workerID) {
         return branchController.findWorker(branchID, workerID);
@@ -150,9 +157,9 @@ public class Facade {
         try{
             convertWorkerToDTO(branchController.findWorkerByID(workerID));
         }catch(Exception e){
-            return new ResponseT<WorkerDTO>(null,e.getMessage());
+            return new ResponseT<>(null,e.getMessage());
         }
-        return new ResponseT<WorkerDTO>(convertWorkerToDTO(branchController.findWorkerByID(workerID)));
+        return new ResponseT<>(convertWorkerToDTO(branchController.findWorkerByID(workerID)));
     }
     private Worker findBusinessWorkerByID(String workerID) {
         return branchController.findWorkerByID(workerID);
