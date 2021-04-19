@@ -289,7 +289,12 @@ public class Main {
         facade.addWorker(workerDTO21, 1);
         facade.addWorker(workerDTO22, 1);
         facade.addWorker(workerDTO23, 1);
-        
+        int add=6;
+        for(int i=0;i<7;i++) {
+            facade.addShiftDemands(1, LocalDate.now().plusDays(add), ShiftTypeDTO.Morning, new ShiftDemandsDTO(LocalDate.now().plusDays(add), 1, 1, 1, 1, 1));
+            facade.addShiftDemands(1, LocalDate.now().plusDays(add), ShiftTypeDTO.Evening, new ShiftDemandsDTO(LocalDate.now().plusDays(add), 1, 1, 1, 1, 1));
+            add++;
+        }
 
 //
 //        LocalDate now = LocalDate.now();

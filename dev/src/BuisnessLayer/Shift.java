@@ -27,9 +27,9 @@ public class Shift {
     public void printWorkersByQualification(Qualifications qualifications){
        List<Worker>workerList= workers.get(qualifications);
        int index=1;
-        System.out.println("The "+ qualifications.name()+ "of this shift are:");
+        System.out.println("The "+ qualifications.name()+ " of this shift are:");
         for(Worker w : workerList) {
-            System.out.println(index + ") name:" + w.getFirstName() + " " + w.getLastName() + "ID:" + w.getID());
+            System.out.println(index + ") name:" + w.getFirstName() + " " + w.getLastName() + " ID:" + w.getID());
             index++;
         }
     }
@@ -43,7 +43,7 @@ public class Shift {
         for(Qualifications qualifications : Qualifications.values()){
             System.out.println("works as "+qualifications.name()+":");
             for( Worker worker : workers.get(qualifications)){
-                System.out.println(i+") name:"+worker.getFirstName()+" "+worker.getLastName()+"ID:"+worker.getID());
+                System.out.println(i+")name:"+worker.getFirstName()+" "+worker.getLastName()+" ID:"+worker.getID());
                 i++;
             }
         }
@@ -108,14 +108,19 @@ public class Shift {
 
     public Shift(LocalDate date, ShiftType type, ShiftDemands demands, List<Worker> cashiers, List<Worker> storeKeepers, List<Worker> arrangers, List<Worker> guards, List<Worker> assistants, Worker shiftManager, int branchID) {
         workers = new EnumMap<Qualifications, List<Worker>>(Qualifications.class);
+        workers.put(Qualifications.Arranger,arrangers);
+        workers.put(Qualifications.Assistant,assistants);
+        workers.put(Qualifications.Cashier,cashiers);
+        workers.put(Qualifications.Guard,guards);
+        workers.put(Qualifications.Storekeeper,storeKeepers);
         this.date = date;
         this.type = type;
         this.demands = demands;
-        setArrangers(arrangers);
-        setAssistants(assistants);
-        setCashiers(cashiers);
-        setGuards(guards);
-        setStoreKeepers(storeKeepers);
+//        setArrangers(arrangers);
+//        setAssistants(assistants);
+//        setCashiers(cashiers);
+//        setGuards(guards);
+//        setStoreKeepers(storeKeepers);
         this.shiftManager = shiftManager;
         this.branchID = branchID;
     }
@@ -153,20 +158,35 @@ public class Shift {
         return null;
     }
 
-    @Override
+   // @Override
+//    public String toString() {
+//        return "Shift{" +
+//                "date=" + date +
+//                ", type=" + type +
+//                ", demands=" + demands +
+//                ", workers=" + workers +
+//                ", shiftManager=" + shiftManager +
+//                ", branchID=" + branchID +
+//                '}';
+//    }
+
+        @Override
     public String toString() {
-        String st = type + " shift at " + "date=" + date +
-                ", shift demands=" + demands +
-                ", shiftManager=" + shiftManager +
-                ", branchID= " + branchID;
-         int i =1;
-        for(Qualifications qualifications : Qualifications.values()){
-            st = st + "works as "+qualifications.name()+":";
-            for( Worker worker : workers.get(qualifications)){
-                st = st+ i+") name:"+worker.getFirstName()+" "+worker.getLastName()+"ID:"+worker.getID();
-                i++;
+            String st = type + " shift at " + "date " + date +
+                    ", shift demands= " + demands +
+                    ", shiftManager name: " + shiftManager.getFirstName() + " " + shiftManager.getLastName() + "ID: " + shiftManager.getID() +
+                    ", branchID= " + branchID + "\n";
+            int i = 1;
+            for (Qualifications qualifications : Qualifications.values()) {
+                if (workers.containsKey(qualifications) && !workers.get(qualifications).isEmpty()) {
+                    st = st + i + ")" + qualifications.name() + ":\n";
+                    //if (workers.containsKey(qualifications) && !workers.get(qualifications).isEmpty()) {
+                    for (Worker worker : workers.get(qualifications)) {
+                        st = st + "name: " + worker.getFirstName() + " " + worker.getLastName() + " ID: " + worker.getID() + "\n";
+                    }
+                    i++;
+                }
             }
+            return st;
         }
-    return st;
-    }
 }

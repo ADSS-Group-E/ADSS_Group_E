@@ -134,8 +134,8 @@ public class ShiftController {
 
         if(!shiftDemandsHashMap.get(branchID)[ans-1][type].getDate().equals(date))
             throw new IllegalArgumentException("The shift demands of this date is not exist in the system");
-        ShiftDemands shiftDemands = shiftDemandsHashMap.get(branchID)[date.getDayOfWeek().getValue()][type];
-        int dayAtWeek = date.getDayOfWeek().getValue();
+        ShiftDemands shiftDemands = shiftDemandsHashMap.get(branchID)[ans-1][type];
+        int dayAtWeek = ans-1;
         int arrangerAmount = shiftDemands.getArrangerAmount();
         int assistantAmount = shiftDemands.getAssistantAmount();
         int cashierAmount = shiftDemands.getCashierAmount();
@@ -149,8 +149,9 @@ public class ShiftController {
         int typeOfShift = shiftType == ShiftType.Morning ? 0 : 1;
         List<Worker> notWorkYet = new LinkedList<>(workerList);
         List<Worker> workingList=new LinkedList<>();
-        for (Worker w : notWorkYet) {
-            List<Qualifications> qualifications = w.getQualifications();
+        for (Worker w : workerList) {
+            List<Qualifications> qualifications=null;
+            qualifications = w.getQualifications();
 
             if (arrangerAmount > 0 && qualifications.contains(Qualifications.Arranger)) {
                 if (w.getAvailableWorkDays().getFavoriteShifts()[dayAtWeek][typeOfShift]) {
@@ -194,7 +195,8 @@ public class ShiftController {
         }
 
         Shift shift = new Shift(date, shiftType, shiftDemands, cashiers, storeKeepers, arrangers, guards, assistants, branchManager,branchID);
-        weeklyAssignment.get(branchID)[dayAtWeek][typeOfShift]=shift;
+        if (arrangerAmount == 0 && assistantAmount == 0 && cashierAmount == 0 && guardAmount == 0 && storeKeeperAmount == 0)
+            weeklyAssignment.get(branchID)[dayAtWeek][typeOfShift]=shift;
         return workingList;
     }
 
@@ -282,23 +284,30 @@ public class ShiftController {
         Shift[][] shifts = null;
         if(weeklyAssignment.get(branchID)[0][0].getDate().equals(date))
             shifts = weeklyAssignment.get(branchID);
-        else{
+        else {
             List<Shift[][]> s = weeklyAssignmentsHistory.get(branchID);
-            for(Shift[][] shift : s ){
-                if(shift[0][0].getDate().equals(date)){
+            for (Shift[][] shift : s) {
+                if (shift[0][0].getDate().equals(date)) {
                     shifts = shift;
                     break;
                 }
             }
-            if (shifts == null)
+        }  if (shifts == null)
                 throw new IllegalArgumentException("There is no weekly assignment in this date");
             else
                 for (int i=0;i<7;i++){
                     for(int j=0;j<2;j++){
-                        System.out.println(shifts[i][j]);
+                        if(shifts[i][j]!=null)
+                            System.out.println(shifts[i][j]);
+                        else{
+                            if(j==0)
+                                System.out.println("can't create the shift because of lack in workers at morning of this shift");
+                            else
+                                System.out.println("can't create the shift because of lack in workers at evening of this shift");
+                        }
                     }
                 }
-            }
+
         }
 
 
