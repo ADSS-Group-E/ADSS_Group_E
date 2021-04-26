@@ -10,6 +10,8 @@
 
 **/META-INF/
 
+*.iml
+
 ### Java ###
 # Compiled class file
 *.class
