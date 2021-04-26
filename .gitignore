@@ -1,0 +1,17 @@
+/.idea/
+
+/dev/.idea/
+
+/dev/out/
+
+/dev/src/META-INF
+
+/out/
+
+**/META-INF/
+
+*.iml
+
+### Java ###
+# Compiled class file
+*.class
