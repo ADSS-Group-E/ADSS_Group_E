@@ -1,10 +1,12 @@
-package PresentationLayer.Inventory;
+package PresentationLayer;
 
 
 import BusinessLayer.Inventory.Controllers.Facade;
 import PresentationLayer.Inventory.DataTransferObjects.CategoryDTO;
 import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
 import PresentationLayer.Inventory.Options.*;
+import PresentationLayer.MainOptionsMenu;
+import PresentationLayer.Supplier.SupplierOptionsMenu;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -17,6 +19,8 @@ public class CommandLineInterface {
 
     private final Facade facade;
     private final MainOptionsMenu mainOptionsMenu;
+    private final MainInventoryOptionsMenu mainInventoryOptionsMenu;
+    private final SupplierOptionsMenu supplierOptionsMenu;
     private final ProductsOptionsMenu productsOptionsMenu;
     private final CategoriesOptionsMenu categoriesOptionsMenu;
     private final DiscountsOptionsMenu discountsOptionsMenu;
@@ -28,6 +32,10 @@ public class CommandLineInterface {
     }
 
 
+
+    public MainInventoryOptionsMenu getMainInventoryOptionsMenu() { return mainInventoryOptionsMenu; }
+
+    public SupplierOptionsMenu getSupplierOptionsMenu() { return supplierOptionsMenu; }
 
     public ProductsOptionsMenu getProductsOptionsMenu() {
         return productsOptionsMenu;
@@ -47,7 +55,9 @@ public class CommandLineInterface {
 
     public CommandLineInterface() {
         facade = new Facade();
-        mainOptionsMenu= new MainOptionsMenu(this);
+        mainOptionsMenu = new MainOptionsMenu(this);
+        mainInventoryOptionsMenu = new MainInventoryOptionsMenu(this);
+        supplierOptionsMenu = new SupplierOptionsMenu(this);
         productsOptionsMenu = new ProductsOptionsMenu(this);
         categoriesOptionsMenu = new CategoriesOptionsMenu(this);
         discountsOptionsMenu = new DiscountsOptionsMenu(this);
@@ -76,7 +86,7 @@ public class CommandLineInterface {
     }
 //    public ProductDTO(int pid, String name, String storageLocation, String storeLocation, int amountInStorage, int amountInStore, String manufacturer, double buyingPrice, double sellingPrice, int minAmount) {
     public void run() {
-        System.out.println("SUPER-LI Inventory Module");
+        System.out.println("SUPER-LI Inventory and Supplier Module");
         mainOptionsMenu.enter();
     }
 }

@@ -1,7 +1,9 @@
 package PresentationLayer.Inventory.Options;
 
-import PresentationLayer.Inventory.CommandLineInterface;
+import PresentationLayer.CommandLineInterface;
 import PresentationLayer.Inventory.DataTransferObjects.DiscountDTO;
+import PresentationLayer.Option;
+import PresentationLayer.OptionsMenu;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -18,7 +20,7 @@ import java.util.ArrayList;
  * Once the user has selected a function, the class then executes the required activity accordingly.
  */
 
-public class DiscountsOptionsMenu extends OptionsMenu{
+public class DiscountsOptionsMenu extends OptionsMenu {
 
     // Display the Discount's list of functions and prompt the user for their selection.
     public DiscountsOptionsMenu(CommandLineInterface parentCLI) {

@@ -1,7 +1,9 @@
 package PresentationLayer.Inventory.Options;
 
-import PresentationLayer.Inventory.CommandLineInterface;
+import PresentationLayer.CommandLineInterface;
 import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
+import PresentationLayer.Option;
+import PresentationLayer.OptionsMenu;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,7 +22,7 @@ import java.util.ArrayList;
  */
 
 // Display the Products list of functions and prompt the user for their selection.
-public class ProductsOptionsMenu extends OptionsMenu{
+public class ProductsOptionsMenu extends OptionsMenu {
     public ProductsOptionsMenu(CommandLineInterface parentCLI) {
         super(parentCLI);
         int i=1;

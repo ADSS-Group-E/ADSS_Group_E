@@ -1,6 +1,8 @@
 package PresentationLayer.Inventory.Options;
 
-import PresentationLayer.Inventory.CommandLineInterface;
+import PresentationLayer.CommandLineInterface;
+import PresentationLayer.Option;
+import PresentationLayer.OptionsMenu;
 
 import java.util.Scanner;
 
@@ -13,8 +15,8 @@ import java.util.Scanner;
  * It then activates the next sub-menu of the system based on the user's selection.
  *  */
 
-public class MainOptionsMenu extends OptionsMenu{
-    public MainOptionsMenu(CommandLineInterface parentCLI) {
+public class MainInventoryOptionsMenu extends OptionsMenu {
+    public MainInventoryOptionsMenu(CommandLineInterface parentCLI) {
         super(parentCLI);
 
         // Prompt the user for their module selection
@@ -31,9 +33,6 @@ public class MainOptionsMenu extends OptionsMenu{
         options.put(4, new Option( "Reports",() -> {
             parentCLI.getReportsOptionsMenu().enter();
         }));
-        options.put(5, new Option( "Quit",() -> {
-            System.out.println("Exiting. Thank you for using our system.");
-            System.exit(0);
-        }));
+        options.put(5, new Option( "Back", this::back));
     }
 }

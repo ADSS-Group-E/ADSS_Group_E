@@ -1,14 +1,15 @@
-package PresentationLayer.Inventory.Options;
+package PresentationLayer;
 
 
-import PresentationLayer.Inventory.CommandLineInterface;
+import PresentationLayer.CommandLineInterface;
+import PresentationLayer.Option;
 
 import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
 
 public abstract class OptionsMenu {
-    protected TreeMap<Integer,Option> options;
+    protected TreeMap<Integer, Option> options;
     protected CommandLineInterface parentCLI;
     protected boolean goBack;
     protected Scanner in;

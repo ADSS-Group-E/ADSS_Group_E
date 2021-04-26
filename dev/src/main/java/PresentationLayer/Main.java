@@ -1,4 +1,7 @@
-package PresentationLayer.Inventory;
+package PresentationLayer;
+
+import PresentationLayer.CommandLineInterface;
+import PresentationLayer.Supplier.ServiceController;
 
 import java.util.Scanner;
 
@@ -10,6 +13,8 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         CommandLineInterface CLI = new CommandLineInterface();
+        ServiceController service = ServiceController.getInstance(); //initializes empty objects
+
 
         // Prompt the user to optionally load the sample data
         System.out.println("Welcome to our system.");
@@ -18,6 +23,8 @@ public class Main {
         String verify = in.next().trim();
         if (verify.equals("y")) {
             CLI.loadSampleData();
+            service.initialize(); //import existing data
+
             System.out.println("Sample data loaded.");
         }
         else {

@@ -1,7 +1,9 @@
 package PresentationLayer.Inventory.Options;
 
 import PresentationLayer.Inventory.DataTransferObjects.CategoryDTO;
-import PresentationLayer.Inventory.CommandLineInterface;
+import PresentationLayer.CommandLineInterface;
+import PresentationLayer.Option;
+import PresentationLayer.OptionsMenu;
 
 import java.util.ArrayList;
 
@@ -17,7 +19,7 @@ import java.util.ArrayList;
  */
 
 // Display the Category's list of functions and prompt the user for their selection.
-public class CategoriesOptionsMenu extends OptionsMenu{
+public class CategoriesOptionsMenu extends OptionsMenu {
     public CategoriesOptionsMenu(CommandLineInterface parentCLI) {
         super(parentCLI);
         int i=1;

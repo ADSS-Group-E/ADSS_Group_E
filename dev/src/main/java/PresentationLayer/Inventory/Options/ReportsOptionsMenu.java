@@ -1,6 +1,8 @@
 package PresentationLayer.Inventory.Options;
 
-import PresentationLayer.Inventory.CommandLineInterface;
+import PresentationLayer.CommandLineInterface;
+import PresentationLayer.Option;
+import PresentationLayer.OptionsMenu;
 
 import java.util.ArrayList;
 
@@ -16,7 +18,7 @@ import java.util.ArrayList;
  */
 
 // Display the Report's list of functions and prompt the user for their selection.
-public class ReportsOptionsMenu extends OptionsMenu{
+public class ReportsOptionsMenu extends OptionsMenu {
     public ReportsOptionsMenu(CommandLineInterface parentCLI) {
         super(parentCLI);
         int i = 1;
