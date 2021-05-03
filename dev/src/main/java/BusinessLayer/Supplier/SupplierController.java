@@ -209,5 +209,22 @@ public class SupplierController {
     public int getMaxDiscount() {
         return maxDiscount;
     }
+
+    public int chooseBestSupplierForItems( ArrayList<String[]> items){
+        // TODO Implement for OrderFromReportHandler
+        return -1;
+    }
+
+    public String proposeOrder(int supplierNum, boolean needsDelivery, boolean constantDelivery, ArrayList<String[]> items){
+        Item[] realItems = new Item[items.size()];
+        for(int i = 0; i < realItems.length; i++){ //creates an item array from all the items provided
+            realItems[i] = new Item(items.get(i)[0], Integer.parseInt(items.get(i)[1]), Integer.parseInt(items.get(i)[2]), Integer.parseInt((items.get(i)[3])));
+        }
+        Order order = new Order(constantDelivery, needsDelivery, Arrays.asList(realItems)); //creates the order
+        int price =  suppliers.get(supplierNum).calcPrice(order); //calculates it's price
+        //TODO Represent the order as a string
+        String aStringRepresentation = "TO BE IMPLEMENTED";
+        return aStringRepresentation;
+    }
 }
 

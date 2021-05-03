@@ -1,5 +1,6 @@
 package PresentationLayer.Inventory.Options;
 
+import BusinessLayer.OrderFromReportHandler;
 import PresentationLayer.CommandLineInterface;
 import PresentationLayer.Option;
 import PresentationLayer.OptionsMenu;
@@ -19,6 +20,8 @@ import java.util.ArrayList;
 
 // Display the Report's list of functions and prompt the user for their selection.
 public class ReportsOptionsMenu extends OptionsMenu {
+    OrderFromReportHandler orderFromReportHandler = parentCLI.getOrderFromReportHandler();
+
     public ReportsOptionsMenu(CommandLineInterface parentCLI) {
         super(parentCLI);
         int i = 1;
@@ -97,16 +100,32 @@ public class ReportsOptionsMenu extends OptionsMenu {
                     }
                 }
 
-                String stockReport = parentCLI.getFacade().generateStockReport(cids,pids);
+                int stockRid = parentCLI.getFacade().generateStockReport(cids,pids);
+                String stockReport = parentCLI.getFacade().getReport(stockRid);
                 System.out.println(stockReport);
                 break;
             case 2:
-                String lowStockReport = parentCLI.getFacade().generateLowStockReport();
+                int lowStockRid =parentCLI.getFacade().generateLowStockReport();
+                String lowStockReport = parentCLI.getFacade().getReport(lowStockRid);
                 System.out.println(lowStockReport);
+                System.out.println("Would you like to generate an automatic order from suppliers based on this report? (y/n)");
+                String verify = in.next().trim();
+                if (!verify.equals("y")) {
+                    break;
+                }
+                String proposedOrder = orderFromReportHandler.proposeOrderFromReport(lowStockRid);
+                System.out.println(proposedOrder);
+                System.out.println("Confirm this order: (y/n)");
+                verify = in.next().trim();
+                if (!verify.equals("y")) {
+                    break;
+                }
+                orderFromReportHandler.createOrderFromReport(lowStockRid);
                 break;
             case 3:
                 //Invalids report
-                String invalidsReport = parentCLI.getFacade().generateInvalidsReport();
+                int invalidsRid =parentCLI.getFacade().generateInvalidsReport();
+                String invalidsReport = parentCLI.getFacade().getReport(invalidsRid);
                 System.out.println(invalidsReport);
                 break;
             default:

@@ -1,11 +1,14 @@
 package PresentationLayer;
 
 
-import BusinessLayer.Inventory.Controllers.Facade;
+import BusinessLayer.Inventory.Controllers.*;
+import BusinessLayer.OrderFromReportHandler;
+import BusinessLayer.Supplier.SupplierController;
 import PresentationLayer.Inventory.DataTransferObjects.CategoryDTO;
 import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
 import PresentationLayer.Inventory.Options.*;
 import PresentationLayer.MainOptionsMenu;
+import PresentationLayer.Supplier.ServiceController;
 import PresentationLayer.Supplier.SupplierOptionsMenu;
 
 import java.time.LocalDateTime;
@@ -18,6 +21,8 @@ public class CommandLineInterface {
 
 
     private final Facade facade;
+    private final OrderFromReportHandler orderFromReportHandler;
+    private final ServiceController serviceController;
     private final MainOptionsMenu mainOptionsMenu;
     private final MainInventoryOptionsMenu mainInventoryOptionsMenu;
     private final SupplierOptionsMenu supplierOptionsMenu;
@@ -31,7 +36,13 @@ public class CommandLineInterface {
         return facade;
     }
 
+    public OrderFromReportHandler getOrderFromReportHandler() {
+        return orderFromReportHandler;
+    }
 
+    public ServiceController getServiceController() {
+        return serviceController;
+    }
 
     public MainInventoryOptionsMenu getMainInventoryOptionsMenu() { return mainInventoryOptionsMenu; }
 
@@ -54,7 +65,16 @@ public class CommandLineInterface {
     }
 
     public CommandLineInterface() {
-        facade = new Facade();
+        ProductController pCont = new ProductController();
+        ReportController rCont = new ReportController();
+        CategoryController cCont = new CategoryController();
+        DiscountController dCont = new DiscountController();
+        SupplierController sCont = new SupplierController();
+
+        facade = new Facade(pCont, rCont, cCont, dCont);
+        orderFromReportHandler = new OrderFromReportHandler(rCont,sCont);
+        serviceController = new ServiceController(sCont);
+
         mainOptionsMenu = new MainOptionsMenu(this);
         mainInventoryOptionsMenu = new MainInventoryOptionsMenu(this);
         supplierOptionsMenu = new SupplierOptionsMenu(this);
@@ -83,6 +103,8 @@ public class CommandLineInterface {
                 cids,
                 pids,
                 "Selling");
+
+        serviceController.initialize();
     }
 //    public ProductDTO(int pid, String name, String storageLocation, String storeLocation, int amountInStorage, int amountInStore, String manufacturer, double buyingPrice, double sellingPrice, int minAmount) {
     public void run() {

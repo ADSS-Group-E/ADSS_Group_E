@@ -13,7 +13,6 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         CommandLineInterface CLI = new CommandLineInterface();
-        ServiceController service = ServiceController.getInstance(); //initializes empty objects
 
 
         // Prompt the user to optionally load the sample data
@@ -23,7 +22,6 @@ public class Main {
         String verify = in.next().trim();
         if (verify.equals("y")) {
             CLI.loadSampleData();
-            service.initialize(); //import existing data
 
             System.out.println("Sample data loaded.");
         }

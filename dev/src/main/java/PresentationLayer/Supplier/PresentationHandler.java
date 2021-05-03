@@ -5,19 +5,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 public class PresentationHandler {
-    private static PresentationHandler instance = null;
-    private ServiceController service = ServiceController.getInstance();
+    private ServiceController service;
     private InputService inputService = InputService.getInstance();
     private OutputService outputService = OutputService.getInstance();
 
-    private PresentationHandler(){
-        service.initialize();
-    }
-
-    static PresentationHandler getInstance(){ //singleton method to make sure there is only one instance
-        if(instance == null)
-            instance = new PresentationHandler();
-        return instance;
+    public PresentationHandler(ServiceController serviceController){
+        service = serviceController;
     }
 
     public ArrayList<String[]> createItemList(int supplierNum) {

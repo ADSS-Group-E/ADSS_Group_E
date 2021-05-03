@@ -8,10 +8,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ServiceController {
-    private static ServiceController instance = null;
 
-    private ServiceController(){
-        supplierController = new SupplierController();
+    public ServiceController(SupplierController sCont){
+        supplierController = sCont;
     }
 
     private SupplierController supplierController;
@@ -99,9 +98,4 @@ public class ServiceController {
         return supplierController.getOrderFromSupplier(supIdx, orderIdx);
     }
 
-    public static ServiceController getInstance(){ //singleton pattern
-        if(instance == null)
-            instance = new ServiceController();
-        return instance;
-    }
 }
