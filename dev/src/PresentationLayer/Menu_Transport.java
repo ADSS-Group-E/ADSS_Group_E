@@ -6,7 +6,7 @@ import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class Menu {
+public class Menu_Transport {
 
     private static Facade facade;
 
