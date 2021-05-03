@@ -4,7 +4,7 @@ import BussinessLayer.DeliveryPackage.Delivery;
 import BussinessLayer.DeliveryPackage.Facade;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;;
+import org.junit.jupiter.api.BeforeEach;
 import java.util.*;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
@@ -48,9 +48,9 @@ public class DeliveryTest {
             }
         };
         facade.createDriver("208938985", "omri", "A", date);
-        facade.createLocation("1", "superli", "lachish 151 shoham", "0543160553", "yossi", "center");
-        facade.createLocation("3", "shufersal", "azrieli tel aviv", "0543160550", "ronit", "center");
-        facade.createLocation("4", "tara", "bialik 32 ramat gan", "0581234567", "moshe", "center");
+        facade.createLocation("1", "superli", "lachish 151 shoham", "0543160553", "yossi", "Center");
+        facade.createLocation("3", "shufersal", "azrieli tel aviv", "0543160550", "ronit", "Center");
+        facade.createLocation("4", "tara", "bialik 32 ramat gan", "0581234567", "moshe", "Center");
         facade.createTruck("2360154", "volvo", 1000.0, 4500.0);
         facade.createOrder("12", items1, "487", "1", 1000.0);
         facade.createOrder("56", items3, "263", "3", 2500.0);
@@ -85,7 +85,7 @@ public class DeliveryTest {
         assertTrue(facade.getLocation("1").getName().equals("superli"));
         assertTrue(facade.getLocation("1").getAddress().equals("lachish 151 shoham"));
         assertTrue(facade.getLocation("1").getContactName().equals("yossi"));
-        assertTrue(facade.getLocation("1").getShippingArea().equals("center"));
+        assertTrue(facade.getLocation("1").getShippingArea().equals("Center"));
         assertTrue(facade.getTruck("2360154").getModel().equals("volvo"));
         assertEquals(1000.0, facade.getTruck("2360154").getNetoWeight(), 0.0);
         assertEquals(4500.0, facade.getTruck("2360154").getTotalWeight(), 0.0);
@@ -220,9 +220,9 @@ public class DeliveryTest {
         Date date = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2030");
         Time newTime = Time.valueOf("14:30:00");
         facade.createDriver("123456789", "lidor", "C", date);
-        facade.createLocation("2", "maxstock", "shoham 26 haifa", "0504616909", "ben", "north");
-        facade.createLocation("5", "tnuva", "rabin 12 beer sheva", "0538523644", "assaf", "north");
-        facade.createLocation("6", "osem", "shimshon 24 krayot", "0528549847", "shoshana", "south");
+        facade.createLocation("2", "maxstock", "shoham 26 haifa", "0504616909", "ben", "North");
+        facade.createLocation("5", "tnuva", "rabin 12 beer sheva", "0538523644", "assaf", "North");
+        facade.createLocation("6", "osem", "shimshon 24 krayot", "0528549847", "shoshana", "South");
         facade.createTruck("30122623", "chevrolet", 5000.0, 9000.5);
         Map<String, Integer> items4 = new HashMap<String, Integer>() {
             {
@@ -259,9 +259,9 @@ public class DeliveryTest {
         assertTrue(facade.getDriver("123456789").isBusy());
         facade.setTruckUsed("30122623");
         assertTrue(facade.getTruck("30122623").isUsed());
-        facade.updateStatus("103", "InTransit");
+        facade.updateStatus("103", "InProgress");
         assertTrue(facade.getDelivery("103").getStatus().equals(Delivery.Status.InProgress));
-        facade.updateStatus("103", "Delivered");
+        facade.updateStatus("103", "Done");
         assertTrue(facade.getDelivery("103").getStatus().equals(Delivery.Status.Done));
         facade.setDriverNotToDrive("123456789");
         assertTrue(!facade.getDriver("123456789").isBusy());
@@ -276,9 +276,9 @@ public class DeliveryTest {
         Date date = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2030");
         Time newTime = Time.valueOf("14:30:00");
         facade.createDriver("852963741", "lidor", "C", date);
-        facade.createLocation("7", "maxstock", "shoham 26 haifa", "0504616909", "ben", "north");
-        facade.createLocation("8", "tnuva", "rabin 12 beer sheva", "0538523644", "assaf", "north");
-        facade.createLocation("9", "osem", "shimshon 24 krayot", "0528549847", "shoshana", "south");
+        facade.createLocation("7", "maxstock", "shoham 26 haifa", "0504616909", "ben", "North");
+        facade.createLocation("8", "tnuva", "rabin 12 beer sheva", "0538523644", "assaf", "North");
+        facade.createLocation("9", "osem", "shimshon 24 krayot", "0528549847", "shoshana", "South");
         facade.createTruck("7896541", "chevrolet", 5000.0, 9000.5);
         Map<String, Integer> items2 = new HashMap<String, Integer>() {
             {
@@ -315,9 +315,9 @@ public class DeliveryTest {
         assertTrue(facade.getDriver("852963741").isBusy());
         facade.setTruckUsed("7896541");
         assertTrue(facade.getTruck("7896541").isUsed());
-        facade.updateStatus("105", "InTransit");
+        facade.updateStatus("105", "InProgress");
         assertTrue(facade.getDelivery("105").getStatus().equals(Delivery.Status.InProgress));
-        facade.updateStatus("105", "Delivered");
+        facade.updateStatus("105", "Done");
         assertTrue(facade.getDelivery("105").getStatus().equals(Delivery.Status.Done));
         facade.setDriverNotToDrive("852963741");
         assertTrue(!facade.getDriver("852963741").isBusy());

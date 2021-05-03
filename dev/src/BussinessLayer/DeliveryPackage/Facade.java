@@ -631,6 +631,13 @@ public class Facade {
         }
     }
 
+    public void displayDeliveries(){
+        System.out.println("Deliveries:\n");
+        for (Delivery delivery: deliveries.values()) {
+            System.out.println(delivery.toString()+"\n");
+        }
+    }
+
     public Map<String, Delivery> getDeliveries()
     {
         return deliveries;

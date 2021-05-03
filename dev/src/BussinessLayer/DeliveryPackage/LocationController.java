@@ -45,7 +45,7 @@ public class LocationController {
             throw new Exception("The Contact Name Contains Illegal Characters");
         if(locations.containsKey(location.getId()))
             throw new Exception("The Location Already Exists");
-        if(location.getShippingArea().compareTo("north") != 0 && location.getShippingArea().compareTo("south") != 0 && location.getShippingArea().compareTo("center") != 0)
+        if(location.getShippingArea().compareTo("North") != 0 && location.getShippingArea().compareTo("South") != 0 && location.getShippingArea().compareTo("Center") != 0)
             throw new Exception("The Location Area Doesn't Exist");
         this.locations.put(location.getId(), location);
     }

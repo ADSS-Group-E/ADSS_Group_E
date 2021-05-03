@@ -277,7 +277,7 @@ public class Menu {
         System.out.println("Deliveries Menu:\n1) Create New Delivery\n2) Delete Delivery\n3) Change Delivery Date\n" +
                 "4) Change Delivery Time\n5) Change Weight Of Delivery\n6) Change Truck For Delivery\n" +
                 "7) Change Driver For Delivery\n8) Add Order And Location\n9) Remove Order And Location\n" +
-                "10) Change Status\n11) Back To Main Menu");
+                "10) Change Status\n11) Display deliveries\n12) Back To Main Menu");
         Scanner in = new Scanner(System.in);
         int choice = in.nextInt();
         String id, s1,name, licenseType, licenseExpDate, s2;
@@ -377,6 +377,8 @@ public class Menu {
                     facade.updateStatus(id, s1);
                     break;
                 case 11:
+                    facade.displayDeliveries();
+                case 12:
                     break;
             }
         }
@@ -394,12 +396,12 @@ public class Menu {
             facade.createDriver("203613310", "eden", "A", date);
             facade.createDriver("313577645", "yarin", "B", date);
             facade.createDriver("123456789", "reem", "C", date);
-            facade.createLocation("1", "superli", "lachish 151 shoham", "0543160553", "avi", "center");
-            facade.createLocation("2", "maxstock", "shoham 26 haifa", "0504616909", "ben", "north");
-            facade.createLocation("3", "shufersal", "azrieli tel aviv", "0543160550", "yossef", "center");
-            facade.createLocation("4", "tara", "bialik 32 ramat gan", "0581234567", "ronen", "center");
-            facade.createLocation("5", "tnuva", "rabin 12 beer sheva", "0538523644", "moshe", "south");
-            facade.createLocation("6", "osem", "shimshon 24 krayot", "0528549847", "lavi", "north");
+            facade.createLocation("1", "superli", "lachish 151 shoham", "0543160553", "avi", "Center");
+            facade.createLocation("2", "maxstock", "shoham 26 haifa", "0504616909", "ben", "North");
+            facade.createLocation("3", "shufersal", "azrieli tel aviv", "0543160550", "yossef", "Center");
+            facade.createLocation("4", "tara", "bialik 32 ramat gan", "0581234567", "ronen", "Center");
+            facade.createLocation("5", "tnuva", "rabin 12 beer sheva", "0538523644", "moshe", "South");
+            facade.createLocation("6", "osem", "shimshon 24 krayot", "0528549847", "lavi", "North");
             facade.createTruck("2360154", "volvo", 1000.0, 4500.0);
             facade.createTruck("30122623", "chevrolet", 5000.0, 9000.5);
             facade.createTruck("11122333", "honda", 10000.0, 15000.0);
@@ -448,9 +450,9 @@ public class Menu {
             facade.createOrder("56", items3, "263", "3", 2500.0);
             facade.createOrder("78", items4, "546", "1", 2000.0);
             facade.createOrder("98", items5, "943", "3", 2000.0);
-            Date newDate1 = new GregorianCalendar(2020, Calendar.MAY, 11).getTime();
-            Date newDate2 = new GregorianCalendar(2020, Calendar.DECEMBER, 31).getTime();
-            Date newDate3 = new GregorianCalendar(2020, Calendar.JULY, 7).getTime();
+            Date newDate1 = new GregorianCalendar(2021, Calendar.MAY, 11).getTime();
+            Date newDate2 = new GregorianCalendar(2021, Calendar.DECEMBER, 31).getTime();
+            Date newDate3 = new GregorianCalendar(2021, Calendar.JULY, 7).getTime();
             Time newTime1 = Time.valueOf("12:30:00");
             Time newTime2 = Time.valueOf("13:00:00");
             Time newTime3 = Time.valueOf("11:25:30");
@@ -482,8 +484,8 @@ public class Menu {
                     add("98");
                 }
             };
-            facade.createDelivery("101", newDate1, newTime1, "208938985", "4", centerLocations, "2360154", orders1);
-            facade.createDelivery("102", newDate2, newTime2, "312164668", "5", northLocations, "30122623", orders2);
+            facade.createDelivery("101", newDate1, newTime1, "203613310", "4", centerLocations, "2360154", orders1);
+            facade.createDelivery("102", newDate2, newTime2, "313577645", "15", northLocations, "30122623", orders2);
             facade.createDelivery("103", newDate3, newTime3, "123456789", "6", centerLocations, "11122333", orders3);
         }
         catch (Exception e)
