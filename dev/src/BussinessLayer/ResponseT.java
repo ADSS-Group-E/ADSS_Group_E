@@ -1,4 +1,4 @@
-package BussinessLayer.WorkersPackage;
+package BussinessLayer;
 
 public class ResponseT<T> extends Response{
     private T Value;

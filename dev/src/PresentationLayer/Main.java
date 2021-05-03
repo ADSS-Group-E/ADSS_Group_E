@@ -1,5 +1,6 @@
 package PresentationLayer;
 
+import BussinessLayer.ResponseT;
 import BussinessLayer.WorkersPackage.*;
 
 import java.time.LocalDate;
@@ -27,7 +28,7 @@ public class Main {
         else {
             createSystem();
         }*/
-        Menu.createSystem();
+        MenuWorkers.createSystem();
 
     }
 
@@ -64,13 +65,13 @@ public class Main {
                 else {
                     List<QualificationsDTO> qualifications = listResponseT.getValue();
                     if (qualifications.contains(QualificationsDTO.BranchManager)) {
-                        Menu.branchManagerMenu(workerDTO, branchDTOResponseT.getValue().getBranchID());
+                        MenuWorkers.branchManagerMenu(workerDTO, branchDTOResponseT.getValue().getBranchID());
 
                     } else if (workerDTO.getQualifications().contains(QualificationsDTO.Human_Resources_Director)) {
-                        Menu.HRDMenu(workerDTO, branchDTOResponseT.getValue().getBranchID());
+                        MenuWorkers.HRDMenu(workerDTO, branchDTOResponseT.getValue().getBranchID());
 
                     } else {
-                        Menu.otherWorkerMenu(workerDTO, branchDTOResponseT.getValue().getBranchID());
+                        MenuWorkers.otherWorkerMenu(workerDTO, branchDTOResponseT.getValue().getBranchID());
                     }
                 }
 
