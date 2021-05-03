@@ -140,7 +140,7 @@ public class WorkersFacade {
         }
         return new ResponseT<>(convertWorkerToDTO(branchController.findWorker(branchID, workerID)));
     }
-    private Worker findBusinessWorker(int branchID, String workerID) {
+    public Worker findBusinessWorker(int branchID, String workerID) {
         return branchController.findWorker(branchID, workerID);
     }
 
