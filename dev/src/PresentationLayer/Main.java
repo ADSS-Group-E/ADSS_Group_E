@@ -13,22 +13,7 @@ public class Main {
     private static Facade facade = Facade.getInstance();
 
     public static void main(String[] args) {
-     /*   System.out.println("Welcome to Super Lee's System");
-        System.out.println("Do you want the system to be initialized? \n Enter Y/N");
-        String ans = reader.next();
-        while (!(ans.equals("n") || ans.equals("N") || ans.equals("Y")||ans.equals("y"))){
-            System.out.println("Please enter Y for Yes or N for No");
-            ans = reader.next();
-        }
-        if(ans.equals("y") || ans.equals("Y")){
-            systemInitialize();
-            system();
-        }
-        else {
-            createSystem();
-        }*/
         Menu.createSystem();
-
     }
 
 
@@ -295,64 +280,6 @@ public class Main {
             facade.addShiftDemands(1, LocalDate.now().plusDays(add), ShiftTypeDTO.Evening, new ShiftDemandsDTO(LocalDate.now().plusDays(add), 1, 1, 1, 1, 1));
             add++;
         }
-
-//
-//        LocalDate now = LocalDate.now();
-//        ShiftTypeDTO shiftTypeDTO = ShiftTypeDTO.Morning;
-//        ShiftDemandsDTO shiftDemandsDTO = new ShiftDemandsDTO(now, 1, 1, 1, 1, 1);
-//        Response response=facade.addShiftDemands(1,now,shiftTypeDTO,shiftDemandsDTO);
-//        if(response.isErrorOccurred())
-//            System.out.println(response.getErrorMessage());
-//        else{
-//            ResponseT<ShiftDemandsDTO>responseT=facade.getShiftDemands(now,1,shiftTypeDTO);
-//            if(responseT.isErrorOccurred())
-//                System.out.println(responseT.getErrorMessage());
-//            else{
-//                System.out.println("The shift demand is:");
-//                System.out.println(responseT.getValue());
-//            }
-//        }
-
-/*
-        LocalDate ld = LocalDate.now();
-
-        ShiftDemandsDTO shiftDemandsDTO1 = new ShiftDemandsDTO(ld, 2, 1, 1, 1, 1);
-
-        WorkerDTO HRD1 = workerDTO5;
-
-        List<WorkerDTO> cashiers = new ArrayList<>();
-        cashiers.add(workerDTO2);
-        cashiers.add(workerDTO4);
-
-        List <WorkerDTO> Assistant = new ArrayList<>();
-        Assistant.add(workerDTO23);
-
-        List<WorkerDTO> Storekeeper = new ArrayList<>();
-        Storekeeper.add(workerDTO4);
-
-        List<WorkerDTO> Guard = new ArrayList<>();
-        Guard.add(workerDTO5);
-
-        List<WorkerDTO> Arranger = new ArrayList<>();
-        Arranger.add(workerDTO1);
-
-        ShiftTypeDTO st = ShiftTypeDTO.Morning;
-
-        EnumMap<Qualifications,List<Worker>> enumMap = new EnumMap<Qualifications, List<Worker>>(Qualifications.class);
-
-        ShiftDTO shift1 = new ShiftDTO(LocalDate.now(),st,shiftDemandsDTO1,cashiers,Storekeeper,Arranger,Guard,Assistant,branchManager,1);
-        Response response=facade.addShiftDemands(1,LocalDate.now(),st,shiftDemandsDTO1);
-        if(response.isErrorOccurred())
-            System.out.println(response.getErrorMessage());
-        else{
-            ResponseT<ShiftDemandsDTO> responseT=facade.getShiftDemands(LocalDate.now(),1,st);
-            if(response.isErrorOccurred()){
-                System.out.println(responseT.getErrorMessage());
-            }else{
-                System.out.println("This is the shift demand you entered:");
-                System.out.println(responseT.getValue());
-            }
-        }*/
 
     }
 }
