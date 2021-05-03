@@ -1,9 +1,8 @@
-package BuisnessLayer;
+package BussinessLayer.WorkersPackage;
 
 import PresentationLayer.ShiftDemandsDTO;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class ShiftDemands {
     private LocalDate date;

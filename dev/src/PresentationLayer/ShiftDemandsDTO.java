@@ -31,7 +31,7 @@ public class ShiftDemandsDTO {
         this.guardAmount = guardAmount;
         this.assistantAmount = assistantAmount;
     }
-    public ShiftDemandsDTO(BuisnessLayer.ShiftDemands blShiftDemands) {
+    public ShiftDemandsDTO(BussinessLayer.WorkersPackage.ShiftDemands blShiftDemands) {
         this.date = blShiftDemands.getDate();
         this.cashierAmount = blShiftDemands.getCashierAmount();
         this.storeKeeperAmount = blShiftDemands.getStoreKeeperAmount();

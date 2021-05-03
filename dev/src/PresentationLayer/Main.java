@@ -1,6 +1,6 @@
 package PresentationLayer;
 
-import BuisnessLayer.*;
+import BussinessLayer.WorkersPackage.*;
 
 import java.time.LocalDate;
 
@@ -10,7 +10,7 @@ import java.util.*;
 public class Main {
 
     private static Scanner reader = new Scanner(System.in);
-    private static Facade facade = Facade.getInstance();
+    private static WorkersFacade workersFacade = WorkersFacade.getInstance();
 
     public static void main(String[] args) {
      /*   System.out.println("Welcome to Super Lee's System");
@@ -37,7 +37,7 @@ public class Main {
         System.out.println(LocalDate.now());
         System.out.println("Welcome to Super Lee's System, please enter your ID in order to log in");
         String ID = reader.next();
-        ResponseT<WorkerDTO> workerDTOResponseT = facade.findDTOWorkerByID(ID);
+        ResponseT<WorkerDTO> workerDTOResponseT = workersFacade.findDTOWorkerByID(ID);
         if (workerDTOResponseT.isErrorOccurred())
             System.out.println(workerDTOResponseT.getErrorMessage());
         else {
@@ -45,7 +45,7 @@ public class Main {
             while (workerDTO == null) {
                 //System.out.println("There is no worker with such ID please enter new ID");
                 ID = reader.next();
-                workerDTOResponseT = facade.findDTOWorkerByID(ID);
+                workerDTOResponseT = workersFacade.findDTOWorkerByID(ID);
                 if (workerDTOResponseT.isErrorOccurred())
                     System.out.println(workerDTOResponseT.getErrorMessage());
                 else {
@@ -53,12 +53,12 @@ public class Main {
                 }
 
             }
-            ResponseT<BranchDTO> branchDTOResponseT = facade.findBranchByWorker(workerDTO);
+            ResponseT<BranchDTO> branchDTOResponseT = workersFacade.findBranchByWorker(workerDTO);
             if (branchDTOResponseT.isErrorOccurred())
                 System.out.println(branchDTOResponseT.getErrorMessage());
             else {
 
-                ResponseT<List<QualificationsDTO>> listResponseT = facade.getWorkerQualifications(workerDTO);
+                ResponseT<List<QualificationsDTO>> listResponseT = workersFacade.getWorkerQualifications(workerDTO);
                 if (listResponseT.isErrorOccurred())
                     System.out.println(listResponseT.getErrorMessage());
                 else {
@@ -265,34 +265,34 @@ public class Main {
         WorkerDTO workerDTO22 = new WorkerDTO("Avi", "Ohayon", "325431754", bankAccountDTO24, hiringConditionsDTO24, availableWorkDaysDTO9, qualificationsDTO5);
         WorkerDTO workerDTO23 = new WorkerDTO("Dganit", "Refeli", "298764234", bankAccountDTO25, hiringConditionsDTO25, availableWorkDaysDTO6, qualificationsDTO6);
 
-        facade.addBranch(1, branchManager, HRD);
-        facade.addWorker(workerDTO1, 1);
-        facade.addWorker(workerDTO2, 1);
+        workersFacade.addBranch(1, branchManager, HRD);
+        workersFacade.addWorker(workerDTO1, 1);
+        workersFacade.addWorker(workerDTO2, 1);
         //facade.addWorker(workerDTO3, 1);
-        facade.addWorker(workerDTO4, 1);
-        facade.addWorker(workerDTO5, 1);
-        facade.addWorker(workerDTO6, 1);
-        facade.addWorker(workerDTO7, 1);
-        facade.addWorker(workerDTO8, 1);
-        facade.addWorker(workerDTO9, 1);
-        facade.addWorker(workerDTO10, 1);
-        facade.addWorker(workerDTO11, 1);
-        facade.addWorker(workerDTO12, 1);
-        facade.addWorker(workerDTO13, 1);
-        facade.addWorker(workerDTO14, 1);
-        facade.addWorker(workerDTO15, 1);
-        facade.addWorker(workerDTO16, 1);
-        facade.addWorker(workerDTO17, 1);
-        facade.addWorker(workerDTO18, 1);
-        facade.addWorker(workerDTO19, 1);
-        facade.addWorker(workerDTO20, 1);
-        facade.addWorker(workerDTO21, 1);
-        facade.addWorker(workerDTO22, 1);
-        facade.addWorker(workerDTO23, 1);
+        workersFacade.addWorker(workerDTO4, 1);
+        workersFacade.addWorker(workerDTO5, 1);
+        workersFacade.addWorker(workerDTO6, 1);
+        workersFacade.addWorker(workerDTO7, 1);
+        workersFacade.addWorker(workerDTO8, 1);
+        workersFacade.addWorker(workerDTO9, 1);
+        workersFacade.addWorker(workerDTO10, 1);
+        workersFacade.addWorker(workerDTO11, 1);
+        workersFacade.addWorker(workerDTO12, 1);
+        workersFacade.addWorker(workerDTO13, 1);
+        workersFacade.addWorker(workerDTO14, 1);
+        workersFacade.addWorker(workerDTO15, 1);
+        workersFacade.addWorker(workerDTO16, 1);
+        workersFacade.addWorker(workerDTO17, 1);
+        workersFacade.addWorker(workerDTO18, 1);
+        workersFacade.addWorker(workerDTO19, 1);
+        workersFacade.addWorker(workerDTO20, 1);
+        workersFacade.addWorker(workerDTO21, 1);
+        workersFacade.addWorker(workerDTO22, 1);
+        workersFacade.addWorker(workerDTO23, 1);
         int add=6;
         for(int i=0;i<7;i++) {
-            facade.addShiftDemands(1, LocalDate.now().plusDays(add), ShiftTypeDTO.Morning, new ShiftDemandsDTO(LocalDate.now().plusDays(add), 1, 1, 1, 1, 1));
-            facade.addShiftDemands(1, LocalDate.now().plusDays(add), ShiftTypeDTO.Evening, new ShiftDemandsDTO(LocalDate.now().plusDays(add), 1, 1, 1, 1, 1));
+            workersFacade.addShiftDemands(1, LocalDate.now().plusDays(add), ShiftTypeDTO.Morning, new ShiftDemandsDTO(LocalDate.now().plusDays(add), 1, 1, 1, 1, 1));
+            workersFacade.addShiftDemands(1, LocalDate.now().plusDays(add), ShiftTypeDTO.Evening, new ShiftDemandsDTO(LocalDate.now().plusDays(add), 1, 1, 1, 1, 1));
             add++;
         }
 

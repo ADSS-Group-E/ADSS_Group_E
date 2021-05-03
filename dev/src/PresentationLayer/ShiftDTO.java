@@ -1,10 +1,5 @@
 package PresentationLayer;
 
-import BuisnessLayer.Qualifications;
-import BuisnessLayer.ShiftDemands;
-import BuisnessLayer.ShiftType;
-import BuisnessLayer.Worker;
-
 import java.time.LocalDate;
 import java.util.EnumMap;
 import java.util.List;

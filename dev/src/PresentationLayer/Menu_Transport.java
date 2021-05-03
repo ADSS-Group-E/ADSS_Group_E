@@ -1,6 +1,6 @@
 package PresentationLayer;
 
-import BussinessLayer.DeliveryPackage.Facade;
+import BussinessLayer.DeliveryPackage.DeliveryFacade;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
@@ -8,10 +8,10 @@ import java.util.*;
 
 public class Menu_Transport {
 
-    private static Facade facade;
+    private static DeliveryFacade deliveryFacade;
 
     public static void main(String[] args) {
-        facade = Facade.getInstance();
+        deliveryFacade = DeliveryFacade.getInstance();
         Scanner in = new Scanner(System.in);
 
         try
@@ -82,25 +82,25 @@ public class Menu_Transport {
                     licenseType = in.next();
                     licenseExpDate = in.next();
                     date = new SimpleDateFormat("dd/MM/yyyy").parse(licenseExpDate);
-                    facade.createDriver(id, name, licenseType, date);
+                    deliveryFacade.createDriver(id, name, licenseType, date);
                     break;
                 case 2:
                     System.out.println("Please enter the driver id that you want to erase from the system");
                     id = in.next();
-                    facade.removeDriver(id);
+                    deliveryFacade.removeDriver(id);
                     break;
                 case 3:
                     System.out.println("Please enter the driver id and the new expiration date");
                     id = in.next();
                     licenseExpDate = in.next();
                     date = new SimpleDateFormat("dd/MM/yyyy").parse(licenseExpDate);
-                    facade.updateExpDate(id, date);
+                    deliveryFacade.updateExpDate(id, date);
                     break;
                 case 4:
                     System.out.println("Please enter the driver id and the new license type");
                     id = in.next();
                     licenseType = in.next();
-                    facade.updateLicenseType(id, licenseType);
+                    deliveryFacade.updateLicenseType(id, licenseType);
                     break;
                 case 5:
                     break;
@@ -130,12 +130,12 @@ public class Menu_Transport {
                     name = in.next();
                     netoWeight = in.nextDouble();
                     totalWeight = in.nextDouble();
-                    facade.createTruck(id, name, netoWeight, totalWeight);
+                    deliveryFacade.createTruck(id, name, netoWeight, totalWeight);
                     break;
                 case 2:
                     System.out.println("Please enter the truck id that you want to erase from the system");
                     id = in.next();
-                    facade.removeTruck(id);
+                    deliveryFacade.removeTruck(id);
                     break;
                 case 3:
                     break;
@@ -168,24 +168,24 @@ public class Menu_Transport {
                     licenseExpDate = in.next();
                     s1 = in.next();
                     s2 = in.next();
-                    facade.createLocation(id, name, licenseType, licenseExpDate, s1, s2);
+                    deliveryFacade.createLocation(id, name, licenseType, licenseExpDate, s1, s2);
                     break;
                 case 2:
                     System.out.println("Please enter the location id that you want to erase from the system");
                     id = in.next();
-                    facade.removeLocation(id);
+                    deliveryFacade.removeLocation(id);
                     break;
                 case 3:
                     System.out.println("Please enter location id and the new telephone number");
                     id = in.next();
                     s1 = in.next();
-                    facade.updateTelNumber(id, s1);
+                    deliveryFacade.updateTelNumber(id, s1);
                     break;
                 case 4:
                     System.out.println("Please enter location id and the new contact name");
                     id = in.next();
                     s1 = in.next();
-                    facade.updateContactName(id, s1);
+                    deliveryFacade.updateContactName(id, s1);
                     break;
                 case 5:
                     break;
@@ -228,38 +228,38 @@ public class Menu_Transport {
                     name = in.next();
                     licenseExpDate = in.next();
                     totalWeight = in.nextDouble();
-                    facade.createOrder(id, items, name, licenseExpDate, totalWeight);
+                    deliveryFacade.createOrder(id, items, name, licenseExpDate, totalWeight);
                     break;
                 case 2:
                     System.out.println("Please enter the order id that you want to erase from the system");
                     id = in.next();
-                    facade.removeOrder(id);
+                    deliveryFacade.removeOrder(id);
                     break;
                 case 3:
                     System.out.println("Please enter order id, item name, quantity");
                     id = in.next();
                     name = in.next();
                     quantity = in.nextInt();
-                    facade.addItem(id, name, quantity);
+                    deliveryFacade.addItem(id, name, quantity);
                     break;
                 case 4:
                     System.out.println("Please enter order id, item name");
                     id = in.next();
                     name = in.next();
-                    facade.removeItem(id, name);
+                    deliveryFacade.removeItem(id, name);
                     break;
                 case 5:
                     System.out.println("Please enter order id, item name, quantity");
                     id = in.next();
                     name = in.next();
                     quantity = in.nextInt();
-                    facade.updateQuantity(id, name, quantity);
+                    deliveryFacade.updateQuantity(id, name, quantity);
                     break;
                 case 6:
                     System.out.println("Please enter order id, total weight");
                     id = in.next();
                     totalWeight = in.nextDouble();
-                    facade.updateTotalWeight(id, totalWeight);
+                    deliveryFacade.updateTotalWeight(id, totalWeight);
                     break;
                 case 7:
                     break;
@@ -316,68 +316,68 @@ public class Menu_Transport {
                     name = in.next();
                     licenseType = in.next();
                     s2 = in.next();
-                    facade.createDelivery(id, date, newTime1, name, licenseType, targetLocations, s2, orders);
+                    deliveryFacade.createDelivery(id, date, newTime1, name, licenseType, targetLocations, s2, orders);
                     break;
                 case 2:
                     System.out.println("Please enter the delivery id that you want to erase from the system");
                     id = in.next();
-                    facade.removeDelivery(id);
+                    deliveryFacade.removeDelivery(id);
                     break;
                 case 3:
                     System.out.println("Please enter the delivery id and the new delivery day");
                     id = in.next();
                     licenseExpDate = in.next();
                     date = new SimpleDateFormat("dd/MM/yyyy").parse(licenseExpDate);
-                    facade.updateDeliveryDate(id, date);
+                    deliveryFacade.updateDeliveryDate(id, date);
                     break;
                 case 4:
                     System.out.println("Please enter the delivery id and the new delivery leaving time");
                     id = in.next();
                     s1 = in.next();
                     Time newTime = Time.valueOf(s1);
-                    facade.updateLeavingTime(id, newTime);
+                    deliveryFacade.updateLeavingTime(id, newTime);
                     break;
                 case 5:
                     System.out.println("Please enter delivery id, new weight of delivery");
                     id = in.next();
                     totalWeight = in.nextDouble();
-                    facade.updateWeight(id, totalWeight);
+                    deliveryFacade.updateWeight(id, totalWeight);
                     break;
                 case 6:
                     System.out.println("Please enter delivery id, truck id");
                     id = in.next();
                     s1 = in.next();
-                    facade.updateTruckId(id, s1);
+                    deliveryFacade.updateTruckId(id, s1);
                     break;
                 case 7:
                     System.out.println("Please enter delivery id, driver id");
                     id = in.next();
                     s1 = in.next();
-                    facade.updateDriverId(id, s1);
+                    deliveryFacade.updateDriverId(id, s1);
                     break;
                 case 8:
                     System.out.println("Please enter delivery id, location id, order id");
                     id = in.next();
                     s1 = in.next();
                     s2 = in.next();
-                    facade.addOrderAndLocation(id, s1, s2);
+                    deliveryFacade.addOrderAndLocation(id, s1, s2);
                     break;
                 case 9:
                     System.out.println("Please enter delivery id, location id, order id");
                     id = in.next();
                     s1 = in.next();
                     s2 = in.next();
-                    facade.removeOrderAndLocation(id, s1, s2);
+                    deliveryFacade.removeOrderAndLocation(id, s1, s2);
                     break;
                 case 10:
                     System.out.println("Please enter delivery id, new delivery status that could be" +
                             "\nInProgress or Done");
                     id = in.next();
                     s1 = in.next();
-                    facade.updateStatus(id, s1);
+                    deliveryFacade.updateStatus(id, s1);
                     break;
                 case 11:
-                    facade.displayDeliveries();
+                    deliveryFacade.displayDeliveries();
                 case 12:
                     break;
             }
@@ -393,18 +393,18 @@ public class Menu_Transport {
         try
         {
             Date date = new SimpleDateFormat("dd/MM/yyyy").parse("31/12/2030");
-            facade.createDriver("203613310", "eden", "A", date);
-            facade.createDriver("313577645", "yarin", "B", date);
-            facade.createDriver("123456789", "reem", "C", date);
-            facade.createLocation("1", "superli", "lachish 151 shoham", "0543160553", "avi", "Center");
-            facade.createLocation("2", "maxstock", "shoham 26 haifa", "0504616909", "ben", "North");
-            facade.createLocation("3", "shufersal", "azrieli tel aviv", "0543160550", "yossef", "Center");
-            facade.createLocation("4", "tara", "bialik 32 ramat gan", "0581234567", "ronen", "Center");
-            facade.createLocation("5", "tnuva", "rabin 12 beer sheva", "0538523644", "moshe", "South");
-            facade.createLocation("6", "osem", "shimshon 24 krayot", "0528549847", "lavi", "North");
-            facade.createTruck("2360154", "volvo", 1000.0, 4500.0);
-            facade.createTruck("30122623", "chevrolet", 5000.0, 9000.5);
-            facade.createTruck("11122333", "honda", 10000.0, 15000.0);
+            deliveryFacade.createDriver("203613310", "eden", "A", date);
+            deliveryFacade.createDriver("313577645", "yarin", "B", date);
+            deliveryFacade.createDriver("123456789", "reem", "C", date);
+            deliveryFacade.createLocation("1", "superli", "lachish 151 shoham", "0543160553", "avi", "Center");
+            deliveryFacade.createLocation("2", "maxstock", "shoham 26 haifa", "0504616909", "ben", "North");
+            deliveryFacade.createLocation("3", "shufersal", "azrieli tel aviv", "0543160550", "yossef", "Center");
+            deliveryFacade.createLocation("4", "tara", "bialik 32 ramat gan", "0581234567", "ronen", "Center");
+            deliveryFacade.createLocation("5", "tnuva", "rabin 12 beer sheva", "0538523644", "moshe", "South");
+            deliveryFacade.createLocation("6", "osem", "shimshon 24 krayot", "0528549847", "lavi", "North");
+            deliveryFacade.createTruck("2360154", "volvo", 1000.0, 4500.0);
+            deliveryFacade.createTruck("30122623", "chevrolet", 5000.0, 9000.5);
+            deliveryFacade.createTruck("11122333", "honda", 10000.0, 15000.0);
             Map<String, Integer> items1 = new HashMap<String, Integer>() {
                 {
                     put("milk", 20);
@@ -445,11 +445,11 @@ public class Menu_Transport {
                     put("fish", 10);
                 }
             };
-            facade.createOrder("12", items1, "487", "1", 1000.0);
-            facade.createOrder("34", items2, "159", "2", 3500.0);
-            facade.createOrder("56", items3, "263", "3", 2500.0);
-            facade.createOrder("78", items4, "546", "1", 2000.0);
-            facade.createOrder("98", items5, "943", "3", 2000.0);
+            deliveryFacade.createOrder("12", items1, "487", "1", 1000.0);
+            deliveryFacade.createOrder("34", items2, "159", "2", 3500.0);
+            deliveryFacade.createOrder("56", items3, "263", "3", 2500.0);
+            deliveryFacade.createOrder("78", items4, "546", "1", 2000.0);
+            deliveryFacade.createOrder("98", items5, "943", "3", 2000.0);
             Date newDate1 = new GregorianCalendar(2021, Calendar.MAY, 11).getTime();
             Date newDate2 = new GregorianCalendar(2021, Calendar.DECEMBER, 31).getTime();
             Date newDate3 = new GregorianCalendar(2021, Calendar.JULY, 7).getTime();
@@ -484,9 +484,9 @@ public class Menu_Transport {
                     add("98");
                 }
             };
-            facade.createDelivery("101", newDate1, newTime1, "203613310", "4", centerLocations, "2360154", orders1);
-            facade.createDelivery("102", newDate2, newTime2, "313577645", "15", northLocations, "30122623", orders2);
-            facade.createDelivery("103", newDate3, newTime3, "123456789", "6", centerLocations, "11122333", orders3);
+            deliveryFacade.createDelivery("101", newDate1, newTime1, "203613310", "4", centerLocations, "2360154", orders1);
+            deliveryFacade.createDelivery("102", newDate2, newTime2, "313577645", "15", northLocations, "30122623", orders2);
+            deliveryFacade.createDelivery("103", newDate3, newTime3, "123456789", "6", centerLocations, "11122333", orders3);
         }
         catch (Exception e)
         {

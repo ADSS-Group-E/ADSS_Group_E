@@ -1,10 +1,5 @@
 package PresentationLayer;
 
-import BuisnessLayer.AvailableWorkDays;
-import BuisnessLayer.BankAccount;
-import BuisnessLayer.HiringConditions;
-import BuisnessLayer.Qualifications;
-
 import java.time.LocalDate;
 import java.util.List;
 

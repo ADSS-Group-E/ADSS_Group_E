@@ -5,7 +5,7 @@ import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class Facade {
+public class DeliveryFacade {
     private final Map<String, Double> licenseTypes = new HashMap<String, Double>() {
         {
             put("A", 5000.0);
@@ -16,13 +16,13 @@ public class Facade {
     };
 
     private Map<String, Delivery> deliveries;
-    private static Facade facade = null;
+    private static DeliveryFacade deliveryFacade = null;
     private DriverController driverController;
     private TruckController truckController;
     private LocationController locationController;
     private OrderController orderController;
 
-    private Facade()
+    private DeliveryFacade()
     {
         this.deliveries = new HashMap<>();
         driverController = DriverController.getInstance();
@@ -31,11 +31,11 @@ public class Facade {
         orderController = OrderController.getInstance();
     }
 
-    public static Facade getInstance()
+    public static DeliveryFacade getInstance()
     {
-        if(facade == null)
-            facade = new Facade();
-        return facade;
+        if(deliveryFacade == null)
+            deliveryFacade = new DeliveryFacade();
+        return deliveryFacade;
     }
 
 
@@ -80,7 +80,7 @@ public class Facade {
         if(!checkArea(targets))
             throw new Exception("Not All Deliveries Are From the Same Area");
         Delivery delivery = new Delivery(id, deliveryDate, leavingTime, driverId, srcLocation, targets, totalWeight, truckId, orders);
-        facade.addDelivery(delivery);
+        deliveryFacade.addDelivery(delivery);
         return delivery;
     }
 

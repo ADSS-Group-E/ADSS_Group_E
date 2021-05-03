@@ -1,4 +1,4 @@
-package BuisnessLayer;
+package BussinessLayer.WorkersPackage;
 
 public class Response {
     private String ErrorMessage;

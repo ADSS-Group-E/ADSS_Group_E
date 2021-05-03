@@ -1,24 +1,24 @@
-package BuisnessLayer;
+package BussinessLayer.WorkersPackage;
 
 import PresentationLayer.*;
 
 import java.time.LocalDate;
 import java.util.*;
 
-public class Facade {
+public class WorkersFacade {
 
     private final BranchController branchController;
     private final ShiftController shiftController;
-    private static Facade instance = null;
+    private static WorkersFacade instance = null;
 
-    private Facade() {
+    private WorkersFacade() {
         this.branchController =new BranchController();
         this.shiftController = new ShiftController();
     }
 
-    public static Facade getInstance() {
+    public static WorkersFacade getInstance() {
         if (instance == null) {
-            instance = new Facade();
+            instance = new WorkersFacade();
         }
         return instance;
     }
@@ -226,7 +226,7 @@ public class Facade {
         return shiftDemandsDTOS;
     }
 
-    public ShiftDemandsDTO getShiftDemandsDTO(BuisnessLayer.ShiftDemands blShiftDemands) {
+    public ShiftDemandsDTO getShiftDemandsDTO(BussinessLayer.WorkersPackage.ShiftDemands blShiftDemands) {
         LocalDate date = blShiftDemands.getDate();
         int cashierAmount = blShiftDemands.getCashierAmount();
         int storeKeeperAmount = blShiftDemands.getStoreKeeperAmount();
