@@ -2,6 +2,7 @@ package PresentationLayer;
 
 import BussinessLayer.DeliveryPackage.DeliveryFacade;
 import BussinessLayer.Facade;
+import BussinessLayer.Response;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
@@ -70,13 +71,15 @@ public class Menu_Transport {
         Scanner in = new Scanner(System.in);
         int choice = in.nextInt();
         String id, name, licenseType, licenseExpDate;
+        int branchId;
         Date date;
         try
         {
             switch (choice)
             {
                 case 1:
-                    System.out.println("Please enter driver details: id, name, type of license, license expiration date");
+                    System.out.println("Please enter driver details: worker id, branch id, name, type of license, license expiration date");
+                    id = in.next();
                     id = in.next();
                     name = in.next();
                     licenseType = in.next();
@@ -130,7 +133,10 @@ public class Menu_Transport {
                     name = in.next();
                     netoWeight = in.nextDouble();
                     totalWeight = in.nextDouble();
-                    facade.createTruck(id, name, netoWeight, totalWeight);
+                    Response res=facade.createTruck(id, name, netoWeight, totalWeight);
+                    if (res.isErrorOccurred()){
+                        System.out.println(res.getErrorMessage());
+                    }
                     break;
                 case 2:
                     System.out.println("Please enter the truck id that you want to erase from the system");

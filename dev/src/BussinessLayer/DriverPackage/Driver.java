@@ -1,37 +1,20 @@
 package BussinessLayer.DriverPackage;
 
+import BussinessLayer.WorkersPackage.Worker;
+
 import java.util.*;
 
-public class Driver {
+public class Driver /*extends Worker*/ {
 
-    private String id; //should be removed after connection with Employee module
-    private String name; //should be removed after connection with Employee module
     private String licenseType;
     private Date expLicenseDate;
     private boolean busy;
 
-    public Driver(String id, String name, String licenseType, Date expLicenseDate) {
-        this.id = id;
-        this.name = name;
+    public Driver(/*Worker baseWorker,*/ String licenseType, Date expLicenseDate) {
+        //super(baseWorker.getFirstName(), baseWorker.getLastName(), baseWorker.getID(), baseWorker.getBankAccount(), baseWorker.getHiringConditions(), baseWorker.getAvailableWorkDays(), baseWorker.getQualifications());
         this.licenseType = licenseType;
         this.expLicenseDate = expLicenseDate;
         this.busy = false;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getLicenseType() {
@@ -64,10 +47,18 @@ public class Driver {
 
     @Override
     public String toString() {
-        return "Driver {" +
-                "id='" + id + '\'' +
-                ", licenseType='" + licenseType + '\'' +
+        return "Driver{" +
+                "firstName='" + super.getFirstName() + '\'' +
+                ", lastName='" + super.getLastName() + '\'' +
+                ", ID='" + super.getID() + '\'' +
+                ", bankAccount=" + super.getBankAccount() +
+                ", startWorkingDay=" + super.getStartWorkingDay() +
+                ", hiringConditions=" + super.getHiringConditions() +
+                ", availableWorkDays=" + super.getAvailableWorkDays() +
+                ", qualifications=" + super.getQualifications() +
+                "licenseType='" + licenseType + '\'' +
                 ", expLicenseDate=" + expLicenseDate +
+                ", busy=" + busy +
                 '}';
     }
 }
