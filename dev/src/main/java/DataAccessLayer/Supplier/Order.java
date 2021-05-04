@@ -1,7 +1,7 @@
 package DataAccessLayer.Supplier;
 
-import PresentationLayer.Inventory.DataTransferObjects.OrderDTO;
-import PresentationLayer.Inventory.DataTransferObjects.SupplierItemDTO;
+import PresentationLayer.Supplier.DataTransferObjects.OrderDTO;
+import PresentationLayer.Supplier.DataTransferObjects.SupplierItemDTO;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

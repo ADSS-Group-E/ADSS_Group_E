@@ -1,6 +1,6 @@
 package DataAccessLayer.Supplier;
 
-import PresentationLayer.Inventory.DataTransferObjects.SupplierDTO;
+import PresentationLayer.Supplier.DataTransferObjects.SupplierDTO;
 
 import java.sql.Connection;
 import java.sql.SQLException;
