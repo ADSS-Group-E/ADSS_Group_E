@@ -11,7 +11,7 @@ class QuantityWriter {
     private Connection c = null;
     private Statement stmt = null;
 
-    QuantityWriter(DBConnection dbConnection) {
+    QuantityWriter(DataAccessLayer.Supplier.DBConnection dbConnection) {
         db = dbConnection;
     }
 
