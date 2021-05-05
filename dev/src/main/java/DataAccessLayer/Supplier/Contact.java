@@ -28,7 +28,7 @@ class Contact {
             c = db.connect();
             stmt = c.createStatement();
             String sql = String.format("INSERT INTO Contact (name, email) " +
-                    "VALUES (%s, %s);", contact.getName(), contact.getEmail());
+                    "VALUES ('%s', '%s');", contact.getName(), contact.getEmail());
             stmt.executeUpdate(sql);
             close();
         }

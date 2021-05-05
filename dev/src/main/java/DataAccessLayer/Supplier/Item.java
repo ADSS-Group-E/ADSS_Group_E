@@ -48,5 +48,33 @@ class Item {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
         }
     }
+
+    void update(SupplierItemDTO item) {
+        try {
+            c = db.connect();
+            stmt = c.createStatement();
+            String sql = String.format("Update SupplierItem SET quantity = %d WHERE " +
+                    "ID = %d;", item.getQuantity(), item.getId());
+            stmt.executeUpdate(sql);
+            close();
+        }
+        catch (SQLException e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        }
+    }
+
+    void delete(SupplierItemDTO item) {
+        try {
+            c = db.connect();
+            stmt = c.createStatement();
+            String sql = String.format("DELETE FROM SupplierItem WHERE " +
+                    "ID = %d;", item.getId());
+            stmt.executeUpdate(sql);
+            close();
+        }
+        catch (SQLException e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        }
+    }
 }
 
