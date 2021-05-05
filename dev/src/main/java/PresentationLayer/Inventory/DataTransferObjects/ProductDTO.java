@@ -31,6 +31,14 @@ public class ProductDTO {
         return name;
     }
 
+    public double getBuyingPriceAfterDiscount() {
+        return buyingPriceAfterDiscount;
+    }
+
+    public double getSellingPriceAfterDiscount() {
+        return sellingPriceAfterDiscount;
+    }
+
     public String getStorageLocation() {
         return storageLocation;
     }
