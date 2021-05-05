@@ -1,4 +1,4 @@
-package DataAccessLayer.Invetory;
+package DataAccessLayer.Inventory;
 
 import PresentationLayer.Inventory.DataTransferObjects.CategoryDTO;
 
