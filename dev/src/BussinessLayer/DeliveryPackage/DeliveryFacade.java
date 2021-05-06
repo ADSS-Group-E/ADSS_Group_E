@@ -1,6 +1,8 @@
 package BussinessLayer.DeliveryPackage;
 import BussinessLayer.DriverPackage.Driver;
 import BussinessLayer.DriverPackage.DriverController;
+import BussinessLayer.WorkersPackage.Worker;
+
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -535,13 +537,14 @@ public class DeliveryFacade {
             throw e;
         }
     }
-    public Driver createDriver(String id, String name, String licenseType, Date expLicenseDate) throws Exception
+
+    public Driver createDriver(Worker worker, String licenseType, Date expLicenseDate) throws Exception
     {
         try
         {
             if(!licenseTypes.containsKey(licenseType))
                 throw new Exception("Not Valid License Type");
-            Driver d = driverController.createDriver(id, name, licenseType, expLicenseDate);
+            Driver d = driverController.createDriver(worker, licenseType, expLicenseDate);
             driverController.addDriver(d);
             return d;
         }
@@ -642,7 +645,7 @@ public class DeliveryFacade {
     {
         return deliveries;
     }
-    public Map<String, Driver> getDrivers()
+    public List<Driver> getDrivers()
     {
         return driverController.getDrivers();
     }

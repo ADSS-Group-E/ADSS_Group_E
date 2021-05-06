@@ -1,5 +1,6 @@
 package PresentationLayer;
 
+import BussinessLayer.DriverPackage.DriverController;
 import BussinessLayer.ResponseT;
 import BussinessLayer.WorkersPackage.*;
 
@@ -65,7 +66,7 @@ public class Main {
                 else {
                     List<QualificationsDTO> qualifications = listResponseT.getValue();
                     if (qualifications.contains(QualificationsDTO.BranchManager)) {
-                        MenuWorkers.branchManagerMenu(workerDTO, branchDTOResponseT.getValue().getBranchID());
+                        MenuWorkers.branchManagerMenu(workerDTO, branchDTOResponseT.getValue().getBranchID(), DriverController.getInstance().getDrivers());
 
                     } else if (workerDTO.getQualifications().contains(QualificationsDTO.Human_Resources_Director)) {
                         MenuWorkers.HRDMenu(workerDTO, branchDTOResponseT.getValue().getBranchID());

@@ -2,7 +2,6 @@ package BussinessLayer.WorkersPackage;
 
 public class AvailableWorkDays {
     private Boolean favoriteShifts[][];
-
     private Boolean cantWork[][];
 
     public Boolean[][] getFavoriteShifts() {

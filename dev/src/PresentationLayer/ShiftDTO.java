@@ -10,6 +10,7 @@ public class ShiftDTO {
     private ShiftDemandsDTO demands;
     private EnumMap<QualificationsDTO,List<WorkerDTO>> workers;
     private WorkerDTO shiftManager;
+    private DriverDTO driver;
     private int branchID;
 
 
@@ -182,5 +183,9 @@ public class ShiftDTO {
             }
         }
         return st;
+    }
+
+    public DriverDTO getDriver() {
+        return driver;
     }
 }

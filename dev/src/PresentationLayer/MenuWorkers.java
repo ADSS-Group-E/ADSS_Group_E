@@ -1,5 +1,7 @@
 package PresentationLayer;
 
+import BussinessLayer.DriverPackage.Driver;
+import BussinessLayer.DriverPackage.DriverController;
 import BussinessLayer.Facade;
 import BussinessLayer.Response;
 import BussinessLayer.ResponseT;
@@ -67,7 +69,7 @@ public class MenuWorkers {
     }
 
 
-    private static void createWeeklyAssignment(WorkerDTO branchManger) {
+    private static void createWeeklyAssignment(WorkerDTO branchManger, List<Driver> drivers) {
         System.out.println("Please enter the branch ID");
         int branchID = reader.nextInt();
         Response response= facade.isLegalBranch(branchID);
@@ -103,7 +105,7 @@ public class MenuWorkers {
 
             //LocalDate date_ = createDate();
             ShiftDemandsDTO[][] sd;
-            response= facade.createWeeklyAssignment(branchID, sunday, branchManger);
+            response= facade.createWeeklyAssignment(branchID, sunday, branchManger, drivers);
             if(response.isErrorOccurred())
                 System.out.println(response.getErrorMessage());
         }
@@ -401,7 +403,7 @@ public class MenuWorkers {
     }
 
 
-    public static int branchManagerMenu(WorkerDTO branchManager, int branchID) {
+    public static int branchManagerMenu(WorkerDTO branchManager, int branchID, List<Driver> drivers) {
         while (true) {
             System.out.println("\n Welcome " + branchManager.getFirstName() + " " + branchManager.getLastName() + ", the branch manager of branch " + branchID + " please choose an action");
             System.out.println("1) Create new weekly assignment by the date of sunday");
@@ -430,7 +432,7 @@ public class MenuWorkers {
 
             switch (menu) {
                 case 1:
-                    createWeeklyAssignment(branchManager);
+                    createWeeklyAssignment(branchManager,drivers);
                     break;
 
                 case 2:
@@ -1335,7 +1337,7 @@ public class MenuWorkers {
                 else{
                     List<QualificationsDTO> qualifications = listResponseT.getValue();
                     if (qualifications.contains(QualificationsDTO.BranchManager)) {
-                        stop = MenuWorkers.branchManagerMenu(workerDTO,branchID);
+                        stop = MenuWorkers.branchManagerMenu(workerDTO,branchID, DriverController.getInstance().getDrivers());
 
                     } else if (workerDTO.getQualifications().contains(QualificationsDTO.Human_Resources_Director)) {
                         stop = MenuWorkers.HRDMenu(workerDTO,branchID);

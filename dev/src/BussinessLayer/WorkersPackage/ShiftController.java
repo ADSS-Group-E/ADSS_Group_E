@@ -2,6 +2,8 @@ package BussinessLayer.WorkersPackage;
 
 //import javafx.util.converter.LocalDateTimeStringConverter;
 
+import BussinessLayer.DriverPackage.Driver;
+
 import java.time.LocalDate;
 import java.util.*;
 
@@ -99,7 +101,7 @@ public class ShiftController {
         weeklyAssignment.remove(branchID);
     }
 
-    private List<Worker> createShiftAssignment(LocalDate date, ShiftType shiftType, int branchID,List<Worker> workerList, Worker branchManager) {
+    private List<Worker> createShiftAssignment(LocalDate date, ShiftType shiftType, int branchID, List<Worker> workerList, Worker branchManager, Driver driver) {
         int type = shiftType == ShiftType.Morning ? 0:1;
         if(branchManager==null)
             throw new IllegalArgumentException("The shiftAssignment must contains a branchManager");
@@ -189,12 +191,11 @@ public class ShiftController {
                     workingList.add(w);
                 }
             }
-
             if (arrangerAmount == 0 && assistantAmount == 0 && cashierAmount == 0 && guardAmount == 0 && storeKeeperAmount == 0)
                 break;
         }
 
-        Shift shift = new Shift(date, shiftType, shiftDemands, cashiers, storeKeepers, arrangers, guards, assistants, branchManager,branchID);
+        Shift shift = new Shift(date, shiftType, shiftDemands, cashiers, storeKeepers, arrangers, guards, assistants, branchManager,branchID, driver);
         if (arrangerAmount == 0 && assistantAmount == 0 && cashierAmount == 0 && guardAmount == 0 && storeKeeperAmount == 0)
             weeklyAssignment.get(branchID)[dayAtWeek][typeOfShift]=shift;
         return workingList;
@@ -249,25 +250,44 @@ public class ShiftController {
 
     }
 
-    public void createWeeklyAssignment(int branchID, LocalDate startDate,List<Worker>workers ,Worker branchManager) {
+    public void createWeeklyAssignment(int branchID, LocalDate startDate,List<Worker>workers ,Worker branchManager, List<Driver> drivers) {
         if(!weeklyAssignment.containsKey(branchID))
             throw new IllegalArgumentException("There is no such branch");
         updateHistory(branchID);
         ShiftDemands[][] shiftDemands = shiftDemandsHashMap.get(branchID);
-
         ShiftType type;
+        Driver driver;
+        if (startDate.getDayOfWeek().getValue()!=7) throw new IllegalArgumentException("Weekly assignment must start on sunday");
         for(int i=0;i<7;i++){
             List<Worker>ableToWork=new LinkedList<>(workers);
+            List <Driver> driversTemp=new LinkedList<>(drivers);
             for(int j=0;j<2;j++){
                 if(j==0)
                     type=ShiftType.Morning;
                 else
                     type=ShiftType.Evening;
-                ableToWork=createShiftAssignment(startDate,type,branchID,ableToWork,branchManager);
+                driver=null;
+                if(shiftDemands[i][j].getDeliveryRequired()) {
+                    for (Driver d : driversTemp) {
+                        if (d.getAvailableWorkDays().getFavoriteShifts()[i][j]) {
+                            driver = d;
+                            break;
+                        }
+                    }
+                }
+                if (driver!=null) {
+                    driversTemp.remove(driver);
+                }
+                if(shiftDemands[i][j].getDeliveryRequired()&& driver==null)
+                    throw new IllegalArgumentException("This shift must contain driver");
+                if (shiftDemands[i][j].getDeliveryRequired() && shiftDemands[i][j].getStoreKeeperAmount()<1)
+                    throw new IllegalArgumentException("This shift must contain storekeeper, because delivery is on the way to the store");
+                ableToWork=createShiftAssignment(startDate,type,branchID,ableToWork,branchManager, driver);
             }
             startDate=startDate.plusDays(1);
         }
     }
+
     public ShiftDemands[][] getShiftDemands(int branchID, LocalDate date){
         if(!shiftDemandsHashMap.get(branchID)[0][0].getDate().equals(date)){
             System.out.println("there is no up to date demands");

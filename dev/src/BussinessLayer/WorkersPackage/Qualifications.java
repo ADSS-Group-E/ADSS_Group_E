@@ -9,7 +9,4 @@ public enum Qualifications {
     BranchManager,
     Assistant,
     ShiftManager;
-
-
-
 }

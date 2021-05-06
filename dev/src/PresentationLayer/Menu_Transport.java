@@ -78,14 +78,15 @@ public class Menu_Transport {
             switch (choice)
             {
                 case 1:
-                    System.out.println("Please enter driver details: worker id, branch id, name, type of license, license expiration date");
-                    id = in.next();
-                    id = in.next();
-                    name = in.next();
+                    System.out.println("Please enter driver details: branch id ");
+                    branchId = in.nextInt();
+
+                    WorkerDTO w=MenuWorkers.createWorkerWithoutAdd();
+                    System.out.println("Please enter driver details: licence type, expiration date");
                     licenseType = in.next();
                     licenseExpDate = in.next();
                     date = new SimpleDateFormat("dd/MM/yyyy").parse(licenseExpDate);
-                    facade.createDriver(id, name, licenseType, date);
+                    facade.createDriver(w, licenseType, date);
                     break;
                 case 2:
                     System.out.println("Please enter the driver id that you want to erase from the system");
@@ -399,9 +400,9 @@ public class Menu_Transport {
         try
         {
             Date date = new SimpleDateFormat("dd/MM/yyyy").parse("31/12/2030");
-            facade.createDriver("203613310", "eden", "A", date);
-            facade.createDriver("313577645", "yarin", "B", date);
-            facade.createDriver("123456789", "reem", "C", date);
+            //facade.createDriver("203613310", "eden", "A", date);
+            //facade.createDriver("313577645", "yarin", "B", date);
+            //facade.createDriver("123456789", "reem", "C", date);
             facade.createLocation("1", "superli", "lachish 151 shoham", "0543160553", "avi", "Center");
             facade.createLocation("2", "maxstock", "shoham 26 haifa", "0504616909", "ben", "North");
             facade.createLocation("3", "shufersal", "azrieli tel aviv", "0543160550", "yossef", "Center");

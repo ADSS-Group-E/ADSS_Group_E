@@ -2,6 +2,8 @@ package BussinessLayer.WorkersPackage;
 
 
 
+import BussinessLayer.DriverPackage.Driver;
+
 import java.time.LocalDate;
 import java.util.*;
 
@@ -11,6 +13,7 @@ public class Shift {
     private ShiftDemands demands;
     private EnumMap<Qualifications,List<Worker>> workers;
     private Worker shiftManager;
+    private Driver driver;
     private int branchID;
 
 
@@ -104,7 +107,7 @@ public class Shift {
         this.shiftManager = shiftManager;
     }
 
-    public Shift(LocalDate date, ShiftType type, ShiftDemands demands, List<Worker> cashiers, List<Worker> storeKeepers, List<Worker> arrangers, List<Worker> guards, List<Worker> assistants, Worker shiftManager, int branchID) {
+    public Shift(LocalDate date, ShiftType type, ShiftDemands demands, List<Worker> cashiers, List<Worker> storeKeepers, List<Worker> arrangers, List<Worker> guards, List<Worker> assistants, Worker shiftManager, int branchID, Driver driver) {
         workers = new EnumMap<Qualifications, List<Worker>>(Qualifications.class);
         workers.put(Qualifications.Arranger,arrangers);
         workers.put(Qualifications.Assistant,assistants);
@@ -120,6 +123,7 @@ public class Shift {
 //        setGuards(guards);
 //        setStoreKeepers(storeKeepers);
         this.shiftManager = shiftManager;
+        this.driver=driver;
         this.branchID = branchID;
     }
 

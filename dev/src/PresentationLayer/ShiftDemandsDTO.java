@@ -1,27 +1,33 @@
 package PresentationLayer;
 
+import BussinessLayer.WorkersPackage.ShiftType;
+
 import java.time.LocalDate;
 
 public class ShiftDemandsDTO {
     private LocalDate date;
+    private ShiftType shiftType;
     private int cashierAmount;
     private int storeKeeperAmount;
+    private int arrangerAmount;
+    private int guardAmount;
+    private int assistantAmount;
+    private boolean deliveryRequired;
+
 
     @Override
     public String toString() {
         return "ShiftDemandsDTO{" +
                 "date=" + date +
+                ", type=" + shiftType +
                 ", cashierAmount=" + cashierAmount +
                 ", storeKeeperAmount=" + storeKeeperAmount +
                 ", arrangerAmount=" + arrangerAmount +
                 ", guardAmount=" + guardAmount +
                 ", assistantAmount=" + assistantAmount +
+                ", deliveryRequired=" + deliveryRequired +
                 '}';
     }
-
-    private int arrangerAmount;
-    private int guardAmount;
-    private int assistantAmount;
 
     public ShiftDemandsDTO(LocalDate date, int cashierAmount, int storeKeeperAmount, int arrangerAmount, int guardAmount, int assistantAmount) {
         this.date = date;
@@ -30,6 +36,18 @@ public class ShiftDemandsDTO {
         this.arrangerAmount = arrangerAmount;
         this.guardAmount = guardAmount;
         this.assistantAmount = assistantAmount;
+        this.deliveryRequired=false;
+    }
+
+    public ShiftDemandsDTO(LocalDate date, int cashierAmount, int storeKeeperAmount, int arrangerAmount, int guardAmount, int assistantAmount, boolean deliveryRequired, ShiftType shiftType) {
+        this.date = date;
+        this.cashierAmount = cashierAmount;
+        this.storeKeeperAmount = storeKeeperAmount;
+        this.arrangerAmount = arrangerAmount;
+        this.guardAmount = guardAmount;
+        this.assistantAmount = assistantAmount;
+        this.deliveryRequired=deliveryRequired;
+        this.shiftType=shiftType;
     }
     public ShiftDemandsDTO(BussinessLayer.WorkersPackage.ShiftDemands blShiftDemands) {
         this.date = blShiftDemands.getDate();
@@ -40,6 +58,17 @@ public class ShiftDemandsDTO {
         this.assistantAmount = blShiftDemands.getAssistantAmount();
     }
 
+    public ShiftType getShiftType() {
+        return shiftType;
+    }
+
+    public void setShiftType(ShiftType shiftType) {
+        this.shiftType = shiftType;
+    }
+
+    public boolean isDeliveryRequired() {
+        return deliveryRequired;
+    }
 
     public LocalDate getDate() {
         return date;
@@ -87,5 +116,13 @@ public class ShiftDemandsDTO {
 
     public void setAssistantAmount(int assistantAmount) {
         this.assistantAmount = assistantAmount;
+    }
+
+    public boolean getDeliveryRequired() {
+        return deliveryRequired;
+    }
+
+    public void setDeliveryRequired(boolean deliveryRequired) {
+        this.deliveryRequired = deliveryRequired;
     }
 }

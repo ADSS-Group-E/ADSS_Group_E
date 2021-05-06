@@ -52,8 +52,8 @@ public class Facade {
         return wFacade.getShift( branchID,  date,  shiftType);
     }
 
-    public Response createWeeklyAssignment(int branchID, LocalDate startDate, WorkerDTO branchManager) {
-        return wFacade.createWeeklyAssignment( branchID,  startDate,  branchManager);
+    public Response createWeeklyAssignment(int branchID, LocalDate startDate, WorkerDTO branchManager, List<Driver> drivers) {
+        return wFacade.createWeeklyAssignment( branchID,  startDate,  branchManager, drivers);
     }
 
     public Response workerReplacement(int branchID, LocalDate date1, ShiftTypeDTO shiftType1, LocalDate date2, ShiftTypeDTO shiftType2, WorkerDTO worker1, WorkerDTO worker2, WorkerDTO branchManager) {
@@ -95,8 +95,8 @@ public class Facade {
         return wFacade.printWorkersByQualification( qualifications,  shift);
     }
 
-    public void createWeeklyAssignment(int branchID, LocalDate startDate, List<Worker> workers, Worker branchManager) {
-         wFacade.createWeeklyAssignment( branchID,  startDate, workers, branchManager);
+    public void createWeeklyAssignment(int branchID, LocalDate startDate, List<Worker> workers, Worker branchManager,List<Driver> drivers) {
+         wFacade.createWeeklyAssignment( branchID,  startDate, workers, branchManager, drivers);
     }
 
     public Response printWeeklyAssignment(int branchID, LocalDate date) {
@@ -417,9 +417,9 @@ public class Facade {
         return new Response();
     }
 
-    public Response createDriver(String id, String name, String licenseType, Date expLicenseDate){
+    public Response createDriver(WorkerDTO w, String licenseType, Date expLicenseDate){
         try{
-            dFacade.createDriver( id,  name,  licenseType,  expLicenseDate);
+            dFacade.createDriver(wFacade.convertWorkerToBusiness(w),  licenseType,  expLicenseDate);
         }catch(Exception e){
             return new Response(e.getMessage());
         }

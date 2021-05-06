@@ -1,5 +1,6 @@
 package BussinessLayer.WorkersPackage;
 
+import BussinessLayer.DriverPackage.Driver;
 import BussinessLayer.Response;
 import BussinessLayer.ResponseT;
 import PresentationLayer.*;
@@ -111,9 +112,9 @@ public class WorkersFacade {
         return new ResponseT<ShiftDTO>(convertShiftToDTO(shiftController.getShift(branchID, date, convertShiftTypeToBusiness(shiftType))));
     }
 
-    public Response createWeeklyAssignment(int branchID, LocalDate startDate, WorkerDTO branchManager) {
+    public Response createWeeklyAssignment(int branchID, LocalDate startDate, WorkerDTO branchManager, List<Driver> drivers) {
         try {
-            shiftController.createWeeklyAssignment(branchID, startDate, branchController.getBranch(branchID).getWorkersList(), convertWorkerToBusiness(branchManager));
+            shiftController.createWeeklyAssignment(branchID, startDate, branchController.getBranch(branchID).getWorkersList(), convertWorkerToBusiness(branchManager), drivers);
         }catch(Exception e){
             return new Response(e.getMessage());
         }
@@ -239,8 +240,8 @@ public class WorkersFacade {
         return new ShiftDemandsDTO(date, cashierAmount, storeKeeperAmount, arrangerAmount, guardAmount, assistantAmount);
     }
 
-    public void createWeeklyAssignment(int branchID, LocalDate startDate, List<Worker> workers, Worker branchManager) {
-        shiftController.createWeeklyAssignment(branchID, startDate, workers, branchManager);
+    public void createWeeklyAssignment(int branchID, LocalDate startDate, List<Worker> workers, Worker branchManager, List<Driver> driver) {
+        shiftController.createWeeklyAssignment(branchID, startDate, workers, branchManager, driver);
     }
 
     public Response printWeeklyAssignment(int branchID, LocalDate date) {
@@ -523,8 +524,8 @@ public class WorkersFacade {
     private Shift convertShiftToBusiness(ShiftDTO shiftDTO){
         if(shiftDTO == null)
             return null;
-
-        return new Shift(shiftDTO.getDate(),convertShiftTypeToBusiness(shiftDTO.getType()),convertShiftDemandsToBusiness(shiftDTO.getDemands()),convertListOfWorkersToBusiness(shiftDTO.getWorkers().get(QualificationsDTO.Cashier)),convertListOfWorkersToBusiness(shiftDTO.getWorkers().get(QualificationsDTO.Storekeeper)),convertListOfWorkersToBusiness(shiftDTO.getWorkers().get(QualificationsDTO.Arranger)),convertListOfWorkersToBusiness(shiftDTO.getWorkers().get(QualificationsDTO.Guard)),convertListOfWorkersToBusiness(shiftDTO.getWorkers().get(QualificationsDTO.Assistant)),convertWorkerToBusiness(shiftDTO.getShiftManager()),shiftDTO.getBranchID());
+        Worker w= new Worker(shiftDTO.getDriver().getFirstName(),shiftDTO.getDriver().getLastName(),shiftDTO.getDriver().getID(),convertBankAccountToBusiness(shiftDTO.getDriver().getBankAccount()),convertHiringConditionsToBusiness(shiftDTO.getDriver().getHiringConditions()),convertAvailableWorkDaysToBusiness(shiftDTO.getDriver().getAvailableWorkDays()),convertListQualificationsToBusiness(shiftDTO.getDriver().getQualifications()));
+        return new Shift(shiftDTO.getDate(),convertShiftTypeToBusiness(shiftDTO.getType()),convertShiftDemandsToBusiness(shiftDTO.getDemands()),convertListOfWorkersToBusiness(shiftDTO.getWorkers().get(QualificationsDTO.Cashier)),convertListOfWorkersToBusiness(shiftDTO.getWorkers().get(QualificationsDTO.Storekeeper)),convertListOfWorkersToBusiness(shiftDTO.getWorkers().get(QualificationsDTO.Arranger)),convertListOfWorkersToBusiness(shiftDTO.getWorkers().get(QualificationsDTO.Guard)),convertListOfWorkersToBusiness(shiftDTO.getWorkers().get(QualificationsDTO.Assistant)),convertWorkerToBusiness(shiftDTO.getShiftManager()),shiftDTO.getBranchID(),new Driver(w,shiftDTO.getDriver().getLicenseType(),shiftDTO.getDriver().getExpLicenseDate()));
     }
 
     private ShiftDemandsDTO convertShiftDemandsToDTO(ShiftDemands shiftDemands){
@@ -536,7 +537,7 @@ public class WorkersFacade {
     private ShiftDemands convertShiftDemandsToBusiness(ShiftDemandsDTO shiftDemandsDTO){
         if(shiftDemandsDTO == null)
             return null;
-        return new ShiftDemands(shiftDemandsDTO.getDate(),shiftDemandsDTO.getCashierAmount(),shiftDemandsDTO.getStoreKeeperAmount(),shiftDemandsDTO.getArrangerAmount(),shiftDemandsDTO.getGuardAmount(),shiftDemandsDTO.getAssistantAmount());
+        return new ShiftDemands(shiftDemandsDTO.getDate(),shiftDemandsDTO.getCashierAmount(),shiftDemandsDTO.getStoreKeeperAmount(),shiftDemandsDTO.getArrangerAmount(),shiftDemandsDTO.getGuardAmount(),shiftDemandsDTO.getAssistantAmount(),shiftDemandsDTO.getShiftType());
     }
 
     private ShiftTypeDTO convertShiftTypeToDTO(ShiftType shiftType){
@@ -571,7 +572,7 @@ public class WorkersFacade {
         return new WorkerDTO(worker.getFirstName(),worker.getLastName(),worker.getID(),convertBankAccountToDTO(worker.getBankAccount()),convertHiringConditionsToDTO(worker.getHiringConditions()),convertAvailableWorkDaysToDTO(worker.getAvailableWorkDays()),list);
     }
 
-    private Worker convertWorkerToBusiness(WorkerDTO workerDTO){
+    public Worker convertWorkerToBusiness(WorkerDTO workerDTO){
         if(workerDTO == null)
             return null;
         List<Qualifications>list=new ArrayList<>();
@@ -699,4 +700,5 @@ public class WorkersFacade {
         }
         return new Response();
     }
+
 }
