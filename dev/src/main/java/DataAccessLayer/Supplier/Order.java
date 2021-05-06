@@ -81,7 +81,7 @@ class Order {
         try {
             c = db.connect();
             stmt = c.createStatement();
-            String sql = "SELECT * FROM Order LEFT JOIN SupplierItem SI on Order.orderID = SI.orderID;";
+            String sql = "SELECT * FROM Order LEFT JOIN SupplierItem SI on Order.orderID = SI.orderID WHERE periodicDelivery = 1;";
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 order = new OrderDTO(
@@ -101,5 +101,35 @@ class Order {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
         }
         return result;
+    }
+
+    OrderDTO select(int companyNumber, int orderID) {
+        OrderDTO order = null;
+        SupplierItemDTO item;
+        HashMap<OrderDTO, ArrayList<SupplierItemDTO>> regularOrders = new HashMap<>();
+        ArrayList<OrderDTO> result = new ArrayList<>();
+        try {
+            c = db.connect();
+            stmt = c.createStatement();
+            String sql = String.format("SELECT * FROM Order LEFT JOIN SupplierItem SI on Order.orderID = SI.orderID WHERE companyNumber = %d AND orderID = %d;", companyNumber, orderID);
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                order = new OrderDTO(
+                        rs.getInt("companyNumber"), rs.getString("date"), rs.getInt("periodicDelivery"), rs.getInt("needsDelivery"), new ArrayList<>()
+                );
+                if (!regularOrders.containsKey(order)) {
+                    regularOrders.put(order, new ArrayList<>());
+                }
+                item = new SupplierItemDTO(rs.getInt("ID"), rs.getString("name"), rs.getInt("quantity"), rs.getInt("price"), rs.getString("supplierCN"));
+                regularOrders.get(order).add(item);
+            }
+            for (OrderDTO orderDTO : regularOrders.keySet())
+                order = new OrderDTO(orderDTO.getId(), orderDTO.getDate(), orderDTO.getPeriodicDelivery(), orderDTO.getNeedsDelivery(), regularOrders.get(orderDTO));
+            close();
+        }
+        catch (SQLException e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        }
+        return order;
     }
 }

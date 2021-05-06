@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 class Item {
     private DBConnection db;
@@ -75,6 +76,47 @@ class Item {
         catch (SQLException e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
         }
+    }
+
+    ArrayList<SupplierItemDTO> selectFromSupplier(int companyNumber) {
+        ArrayList<SupplierItemDTO> suppliers = new ArrayList<>();
+        try {
+            c = db.connect();
+            stmt = c.createStatement();
+            String sql = String.format("SELECT Item.* FROM SupplierItem LEFT JOIN Order O on SupplierItem.orderID = O.orderID LEFT JOIN " +
+                    "Supplier S on O.companyNumber = S.companyNumber WHERE companyNumber = %d;", companyNumber);
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                suppliers.add(new SupplierItemDTO(
+                        rs.getInt("orderID"), rs.getString("name"), rs.getInt("quantity"), rs.getInt("price"), rs.getString("supplierCN")
+                ));
+            }
+            close();
+        }
+        catch (SQLException e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        }
+        return suppliers;
+    }
+
+    SupplierItemDTO select(int orderID, int itemID) {
+        SupplierItemDTO supplier = null;
+        try {
+            c = db.connect();
+            stmt = c.createStatement();
+            String sql = String.format("SELECT * FROM SupplierItem WHERE orderID = %s AND ID = %d", orderID, itemID);
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                supplier = new SupplierItemDTO(
+                        rs.getInt("orderID"), rs.getString("name"), rs.getInt("quantity"), rs.getInt("price"), rs.getString("supplierCN")
+                );
+            }
+            close();
+        }
+        catch (SQLException e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        }
+        return supplier;
     }
 }
 
