@@ -74,12 +74,12 @@ public class Repo {
 
     }
 
-
+    //TODO : I changed the table to be BankAccounts and not BankAccount
     public static void createBankAccount(Connection conn)  {
         try (Statement stmt = conn.createStatement();) {
 
             String sql1 = """
-                    CREATE TABLE IF NOT EXISTS BankAccount  (
+                    CREATE TABLE IF NOT EXISTS BankAccounts  (
                     ID	TEXT NOT NULL,
                     Bank_Name	TEXT NOT NULL,
                     Branch	TEXT NOT NULL,
