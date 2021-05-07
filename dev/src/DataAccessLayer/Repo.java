@@ -120,7 +120,7 @@ public class Repo {
         try (Statement stmt = conn.createStatement();) {
 
             String sql1 = """
-                                CREATE TABLE IF NOT EXISTS "Qualificaions" (
+                                CREATE TABLE IF NOT EXISTS "Qualifications" (
                                 	"ID"	TEXT NOT NULL,
                                 	"Qualification"	TEXT NOT NULL,
                                 	FOREIGN KEY (ID) REFERENCES Workers(ID) ON DELETE CASCADE ,
@@ -212,7 +212,7 @@ public class Repo {
                     "(ID VARCHAR(100) PRIMARY KEY NOT NULL," +
                     "DELIVERY_DATE DATE    NOT NULL, " +
                     "DELIVER_TIME  TIME NOT NULL ," +
-                    "DRIVER_ID INT NOT NULL, "+
+                    "DRIVER_ID TEXT NOT NULL, "+
                     "SOURCE_LOCATION INT NOT NULL, "+
                     "WEIGHT DOUBLE NOT NULL, "+
                     "TRUCK_ID VARCHAR (100) NOT NULL, "+
@@ -270,6 +270,7 @@ public class Repo {
                 String sql1 = """
                         CREATE TABLE IF NOT EXISTS "Workers" (
                         	"ID"	TEXT NOT NULL,
+                        	"BranchID"	INTEGER NOT NULL,
                         	"First_Name"	INTEGER NOT NULL,
                         	"Last_Name"	INTEGER NOT NULL,
                         	"Start_Working_Day"	DATE NOT NULL,
