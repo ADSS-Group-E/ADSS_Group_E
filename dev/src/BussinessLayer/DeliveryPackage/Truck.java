@@ -16,6 +16,14 @@ public class Truck {
         isUsed = false;
     }
 
+    public Truck(String id, String model, double netoWeight, double totalWeight,boolean isUsed) {
+        this.id = id;
+        this.model = model;
+        this.netoWeight = netoWeight;
+        this.totalWeight = totalWeight;
+        this.isUsed = isUsed;
+    }
+
     public String getId() {
         return id;
     }

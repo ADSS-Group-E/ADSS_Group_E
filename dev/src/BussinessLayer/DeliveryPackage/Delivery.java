@@ -14,12 +14,12 @@ public class Delivery {
     private String driverId;
     private String truckId;
     private double weight;
-    private String srcLocation;
-    private List<String> targets;
-    private List<String> orders;
+    private int srcLocation;
+    private List<Integer> targets;
+    private List<Integer> orders;
     private Status status;
 
-    public Delivery(String id, Date deliveryDate, Time leavingTime, String driverId, String srcLocation, List<String> targets, double weight, String truckId, List<String> orders) {
+    public Delivery(String id, Date deliveryDate, Time leavingTime, String driverId, int srcLocation, List<Integer> targets, double weight, String truckId, List<Integer> orders) {
         this.id = id;
         this.deliveryDate = deliveryDate;
         this.leavingTime = leavingTime;
@@ -30,6 +30,19 @@ public class Delivery {
         this.truckId = truckId;
         this.orders = orders;
         this.status = Status.Created;
+    }
+
+    public Delivery(String id, Date deliveryDate, Time leavingTime, String driverId, int srcLocation, List<Integer> targets, double weight, String truckId, List<Integer> orders,String status) {
+        this.id = id;
+        this.deliveryDate = deliveryDate;
+        this.leavingTime = leavingTime;
+        this.driverId = driverId;
+        this.srcLocation = srcLocation;
+        this.targets = targets;
+        this.weight = weight;
+        this.truckId = truckId;
+        this.orders = orders;
+        this.status = Status.valueOf(status);
     }
 
     public String getId() {
@@ -64,15 +77,15 @@ public class Delivery {
         this.driverId = driverId;
     }
 
-    public String getSrcLocation() {
+    public int getSrcLocation() {
         return srcLocation;
     }
 
-    public void setSrcLocation(String srcLocation) {
+    public void setSrcLocation(int srcLocation) {
         this.srcLocation = srcLocation;
     }
 
-    public List<String> getTargets() {
+    public List<Integer> getTargets() {
         return targets;
     }
 
@@ -80,7 +93,7 @@ public class Delivery {
         this.targets.remove(targetLocation);
     }
 
-    public void addTargetLocation(String targetLocation) {
+    public void addTargetLocation(int targetLocation) {
         this.targets.add(targetLocation);
     }
 
@@ -100,7 +113,7 @@ public class Delivery {
         this.truckId = truckId;
     }
 
-    public List<String> getOrders() {
+    public List<Integer> getOrders() {
         return orders;
     }
 
@@ -108,7 +121,7 @@ public class Delivery {
         this.targets.remove(orderId);
     }
 
-    public void addOrder(String orderId) {
+    public void addOrder(int orderId) {
         this.targets.add(orderId);
     }
 

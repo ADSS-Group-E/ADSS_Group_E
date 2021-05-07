@@ -2,7 +2,9 @@ package BussinessLayer.DeliveryPackage;
 import BussinessLayer.DriverPackage.Driver;
 import BussinessLayer.DriverPackage.DriverController;
 import BussinessLayer.WorkersPackage.Worker;
+import DataAccessLayer.Transports.DTO;
 
+import java.sql.SQLException;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -41,69 +43,64 @@ public class DeliveryFacade {
     }
 
 
-    public Delivery createDelivery(String id, Date deliveryDate, Time leavingTime, String driverId, String srcLocation, List<String> targets, String truckId, List<String> orders) throws Exception
+    public Delivery createDelivery(String id, Date deliveryDay, Time leavingTime, String driverId, int srcLocation, List<Integer> targetLocation,
+                                   String truckId, List<Integer> orders) throws Exception
     {
-        double totalWeight = 0;
-        for (String s : orders)
+        double weight = 0.0;
+        for (Integer s : orders)
         {
-            if(!this.getOrders().containsKey(s))
-                throw new Exception("The Order Does Not Exist");
-            totalWeight += orderController.getOrder(s).getWeight();
+            if(DataAccessLayer.Transports.Order.checkOrder(s)==null)
+                throw new Exception("the order doesn't exist");
+            weight += orderController.getOrder(s).getTotalWeight();
+
         }
-        totalWeight += truckController.getTruck(truckId).getNetoWeight();
+        weight += truckController.getTruck(truckId).getNetoWeight();
         Date date = new Date();
         SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm");
         Calendar cal = Calendar.getInstance();
         Time time = new Time(timeFormat.parse(timeFormat.format(cal.getTime())).getTime());
-        if (deliveries.containsKey(id))
-            throw new Exception("The Delivery Already Exists");
-        if (deliveryDate.compareTo(date) < 0 )
-            throw new Exception("The Delivery Date Must Be A Future Date");
-        if(driverController.getDriver(driverId).getExpLicenseDate().compareTo(deliveryDate) < 0)
-            throw new Exception("The Driver Cannot Drive the Delivery With Expired License");
+        if (DataAccessLayer.Transports.Delivery.checkDelivery(id)!=null)
+            throw new Exception("the delivery already exists");
+        if (deliveryDay.compareTo(date) < 0 )
+            throw new Exception("delivery date must be future date");
         if (leavingTime.compareTo(time) < 0)
-            throw new Exception("The Delivery Time Must Be a Future Time");
-        if(totalWeight <= 0)
-            throw new Exception("The Weight Must Be a Positive Number");
-        if(totalWeight > truckController.getTruck(truckId).getTotalWeight())
-            throw new Exception("The Weight of the Orders and the Truck Exceeds the Max Weight");
-        if(truckController.getTruck(truckId).isUsed())
-            throw new Exception("The Truck Is Used");
-        if(driverController.getDriver(driverId).isBusy())
-        throw new Exception("The Driver Is Busy");
-        if(licenseTypes.get(driverController.getDriver(driverId).getLicenseType()) < truckController.getTruck(truckId).getTotalWeight())
-            throw new Exception("The Driver Cannot Drive the Truck");
-        for (Delivery d : deliveries.values())
-        {
-            if(d.getDeliveryDate().compareTo(deliveryDate) == 0)
-                if(d.getTruckId().compareTo(truckId) == 0 || d.getDriverId().compareTo(driverId) == 0)
-                    throw new Exception("The Driver or the Truck Already in Use");
-        }
-        if(!checkArea(targets))
-            throw new Exception("Not All Deliveries Are From the Same Area");
-        Delivery delivery = new Delivery(id, deliveryDate, leavingTime, driverId, srcLocation, targets, totalWeight, truckId, orders);
+            throw new Exception("delivery time must be future time");
+        if(weight <= 0)
+            throw new Exception("weight must be greater than 0");
+        if(weight > truckController.getTruck(truckId).getTotalWeight())
+            throw new Exception("the weight of the order and the truck bigger than the max weight");
+        if(DataAccessLayer.Transports.Delivery.checkDTforDate(id, new java.sql.Date(deliveryDay.getTime()),driverId,truckId))
+            throw new Exception("the truck or driver is used at the same date");
+        if(locationController.getLocation(srcLocation)==null)
+            throw new Exception("sorce location doesn't exists");
+        if(!checkArea(targetLocation))
+            throw new Exception("locations are not in the another area");
+
+        Delivery delivery = new Delivery(id, deliveryDay, leavingTime, driverId, srcLocation, targetLocation, weight, truckId, orders);
         deliveryFacade.addDelivery(delivery);
         return delivery;
     }
 
     public Delivery getDelivery(String id) throws Exception {
-        if (!deliveries.containsKey(id))
-            throw new Exception("The Delivery Doesn't Exists");
-        return deliveries.get(id);
+        Delivery d= DataAccessLayer.Transports.Delivery.checkDelivery(id);
+        if (d==null)
+            throw new Exception("the delivery doesn't exists");
+        return d;
     }
 
-    public Location getLocation(String id) throws Exception {
-        if (locationController.getLocation(id) == null)
-            throw new Exception("The Location Doesn't Exists");
-        return locationController.getLocation(id);
+    public Location getLocation(int id) throws Exception {
+        Location l=DataAccessLayer.Transports.Location.checkLocation(id);
+        if(l==null)
+            throw new Exception("the location doesn't exists");
+        return l;
     }
 
 
 
-    public boolean checkArea(List<String> locationAreas){
+    public boolean checkArea(List<Integer> locationAreas){
         try
         {
-            for (String id : locationAreas)
+            for (Integer id : locationAreas)
                 if(locationController.getLocation(id).getShippingArea().compareTo(locationController.getLocation(locationAreas.get(0)).getShippingArea()) != 0)
                     return false;
             return true;
@@ -115,107 +112,121 @@ public class DeliveryFacade {
     }
 
     public void addDelivery(Delivery delivery) throws Exception {
-        if (deliveries.containsKey(delivery.getId()))
-            throw new Exception("The Delivery Already Exists");
+        if (DataAccessLayer.Transports.Delivery.checkDelivery(delivery.getId())!=null)
+            throw new Exception("the delivery already exists");
         this.deliveries.put(delivery.getId(), delivery);
+        DataAccessLayer.Transports.Delivery.insertDelivery(new DTO.Delivery(delivery.getId(),delivery.getDeliveryDate(),delivery.getLeavingTime(),delivery.getDriverId(),delivery.getSrcLocation(),delivery.getWeight(),delivery.getTruckId(),delivery.getStatus().toString()));
+        for (int l:delivery.getTargets()
+        ) {
+            DataAccessLayer.Transports.Delivery.insertDeliveryTargetLocation(new DTO.DeliverytargetLocation(delivery.getId(),l));
+        }
+        for (int o: delivery.getOrders()
+        ) {
+            DataAccessLayer.Transports.Delivery.insertOrdersForDeliveries(new DTO.OrdersForDelivery(delivery.getId(),o));
+        }
     }
 
     public void removeDelivery(String id) throws Exception {
-        if (!deliveries.containsKey(id))
-            throw new Exception("The Delivery Doesn't Exists");
-        if(deliveries.get(id).getStatus().equals(Delivery.Status.InProgress) || deliveries.get(id).getStatus().equals(Delivery.Status.Done))
-            throw new Exception("Edit Delivery Details Only for Created Delivery");
-        this.deliveries.remove(id);
+        Delivery d=DataAccessLayer.Transports.Delivery.checkDelivery(id);
+        if (d==null)
+            throw new Exception("the delivery doesn't exists");
+        if(d.getStatus().equals(Delivery.Status.InProgress) ||d.getStatus().equals(Delivery.Status.Done))
+            throw new Exception("edit delivery details only for Created delivery");
+        //this.deliveries.remove(id);
+        DataAccessLayer.Transports.Delivery.deleteDelivery(id);
     }
 
     public void updateDeliveryDate(String id, Date deliveryDay) throws Exception {
         Date date = new Date();
-        if (!deliveries.containsKey(id))
-            throw new Exception("The Delivery Doesn't Exists");
+        Delivery d=DataAccessLayer.Transports.Delivery.checkDelivery(id);
+        if (d==null)
+            throw new Exception("the delivery doesn't exists");
         if (deliveryDay.compareTo(date) < 0 )
-            throw new Exception("Delivery Date Must Be Future Date");
-        if(deliveries.get(id).getStatus().equals(Delivery.Status.InProgress) || deliveries.get(id).getStatus().equals(Delivery.Status.Done))
-            throw new Exception("Edit Delivery Details Only for Created Delivery");
-        deliveries.get(id).setDeliveryDate(deliveryDay);
+            throw new Exception("delivery date must be future date");
+        if(d.getStatus().equals(Delivery.Status.InProgress) || d.getStatus().equals(Delivery.Status.Done))
+            throw new Exception("edit delivery details only for Created delivery");
+        //deliveries.get(id).setDeliveryDay(deliveryDay);
+        DataAccessLayer.Transports.Delivery.updateDeliveryDay(id,deliveryDay);
     }
 
     public void updateLeavingTime(String id, Time leavingTime) throws Exception {
         SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm");
         Calendar cal = Calendar.getInstance();
         Time time = new Time(timeFormat.parse(timeFormat.format(cal.getTime())).getTime());
-        if (!deliveries.containsKey(id))
-            throw new Exception("The Delivery Doesn't Exists");
-        if (leavingTime.compareTo(time) < 0)
-            throw new Exception("Delivery Time Must Be Future Time");
-        if(!deliveries.get(id).getStatus().equals(Delivery.Status.Created))
-            throw new Exception("Edit Delivery Details Only for Created Delivery");
-        deliveries.get(id).setLeavingTime(leavingTime);
+        Delivery d=DataAccessLayer.Transports.Delivery.checkDelivery(id);
+        if (d==null)
+            throw new Exception("the delivery doesn't exists");
+        if(leavingTime.after(Time.valueOf("22:00:00")) || leavingTime.before(Time.valueOf("7:00:00")))
+            throw new Exception("delivery time must be future time");
+        if(d.getStatus().equals(Delivery.Status.InProgress) || d.getStatus().equals(Delivery.Status.Done))
+            throw new Exception("edit delivery details only for Created delivery");
+        //deliveries.get(id).setLeavingTime(leavingTime);
+        DataAccessLayer.Transports.Delivery.updateLeavingTime(id,leavingTime);
     }
 
     public void updateDriverId(String id, String driverId) throws Exception {
-        if (!deliveries.containsKey(id))
-            throw new Exception("The Delivery Doesn't Exists");
-        if(driverController.getDriver(driverId).getExpLicenseDate().compareTo(deliveries.get(id).getDeliveryDate()) < 0)
-            throw new Exception("The Driver's License Is Expired At This Date");
-        if(!deliveries.get(id).getStatus().equals(Delivery.Status.Created))
-            throw new Exception("Edit Delivery Details Only for Created Delivery");
-        for (Delivery d : deliveries.values())
-        {
-            if(d.getDeliveryDate().compareTo(deliveries.get(id).getDeliveryDate()) == 0 && d.getId().compareTo(id) != 0)
-                if(d.getDriverId().compareTo(driverId) == 0)
-                    throw new Exception("The Driver Already Busy");
-        }
+        Delivery d=DataAccessLayer.Transports.Delivery.checkDelivery(id);
+        if (d==null)
+            throw new Exception("the delivery doesn't exists");
+
+        if(d.getStatus().equals(Delivery.Status.InProgress) || d.getStatus().equals(Delivery.Status.Done))
+            throw new Exception("edit delivery details only for Created delivery");
+        if(DataAccessLayer.Transports.Delivery.checkDriverForDel(id,new java.sql.Date(d.getDeliveryDate().getTime()),driverId))
+            throw new Exception("the driver already in use");
+
         try {
-            Driver d = driverController.getDriver(driverId);
-            if(licenseTypes.get(d.getLicenseType()) < truckController.getTruck(deliveries.get(id).getTruckId()).getTotalWeight())
-                throw new Exception("The Driver Cannot Drive This Truck, Too Heavy");
-            deliveries.get(id).setDriverId(driverId);
+
+            DataAccessLayer.Transports.Delivery.updateDriverId(id,driverId);
         }
         catch (Exception e)
         {
             throw e;
         }
-    }
+        }
 
-    public void removeOrderAndLocation(String id, String locationId, String orderId) throws Exception {
-        if (!deliveries.containsKey(id))
-            throw new Exception("The Delivery Doesn't Exists");
-        if (!deliveries.get(id).getTargets().contains(locationId))
-            throw new Exception("The Target Location Doesn't Exists in the Delivery");
-        if (!deliveries.get(id).getOrders().contains(orderId))
-            throw new Exception("The Order Doesn't Exists in the Delivery");
-        if(!deliveries.get(id).getStatus().equals(Delivery.Status.Created) )
-            throw new Exception("Edit Delivery Details Only for Created Delivery");
+
+    public void removeOrderAndLocation(String id, int locationId, int orderId) throws Exception {
+        Delivery d= DataAccessLayer.Transports.Delivery.checkDelivery(id);
+        if (d==null)
+            throw new Exception("the delivery doesn't exists");
+        if (!d.getTargets().contains(locationId))
+            throw new Exception("the target location doesn't exists in the delivery");
+        if (!d.getOrders().contains(orderId))
+            throw new Exception("the order doesn't exists in the delivery");
+        if(d.getStatus().equals(Delivery.Status.InProgress) || d.getStatus().equals(Delivery.Status.Done))
+            throw new Exception("edit delivery details only for Created delivery");
         try {
-            Location l = locationController.getLocation(locationId);
+            /*Location l = locationController.getLocation(locationId);
             Order o = orderController.getOrder(orderId);
             deliveries.get(id).removeTargetLocation(locationId);
-            deliveries.get(id).removeOrder(orderId);
+            deliveries.get(id).removeOrder(orderId);*/
+            DataAccessLayer.Transports.Delivery.removeOrderAndLocation(id,locationId,orderId);
         } catch (Exception e)
         {
             throw e;
         }
     }
 
-    public void addOrderAndLocation(String id, String locationId, String orderId) throws Exception {
-        if (!deliveries.containsKey(id))
-            throw new Exception("The Delivery Doesn't Exists");
-        if (deliveries.get(id).getOrders().contains(orderId))
+    public void addOrderAndLocation(String id, int locationId, int orderId) throws Exception {
+        Delivery d= DataAccessLayer.Transports.Delivery.checkDelivery(id);
+
+        if (d==null)
+            throw new Exception("the delivery doesn't exists");
+        if (d.getTargets().contains(locationId))
+            throw new Exception("the target location already exists in the delivery");
+        if (d.getOrders().contains(orderId))
             throw new Exception("the order already exists in the delivery");
-        if (deliveries.get(id).getTargets().contains(locationId))
-            throw new Exception("The Target Location Already Exists in the Delivery");
-        if(locationId.compareTo(locationController.getLocation(deliveries.get(id).getTargets().get(0)).getShippingArea()) != 0)
-            throw new Exception("The Location Is In Another Area");
-        if(deliveries.get(id).getStatus().equals(Delivery.Status.InProgress) || deliveries.get(id).getStatus().equals(Delivery.Status.Done))
-            throw new Exception("Edit Delivery Details Is Available Only for Created Delivery");
+        if(locationController.getLocation(locationId).getShippingArea().compareTo(locationController.getLocation(d.getTargets().get(0)).getShippingArea()) != 0)
+            throw new Exception("location in another area");
+        if(d.getStatus().equals(Delivery.Status.InProgress) || d.getStatus().equals(Delivery.Status.Done))
+            throw new Exception("edit delivery details only for Created delivery");
         try {
-            if(deliveries.get(id).getWeight() + orderController.getOrder(orderId).getWeight() >
-                    truckController.getTruck(deliveries.get(id).getTruckId()).getTotalWeight())
-                throw new Exception("Cannot Add the Order to the Delivery, the Weight of the Delivery Exceeds the Maximal Total Weight of the Truck");
-            Order o = orderController.getOrder(orderId);
-            Location l = locationController.getLocation(locationId);
-            deliveries.get(id).addTargetLocation(locationId);
-            deliveries.get(id).addOrder(orderId);
+            if(d.getWeight() + orderController.getOrder(orderId).getTotalWeight() >
+                    truckController.getTruck(d.getTruckId()).getTotalWeight())
+                throw new Exception("cannot add the order to the delivery, the weight of the delivery passes the max capacity of the truck");
+            DataAccessLayer.Transports.Delivery.addOrderAndLocation(id,locationId,orderId);
+            double we=d.getWeight() + orderController.getOrder(orderId).getTotalWeight();
+            DataAccessLayer.Transports.Delivery.updateDelWeight(id,we);
 
         }
         catch (Exception e)
@@ -225,33 +236,37 @@ public class DeliveryFacade {
     }
 
     public void updateWeight(String id, double weight) throws Exception {
-        if (!deliveries.containsKey(id))
-            throw new Exception("The Delivery Doesn't Exists");
+        Delivery d= DataAccessLayer.Transports.Delivery.checkDelivery(id);
+        if (d==null)
+            throw new Exception("the delivery doesn't exists");
         if(weight <= 0)
-            throw new Exception("The Weight Is Must Be a Positive Number");
-        if(weight + truckController.getTruck(deliveries.get(id).getTruckId()).getNetoWeight() > truckController.getTruck(deliveries.get(id).getTruckId()).getTotalWeight())
-            throw new Exception("The Weight of the Order and the Truck Exceeds the Maximal Weight");
-        if(!deliveries.get(id).getStatus().equals(Delivery.Status.Created))
-            throw new Exception("Edit Delivery Details Is Available Only for Created Delivery");
-        deliveries.get(id).setWeight(weight);
+            throw new Exception("the weight is lower than 0");
+        if(weight + truckController.getTruck(d.getTruckId()).getNetoWeight() > truckController.getTruck(d.getTruckId()).getTotalWeight())
+            throw new Exception("the weight of the order and the truck bigger than the max weight");
+        if(d.getStatus().equals(Delivery.Status.InProgress) || d.getStatus().equals(Delivery.Status.Done))
+            throw new Exception("edit delivery details only for Created delivery");
+        //deliveries.get(id).setWeight(weight);
+        DataAccessLayer.Transports.Delivery.updateDelWeight(id,weight+truckController.getTruck(d.getTruckId()).getNetoWeight());
+
     }
 
     public void updateTruckId(String id, String truckId) throws Exception {
-        if (!deliveries.containsKey(id))
-            throw new Exception("The Delivery Doesn't Exists");
-        if(!deliveries.get(id).getStatus().equals(Delivery.Status.Created))
-            throw new Exception("Edit Delivery Details Is Available Only for Created Delivery");
-        for (Delivery d : deliveries.values())
-        {
-            if(d.getDeliveryDate().compareTo(deliveries.get(id).getDeliveryDate()) == 0 && d.getId().compareTo(id) != 0)
-                if(d.getTruckId().compareTo(truckId) == 0)
-                    throw new Exception("The Truck Already in Use");
-        }
+        Delivery d= DataAccessLayer.Transports.Delivery.checkDelivery(id);
+        if (d==null)
+            throw new Exception("the delivery doesn't exists");
+        if(d.getStatus().equals(Delivery.Status.InProgress) || d.getStatus().equals(Delivery.Status.Done))
+            throw new Exception("edit delivery details only for Created delivery");
+        if(DataAccessLayer.Transports.Truck.checkTruck(truckId)==null)
+            throw new Exception("the truck doesn't exists");
+        if(d.getWeight()>truckController.getTruck(truckId).getTotalWeight())
+            throw new Exception("weight of delivery is bigger then the truck's max weight");
+        if(DataAccessLayer.Transports.Delivery.checkTruckForDel(id,new java.sql.Date(d.getDeliveryDate().getTime()),truckId))
+            throw new Exception("the truck is already is used at the same");
+
         try {
-            Truck t = truckController.getTruck(truckId);
-            if(licenseTypes.get(driverController.getDriver(deliveries.get(id).getDriverId()).getLicenseType()) < truckController.getTruck(truckId).getTotalWeight())
-                throw new Exception("The Driver Cannot Drive the Truck, Too Heavy");
-            deliveries.get(id).setTruckId(truckId);
+
+            //deliveries.get(id).setTruckId(truckId);
+            DataAccessLayer.Transports.Delivery.updateTruckID(id,truckId);
         }
         catch (Exception e)
         {
@@ -259,30 +274,38 @@ public class DeliveryFacade {
         }
     }
 
-    public void updateStatus(String id, String status) throws Exception {
-        if (!deliveries.containsKey(id))
-            throw new Exception("The Delivery Doesn't Exists");
-        if(status.compareTo("InProgress") != 0 && status.compareTo("Done") != 0)
-            throw new Exception("Status Can Be Changed Only to InProgress or Done");
-        if(status.compareTo("InProgress") == 0 && deliveries.get(id).getWeight() <= truckController.getTruck(deliveries.get(id).getTruckId()).getTotalWeight())
+    public boolean updateStatus(String id, String status) throws Exception {
+        Delivery d= DataAccessLayer.Transports.Delivery.checkDelivery(id);
+        if (d==null)
+            throw new Exception("the delivery doesn't exists");
+        if(status.compareTo("InTransit") != 0 && status.compareTo("Delivered") != 0)
+            throw new Exception("status can be changed only to InTransit or Delivered");
+        /*if(d.getWeight()>truckController.getTruck(d.getTruckId()).getTotalWeight())
+            throw new Exception("weight of delivery is bigger then the truck's max weight");*/
+        if(status.compareTo("InTransit") == 0 && d.getWeight() <= truckController.getTruck(d.getTruckId()).getTotalWeight())
         {
-            deliveries.get(id).setStatus(Delivery.Status.InProgress);
-            truckController.getTruck(deliveries.get(id).getTruckId()).setUsed();
-            driverController.getDriver(deliveries.get(id).getDriverId()).setDriving();
+            d.setStatus(Delivery.Status.InProgress);
+            DataAccessLayer.Transports.Delivery.updateStatus(id,status);
+            truckController.getTruck(d.getTruckId()).setUsed();
+            DataAccessLayer.Transports.Truck.updateUsed(d.getTruckId(),true);
+            //driverController.getDriver(deliveries.get(id).getDriverId()).setDriving();
         }
         else
-            if(status.compareTo("InProgress") == 0)
-                throw new Exception("The Weight of the Delivery Is Bigger Than the Total Weight Possible\n" +
-                    "Please Rearrange the Delivery - Delivery Process Cannot Start");
-        if(status.compareTo("Done") == 0)
+        if(status.compareTo("InTransit") == 0)
+            throw new Exception("cannot start the delivery process, the weight of the delivery is bigger than the total weight possible\n" +
+                    "please rearrange the delivery");
+        if(status.compareTo("Delivered") == 0)
         {
-            deliveries.get(id).setStatus(Delivery.Status.Done);
-            truckController.getTruck(deliveries.get(id).getTruckId()).setNotUsed();
-            driverController.getDriver(deliveries.get(id).getDriverId()).setNotDriving();
+            d.setStatus(Delivery.Status.Done);
+            DataAccessLayer.Transports.Delivery.updateStatus(id,status);
+            truckController.getTruck(d.getTruckId()).setNotUsed();
+            DataAccessLayer.Transports.Truck.updateUsed(d.getTruckId(),false);
+            //driverController.getDriver(deliveries.get(id).getDriverId()).setNotDriving();
         }
+        return true;
     }
 
-    public Order createOrder(String id, Map<String, Integer> items, String supplierId, String locationId, double totalWeight) throws Exception
+    public Order createOrder(int id, Map<String, Integer> items, String supplierId, int locationId, double totalWeight) throws Exception
     {
         try
         {
@@ -296,7 +319,7 @@ public class DeliveryFacade {
         }
     }
 
-    public Map<String, Order> getOrders()
+    public Map<Integer, Order> getOrders()
     {
         return orderController.getOrders();
     }
@@ -312,15 +335,11 @@ public class DeliveryFacade {
             throw e;
         }
     }
-    public void removeOrder(String id) throws Exception
+
+    public void removeOrder(int id) throws Exception
     {
-        for (String deliveryId : deliveries.keySet())
-        {
-            if(deliveries.get(deliveryId).getOrders().contains(id) && deliveries.get(deliveryId).getStatus().equals(Delivery.Status.InProgress))
-                throw new Exception("Cannot Remove an Order From a Delivery in Transit");
-            if(deliveries.get(deliveryId).getOrders().contains(id) && deliveries.get(deliveryId).getStatus().equals(Delivery.Status.Done))
-                throw new Exception("Cannot Remove an Order From a Delivery That Done Already");
-        }
+        if(DataAccessLayer.Transports.Delivery.checkOrder(id))
+            throw new Exception("cant change delivery that is InTransit or Delivered");
         try
         {
             orderController.removeOrder(orderController.getOrder(id));
@@ -330,15 +349,11 @@ public class DeliveryFacade {
             throw e;
         }
     }
-    public void addItem(String id, String item, int quantity) throws Exception
+
+    public void addItem(int id, String item, int quantity) throws Exception
     {
-        for (String deliveryId : deliveries.keySet())
-        {
-            if(deliveries.get(deliveryId).getOrders().contains(id) && deliveries.get(deliveryId).getStatus().equals(Delivery.Status.InProgress))
-                throw new Exception("Cannot Add an Item to an Order of a Delivery in Transit");
-            if(deliveries.get(deliveryId).getOrders().contains(id) && deliveries.get(deliveryId).getStatus().equals(Delivery.Status.Done))
-                throw new Exception("Cannot Add an Item to an Order of a Delivery That Delivered Already");
-        }
+        if(DataAccessLayer.Transports.Delivery.checkOrder(id))
+            throw new Exception("cant change delivery that is InTransit or Delivered");
         try
         {
             orderController.addItem(id, item, quantity);
@@ -348,15 +363,12 @@ public class DeliveryFacade {
             throw e;
         }
     }
-    public void removeItem(String id, String item) throws Exception
+
+
+    public void removeItem(int id, String item) throws Exception
     {
-        for (String deliveryId : deliveries.keySet())
-        {
-            if(deliveries.get(deliveryId).getOrders().contains(id) && deliveries.get(deliveryId).getStatus().equals(Delivery.Status.InProgress))
-                throw new Exception("Cannot Remove an Item to an Order of a Delivery in Transit");
-            if(deliveries.get(deliveryId).getOrders().contains(id) && deliveries.get(deliveryId).getStatus().equals(Delivery.Status.Done))
-                throw new Exception("Cannot Remove an Item to an Order of a Delivery That Delivered Already");
-        }
+        if(DataAccessLayer.Transports.Delivery.checkOrder(id))
+            throw new Exception("cant change delivery that is InTransit or Delivered");
         try
         {
             orderController.removeItem(id, item);
@@ -366,15 +378,12 @@ public class DeliveryFacade {
             throw e;
         }
     }
-    public void updateQuantity(String id, String item, int quantity) throws Exception
+
+
+    public void updateQuantity(int id, String item, int quantity) throws Exception
     {
-        for (String deliveryId : deliveries.keySet())
-        {
-            if(deliveries.get(deliveryId).getOrders().contains(id) && deliveries.get(deliveryId).getStatus().equals(Delivery.Status.InProgress))
-                throw new Exception("Cannot Change Quantity of an Item to an Order of a Delivery That in Transit");
-            if(deliveries.get(deliveryId).getOrders().contains(id) && deliveries.get(deliveryId).getStatus().equals(Delivery.Status.Done))
-                throw new Exception("Cannot Change Quantity of an Item to an Order of a Delivery That Delivered Already");
-        }
+        if(DataAccessLayer.Transports.Delivery.checkOrder(id))
+            throw new Exception("cant change delivery that is InTransit or Delivered");
         try
         {
             orderController.updateQuantity(id, item, quantity);
@@ -384,26 +393,21 @@ public class DeliveryFacade {
             throw e;
         }
     }
-    public void updateTotalWeight(String id, double totalWeight) throws Exception
+    public void updateTotalWeight(int id, double totalWeight) throws Exception
     {
-        for (String deliveryId : deliveries.keySet())
-        {
-            if(deliveries.get(deliveryId).getOrders().contains(id) && deliveries.get(deliveryId).getStatus().equals(Delivery.Status.InProgress))
-                throw new Exception("Cannot Change Weight of an Order That Belongs to a Delivery That in Transit");
-            if(deliveries.get(deliveryId).getOrders().contains(id) && deliveries.get(deliveryId).getStatus().equals(Delivery.Status.Done))
-                throw new Exception("Cannot Change Weight of an Order That Belongs to a Delivery That Delivered Already");
-        }
+        if(DataAccessLayer.Transports.Delivery.checkOrder(id))
+            throw new Exception("cant change delivery that is InTransit or Delivered");
         try
         {
-            for (String deliveryId : deliveries.keySet())
+            /*for (String deliveryId : deliveries.keySet())
             {
                 if(deliveries.get(deliveryId).getOrders().contains(id) &&
                         deliveries.get(deliveryId).getWeight() + totalWeight <= truckController.getTruck(deliveries.get(deliveryId).getTruckId()).getTotalWeight())
                     deliveries.get(deliveryId).setWeight(deliveries.get(deliveryId).getWeight() + totalWeight);
                 else
                     if(deliveries.get(deliveryId).getOrders().contains(id))
-                        throw new Exception("The Weight of Delivery: " + deliveryId + " Passed the Max Weight Possible");
-            }
+                        throw new Exception("the weight of delivery: " + deliveryId + " passed the max weight possible");
+            }*/
             orderController.updateTotalWeight(id, totalWeight);
         }
         catch (Exception e)
@@ -411,7 +415,8 @@ public class DeliveryFacade {
             throw e;
         }
     }
-    public Location createLocation(String id, String name, String address, String telNumber, String contactName, String shippingArea) throws Exception
+
+    public Location createLocation(int id, String name, String address, String telNumber, String contactName, String shippingArea) throws Exception
     {
         try
         {
@@ -424,6 +429,7 @@ public class DeliveryFacade {
             throw e;
         }
     }
+
     public void addLocation(Location location) throws Exception
     {
         try
@@ -435,7 +441,8 @@ public class DeliveryFacade {
             throw e;
         }
     }
-    public void removeLocation(String id) throws Exception
+
+    public void removeLocation(int id) throws Exception
     {
         try
         {
@@ -446,7 +453,8 @@ public class DeliveryFacade {
             throw e;
         }
     }
-    public void updateTelNumber(String id, String telNumber) throws Exception
+
+    public void updateTelNumber(int id, String telNumber) throws Exception
     {
         try
         {
@@ -457,7 +465,8 @@ public class DeliveryFacade {
             throw e;
         }
     }
-    public void updateContactName(String id, String contactName) throws Exception
+
+    public void updateContactName(int id, String contactName) throws Exception
     {
         try
         {
@@ -468,6 +477,7 @@ public class DeliveryFacade {
             throw e;
         }
     }
+
     public Truck createTruck(String id, String model, double netoWeight, double totalWeight) throws Exception
     {
         try
@@ -508,7 +518,7 @@ public class DeliveryFacade {
     {
         try
         {
-            truckController.removeTruck(truckController.getTruck(id));
+            truckController.removeTruck(id);
         }
         catch (Exception e)
         {
@@ -553,6 +563,7 @@ public class DeliveryFacade {
             throw e;
         }
     }
+
     public Driver getDriver(String id) throws Exception {
         try
         {
@@ -653,8 +664,54 @@ public class DeliveryFacade {
     {
         return truckController.getTrucks();
     }
-    public Map<String, Location> getLocations()
+    public Map<Integer, Location> getLocations()
     {
         return locationController.getLocations();
     }
+
+    public Date getDeliveryDate(String id) throws Exception {
+        Delivery d= DataAccessLayer.Transports.Delivery.checkDelivery(id);
+        if(d==null)
+            throw new Exception("the delivery id does not exists");
+        return d.getDeliveryDate();
+    }
+
+    public double getDeliveryTruckWeight(String id) throws Exception {
+        Delivery d= DataAccessLayer.Transports.Delivery.checkDelivery(id);
+        if(d==null)
+            throw new Exception("the delivery id does not exists");
+
+        return truckController.getTruck(d.getTruckId()).getTotalWeight();
+    }
+
+    public double getWeightForType(String type)
+    {
+        return licenseTypes.get(type);
+    }
+
+    public String getDeliveryDriverID(String id) throws Exception {
+        Delivery d= DataAccessLayer.Transports.Delivery.checkDelivery(id);
+        if(d==null)
+            throw new Exception("the driver doesn't exists");
+        return d.getDriverId();
+    }
+    public Time getDeliveryLeavingTime(String id) throws Exception {
+        Delivery d= DataAccessLayer.Transports.Delivery.checkDelivery(id);
+        if(d==null)
+            throw new Exception("delivery doesn't exists");
+        return d.getLeavingTime();
+
+    }
+
+    public void printDeliveries() throws SQLException { DataAccessLayer.Transports.Delivery.printDeliveries(); }
+
+    public void printLocations() throws SQLException {  locationController.printLocations(); }
+
+    public void printOrders() throws SQLException{ orderController.printOrders(); }
+
+    public  void printTrucks() throws SQLException { truckController.printTrucks(); }
+
+
+
+
 }

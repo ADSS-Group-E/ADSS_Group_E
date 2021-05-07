@@ -161,7 +161,8 @@ public class Menu_Transport {
                 "4) Change Contact Name\n5) Back To Main Menu");
         Scanner in = new Scanner(System.in);
         int choice = in.nextInt();
-        String id, name, licenseType, licenseExpDate, s1, s2;
+        String  name, licenseType, licenseExpDate, s1, s2;
+        int id;
         try
         {
             switch (choice)
@@ -169,7 +170,7 @@ public class Menu_Transport {
                 case 1:
                     System.out.println("Please enter location details: location id, name, address, telephone number,\n" +
                             "contact name, shipping area");
-                    id = in.next();
+                    id = in.nextInt();
                     name = in.next();
                     licenseType = in.next();
                     licenseExpDate = in.next();
@@ -179,18 +180,18 @@ public class Menu_Transport {
                     break;
                 case 2:
                     System.out.println("Please enter the location id that you want to erase from the system");
-                    id = in.next();
+                    id = in.nextInt();
                     facade.removeLocation(id);
                     break;
                 case 3:
                     System.out.println("Please enter location id and the new telephone number");
-                    id = in.next();
+                    id = in.nextInt();
                     s1 = in.next();
                     facade.updateTelNumber(id, s1);
                     break;
                 case 4:
                     System.out.println("Please enter location id and the new contact name");
-                    id = in.next();
+                    id = in.nextInt();
                     s1 = in.next();
                     facade.updateContactName(id, s1);
                     break;
@@ -212,7 +213,8 @@ public class Menu_Transport {
                 "7) Back To Main Menu");
         Scanner in = new Scanner(System.in);
         int choice = in.nextInt();
-        String id, name, s1, licenseExpDate;
+        String name, s1, licenseExpDate;
+        int id;
         int quantity;
         double totalWeight;
         try
@@ -231,7 +233,7 @@ public class Menu_Transport {
                         s1 = in.next();
                     }
                     System.out.println("Please enter order details: id, supplier id, location id, total weight");
-                    id = in.next();
+                    id = in.nextInt();
                     name = in.next();
                     licenseExpDate = in.next();
                     totalWeight = in.nextDouble();
@@ -239,32 +241,32 @@ public class Menu_Transport {
                     break;
                 case 2:
                     System.out.println("Please enter the order id that you want to erase from the system");
-                    id = in.next();
+                    id = in.nextInt();
                     facade.removeOrder(id);
                     break;
                 case 3:
                     System.out.println("Please enter order id, item name, quantity");
-                    id = in.next();
+                    id = in.nextInt();
                     name = in.next();
                     quantity = in.nextInt();
                     facade.addItem(id, name, quantity);
                     break;
                 case 4:
                     System.out.println("Please enter order id, item name");
-                    id = in.next();
+                    id = in.nextInt();
                     name = in.next();
                     facade.removeItem(id, name);
                     break;
                 case 5:
                     System.out.println("Please enter order id, item name, quantity");
-                    id = in.next();
+                    id = in.nextInt();
                     name = in.next();
                     quantity = in.nextInt();
                     facade.updateQuantity(id, name, quantity);
                     break;
                 case 6:
                     System.out.println("Please enter order id, total weight");
-                    id = in.next();
+                    id = in.nextInt();
                     totalWeight = in.nextDouble();
                     facade.updateTotalWeight(id, totalWeight);
                     break;
@@ -365,7 +367,7 @@ public class Menu_Transport {
                 case 8:
                     System.out.println("Please enter delivery id, location id, order id");
                     id = in.next();
-                    s1 = in.next();
+                    s1 = in.nextInt();
                     s2 = in.next();
                     facade.addOrderAndLocation(id, s1, s2);
                     break;

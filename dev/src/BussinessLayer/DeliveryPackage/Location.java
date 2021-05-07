@@ -2,14 +2,14 @@ package BussinessLayer.DeliveryPackage;
 
 public class Location {
 
-    private String id;
+    private int id;
     private String name;
     private String address;
     private String telNumber;
     private String contactName;
     private String shippingArea;
 
-    public Location(String id, String name, String address, String telNumber, String contactName, String shippingArea) {
+    public Location(int id, String name, String address, String telNumber, String contactName, String shippingArea) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -18,11 +18,11 @@ public class Location {
         this.shippingArea = shippingArea;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

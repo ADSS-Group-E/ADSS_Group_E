@@ -1,10 +1,12 @@
 package BussinessLayer.DeliveryPackage;
+import DataAccessLayer.Transports.DTO;
 
+import java.sql.SQLException;
 import java.util.*;
 
 public class OrderController {
 
-    private Map<String, Order> orders;
+    private Map<Integer, Order> orders;
     private static OrderController orderController = null;
 
     private OrderController()
@@ -19,65 +21,85 @@ public class OrderController {
         return orderController;
     }
 
-    public Map<String, Order> getOrders()
+    public Map<Integer, Order> getOrders()
     {
         return orders;
     }
-    public Order getOrder(String id) throws Exception {
-        if(!orders.containsKey(id))
-            throw new Exception("The Order Doesn't Exists");
-        return orders.get(id);
+    public Order getOrder(int id) throws Exception {
+        Order o= DataAccessLayer.Transports.Order.checkOrder(id);
+        if(o==null)
+            throw new Exception("the order doesn't exists");
+        return o;
     }
 
-    public Order createOrder(String id, Map<String, Integer> items, String supplierId, String locationId, double totalWeight) throws Exception {
-        if(orders.containsKey(id))
-            throw new Exception("The Order Already Exists");
+    public Order createOrder(int id, Map<String, Integer> items, String supplierId, int locationId, double totalWeight) throws Exception {
+        if(DataAccessLayer.Transports.Order.checkOrder(id)!=null)
+            throw new Exception("the order already exists");
+        if(items.isEmpty())
+            throw new Exception("can't create an order with no items");
         Order order = new Order(id, items, supplierId, locationId, totalWeight);
         return order;
     }
 
     public void addOrder(Order order) throws Exception {
-        if(orders.containsKey(order.getId()))
-            throw new Exception("Order Already Exists");
+        if(DataAccessLayer.Transports.Order.checkOrder(order.getId())!=null)
+            throw new Exception("the order already exists");
         this.orders.put(order.getId(), order);
+        DataAccessLayer.Transports.Order.insertOrder(new DTO.Order(order.getId(),order.getSupplierId(),order.getLocationId(),order.getTotalWeight()));
+        for (Map.Entry<String,Integer > entry: order.getItems().entrySet()
+        ) {
+            DataAccessLayer.Transports.Order.insertItemsForOrders(new DTO.ItemsForOrders(order.getId(),entry.getKey(),entry.getValue()));
+        }
     }
 
     public void removeOrder(Order order) throws Exception {
-        if(!orders.containsKey(order.getId()))
-            throw new Exception("The Order Doesn't Exists");
-        this.orders.remove(order.getId());
+        if(DataAccessLayer.Transports.Order.checkOrder(order.getId())==null)
+            throw new Exception("the order doesn't exists");
+        //this.orders.remove(order.getId());
+        DataAccessLayer.Transports.Order.deleteOrder(order.getId());
     }
 
-    public void addItem(String id, String item, int quantity) throws Exception {
-        if(!orders.containsKey(id))
-            throw new Exception("The Order Doesn't Exists");
+    public void addItem(int id, String item, int quantity) throws Exception {
+        if(DataAccessLayer.Transports.Order.checkOrder(id)==null)
+            throw new Exception("the order doesn't exists");
         if(quantity <= 0)
-            throw new Exception("The Quantity Is Illegal");
-        if(orders.get(id).getItems().containsKey(item))
-            throw new Exception("The Item Already Exists");
-        orders.get(id).getItems().put(item, quantity);
+            throw new Exception("the quantity is illegal");
+        if(DataAccessLayer.Transports.Order.checkItem(id,item))
+            throw new Exception("item already exists in order");
+        //orders.get(id).getItems().put(item, quantity);
+        DataAccessLayer.Transports.Order.insertItemsForOrders(new DTO.ItemsForOrders(id,item,quantity));
     }
-    public void removeItem(String id, String item) throws Exception
+    public void removeItem(int id, String item) throws Exception
     {
-        if(!orders.containsKey(id))
-            throw new Exception("The Order Doesn't Exists");
-        if(!orders.get(id).getItems().containsKey(item))
-            throw new Exception("The Item Doesn't Exists");
-        orders.get(id).getItems().remove(item);
+        Order o =DataAccessLayer.Transports.Order.checkOrder(id);
+
+        if(o==null)
+            throw new Exception("the order doesn't exists");
+        if(!DataAccessLayer.Transports.Order.checkItem(id,item))
+            throw new Exception("the item doesn't exists");
+        if(o.getItems().size()==1)
+            throw new Exception("orders can't have zero items");
+        //orders.get(id).getItems().remove(item);
+        DataAccessLayer.Transports.Order.deleteItem(id,item);
     }
-    public void updateQuantity(String id, String item, int quantity) throws Exception
+    public void updateQuantity(int id, String item, int quantity) throws Exception
     {
-        if(!orders.containsKey(id))
-            throw new Exception("The Order Doesn't Exists");
+        if(DataAccessLayer.Transports.Order.checkOrder(id)==null)
+            throw new Exception("the order doesn't exists");
         if(quantity <= 0)
-            throw new Exception("The Quantity Is Illegal");
-        if(!orders.get(id).getItems().containsKey(item))
-            throw new Exception("The Item Doesn't Exists");
-        orders.get(id).getItems().put(item, quantity);
+            throw new Exception("the quantity is illegal");
+        if(!DataAccessLayer.Transports.Order.checkItem(id,item))
+            throw new Exception("item doesn't exists in order");
+        DataAccessLayer.Transports.Order.checkOrder(id).getItems().put(item, quantity);
+        DataAccessLayer.Transports.Order.updatQunt(id,item,quantity);
     }
-    public void updateTotalWeight(String id, double totalWeight) throws Exception {
-            if(!orders.containsKey(id))
-                throw new Exception("The Order Doesn't Exists");
-            orders.get(id).setWeight(totalWeight);
+    public void updateTotalWeight(int id, double totalWeight) throws Exception {
+        if(DataAccessLayer.Transports.Order.checkOrder(id)==null)
+            throw new Exception("the order doesn't exists");
+        DataAccessLayer.Transports.Order.checkOrder(id).setTotalWeight(totalWeight);
+        DataAccessLayer.Transports.Order.updateTotal(id,totalWeight);
+    }
+    public void printOrders() throws SQLException {
+        DataAccessLayer.Transports.Order.printOrders();
     }
 }

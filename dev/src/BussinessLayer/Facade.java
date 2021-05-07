@@ -167,7 +167,7 @@ public class Facade {
 
     //////////////////////////////////////////////////////////////////////////
 
-    public Response createDelivery(String id, Date deliveryDate, Time leavingTime, String driverId, String srcLocation, List<String> targets, String truckId, List<String> orders)
+    public Response createDelivery(String id, Date deliveryDate, Time leavingTime, String driverId, int srcLocation, List<Integer> targets, String truckId, List<Integer> orders)
     {
        try{
            dFacade.createDelivery(id,deliveryDate,leavingTime,driverId,srcLocation,targets,truckId, orders);
@@ -186,7 +186,7 @@ public class Facade {
         return new Response();
     }
 
-    public Response getLocation(String id)  {
+    public Response getLocation(int id)  {
         try{
             dFacade.getLocation(id);
         }catch(Exception e){
@@ -242,7 +242,7 @@ public class Facade {
         return new Response();
     }
 
-    public Response removeOrderAndLocation(String id, String locationId, String orderId) {
+    public Response removeOrderAndLocation(String id, Integer locationId, Integer orderId) {
         try{
             dFacade.removeOrderAndLocation(id, locationId, orderId);
         }catch(Exception e){
@@ -251,7 +251,7 @@ public class Facade {
         return new Response();
     }
 
-    public Response addOrderAndLocation(String id, String locationId, String orderId){
+    public Response addOrderAndLocation(String id, int locationId, int orderId){
         try{
             dFacade.addOrderAndLocation(id,locationId,orderId);
         }catch(Exception e){
@@ -287,7 +287,7 @@ public class Facade {
         return new Response();
     }
 
-    public Response createOrder(String id, Map<String, Integer> items, String supplierId, String locationId, double totalWeight) {
+    public Response createOrder(int id, Map<String, Integer> items, String supplierId, Integer locationId, double totalWeight) {
         try{
             dFacade.createOrder( id, items,  supplierId,  locationId,  totalWeight);
         }catch(Exception e){
@@ -297,13 +297,13 @@ public class Facade {
     }
 
 
-    public Map<String, Order> getOrders()
+    public Map<Integer, Order> getOrders()
     {
         return dFacade.getOrders();
     }
 
 
-    public Response removeOrder(String id){
+    public Response removeOrder(Integer id){
         try{
             dFacade.removeOrder(id);
         }catch(Exception e){
@@ -312,7 +312,7 @@ public class Facade {
         return new Response();
     }
 
-    public Response addItem(String id, String item, int quantity){
+    public Response addItem(Integer id, String item, int quantity){
         try{
             dFacade.addItem( id,  item, quantity);
         }catch(Exception e){
@@ -322,7 +322,7 @@ public class Facade {
     }
 
 
-    public Response removeItem(String id, String item){
+    public Response removeItem(Integer id, String item){
         try{
             dFacade.removeItem(id,item);
         }catch(Exception e){
@@ -332,7 +332,7 @@ public class Facade {
     }
 
 
-    public Response updateQuantity(String id, String item, int quantity){
+    public Response updateQuantity(Integer id, String item, int quantity){
         try{
             dFacade.updateQuantity(id,item,quantity);
         }catch(Exception e){
@@ -342,7 +342,7 @@ public class Facade {
     }
 
 
-    public Response updateTotalWeight(String id, double totalWeight) {
+    public Response updateTotalWeight(Integer id, double totalWeight) {
         try{
             dFacade.updateTotalWeight(id,totalWeight);
         }catch(Exception e){
@@ -352,7 +352,7 @@ public class Facade {
     }
 
 
-    public Response createLocation(String id, String name, String address, String telNumber, String contactName, String shippingArea) {
+    public Response createLocation(int id, String name, String address, String telNumber, String contactName, String shippingArea) {
         try{
             dFacade.createLocation( id,  name,  address,  telNumber,  contactName,  shippingArea);
         }catch(Exception e){
@@ -362,7 +362,7 @@ public class Facade {
     }
 
 
-    public Response removeLocation(String id){
+    public Response removeLocation(int id){
         try{
             dFacade.removeLocation(id);
         }catch(Exception e){
@@ -371,7 +371,7 @@ public class Facade {
         return new Response();
     }
 
-    public Response updateTelNumber(String id, String telNumber){
+    public Response updateTelNumber(Integer id, String telNumber){
         try{
             dFacade.updateTelNumber( id,  telNumber);
         }catch(Exception e){
@@ -381,7 +381,7 @@ public class Facade {
     }
 
 
-    public Response updateContactName(String id, String contactName){
+    public Response updateContactName(Integer id, String contactName){
         try{
             dFacade.updateContactName( id,  contactName);
         }catch(Exception e){
