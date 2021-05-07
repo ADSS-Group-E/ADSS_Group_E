@@ -31,7 +31,7 @@ class Item {
             c = db.connect();
             stmt = c.createStatement();
             String sql = String.format("INSERT INTO Item (name) " +
-                    "VALUES (%s);", item.getName());
+                    "VALUES ('%s');", item.getName());
             c.prepareStatement(sql, key);
             stmt.executeUpdate(sql);
             ResultSet rs = stmt.getGeneratedKeys();
@@ -40,7 +40,7 @@ class Item {
             }
             item.setId(generatedId);
             sql = String.format("INSERT INTO SupplierItem (ID, name, quantity, price, supplierCN, orderID) " +
-                    "VALUES (%d, %s, %d, %d, %s, NULL);", item.getId(), item.getName(), item.getQuantity(), item.getPrice(), item.getSupplierCN());
+                    "VALUES (%d, '%s', %d, %d, '%s', NULL);", generatedId, item.getName(), item.getQuantity(), item.getPrice(), item.getSupplierCN());
             stmt.executeUpdate(sql);
             close();
         }

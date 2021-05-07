@@ -1,6 +1,8 @@
 package DataAccessLayer.Supplier;
 
+import PresentationLayer.Supplier.DataTransferObjects.ContactDTO;
 import PresentationLayer.Supplier.DataTransferObjects.SupplierDTO;
+import PresentationLayer.Supplier.DataTransferObjects.SupplierItemDTO;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -33,6 +35,18 @@ class Supplier {
                     "VALUES (%d, '%s', '%s', '%s' );", sup.getCompanyNumber(), sup.getName(), sup.getPaymentMethod(), sup.getBankAccount());
             stmt.executeUpdate(sql);
             close();
+            Contact contact = new Contact(db);
+            for (ContactDTO contactDTO : sup.getContacts()) {
+                contact.insert(contactDTO);
+            }
+            Item item = new Item(db);
+            for (SupplierItemDTO itemDTO : sup.getItems()) {
+                item.insert(itemDTO);
+            }
+            if (sup.getQuantityWriter() != null) {
+                QuantityWriter quantityWriter = new QuantityWriter(db);
+                quantityWriter.insert(sup.getQuantityWriter());
+            }
         }
         catch (SQLException e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );

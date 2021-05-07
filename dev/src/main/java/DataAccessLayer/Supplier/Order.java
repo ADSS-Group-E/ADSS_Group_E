@@ -31,10 +31,11 @@ class Order {
         try {
             String[] key = {"orderID"};
             int generatedId = -1;
+            int id = -1;
             c = db.connect();
             stmt = c.createStatement();
-            String sql = String.format("INSERT INTO Order (orderID, date, periodicDelivery, needsDelivery) " +
-                    "VALUES (%d, '%s', %d, %d);", order.getId(), order.getDate(), order.getPeriodicDelivery(), order.getNeedsDelivery());
+            String sql = String.format("INSERT INTO 'Order' (date, periodicDelivery, needsDelivery) " +
+                    "VALUES ('%s', %d, %d);", order.getDate(), order.getPeriodicDelivery(), order.getNeedsDelivery());
             c.prepareStatement(sql, key);
             stmt.executeUpdate(sql);
             ResultSet rs = stmt.getGeneratedKeys();
@@ -42,14 +43,20 @@ class Order {
                 generatedId = rs.getInt(1);
             }
             ArrayList<SupplierItemDTO> items = order.getOrderItems();
+            key = new String[]{"ID"};
             for (SupplierItemDTO item : items) {
-                sql = String.format("INSERT INTO SupplierItem (ID, name, quantity, price, supplierCN, orderID) " +
-                                "VALUES (%d, %s, %d, %d, %s, %d);",
-                        item.getId(), item.getName(), item.getPrice(), item.getQuantity(), item.getSupplierCN(), generatedId);
+                sql = String.format("INSERT INTO SupplierItem (name, quantity, price, supplierCN, orderID) " +
+                                "VALUES ('%s', %d, %d, '%s', %d);",
+                        item.getName(), item.getQuantity(), item.getPrice(), item.getSupplierCN(), generatedId);
+                c.prepareStatement(sql, key);
                 stmt.executeUpdate(sql);
+                rs = stmt.getGeneratedKeys();
+                if (rs.next()) {
+                    id = rs.getInt(1);
+                }
                 sql = String.format("Update SupplierItem SET quantity = quantity - %d " +
-                                "WHERE ID = %d AND itemTag = 's';",
-                        item.getQuantity(), item.getId());
+                                "WHERE ID = %d AND orderID IS NULL;",
+                        item.getQuantity(), id);
                 stmt.executeUpdate(sql);
             }
             close();

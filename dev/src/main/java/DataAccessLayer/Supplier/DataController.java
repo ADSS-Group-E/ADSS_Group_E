@@ -1,5 +1,8 @@
 package DataAccessLayer.Supplier;
 
+import PresentationLayer.Supplier.DataTransferObjects.OrderDTO;
+import PresentationLayer.Supplier.DataTransferObjects.SupplierDTO;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -35,5 +38,13 @@ public class DataController {
         System.out.println("Opened database successfully");
         return c;
     };
+
+    public void insert(SupplierDTO sup) {
+        supplier.insert(sup);
+    }
+
+    public void insert(OrderDTO ord) {
+        orders.insert(ord);
+    }
 }
 

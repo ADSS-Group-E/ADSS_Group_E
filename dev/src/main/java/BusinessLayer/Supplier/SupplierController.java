@@ -1,7 +1,11 @@
 package BusinessLayer.Supplier;
 
 import DataAccessLayer.Supplier.DataController;
+import PresentationLayer.Inventory.DataTransferObjects.ItemDTO;
+import PresentationLayer.Supplier.DataTransferObjects.*;
 
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -56,40 +60,66 @@ public class SupplierController {
 
     public void register(String name, int companyNumber, String paymentMethod,
                  String bankAccount, ArrayList<String[]> items, ArrayList<String[]> contacts){
+        ArrayList<SupplierItemDTO> itemDTOs = new ArrayList<>();
+        ArrayList<ContactDTO> contactDTOs = new ArrayList<>();
         Item[] realItems = new Item[items.size()]; //create an arraylist with size of the number of items
         Contact[] realContacts = new Contact[contacts.size()]; //create an arraylist with size of the number of contacts
         for(int i = 0; i < realItems.length; i++){ //fills the item
             realItems[i] = new Item(items.get(i)[0], Integer.parseInt(items.get(i)[1]), Integer.parseInt(items.get(i)[2]), Integer.parseInt(items.get(i)[3]));
+            itemDTOs.add(new SupplierItemDTO(items.get(i)[0], Integer.parseInt(items.get(i)[1]), Integer.parseInt(items.get(i)[2]), items.get(i)[3]));
         }
         for(int i = 0; i < realContacts.length; i++){ //fills the contacts
             realContacts[i] = new Contact(contacts.get(i)[0], contacts.get(i)[1]);
+            contactDTOs.add(new ContactDTO(contacts.get(i)[0], contacts.get(i)[1], companyNumber));
         }
         suppliers.add(new Supplier(name, companyNumber, paymentMethod, bankAccount, Arrays.asList(realItems), Arrays.asList(realContacts))); //add a supplier
+        SupplierDTO supplierDTO = new SupplierDTO(companyNumber, name, bankAccount, paymentMethod);
+        supplierDTO.setItems(itemDTOs);
+        supplierDTO.setContacts(contactDTOs);
+        data.insert(supplierDTO);
     }
 
     public void register(String name, int companyNumber, String paymentMethod, String bankAccount,
                          ArrayList<String[]> items, ArrayList<String[]> contacts, int regCostumer,
                          int minPrice, HashMap<Integer, Integer> discountSteps){
         //same as register only adds a quantity writer as well
+        ArrayList<SupplierItemDTO> itemDTOs = new ArrayList<>();
+        ArrayList<ContactDTO> contactDTOs = new ArrayList<>();
+        ArrayList<DiscountStepDTO> discountStepDTOs = new ArrayList<>();
         Item[] realItems = new Item[items.size()];
         Contact[] realContacts = new Contact[contacts.size()];
         for(int i = 0; i < realItems.length; i++){
             realItems[i] = new Item(items.get(i)[0], Integer.parseInt(items.get(i)[1]), Integer.parseInt(items.get(i)[2]), Integer.parseInt(items.get(i)[3]));
+            itemDTOs.add(new SupplierItemDTO(items.get(i)[0], Integer.parseInt(items.get(i)[1]), Integer.parseInt(items.get(i)[2]), items.get(i)[3]));
         }
         for(int i = 0; i < realContacts.length; i++){
             realContacts[i] = new Contact(contacts.get(i)[0], contacts.get(i)[1]);
+            contactDTOs.add(new ContactDTO(contacts.get(i)[0], contacts.get(i)[1], companyNumber));
+        }
+        for (Integer i : discountSteps.keySet()) {
+            DiscountStepDTO discount = new DiscountStepDTO(i, discountSteps.get(i));
+            discountStepDTOs.add(discount);
         }
         QuantityWriter writer = new QuantityWriter(discountSteps, regCostumer, minPrice);
         suppliers.add(new Supplier(name, companyNumber, paymentMethod, bankAccount, Arrays.asList(realItems), Arrays.asList(realContacts), writer));
+        SupplierDTO supplierDTO = new SupplierDTO(companyNumber, name, bankAccount, paymentMethod);
+        supplierDTO.setItems(itemDTOs);
+        supplierDTO.setContacts(contactDTOs);
+        supplierDTO.setQuantityWriter(new QuantityWriterDTO(companyNumber, regCostumer, minPrice, discountStepDTOs));
+        data.insert(supplierDTO);
     }
 
     public int createOrder(int supplierNum, boolean needsDelivery, boolean constantDelivery, ArrayList<String[]> items){
         Item[] realItems = new Item[items.size()];
+        ArrayList<SupplierItemDTO> itemDTOs = new ArrayList<>();
         for(int i = 0; i < realItems.length; i++){ //creates an item array from all the items provided
             realItems[i] = new Item(items.get(i)[0], Integer.parseInt(items.get(i)[1]), Integer.parseInt(items.get(i)[2]), Integer.parseInt((items.get(i)[3])));
+            itemDTOs.add(new SupplierItemDTO(items.get(i)[0], Integer.parseInt(items.get(i)[2]), Integer.parseInt(items.get(i)[1]), (items.get(i)[3])));
         }
         Order order = new Order(constantDelivery, needsDelivery, Arrays.asList(realItems)); //creates the order
         suppliers.get(supplierNum).addOrder(order); //adds the order
+        OrderDTO orderDTO = new OrderDTO(ZonedDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy-hh:mm:ss")), constantDelivery? 1 : 0, needsDelivery? 1 : 0, itemDTOs);
+        data.insert(orderDTO);
         return suppliers.get(supplierNum).calcPrice(order); //calculates it's price
     }
 

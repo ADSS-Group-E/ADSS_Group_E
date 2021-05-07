@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class PresentationHandler {
+class PresentationHandler {
     private static PresentationHandler instance = null;
     private ServiceController service = ServiceController.getInstance();
     private InputService inputService = InputService.getInstance();
     private OutputService outputService = OutputService.getInstance();
 
     private PresentationHandler(){
-        service.initialize();
+
     }
 
     static PresentationHandler getInstance(){ //singleton method to make sure there is only one instance
@@ -20,7 +20,7 @@ public class PresentationHandler {
         return instance;
     }
 
-    public ArrayList<String[]> createItemList(int supplierNum) {
+    ArrayList<String[]> createItemList(int supplierNum) {
         //creates a list of items using input from the user to create an order from the supplier whose index is supplierNum
         ArrayList<String[]> list = new ArrayList<>();
         String ans = "Y";
@@ -68,7 +68,7 @@ public class PresentationHandler {
         return list;
     }
 
-    public ArrayList<String[]> createItemList() {
+     ArrayList<String[]> createItemList() {
         //create a list of items for the supplier to supply
         ArrayList<String[]> list = new ArrayList<>();
         String ans = "Y";
@@ -102,7 +102,7 @@ public class PresentationHandler {
         return list;
     }
 
-    public ArrayList<String[]> createContactList() {
+     ArrayList<String[]> createContactList() {
         //creates a list of contacts for the supplier
         ArrayList<String[]> list = new ArrayList<>();
         String ans = "Y";
@@ -131,7 +131,7 @@ public class PresentationHandler {
         return list;
     }
 
-    public HashMap<Integer, Integer> createDiscountList() {
+     HashMap<Integer, Integer> createDiscountList() {
         // creates a discount step list for the quantity writer
         int maxDiscount = service.getMaxDiscount(); //gets a constant number that is in the system, usually 100 that suggests 100% discount is max
         HashMap<Integer, Integer> map = new HashMap<>();
@@ -164,7 +164,7 @@ public class PresentationHandler {
         return map;
     }
 
-    public boolean showSupplierInfo(){
+     boolean showSupplierInfo(){
         ArrayList<String[]> sups = service.getSuppliersInfo();
         if (sups.size() == 0) return false; //we return false to release the user from picking a supplier when no supplier exists
         for (int i = 0; i < sups.size(); i++) { //prints the suppliers info with an index the user has to put to pick a supplier
@@ -173,7 +173,7 @@ public class PresentationHandler {
         return true;
     }
 
-    public boolean manageQuantityWriter(){
+     boolean manageQuantityWriter(){
         //asks the user if he needs a quantity writer, and return true if Y and false if N
         String ny = inputService.next("Do you need a Quantity Writer? N/Y ");
         while (!ny.equalsIgnoreCase("N")) {
@@ -187,7 +187,7 @@ public class PresentationHandler {
         return false;
     }
 
-    public int showOptions(){
+     int showOptions(){
         //prints the options of the menu
         String[] options = new String[]{
                 "Add Supplier", "Create Order", "Get Weekly Orders", "Update Order Item Quantity", "Delete Item From Order"
@@ -199,7 +199,7 @@ public class PresentationHandler {
         return options.length;
     }
 
-    public String showSupplierItems(ArrayList<String> items) {
+     String showSupplierItems(ArrayList<String> items) {
         //prints to screen the items we got from the supplier
         StringBuilder result = new StringBuilder();
         int i;

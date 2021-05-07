@@ -18,6 +18,13 @@ public class QuantityWriterDTO {
         this.discounts = discounts;
     }
 
+    public QuantityWriterDTO(int companyNumber, int regularCostumerDiscount, int minPriceDiscount, ArrayList<DiscountStepDTO> discounts) {
+        this.id = -1;
+        this.companyNumber = companyNumber;
+        this.regularCostumerDiscount = regularCostumerDiscount;
+        this.minPriceDiscount = minPriceDiscount;
+        this.discounts = discounts;
+    }
 
     public int getId() {
         return id;
