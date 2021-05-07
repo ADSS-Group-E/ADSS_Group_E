@@ -367,17 +367,15 @@ public class Repo {
         try (Statement stmt = conn.createStatement();) {
 
             String sql1 = """
-                    CREATE TABLE IF NOT EXISTS ShiftDemands (
+                    CREATE TABLE Shifts (
                     	Date	DATE NOT NULL,
                     	ShiftType	TEXT NOT NULL,
-                    	cashierAmount	INTEGER NOT NULL,
-                    	storeKeeperAmount	INTEGER NOT NULL,
-                    	arrangerAmount	INTEGER NOT NULL,
-                    	guardAmount	INTEGER NOT NULL,
-                    	assistantAmount	INTEGER NOT NULL,
-                    	deliveryRequired	INTEGER NOT NULL,
-                    	FOREIGN KEY (Date,ShiftType) REFERENCES Shifts(Date,ShiftType) ON DELETE CASCADE ,
-                    	PRIMARY KEY(Date,ShiftType)
+                    	BranchID	INTEGER NOT NULL,
+                    	ShiftManagerID	TEXT NOT NULL,
+                    	DriverID	TEXT,
+                    	FOREIGN KEY(ShiftManagerID) REFERENCES Workers(ID) ON DELETE CASCADE ,
+                    	FOREIGN KEY(DriverID) REFERENCES Drivers(ID) ON DELETE CASCADE ,
+                    	PRIMARY KEY(Date,ShiftType,BranchID)
                     )
                     """;
             stmt.executeUpdate(sql1);
@@ -391,11 +389,14 @@ public class Repo {
     public static void createShifts(Connection conn)  {
         try (Statement stmt = conn.createStatement();) {
 
-            String sql1 = "CREATE TABLE IF NOT EXISTS Shifts" +
+            String sql1 = """
+                    CREATE TABLE IF NOT EXISTS Shifts" +
                     "(Date DATE NOT NULL," +
                     "Kind VARCHAR (20) NOT NULL, " +
                     "ShiftManager BIT DEFAULT 0 NOT NULL,"+
-                    "PRIMARY KEY (Date,Kind))";
+                    "BranchID INTEGER NOT NULL,"+
+                    "PRIMARY KEY (Date,Kind))
+                    """;
             stmt.executeUpdate(sql1);
 
         }catch (SQLException e) {
