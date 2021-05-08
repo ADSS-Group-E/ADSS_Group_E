@@ -12,7 +12,7 @@ public class Location {
 
     public static void insertLocation(DTO.Location l) throws SQLException {
         try (Connection conn = Repo.openConnection()) {
-            String query = "INSERT OR IGNORE INTO Locations VALUES (?, ?, ? ,?,?,?)";
+            String query = "INSERT OR IGNORE INTO VALUES (?, ?, ? ,?,?,?)";
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setInt(1, l.id);
             stmt.setString(2, l.name);
@@ -25,7 +25,14 @@ public class Location {
         } catch (Exception e) {
             throw e;        }
     }
-
+    /*
+    ID INT PRIMARY KEY NOT NULL," +
+                    "NAME           VARCHAR(100)    NOT NULL, " +
+                    "ADDRESS         VARCHAR(100) NOT NULL ," +
+                    "TEL_NUMBER         VARCHAR(100) NOT NULL, "+
+                    "CONTACT_NAME  VARCHAR(100) NOT NULL,"+
+                    "SHIIPING_EREA VARCHAR(100) NOT NULL )";
+     */
     public static BussinessLayer.DeliveryPackage.Location checkLocation(int id) throws SQLException {
         try (Connection conn = Repo.openConnection()) {
             String sql = "SELECT * From Locations WHERE ID=?";

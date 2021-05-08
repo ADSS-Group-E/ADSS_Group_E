@@ -192,7 +192,7 @@ public class Repo {
         try (Statement stmt = conn.createStatement();) {
 
             String sql1 = "CREATE TABLE IF NOT EXISTS Drivers" +
-                    "(ID INT PRIMARY KEY NOT NULL," +
+                    "(ID TEXT PRIMARY KEY NOT NULL," +
                     "License_Type VARCHAR (10)   NOT NULL, " +
                     "Expiration_Date DATE NOT NULL," +
                     "STATUS INT NOT NULL,"+
@@ -316,7 +316,7 @@ public class Repo {
                     	"vacationDays"	INTEGER NOT NULL,
                     	"sickLeavePerMonth"	INTEGER NOT NULL,
                     	PRIMARY KEY("ID"),
-                    	FOREIGN KEY (ID) REFERENCES Workers(ID) ON DELETE CASCADE)
+                    	FOREIGN KEY (ID) REFERENCES Workers(ID) ON DELETE CASCADE
                     )
                         """;
             stmt.executeUpdate(sql1);

@@ -11,7 +11,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Order {
-
+    /*
+    "(ID INT PRIMARY KEY NOT NULL," +
+                    "SUPPLIER           VARCHAR(100)    NOT NULL, " +
+                    "TARGET_LOCATION         INT NOT NULL ," +
+                    "TOTAL_WEIGHT         DOUBLE NOT NULL,"
+     */
     public static void insertOrder(DTO.Order o) throws SQLException {
         try (Connection conn = Repo.openConnection()) {
             String query = "INSERT OR IGNORE INTO Orders VALUES (?, ?, ? ,?)";

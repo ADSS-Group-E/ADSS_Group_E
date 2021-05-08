@@ -213,7 +213,8 @@ public class Menu_Transport {
                 "7) Back To Main Menu");
         Scanner in = new Scanner(System.in);
         int choice = in.nextInt();
-        String name, s1, licenseExpDate;
+        String name, s1;
+        int licenseExpDate;
         int id;
         int quantity;
         double totalWeight;
@@ -235,7 +236,7 @@ public class Menu_Transport {
                     System.out.println("Please enter order details: id, supplier id, location id, total weight");
                     id = in.nextInt();
                     name = in.next();
-                    licenseExpDate = in.next();
+                    licenseExpDate = in.nextInt();
                     totalWeight = in.nextDouble();
                     facade.createOrder(id, items, name, licenseExpDate, totalWeight);
                     break;
@@ -289,7 +290,8 @@ public class Menu_Transport {
                 "10) Change Status\n11) Display deliveries\n12) Back To Main Menu");
         Scanner in = new Scanner(System.in);
         int choice = in.nextInt();
-        String id, s1,name, licenseType, licenseExpDate, s2;
+        String id, s1 ,name, licenseExpDate, s2;
+        int licenseType;
         Date date;
         double totalWeight;
         try
@@ -297,14 +299,14 @@ public class Menu_Transport {
             switch (choice)
             {
                 case 1:
-                    List<String> targetLocations = new ArrayList<>();
-                    List<String> orders = new ArrayList<>();
+                    List<Integer> targetLocations = new ArrayList<>();
+                    List<Integer> orders = new ArrayList<>();
                     System.out.println("To create delivery details please first enter target locations," +
                             "\nTo finish please x");
                     s1 = in.next();
                     while(s1.compareTo("x") != 0)
                     {
-                        targetLocations.add(s1);
+                        targetLocations.add(Integer.parseInt(s1));
                         s1 = in.next();
                     }
                     System.out.println("To create delivery details please first enter orders," +
@@ -312,7 +314,7 @@ public class Menu_Transport {
                     s1 = in.next();
                     while(s1.compareTo("x") != 0)
                     {
-                        orders.add(s1);
+                        orders.add(Integer.parseInt(s1));
                         s1 = in.next();
                     }
                     System.out.println("Please ender delivery details: id, delivery day, leaving time, driver id," +
@@ -323,7 +325,7 @@ public class Menu_Transport {
                     s1 = in.next();
                     Time newTime1 = Time.valueOf(s1);
                     name = in.next();
-                    licenseType = in.next();
+                    licenseType = in.nextInt();
                     s2 = in.next();
                     facade.createDelivery(id, date, newTime1, name, licenseType, targetLocations, s2, orders);
                     break;
@@ -367,16 +369,16 @@ public class Menu_Transport {
                 case 8:
                     System.out.println("Please enter delivery id, location id, order id");
                     id = in.next();
-                    s1 = in.nextInt();
+                    s1 = in.next();
                     s2 = in.next();
-                    facade.addOrderAndLocation(id, s1, s2);
+                    facade.addOrderAndLocation(id, Integer.parseInt(s1), Integer.parseInt(s2));
                     break;
                 case 9:
                     System.out.println("Please enter delivery id, location id, order id");
                     id = in.next();
                     s1 = in.next();
                     s2 = in.next();
-                    facade.removeOrderAndLocation(id, s1, s2);
+                    facade.removeOrderAndLocation(id,Integer.parseInt(s1), Integer.parseInt(s2));
                     break;
                 case 10:
                     System.out.println("Please enter delivery id, new delivery status that could be" +
@@ -405,12 +407,12 @@ public class Menu_Transport {
             //facade.createDriver("203613310", "eden", "A", date);
             //facade.createDriver("313577645", "yarin", "B", date);
             //facade.createDriver("123456789", "reem", "C", date);
-            facade.createLocation("1", "superli", "lachish 151 shoham", "0543160553", "avi", "Center");
-            facade.createLocation("2", "maxstock", "shoham 26 haifa", "0504616909", "ben", "North");
-            facade.createLocation("3", "shufersal", "azrieli tel aviv", "0543160550", "yossef", "Center");
-            facade.createLocation("4", "tara", "bialik 32 ramat gan", "0581234567", "ronen", "Center");
-            facade.createLocation("5", "tnuva", "rabin 12 beer sheva", "0538523644", "moshe", "South");
-            facade.createLocation("6", "osem", "shimshon 24 krayot", "0528549847", "lavi", "North");
+            facade.createLocation(1, "superli", "lachish 151 shoham", "0543160553", "avi", "Center");
+            facade.createLocation(2, "maxstock", "shoham 26 haifa", "0504616909", "ben", "North");
+            facade.createLocation(3, "shufersal", "azrieli tel aviv", "0543160550", "yossef", "Center");
+            facade.createLocation(4, "tara", "bialik 32 ramat gan", "0581234567", "ronen", "Center");
+            facade.createLocation(5, "tnuva", "rabin 12 beer sheva", "0538523644", "moshe", "South");
+            facade.createLocation(6, "osem", "shimshon 24 krayot", "0528549847", "lavi", "North");
             facade.createTruck("2360154", "volvo", 1000.0, 4500.0);
             facade.createTruck("30122623", "chevrolet", 5000.0, 9000.5);
             facade.createTruck("11122333", "honda", 10000.0, 15000.0);
@@ -454,48 +456,48 @@ public class Menu_Transport {
                     put("fish", 10);
                 }
             };
-            facade.createOrder("12", items1, "487", "1", 1000.0);
-            facade.createOrder("34", items2, "159", "2", 3500.0);
-            facade.createOrder("56", items3, "263", "3", 2500.0);
-            facade.createOrder("78", items4, "546", "1", 2000.0);
-            facade.createOrder("98", items5, "943", "3", 2000.0);
+            facade.createOrder(12, items1, "487", 1, 1000.0);
+            facade.createOrder(34, items2, "159", 2, 3500.0);
+            facade.createOrder(56, items3, "263", 3, 2500.0);
+            facade.createOrder(78, items4, "546", 1, 2000.0);
+            facade.createOrder(98, items5, "943", 3, 2000.0);
             Date newDate1 = new GregorianCalendar(2021, Calendar.MAY, 11).getTime();
             Date newDate2 = new GregorianCalendar(2021, Calendar.DECEMBER, 31).getTime();
             Date newDate3 = new GregorianCalendar(2021, Calendar.JULY, 7).getTime();
             Time newTime1 = Time.valueOf("12:30:00");
             Time newTime2 = Time.valueOf("13:00:00");
             Time newTime3 = Time.valueOf("11:25:30");
-            List<String> centerLocations = new ArrayList<String>() {
+            List<Integer> centerLocations = new ArrayList<Integer>() {
                 {
-                    add("1");
-                    add("3");
+                    add(1);
+                    add(3);
                 }
             };
-            List<String> northLocations = new ArrayList<String>() {
+            List<Integer> northLocations = new ArrayList<Integer>() {
                 {
-                    add("2");
+                    add(2);
                 }
             };
-            List<String> orders1 = new ArrayList<String>() {
+            List<Integer> orders1 = new ArrayList<Integer>() {
                 {
-                    add("12");
-                    add("56");
+                    add(12);
+                    add(56);
                 }
             };
-            List<String> orders2 = new ArrayList<String>() {
+            List<Integer> orders2 = new ArrayList<Integer>() {
                 {
-                    add("34");
+                    add(34);
                 }
             };
-            List<String> orders3 = new ArrayList<String>() {
+            List<Integer> orders3 = new ArrayList<Integer>() {
                 {
-                    add("78");
-                    add("98");
+                    add(78);
+                    add(98);
                 }
             };
-            facade.createDelivery("101", newDate1, newTime1, "203613310", "4", centerLocations, "2360154", orders1);
-            facade.createDelivery("102", newDate2, newTime2, "313577645", "15", northLocations, "30122623", orders2);
-            facade.createDelivery("103", newDate3, newTime3, "123456789", "6", centerLocations, "11122333", orders3);
+            facade.createDelivery("101", newDate1, newTime1, "203613310", 4, centerLocations, "2360154", orders1);
+            facade.createDelivery("102", newDate2, newTime2, "313577645", 15, northLocations, "30122623", orders2);
+            facade.createDelivery("103", newDate3, newTime3, "123456789", 6, centerLocations, "11122333", orders3);
         }
         catch (Exception e)
         {
