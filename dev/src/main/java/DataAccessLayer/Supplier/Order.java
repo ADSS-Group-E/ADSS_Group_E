@@ -27,10 +27,10 @@ class Order {
         stmt = null;
     }
 
-    void insert(OrderDTO order) {
+    int insert(OrderDTO order) {
+        int generatedId = -1;
         try {
             String[] key = {"orderID"};
-            int generatedId = -1;
             int id = -1;
             c = db.connect();
             stmt = c.createStatement();
@@ -50,6 +50,7 @@ class Order {
                         item.getName(), item.getQuantity(), item.getPrice(), item.getSupplierCN(), generatedId);
                 c.prepareStatement(sql, key);
                 stmt.executeUpdate(sql);
+                key = new String[]{"companyNumber"};
                 rs = stmt.getGeneratedKeys();
                 if (rs.next()) {
                     id = rs.getInt(1);
@@ -64,13 +65,14 @@ class Order {
         catch (SQLException e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
         }
+        return generatedId;
     }
 
     void delete(OrderDTO order) {
         try {
             c = db.connect();
             stmt = c.createStatement();
-            String sql = String.format("DELETE FROM Order WHERE " +
+            String sql = String.format("DELETE FROM 'Order' WHERE " +
                     "orderID = %d;", order.getId());
             stmt.executeUpdate(sql);
             close();
@@ -88,11 +90,41 @@ class Order {
         try {
             c = db.connect();
             stmt = c.createStatement();
-            String sql = "SELECT * FROM Order LEFT JOIN SupplierItem SI on Order.orderID = SI.orderID;";
+            String sql = "SELECT * FROM 'Order' LEFT JOIN SupplierItem SI on 'Order'.orderID = SI.orderID WHERE 'Order'.periodicDelivery = 1;";
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 order = new OrderDTO(
-                        rs.getInt("companyNumber"), rs.getString("date"), rs.getInt("periodicDelivery"), rs.getInt("needsDelivery"), new ArrayList<>()
+                        rs.getInt("orderID"), rs.getString("date"), rs.getInt("periodicDelivery"), rs.getInt("needsDelivery"), new ArrayList<>()
+                );
+                if (!regularOrders.containsKey(order)) {
+                    regularOrders.put(order, new ArrayList<>());
+                }
+                item = new SupplierItemDTO(rs.getInt("ID"), rs.getString("name"), rs.getInt("quantity"), rs.getInt("price"), rs.getString("supplierCN"));
+                regularOrders.get(order).add(item);
+            }
+            for (OrderDTO orderDTO : regularOrders.keySet())
+                result.add(new OrderDTO(orderDTO.getId(), orderDTO.getDate(), orderDTO.getPeriodicDelivery(), orderDTO.getNeedsDelivery(), regularOrders.get(orderDTO)));
+            close();
+        }
+        catch (SQLException e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        }
+        return result;
+    }
+
+    ArrayList<OrderDTO> select() {
+        OrderDTO order;
+        SupplierItemDTO item;
+        HashMap<OrderDTO, ArrayList<SupplierItemDTO>> regularOrders = new HashMap<>();
+        ArrayList<OrderDTO> result = new ArrayList<>();
+        try {
+            c = db.connect();
+            stmt = c.createStatement();
+            String sql = "SELECT SupplierItem.* FROM 'Order' LEFT JOIN SupplierItem SI on 'Order'.orderID = SI.orderID;";
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                order = new OrderDTO(
+                        rs.getInt("orderID"), rs.getString("date"), rs.getInt("periodicDelivery"), rs.getInt("needsDelivery"), new ArrayList<>()
                 );
                 if (!regularOrders.containsKey(order)) {
                     regularOrders.put(order, new ArrayList<>());

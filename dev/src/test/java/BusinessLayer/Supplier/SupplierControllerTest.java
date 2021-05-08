@@ -1,5 +1,8 @@
 package BusinessLayer.Supplier;
 
+import PresentationLayer.Supplier.DataTransferObjects.DiscountStepDTO;
+import PresentationLayer.Supplier.DataTransferObjects.QuantityWriterDTO;
+import PresentationLayer.Supplier.DataTransferObjects.SupplierItemDTO;
 import PresentationLayer.Supplier.ServiceController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +18,6 @@ class SupplierControllerTest {
     @BeforeEach
     void setUp() {
         controller = ServiceController.getInstance();
-        controller.initialize();
     }
 
     @Test
@@ -36,14 +38,16 @@ class SupplierControllerTest {
         contacts.add(new String[]{"Tzahi", "tzahi@apple.com"});
         HashMap<Integer, Integer> discounts = new HashMap<>();
         discounts.put(15000, 20);
+        DiscountStepDTO stepDTO = new DiscountStepDTO(1, 20, 5000, 1);
+        ArrayList<DiscountStepDTO> list = new ArrayList<>();
         controller.register("Apple", 941, "Apple Pay", "49913/14", supplierItems, contacts, 10, 5000, discounts);
-        String[] appleinfo = controller.getSuppliersInfo().get(2);
+        String[] appleinfo = controller.getSuppliersInfo().get(941);
         assertEquals("Apple", appleinfo[0]);
         assertEquals(appleinfo[1], 941 + "");
         assertEquals("Apple Pay", appleinfo[2]);
         assertEquals("49913/14", appleinfo[3]);
-        QuantityWriter writer = controller.getQuantityWriter(2);
-        assertEquals(writer, new QuantityWriter(discounts, 10, 5000));
+        QuantityWriterDTO writer = controller.getQuantityWriter(941);
+        assertEquals(writer, new QuantityWriterDTO(1, 941, 10, 5000, list));
     }
 
     @Test
@@ -53,7 +57,7 @@ class SupplierControllerTest {
         ArrayList<String[]> contacts = new ArrayList<>();
         contacts.add(new String[]{"Tzahi", "tzahi@apple.com"});
         controller.register("Apple", 941, "Apple Pay", "49913/14", supplierItems, contacts);
-        String[] appleinfo = controller.getSuppliersInfo().get(2);
+        String[] appleinfo = controller.getSuppliersInfo().get(941);
         assertEquals("Apple", appleinfo[0]);
         assertEquals(appleinfo[1], 941 + "");
         assertEquals("Apple Pay", appleinfo[2]);
@@ -64,11 +68,11 @@ class SupplierControllerTest {
     void createOrder() {
         ArrayList<String[]> supItems = new ArrayList<>();
         supItems.add(new String[]{"Dog", 3000 + "", 10 + "", 5041 + ""});
-        ArrayList<Item> items = new ArrayList<>();
-        items.add(new Item("Dog", 3000, 10, 5041));
+        ArrayList<SupplierItemDTO> items = new ArrayList<>();
+        items.add(new SupplierItemDTO("Dog", 3000, 10, "5041"));
         controller.createOrder(0, true, true, supItems);
-        assertTrue(controller.getOrderFromSupplier(0, 1).isConstantDelivery());
-        assertTrue(controller.getOrderFromSupplier(0, 1).isNeedsDelivery());
+        assertEquals(1, controller.getOrderFromSupplier(0, 1).getPeriodicDelivery());
+        assertEquals(1, controller.getOrderFromSupplier(0, 1).getNeedsDelivery());
         assertEquals(controller.getOrderFromSupplier(0, 1).getOrderItems(), items);
     }
 
@@ -91,7 +95,7 @@ class SupplierControllerTest {
     @Test
     void updateOrderItemQuantity() {
         assertEquals(controller.getOrderFromSupplier(1, 0).getOrderItems().get(0).getQuantity(), 10);
-        controller.updateOrderItemQuantity(1,0,0,1);
+        controller.updateOrderItemQuantity(1,0);
         assertEquals(controller.getOrderFromSupplier(1, 0).getOrderItems().get(0).getQuantity(), 1);
     }
 

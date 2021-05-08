@@ -7,7 +7,7 @@ public class OrderDTO {
     private final String date;
     private final int periodicDelivery;
     private final int needsDelivery;
-    private final ArrayList<SupplierItemDTO> orderItems;
+    private ArrayList<SupplierItemDTO> orderItems;
 
     public OrderDTO(String date, int periodicDelivery, int needsDelivery, ArrayList<SupplierItemDTO> orderItems) {
         this.id = -1;
@@ -43,5 +43,9 @@ public class OrderDTO {
 
     public String getDate() {
         return date;
+    }
+
+    public void setOrderItems(ArrayList<SupplierItemDTO> items) {
+        this.orderItems = items;
     }
 }

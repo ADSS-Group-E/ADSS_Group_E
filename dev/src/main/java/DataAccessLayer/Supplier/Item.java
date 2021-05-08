@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 class Item {
     private DBConnection db;
@@ -75,6 +77,65 @@ class Item {
         catch (SQLException e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
         }
+    }
+
+    ArrayList<SupplierItemDTO> select() {
+        SupplierItemDTO item;
+        ArrayList<SupplierItemDTO> result = new ArrayList<>();
+        try {
+            c = db.connect();
+            stmt = c.createStatement();
+            String sql = "SELECT * FROM SupplierItem WHERE orderID IS NOT NULL;";
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                item = new SupplierItemDTO(rs.getInt("ID"), rs.getString("name"), rs.getInt("quantity"), rs.getInt("price"), rs.getString("supplierCN"));
+                item.setOrderID(rs.getInt("orderID"));
+                result.add(item);
+            }
+            close();
+        }
+        catch (SQLException e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        }
+        return result;
+    }
+
+    SupplierItemDTO select(int id) {
+        SupplierItemDTO item = null;
+        try {
+            c = db.connect();
+            stmt = c.createStatement();
+            String sql = String.format("SELECT * FROM SupplierItem WHERE " +
+                    "ID = %d AND orderID IS NOT NULL;", id);
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                item = new SupplierItemDTO(rs.getInt("ID"), rs.getString("name"), rs.getInt("quantity"), rs.getInt("price"), rs.getString("supplierCN"), rs.getInt("orderID"));
+            }
+            close();
+        }
+        catch (SQLException e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        }
+        return item;
+    }
+
+    SupplierItemDTO select(String name) {
+        SupplierItemDTO item = null;
+        try {
+            c = db.connect();
+            stmt = c.createStatement();
+            String sql = String.format("SELECT * FROM SupplierItem WHERE " +
+                    "name = '%s' AND orderID IS NULL;", name);
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                item = new SupplierItemDTO(rs.getInt("ID"), rs.getString("name"), rs.getInt("quantity"), rs.getInt("price"), rs.getString("supplierCN"));
+            }
+            close();
+        }
+        catch (SQLException e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        }
+        return item;
     }
 }
 

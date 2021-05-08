@@ -27,12 +27,19 @@ class Supplier {
         stmt = null;
     }
 
-    void insert(SupplierDTO sup) {
+    int insert(SupplierDTO sup) {
+        int generatedId = -1;
         try {
+            String[] key = {"companyNumber"};
             c = db.connect();
             stmt = c.createStatement();
             String sql = String.format("INSERT INTO Supplier (companyNumber, name, paymentMethod, bankAccount) " +
                     "VALUES (%d, '%s', '%s', '%s' );", sup.getCompanyNumber(), sup.getName(), sup.getPaymentMethod(), sup.getBankAccount());
+            c.prepareStatement(sql, key);
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                generatedId = rs.getInt(1);
+            }
             stmt.executeUpdate(sql);
             close();
             Contact contact = new Contact(db);
@@ -51,6 +58,7 @@ class Supplier {
         catch (SQLException e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
         }
+        return generatedId;
     }
 
     ArrayList<SupplierDTO> select() {
@@ -71,6 +79,26 @@ class Supplier {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
         }
         return suppliers;
+    }
+
+    SupplierDTO select(int id) {
+        SupplierDTO supplier = null;
+        try {
+            c = db.connect();
+            stmt = c.createStatement();
+            String sql = String.format("SELECT * FROM Supplier WHERE companyNumber = %d;", id);
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                supplier = new SupplierDTO(
+                        rs.getInt("companyNumber"), rs.getString("name"), rs.getString("bankAccount"), rs.getString("paymentMethod")
+                );
+            }
+            close();
+        }
+        catch (SQLException e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        }
+        return supplier;
     }
 }
 

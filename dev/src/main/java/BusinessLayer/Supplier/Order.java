@@ -1,50 +1,26 @@
 package BusinessLayer.Supplier;
 
+import PresentationLayer.Supplier.DataTransferObjects.OrderDTO;
+import PresentationLayer.Supplier.DataTransferObjects.SupplierItemDTO;
+
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Order {
-    private boolean constantDelivery;
-    private boolean needsDelivery;
-    private List<Item> orderItems;
-    private ZonedDateTime date;
 
-    public Order(boolean constantDelivery, boolean needsDelivery, List<Item> orderItems) {
-        this.constantDelivery = constantDelivery;
-        this.needsDelivery = needsDelivery;
-        this.orderItems = orderItems;
-        this.date = ZonedDateTime.now();
-    }
-
-    public boolean isConstantDelivery() {
-        return constantDelivery;
-    }
-
-    public boolean isNeedsDelivery() {
-        return needsDelivery;
-    }
-
-    public List<Item> getOrderItems() {
-        return orderItems;
-    }
-
-    public void setOrderItems(List<Item> orderItems) {
-        this.orderItems = orderItems;
-    }
-
-    ArrayList<String> getOrderItemsToString() {
+    ArrayList<String> getOrderItemsToString(ArrayList<SupplierItemDTO> orderItems) {
         ArrayList<String> retItems = new ArrayList<>();
-        for (Item i : orderItems) {
-            retItems.add(i.toString());
+        for (SupplierItemDTO i : orderItems) {
+            retItems.add(String.format("ID: %d\nName: %s\nPrice: %d\nQuantity: %d\nSupplier CN: %s",i.getId(), i.getName(), i.getPrice(), i.getQuantity(), i.getSupplierCN()));
         }
         return retItems;
     }
 
-    int getPrice() {
+    int getPrice(OrderDTO order) {
         int sum = 0;
-        for (Item i : orderItems) {
-            sum += i.getQuantity() * i.getPrice();
+        for (SupplierItemDTO supplierItemDTO : order.getOrderItems()) {
+            sum += supplierItemDTO.getQuantity() * supplierItemDTO.getPrice();
         }
         return sum;
     }

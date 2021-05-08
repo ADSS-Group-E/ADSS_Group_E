@@ -1,5 +1,7 @@
 package PresentationLayer.Supplier;
 
+import PresentationLayer.Supplier.DataTransferObjects.SupplierItemDTO;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -199,12 +201,12 @@ class PresentationHandler {
         return options.length;
     }
 
-     String showSupplierItems(ArrayList<String> items) {
+     String showSupplierItems(ArrayList<SupplierItemDTO> items) {
         //prints to screen the items we got from the supplier
         StringBuilder result = new StringBuilder();
         int i;
         for (i = 0; i < items.size() - 1; i++) {
-            result.append(i).append(": ").append(items.get(i)).append("\n\n"); //appends indexes to the items
+            result.append(i).append(": ").append(String.format("ID: %d\nName: %s\nPrice: %d\nQuantity: %d\nSupplierCN: %s", items.get(i).getId(), items.get(i).getName(), items.get(i).getPrice(), items.get(i).getQuantity(), items.get(i).getSupplierCN())).append("\n\n"); //appends indexes to the items
         }
         result.append(i).append(": ").append(items.get(i)); //appends last item without \n\n
         return result.toString();
