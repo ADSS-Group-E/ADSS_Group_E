@@ -102,12 +102,12 @@ public class DTO {
     }
 
     public static class Driver{
-        protected int id;
+        protected String id;
         protected String lType;
         protected Date expDate;
         protected boolean status;
 
-        public Driver(int id, String lType, java.util.Date expDate, boolean status)
+        public Driver(String id, String lType, java.util.Date expDate, boolean status)
         {
             this.id=id;
             this.lType=lType;

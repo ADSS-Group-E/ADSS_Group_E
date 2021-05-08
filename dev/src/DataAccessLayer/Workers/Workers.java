@@ -1,8 +1,12 @@
 package DataAccessLayer.Workers;
 
+import BussinessLayer.WorkersPackage.*;
 import DataAccessLayer.Repo;
 
 import java.sql.*;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -372,6 +376,238 @@ public class Workers {
             throw e;
         }
     }
+
+
+    public static void deleteEmployee(String ID) throws Exception {
+        try (Connection conn = Repo.openConnection()) {
+            String sql = "DELETE FROM Workers WHERE ID=?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1,ID);
+            pst.executeUpdate();
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+    //----------------------------------------------------------------------------------------------
+    /*
+     CREATE TABLE IF NOT EXISTS "AvailableWorkingDays" (
+                            	"ID"	TEXT NOT NULL,
+                            	"Day"	TEXT NOT NULL,
+                            	"Shift_Type"	TEXT NOT NULL,
+                            	"IsAvailable"	INTEGER NOT NULL,
+                            	PRIMARY KEY("ID","Day","Shift_Type")
+                            )
+     */
+    public static void deleteFavoriteDay(String ID, String day, String shiftType) throws Exception {
+        try (Connection conn = Repo.openConnection()) {
+            String sql = "DELETE FROM AvailableWorkingDays WHERE ID=? AND Day=? AND Shift_Type=?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1,ID);
+            pst.setString(2,day);
+            pst.setString(3,shiftType);
+            pst.executeUpdate();
+
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+
+    }
+
+    /*
+    CREATE TABLE IF NOT EXISTS "Qualifications" (
+                                	"ID"	TEXT NOT NULL,
+                                	"Qualification"	TEXT NOT NULL,
+                                	FOREIGN KEY (ID) REFERENCES Workers(ID) ON DELETE CASCADE ,
+                                	PRIMARY KEY("ID","Qualification")
+                                )
+     */
+
+    public static void deleteQualification(String ID, String qualification) throws Exception {
+        try (Connection conn = Repo.openConnection()) {
+            String sql = "DELETE FROM Qualifications WHERE ID=? AND Qualification=?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1,ID);
+            pst.setString(2,qualification);
+            pst.executeUpdate();
+
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+
+    }
+
+    public static boolean CheckQualification(String ID, String qualification) throws SQLException {
+        try (Connection conn = Repo.openConnection()) {
+            String sql = "SELECT Qualification From Qualifications WHERE ID=?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1,ID);
+
+            ResultSet results = pst.executeQuery();
+            LinkedList<String> qualifications = new LinkedList<>();
+            while(results.next()==true)
+                qualifications.add(results.getString(1));
+            return qualifications.contains(qualification);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public static LinkedList<String> getQualificationsFromDB(String ID) throws Exception {
+        try (Connection conn = Repo.openConnection()) {
+            String sql = "SELECT * From Qualifications WHERE ID=?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1,ID);
+
+            ResultSet results = pst.executeQuery();
+            LinkedList<String>res=new LinkedList<>();
+            while(results.next()){
+                res.add(results.getString("Qualification"));
+            }
+               return res;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+
+    public static String getFirstNameFromDB(String ID) throws Exception {
+        try (Connection conn = Repo.openConnection()) {
+            String sql = "SELECT * From Workers WHERE ID=?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1,ID);
+
+            ResultSet results = pst.executeQuery();
+            if(!results.next())
+                return null;
+
+            return results.getString("First_Name");
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public static String getLastNameFromDB(String ID) throws Exception {
+        try (Connection conn = Repo.openConnection()) {
+            String sql = "SELECT * From Workers WHERE ID=?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1,ID);
+
+            ResultSet results = pst.executeQuery();
+            if(!results.next())
+                return null;
+
+            return results.getString("Last_Name");
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public static LocalDate getStartWorkingDateFromDB(String ID) throws Exception {
+        try (Connection conn = Repo.openConnection()) {
+            String sql = "SELECT * From Workers WHERE ID=?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1,ID);
+
+            ResultSet results = pst.executeQuery();
+            if(!results.next())
+                return null;
+            Date date=results.getDate("Start_Working_Day");
+            //convert Date to LocalDate
+            LocalDate localDate = Instant.ofEpochMilli(date.getTime())
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+            return localDate;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+
+    public static BussinessLayer.WorkersPackage.BankAccount getBankAccountFromDB(String ID) throws Exception {
+        try (Connection conn = Repo.openConnection()) {
+            String sql = "SELECT * From BankAccounts WHERE ID=?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1,ID);
+
+            ResultSet results = pst.executeQuery();
+            if(!results.next())
+                return null;
+
+            return new BussinessLayer.WorkersPackage.BankAccount(results.getString("Bank_Name"),results.getString("Branch"), results.getString("BankAccountID"));
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public static BussinessLayer.WorkersPackage.HiringConditions getHiringConditionsFromDB(String ID) throws Exception {
+        try (Connection conn = Repo.openConnection()) {
+            String sql = "SELECT * From HiringConditions WHERE ID=?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1,ID);
+
+            ResultSet results = pst.executeQuery();
+            if(!results.next())
+                return null;
+
+            double salaryPerHour=results.getDouble("salaryPerHour");
+            String fund=results.getString("fund");
+            int vacationDays=results.getInt("vacationDays");
+            int sickLeavePerMonth=results.getInt("sickLeavePerMonth");
+
+            return new BussinessLayer.WorkersPackage.HiringConditions(salaryPerHour,fund,vacationDays,sickLeavePerMonth);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+
+    public static BussinessLayer.WorkersPackage.AvailableWorkDays getAvailableWorkDaysFromDB(String ID) throws Exception {
+        try (Connection conn = Repo.openConnection()) {
+            boolean[][] favorite=getFavoriteDays(ID);
+            boolean[][] cantWork=getCantWorkDays(ID);
+            Boolean[][] favoriteBoolean=new Boolean[favorite.length][];
+            Boolean[][] cantWorkBoolean=new Boolean[cantWork.length][];
+            for(int i=0;i<favorite.length;i++) {
+                favoriteBoolean[i] = new Boolean[favorite[i].length];
+                for (int j = 0; j < favorite[i].length; j++) {
+                    favoriteBoolean[i][j] = favorite[i][j];
+                }
+            }
+
+            for(int i=0;i<cantWork.length;i++) {
+                cantWorkBoolean[i] = new Boolean[cantWork[i].length];
+                for (int j = 0; j < cantWork[i].length; j++) {
+                    cantWorkBoolean[i][j] = cantWork[i][j];
+                }
+            }
+            return new BussinessLayer.WorkersPackage.AvailableWorkDays(favoriteBoolean,cantWorkBoolean);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+
+
+    public static BussinessLayer.WorkersPackage.Worker getWorker(String ID) throws Exception {
+        try (Connection conn = Repo.openConnection()) {
+            String FirstName=getFirstNameFromDB(ID);
+            String LastName=getLastNameFromDB(ID);
+            BussinessLayer.WorkersPackage.BankAccount bankAccount=getBankAccountFromDB(ID);
+            BussinessLayer.WorkersPackage.HiringConditions hiringConditions=getHiringConditionsFromDB(ID);
+            BussinessLayer.WorkersPackage.AvailableWorkDays availableWorkDays=getAvailableWorkDaysFromDB(ID);
+            List<String>names=getQualificationsFromDB(ID);
+            List<Qualifications>qualifications=new LinkedList<>();
+            for(Qualifications q :Qualifications.values()){
+                if(names.contains(q.name()))
+                    qualifications.add(q);
+            }
+            return new Worker(FirstName,LastName,ID,bankAccount,hiringConditions,availableWorkDays,qualifications);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+
 
 //    public static boolean CheckConstraint(String ID,int day,int shiftType) throws SQLException {
 //        try (Connection conn = Repo.openConnection()) {

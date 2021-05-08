@@ -8,16 +8,24 @@ import java.util.List;
 
 public class Driver {
 
+    /*
+    "CREATE TABLE IF NOT EXISTS Drivers" +
+                    "(ID INT PRIMARY KEY NOT NULL," +
+                    "License_Type VARCHAR (10)   NOT NULL, " +
+                    "Expiration_Date DATE NOT NULL," +
+                    "STATUS INT NOT NULL,"+
+                    "FOREIGN KEY (ID) REFERENCES Workers (ID) ON DELETE CASCADE )";
+     */
+
     public static void insertDriver(DTO.Driver d) throws SQLException {
         try (Connection conn = Repo.openConnection()) {
             String query = "INSERT OR IGNORE INTO Drivers VALUES (?, ?, ?,?)";
             PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setInt(1,d.id );
+            stmt.setString(1,d.id );
             stmt.setString(2, d.lType);
             stmt.setDate(3, (Date) d.expDate);
             stmt.setBoolean(4,d.status);
             stmt.executeUpdate();
-            conn.close();
         } catch (Exception e) {
             throw e;
         }

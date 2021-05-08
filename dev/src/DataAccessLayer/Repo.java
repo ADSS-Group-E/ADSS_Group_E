@@ -192,7 +192,7 @@ public class Repo {
         try (Statement stmt = conn.createStatement();) {
 
             String sql1 = "CREATE TABLE IF NOT EXISTS Drivers" +
-                    "(ID INT PRIMARY KEY NOT NULL," +
+                    "(ID TEXT PRIMARY KEY NOT NULL," +
                     "License_Type VARCHAR (10)   NOT NULL, " +
                     "Expiration_Date DATE NOT NULL," +
                     "STATUS INT NOT NULL,"+
@@ -368,17 +368,18 @@ public class Repo {
 
             String sql1 = """
                     CREATE TABLE IF NOT EXISTS ShiftDemands (
-                    	Date	DATE NOT NULL,
-                    	ShiftType	TEXT NOT NULL,
-                    	cashierAmount	INTEGER NOT NULL,
-                    	storeKeeperAmount	INTEGER NOT NULL,
-                    	arrangerAmount	INTEGER NOT NULL,
-                    	guardAmount	INTEGER NOT NULL,
-                    	assistantAmount	INTEGER NOT NULL,
-                    	deliveryRequired	INTEGER NOT NULL,
-                    	FOREIGN KEY (Date,ShiftType) REFERENCES Shifts(Date,ShiftType) ON DELETE CASCADE ,
-                    	PRIMARY KEY(Date,ShiftType)
-                    )
+                                        	Date	DATE NOT NULL,
+                                        	ShiftType	TEXT NOT NULL,
+                                        	cashierAmount	INTEGER NOT NULL,
+                                        	storeKeeperAmount	INTEGER NOT NULL,
+                                        	arrangerAmount	INTEGER NOT NULL,
+                                        	guardAmount	INTEGER NOT NULL,
+                                        	assistantAmount	INTEGER NOT NULL,
+                                        	deliveryRequired	INTEGER NOT NULL,
+                                        	BranchID            INTEGER NOT NULL,
+                                        	FOREIGN KEY (Date,ShiftType,BranchID) REFERENCES Shifts(Date,ShiftType,BranchID) ON DELETE CASCADE ,
+                                        	PRIMARY KEY(Date,ShiftType,BranchID)
+                                        )
                     """;
             stmt.executeUpdate(sql1);
 
