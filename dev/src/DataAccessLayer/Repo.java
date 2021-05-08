@@ -274,6 +274,7 @@ public class Repo {
                         	"First_Name"	INTEGER NOT NULL,
                         	"Last_Name"	INTEGER NOT NULL,
                         	"Start_Working_Day"	DATE NOT NULL,
+                        	"isWorking" INTEGER NOT NULL,
                         	PRIMARY KEY("ID")
                         )
                         """;
@@ -305,6 +306,26 @@ public class Repo {
 
     }
 
+    //TODO : add foreign key to branchManagerID and HRD_ID
+    public static void createBranches(Connection conn)  {
+        try (Statement stmt = conn.createStatement();) {
+
+            String sql1 = """
+                    CREATE TABLE IN NOT EXISTS "Branches" (
+                    	"branchID"	INTEGER NOT NULL,
+                    	"branchManagerID"	TEXT NOT NULL,
+                    	"HRD_ID"	TEXT NOT NULL,
+                    	PRIMARY KEY("branchID")
+                    )
+                        """;
+            stmt.executeUpdate(sql1);
+
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public static void createHiringConditions(Connection conn)  {
         try (Statement stmt = conn.createStatement();) {
 
@@ -316,7 +337,7 @@ public class Repo {
                     	"vacationDays"	INTEGER NOT NULL,
                     	"sickLeavePerMonth"	INTEGER NOT NULL,
                     	PRIMARY KEY("ID"),
-                    	FOREIGN KEY (ID) REFERENCES Workers(ID) ON DELETE CASCADE)
+                    	FOREIGN KEY (ID) REFERENCES Workers(ID) ON DELETE CASCADE
                     )
                         """;
             stmt.executeUpdate(sql1);

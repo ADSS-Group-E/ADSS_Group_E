@@ -2,6 +2,7 @@ package DataAccessLayer.Workers;
 
 import BussinessLayer.WorkersPackage.*;
 import DataAccessLayer.Repo;
+import PresentationLayer.WorkerDTO;
 
 import java.sql.*;
 import java.time.Instant;
@@ -13,22 +14,136 @@ import java.util.List;
 
 public class Workers {
 
-//    public static void insertWorker(DTO.Worker worker) throws SQLException {
-//        try (Connection conn = Repo.openConnection()) {
-//            String query = "INSERT OR IGNORE INTO Employees VALUES (?, ?, ? ,?,?,?)";
-//            PreparedStatement stmt = conn.prepareStatement(query);
-//            stmt.setInt(1, worker.ID);
-//            stmt.setString(2, worker.Name);
-//            stmt.setInt(3, worker.bankAccount);
-//            stmt.setDate(4, Date.valueOf(worker.startWorkingDate));
-//            stmt.setInt(5, worker.salary);
-//            stmt.setInt(6, worker.vacationDays);
+
+
+    public static void removeWorker(String WorkerID) throws SQLException {
+        try (Connection conn = Repo.openConnection()) {
+            String query = "UPDATE Workers SET isWorking = 0 WHERE ID = ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1,WorkerID);
+            stmt.executeUpdate();
+
+//            query="DELETE * FROM BankAccounts Where ID = ?";
+//            stmt = conn.prepareStatement(query);
+//            stmt.setString(1,WorkerID);
 //            stmt.executeUpdate();
-//            conn.close();
-//        } catch (Exception e) {
-//            throw e;
-//        }
-//    }
+//
+//            query="DELETE * FROM HiringConditions Where ID = ?";
+//            stmt = conn.prepareStatement(query);
+//            stmt.setString(1,WorkerID);
+//            stmt.executeUpdate();
+//
+//            query="DELETE * FROM AvailableWorkingDays Where ID = ?";
+//            stmt = conn.prepareStatement(query);
+//            stmt.setString(1,WorkerID);
+//            stmt.executeUpdate();
+//
+//            query="DELETE * FROM Qualifications Where ID = ?";
+//            stmt = conn.prepareStatement(query);
+//            stmt.setString(1,WorkerID);
+//            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw e;
+        }
+
+    }
+
+
+//    CREATE TABLE IF NOT EXISTS "Workers" (
+//            "ID"	TEXT NOT NULL,
+//            "BranchID"	INTEGER NOT NULL,
+//            "First_Name"	INTEGER NOT NULL,
+//            "Last_Name"	INTEGER NOT NULL,
+//            "Start_Working_Day"	DATE NOT NULL,
+//            "isWorking" INTEGER NOT NULL
+//    PRIMARY KEY("ID")
+//                        )
+
+    public static void insertWorker(BussinessLayer.WorkersPackage.Worker worker,int branchID) throws SQLException {
+
+        try (Connection conn = Repo.openConnection()) {
+            String query = "INSERT OR IGNORE INTO Workers VALUES (?, ?, ? ,? ,?,?)";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, worker.getID());
+            stmt.setInt(2, branchID);
+            stmt.setString(3, worker.getFirstName());
+            stmt.setString(4, worker.getLastName());
+            Date date=Date.valueOf(worker.getStartWorkingDay());
+            stmt.setDate(5,date);
+            stmt.setInt(6, 1);
+            stmt.executeUpdate();
+
+            BussinessLayer.WorkersPackage.BankAccount bankAccount= worker.getBankAccount();
+            query="INSERT OR IGNORE INTO BankAccounts VALUES (?, ?, ? ,?)";
+            stmt= conn.prepareStatement(query);
+            stmt.setString(1, worker.getID());
+            stmt.setString(2, bankAccount.getBankName());
+            stmt.setString(3, bankAccount.getBranch());
+            stmt.setString(4, bankAccount.getBankAccount());
+            stmt.executeUpdate();
+
+            BussinessLayer.WorkersPackage.HiringConditions hiringConditions= worker.getHiringConditions();
+            query="INSERT OR IGNORE INTO HiringConditions VALUES (?, ?, ? ,? ,?)";
+            stmt= conn.prepareStatement(query);
+            stmt.setString(1, worker.getID());
+            stmt.setDouble(2, hiringConditions.getSalaryPerHour());
+            stmt.setString(3, hiringConditions.getFund());
+            stmt.setInt(4, hiringConditions.getVacationDays());
+            stmt.setInt(5, hiringConditions.getSickLeavePerMonth());
+            stmt.executeUpdate();
+
+            BussinessLayer.WorkersPackage.AvailableWorkDays availableWorkDays= worker.getAvailableWorkDays();
+            String day="",shiftType="";
+            for(int i=0;i<availableWorkDays.getFavoriteShifts().length;i++){
+                for(int j=0;j<availableWorkDays.getFavoriteShifts()[i].length;j++){
+
+                    if(availableWorkDays.getFavoriteShifts()[i][j]) {
+                        day = convertIntToDayName(i + 1);
+                        shiftType = j == 0 ? "Morning" : "Evening";
+                        query = "INSERT OR IGNORE INTO AvailableWorkingDays VALUES (?, ?, ? ,?)";
+                        stmt = conn.prepareStatement(query);
+                        stmt.setString(1, worker.getID());
+                        stmt.setString(2, day);
+                        stmt.setString(3, shiftType);
+                        stmt.setInt(4, 1);
+                        stmt.executeUpdate();
+                    }
+                }
+            }
+
+            for(int i=0;i<availableWorkDays.getCantWork().length;i++){
+                for(int j=0;j<availableWorkDays.getCantWork()[i].length;j++){
+
+                    if(availableWorkDays.getCantWork()[i][j]) {
+                        day = convertIntToDayName(i + 1);
+                        shiftType = j == 0 ? "Morning" : "Evening";
+                        query = "INSERT OR IGNORE INTO AvailableWorkingDays VALUES (?, ?, ? ,?)";
+                        stmt = conn.prepareStatement(query);
+                        stmt.setString(1, worker.getID());
+                        stmt.setString(2, day);
+                        stmt.setString(3, shiftType);
+                        stmt.setInt(4, 0);
+                        stmt.executeUpdate();
+                    }
+                }
+            }
+
+            List<Qualifications>qualifications=worker.getQualifications();
+            for(Qualifications q : Qualifications.values()){
+                if(qualifications.contains(q)){
+                    query = "INSERT OR IGNORE INTO Qualifications VALUES (?, ?)";
+                    stmt = conn.prepareStatement(query);
+                    stmt.setString(1, worker.getID());
+                    stmt.setString(2, q.name());
+                    stmt.executeUpdate();
+                }
+            }
+
+        } catch (Exception e) {
+            throw e;
+        }
+    }
 
 
     public static void updateBankAccount(String id, String bankName,String branch,String bankAccount) throws SQLException {
@@ -513,10 +628,7 @@ public class Workers {
                 return null;
             Date date=results.getDate("Start_Working_Day");
             //convert Date to LocalDate
-            LocalDate localDate = Instant.ofEpochMilli(date.getTime())
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalDate();
-            return localDate;
+            return new java.sql.Date(date.getTime()).toLocalDate();
         } catch (Exception e) {
             throw e;
         }
@@ -606,6 +718,44 @@ public class Workers {
             throw e;
         }
     }
+
+    public static void displayWorkersByBranchID(int brID) throws Exception {
+
+        List<Worker>workers=new LinkedList<>();
+
+        try(Connection conn = Repo.openConnection()){
+
+            String sql = "SELECT ID From Workers WHERE BranchID=?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setInt(1,brID);
+            ResultSet results = pst.executeQuery();
+            while(results.next()){
+                workers.add(getWorker(results.getString("ID")));
+            }
+
+        }catch(Exception e){
+            throw e;
+        }
+
+        if(workers.isEmpty()) {
+            System.out.println("Can't display workers of branch that isn't exist");
+            return ;
+        }
+
+        System.out.println("The workers at branch "+brID+" are:");
+        int index=1;
+
+
+        System.out.println("1) The Branch manager is: " + "Name:"+getBranch(brID).getBranchManager().getFirstName()+" "+getBranch(brID).getBranchManager().getLastName()+" ID:"+getBranch(brID).getBranchManager().getID() + " Qualifications:"+getBranch(brID).getBranchManager().getQualifications() );
+        System.out.println("2) The HRD is: " +"Name:"+getBranch(brID).getActiveHRD().getFirstName()+" "+getBranch(brID).getActiveHRD().getLastName()+" ID:"+getBranch(brID).getActiveHRD().getID() + " Qualifications:"+getBranch(brID).getActiveHRD().getQualifications());
+        for(Worker worker:getBranch(brID).getWorkersList()){
+            if(!getBranch(brID).getBranchManager().getID().equals(worker.getID()) && !getBranch(brID).getActiveHRD().getID().equals(worker.getID()) )
+                System.out.println(index+") Name:"+worker.getFirstName()+" "+worker.getLastName()+" ID:"+worker.getID() + " Qualifications:"+worker.getQualifications());
+            index++;
+        }
+
+    }
+
 
 
 
