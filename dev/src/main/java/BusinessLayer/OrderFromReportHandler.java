@@ -41,6 +41,7 @@ public class OrderFromReportHandler {
         ArrayList<Product> reportProducts = report.getProducts();
         for (Product product:
              reportProducts) {
+            // TODO: get min amount and total amount in product to calculate quantity to order
 
         }
         return null;
