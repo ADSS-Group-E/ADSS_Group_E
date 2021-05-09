@@ -45,6 +45,7 @@ public class BranchController {
         }
         return branchByWorker;
     }
+
     public void showWorkers(int branchID){
         getBranch(branchID).showWorkers();
     }
@@ -60,10 +61,6 @@ public class BranchController {
             throw new IllegalArgumentException("The branch manager and the HRD can't be the same person");
         Branch branch=new Branch(branchID,branchManager,activeHRD);
         branchList.add(branch);
-    }
-
-    public void addWorkerToDB(Worker worker,int branchID){
-        //Workers.
     }
 
     public void removeBranch(int branchID){

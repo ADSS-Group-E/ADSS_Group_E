@@ -53,12 +53,14 @@ public class WorkersFacade {
         return new Response();
     }
 
+    //TODO : check if I should remove the lines 59-62
     public Response addBranch(int branchID, WorkerDTO branchManager, WorkerDTO activeHRD) {
         try {
-            branchController.addBranch(branchID, convertWorkerToBusiness(branchManager), convertWorkerToBusiness(activeHRD));
-            shiftController.addBranch(branchID);
-            addWorker(branchManager, branchID);
-            addWorker(activeHRD, branchID);
+//            branchController.addBranch(branchID, convertWorkerToBusiness(branchManager), convertWorkerToBusiness(activeHRD));
+//            shiftController.addBranch(branchID);
+//            addWorker(branchManager, branchID);
+//            addWorker(activeHRD, branchID);
+            Workers.addBranch(branchID,branchManager.getID(),activeHRD.getID());
         }catch(Exception e){
             return new Response(e.getMessage());
         }
@@ -83,7 +85,7 @@ public class WorkersFacade {
 
     public Response removeWorker(WorkerDTO worker, int branchID) {
         try{
-        branchController.removeWorker(convertWorkerToBusiness(worker), branchID);
+        //branchController.removeWorker(convertWorkerToBusiness(worker), branchID);
         Workers.removeWorker(worker.getID());
         }catch(Exception e){
            return new Response(e.getMessage());
@@ -91,6 +93,7 @@ public class WorkersFacade {
         return new Response();
     }
 
+    //TODO : not in use
     public Response removeBranch(int branchID) {
         try {
             branchController.removeBranch(branchID);

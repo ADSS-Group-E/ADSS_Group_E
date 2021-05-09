@@ -745,18 +745,56 @@ public class Workers {
         System.out.println("The workers at branch "+brID+" are:");
         int index=1;
 
+        ////////////////////////////////////////////////////////////////////////////
 
-        System.out.println("1) The Branch manager is: " + "Name:"+getBranch(brID).getBranchManager().getFirstName()+" "+getBranch(brID).getBranchManager().getLastName()+" ID:"+getBranch(brID).getBranchManager().getID() + " Qualifications:"+getBranch(brID).getBranchManager().getQualifications() );
-        System.out.println("2) The HRD is: " +"Name:"+getBranch(brID).getActiveHRD().getFirstName()+" "+getBranch(brID).getActiveHRD().getLastName()+" ID:"+getBranch(brID).getActiveHRD().getID() + " Qualifications:"+getBranch(brID).getActiveHRD().getQualifications());
-        for(Worker worker:getBranch(brID).getWorkersList()){
-            if(!getBranch(brID).getBranchManager().getID().equals(worker.getID()) && !getBranch(brID).getActiveHRD().getID().equals(worker.getID()) )
-                System.out.println(index+") Name:"+worker.getFirstName()+" "+worker.getLastName()+" ID:"+worker.getID() + " Qualifications:"+worker.getQualifications());
-            index++;
-        }
+//        try(Connection conn = Repo.openConnection()){
+//
+//            String sql = "SELECT ID From Workers WHERE BranchID=?";
+//            PreparedStatement pst = conn.prepareStatement(sql);
+//            pst.setInt(1,brID);
+//            ResultSet results = pst.executeQuery();
+//            while(results.next()){
+//                workers.add(getWorker(results.getString("ID")));
+//            }
+//
+//        }catch(Exception e){
+//            throw e;
+//        }
+
+//
+//        System.out.println("1) The Branch manager is: " + "Name:"+getBranch(brID).getBranchManager().getFirstName()+" "+getBranch(brID).getBranchManager().getLastName()+" ID:"+getBranch(brID).getBranchManager().getID() + " Qualifications:"+getBranch(brID).getBranchManager().getQualifications() );
+//        System.out.println("2) The HRD is: " +"Name:"+getBranch(brID).getActiveHRD().getFirstName()+" "+getBranch(brID).getActiveHRD().getLastName()+" ID:"+getBranch(brID).getActiveHRD().getID() + " Qualifications:"+getBranch(brID).getActiveHRD().getQualifications());
+//        for(Worker worker:getBranch(brID).getWorkersList()){
+//            if(!getBranch(brID).getBranchManager().getID().equals(worker.getID()) && !getBranch(brID).getActiveHRD().getID().equals(worker.getID()) )
+//                System.out.println(index+") Name:"+worker.getFirstName()+" "+worker.getLastName()+" ID:"+worker.getID() + " Qualifications:"+worker.getQualifications());
+//            index++;
+//        }
 
     }
 
+    /*
+      CREATE TABLE IF NOT EXISTS "Branches" (
+                    	"branchID"	INTEGER NOT NULL,
+                    	"branchManagerID"	TEXT NOT NULL,
+                    	"HRD_ID"	TEXT NOT NULL,
+                    	PRIMARY KEY("branchID")
+                    	FOREIGN KEY (branchManagerID) REFERENCES Workers(id),
+                        FOREIGN KEY (HRD_ID) REFERENCES Workers(id)
+                    )
+     */
 
+    public static void addBranch(int branchID, String branchManagerID, String HRD_ID) throws SQLException{
+        try (Connection conn = Repo.openConnection()) {
+            String sql = "INSERT OR IGNORE INTO Branches VALUES (?, ?, ?)";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setInt(1,branchID);
+            pst.setString(2,branchManagerID);
+            pst.setString(3,HRD_ID);
+            pst.executeUpdate();
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
 
 
 //    public static boolean CheckConstraint(String ID,int day,int shiftType) throws SQLException {
