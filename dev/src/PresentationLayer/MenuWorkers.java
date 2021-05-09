@@ -797,15 +797,25 @@ public class MenuWorkers {
     private static void addWorker() {
         System.out.println("Please enter the branch ID");
         int branchID = reader.nextInt();
-        Response response = facade.isLegalBranch(branchID);
-        if (response.isErrorOccurred()) {
-            System.out.println(response.getErrorMessage());
-            return;
+        ResponseT<Boolean> booleanResponseT=facade.isBranchExists(branchID);
+        if(booleanResponseT.isErrorOccurred()) {
+            System.out.println(booleanResponseT.getErrorMessage());
+            return ;
         }
+        if(booleanResponseT.getValue()!=true) {
+            System.out.println("cant add Worker to a branch that is not exists");
+            return ;
+        }
+
+//        Response response = facade.isLegalBranch(branchID);
+//        if (response.isErrorOccurred()) {
+//            System.out.println(response.getErrorMessage());
+//            return;
+//        }
 
         System.out.println("Please enter worker ID");
         String ID = reader.next();
-        response = facade.isWorkerExist(ID);
+        Response response = facade.isWorkerExist(ID);
         if (!response.isErrorOccurred()) {
             System.out.println("The worker is already exist");
             return;
@@ -818,12 +828,12 @@ public class MenuWorkers {
         WorkerDTO branchManager, branchHRD;
         System.out.println("Please enter new branch ID");
         int branchID = reader.nextInt();
-        ResponseT<BranchDTO>branchDTOResponseT= facade.getBranch(branchID);
+        ResponseT<Boolean>branchDTOResponseT= facade.isBranchExists(branchID);
         if(!branchDTOResponseT.isErrorOccurred())
             System.out.println("cant create a branch that is already exist");
         else{
-            BranchDTO branchDTO=branchDTOResponseT.getValue();
-            if (branchDTO != null)
+            Boolean isBranchExists=branchDTOResponseT.getValue();
+            if (isBranchExists != null && isBranchExists==true)
                 throw new IllegalArgumentException("The branch " + branchID + "is already exist in the system");
             System.out.println("Do you want to promote an existing worker in another branch to be this new branch manager?");
             System.out.println("Enter Y/N");
@@ -1077,36 +1087,32 @@ public class MenuWorkers {
     private static void removeWorker(String HRD_ID) {
         System.out.println("Please enter worker ID to remove");
         String ID = reader.next();
-        Response response = facade.isWorkerExist(ID);
-        if (response.isErrorOccurred()) {
-            System.out.println(response.getErrorMessage());
-            return;
-        }
-
         if (HRD_ID.equals(ID)) {
             System.out.println("You can't remove yourself");
             return;
         }
 
-        ResponseT<WorkerDTO> workerDTOResponseT = facade.findDTOWorkerByID(ID);
-        if (workerDTOResponseT.isErrorOccurred())
-            System.out.println(workerDTOResponseT.getValue());
-        else {
-            WorkerDTO workerDTOToRemove = workerDTOResponseT.getValue();
-            ResponseT<BranchDTO> branchDTOResponseT = facade.findBranchByWorker(workerDTOToRemove);
-            if (branchDTOResponseT.isErrorOccurred())
-                System.out.println(branchDTOResponseT.getValue());
-            else {
-                BranchDTO branchDTO = branchDTOResponseT.getValue();
-                Response response1 = facade.removeWorker(workerDTOToRemove, branchDTO.getBranchID());
-                if (response1.isErrorOccurred())
-                    System.out.println(response1);
-                else
-                    System.out.println("Removal succeeded");
+        ResponseT<Integer> branchIDByWorker=facade.findBranchIDByWorker(ID);
+        if(branchIDByWorker.isErrorOccurred())
+            System.out.println(branchIDByWorker.getErrorMessage());
+        else{
+            ResponseT<WorkerDTO> branchManager=facade.getBranchManager(branchIDByWorker.getValue());
+            if(branchManager.isErrorOccurred()) {
+                System.out.println(branchManager.getErrorMessage());
+                return ;
             }
+
+            if(branchManager.getValue().getID().equals(ID)){
+                System.out.println("You cant remove the branch manager of this branch");
+                return;
+            }
+
+            Response response=facade.removeWorker(ID);
+            if(response.isErrorOccurred())
+                System.out.println(response.getErrorMessage());
+            else
+                System.out.println("Removal succeeded");
         }
-
-
     }
 
     private static void changeWorkerBranch() {
@@ -1326,11 +1332,11 @@ public class MenuWorkers {
                 }
 
             }
-            ResponseT<BranchDTO> branchDTOResponseT = facade.findBranchByWorker(workerDTO);
-            if(branchDTOResponseT.isErrorOccurred())
-                System.out.println(branchDTOResponseT.getErrorMessage());
+            ResponseT<Integer> responseBranchID = facade.findBranchIDByWorker(ID);
+            if(responseBranchID.isErrorOccurred())
+                System.out.println(responseBranchID.getErrorMessage());
             else{
-                int branchID = branchDTOResponseT.getValue().getBranchID();
+                int branchID = responseBranchID.getValue();
                 ResponseT<List<QualificationsDTO>> listResponseT= facade.getWorkerQualifications(workerDTO);
                 if(listResponseT.isErrorOccurred())
                     System.out.println(listResponseT.getErrorMessage());

@@ -145,7 +145,7 @@ public class Facade {
         return wFacade.isLegalBranch( branchID);
     }
 
-    public Response isWorkerExist(String workerID){
+    public ResponseT<Boolean> isWorkerExist(String workerID){
         return wFacade.isWorkerExist( workerID);
     }
 
@@ -473,5 +473,21 @@ public class Facade {
             return new Response(e.getMessage());
         }
         return new Response();
+    }
+
+    public ResponseT<Integer> findBranchIDByWorker(String id) {
+        return wFacade.findBranchIDByWorker(id);
+    }
+
+    public ResponseT<Boolean> isBranchExists(int branchID){
+        return wFacade.isBranchExists(branchID);
+    }
+
+    public Response removeWorker(String hrd_id) {
+        return wFacade.removeWorker(hrd_id);
+    }
+
+    public ResponseT<WorkerDTO> getBranchManager(int branchID) {
+        return wFacade.getBranchManager(branchID);
     }
 }
