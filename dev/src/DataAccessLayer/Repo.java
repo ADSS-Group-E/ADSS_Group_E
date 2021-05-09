@@ -23,6 +23,7 @@ public class Repo {
         Connection conn=openConnection();
         try (Statement stmt = conn.createStatement();) {
             createWorkers(conn);
+            createBranches(conn);
             createBankAccount(conn);
             createAvailableWorkDays(conn);
             createQualifications(conn);
@@ -87,7 +88,7 @@ public class Repo {
                     FOREIGN KEY (ID) REFERENCES Workers(ID) ON DELETE CASCADE,
             PRIMARY KEY(ID))
             """
-                   ;
+                    ;
             stmt.executeUpdate(sql1);
 
         }catch (SQLException e) {
@@ -192,7 +193,7 @@ public class Repo {
         try (Statement stmt = conn.createStatement();) {
 
             String sql1 = "CREATE TABLE IF NOT EXISTS Drivers" +
-                    "(ID INT PRIMARY KEY NOT NULL," +
+                    "(ID TEXT PRIMARY KEY NOT NULL," +
                     "License_Type VARCHAR (10)   NOT NULL, " +
                     "Expiration_Date DATE NOT NULL," +
                     "STATUS INT NOT NULL,"+
@@ -267,13 +268,14 @@ public class Repo {
     public static void createWorkers(Connection conn)  {
         try (Statement stmt = conn.createStatement();) {
 
-                String sql1 = """
+            String sql1 = """
                         CREATE TABLE IF NOT EXISTS "Workers" (
                         	"ID"	TEXT NOT NULL,
                         	"BranchID"	INTEGER NOT NULL,
                         	"First_Name"	INTEGER NOT NULL,
                         	"Last_Name"	INTEGER NOT NULL,
                         	"Start_Working_Day"	DATE NOT NULL,
+                        	"isWorking" INTEGER NOT NULL,
                         	PRIMARY KEY("ID")
                         )
                         """;
@@ -305,6 +307,27 @@ public class Repo {
 
     }
 
+    //TODO : add foreign key to branchManagerID and HRD_ID
+    public static void createBranches(Connection conn)  {
+        try (Statement stmt = conn.createStatement();) {
+
+            String sql1 = """
+                    CREATE TABLE IF NOT EXISTS "Branches" (
+                    	"branchID"	INTEGER NOT NULL,
+                    	"branchManagerID"	TEXT NOT NULL,
+                    	"HRD_ID"	TEXT NOT NULL,
+                    	PRIMARY KEY("branchID")
+                    	FOREIGN KEY (branchManagerID) REFERENCES Workers(id),            
+                        FOREIGN KEY (HRD_ID) REFERENCES Workers(id)
+                    )
+                        """;
+            stmt.executeUpdate(sql1);
+
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void createHiringConditions(Connection conn)  {
         try (Statement stmt = conn.createStatement();) {
 
@@ -316,7 +339,7 @@ public class Repo {
                     	"vacationDays"	INTEGER NOT NULL,
                     	"sickLeavePerMonth"	INTEGER NOT NULL,
                     	PRIMARY KEY("ID"),
-                    	FOREIGN KEY (ID) REFERENCES Workers(ID) ON DELETE CASCADE)
+                    	FOREIGN KEY (ID) REFERENCES Workers(ID) ON DELETE CASCADE
                     )
                         """;
             stmt.executeUpdate(sql1);
@@ -362,23 +385,24 @@ public class Repo {
         }
 
     }
-//Todo we stoppen in shift demands
+    //Todo we stoppen in shift demands
     public static void createShiftDemands(Connection conn)  {
         try (Statement stmt = conn.createStatement();) {
 
             String sql1 = """
                     CREATE TABLE IF NOT EXISTS ShiftDemands (
-                    	Date	DATE NOT NULL,
-                    	ShiftType	TEXT NOT NULL,
-                    	cashierAmount	INTEGER NOT NULL,
-                    	storeKeeperAmount	INTEGER NOT NULL,
-                    	arrangerAmount	INTEGER NOT NULL,
-                    	guardAmount	INTEGER NOT NULL,
-                    	assistantAmount	INTEGER NOT NULL,
-                    	deliveryRequired	INTEGER NOT NULL,
-                    	FOREIGN KEY (Date,ShiftType) REFERENCES Shifts(Date,ShiftType) ON DELETE CASCADE ,
-                    	PRIMARY KEY(Date,ShiftType)
-                    )
+                                        	Date	DATE NOT NULL,
+                                        	ShiftType	TEXT NOT NULL,
+                                        	cashierAmount	INTEGER NOT NULL,
+                                        	storeKeeperAmount	INTEGER NOT NULL,
+                                        	arrangerAmount	INTEGER NOT NULL,
+                                        	guardAmount	INTEGER NOT NULL,
+                                        	assistantAmount	INTEGER NOT NULL,
+                                        	deliveryRequired	INTEGER NOT NULL,
+                                        	BranchID            INTEGER NOT NULL,
+                                        	FOREIGN KEY (Date,ShiftType,BranchID) REFERENCES Shifts(Date,ShiftType,BranchID) ON DELETE CASCADE ,
+                                        	PRIMARY KEY(Date,ShiftType,BranchID)
+                                        )
                     """;
             stmt.executeUpdate(sql1);
 

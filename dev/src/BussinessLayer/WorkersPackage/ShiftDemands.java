@@ -25,7 +25,7 @@ public class ShiftDemands {
         this.shiftType=shiftType;
     }
 
-    public ShiftDemands(LocalDate date, int cashierAmount, int storeKeeperAmount, int arrangerAmount, int guardAmount, int assistantAmount, boolean deliveryRequired) {
+    public ShiftDemands(LocalDate date, int cashierAmount, int storeKeeperAmount, int arrangerAmount, int guardAmount, int assistantAmount,ShiftType shiftType, boolean deliveryRequired) {
         this.date = date;
         this.cashierAmount = cashierAmount;
         this.storeKeeperAmount = storeKeeperAmount;
