@@ -23,7 +23,6 @@ public class Repo {
         Connection conn=openConnection();
         try (Statement stmt = conn.createStatement();) {
             createWorkers(conn);
-            createBranches(conn);
             createBankAccount(conn);
             createAvailableWorkDays(conn);
             createQualifications(conn);
@@ -88,7 +87,7 @@ public class Repo {
                     FOREIGN KEY (ID) REFERENCES Workers(ID) ON DELETE CASCADE,
             PRIMARY KEY(ID))
             """
-                    ;
+                   ;
             stmt.executeUpdate(sql1);
 
         }catch (SQLException e) {
@@ -268,7 +267,7 @@ public class Repo {
     public static void createWorkers(Connection conn)  {
         try (Statement stmt = conn.createStatement();) {
 
-            String sql1 = """
+                String sql1 = """
                         CREATE TABLE IF NOT EXISTS "Workers" (
                         	"ID"	TEXT NOT NULL,
                         	"BranchID"	INTEGER NOT NULL,
@@ -312,13 +311,11 @@ public class Repo {
         try (Statement stmt = conn.createStatement();) {
 
             String sql1 = """
-                    CREATE TABLE IF NOT EXISTS "Branches" (
+                    CREATE TABLE IN NOT EXISTS "Branches" (
                     	"branchID"	INTEGER NOT NULL,
                     	"branchManagerID"	TEXT NOT NULL,
                     	"HRD_ID"	TEXT NOT NULL,
                     	PRIMARY KEY("branchID")
-                    	FOREIGN KEY (branchManagerID) REFERENCES Workers(id),            
-                        FOREIGN KEY (HRD_ID) REFERENCES Workers(id)
                     )
                         """;
             stmt.executeUpdate(sql1);
@@ -326,6 +323,7 @@ public class Repo {
         }catch (SQLException e) {
             e.printStackTrace();
         }
+
     }
 
     public static void createHiringConditions(Connection conn)  {
@@ -385,7 +383,7 @@ public class Repo {
         }
 
     }
-    //Todo we stoppen in shift demands
+//Todo we stoppen in shift demands
     public static void createShiftDemands(Connection conn)  {
         try (Statement stmt = conn.createStatement();) {
 

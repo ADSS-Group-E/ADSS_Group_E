@@ -4,6 +4,7 @@ import BussinessLayer.DriverPackage.Driver;
 import BussinessLayer.WorkersPackage.*;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.EnumMap;
 import java.util.List;
 
@@ -64,10 +65,10 @@ public class DTO {
         protected  String ID;
         protected String FirstName;
         protected String LastName;
-        protected LocalDate startWorkingDay;
+        protected Date startWorkingDay;
         protected boolean isFired;
 
-        public Worker(int branchID, String ID, String firstName, String lastName, LocalDate startWorkingDay, boolean isFired) {
+        public Worker(int branchID, String ID, String firstName, String lastName, Date startWorkingDay, boolean isFired) {
             this.branchID = branchID;
             this.ID = ID;
             FirstName = firstName;
@@ -76,7 +77,7 @@ public class DTO {
             this.isFired = isFired;
         }
 
-        public Worker(int branchID, String ID, String firstName, String lastName, LocalDate startWorkingDay) {
+        public Worker(int branchID, String ID, String firstName, String lastName, Date startWorkingDay) {
             this.branchID = branchID;
             this.ID = ID;
             FirstName = firstName;
@@ -87,7 +88,7 @@ public class DTO {
     }
 
     public static class Shift{
-        protected LocalDate date;
+        protected Date date;
         protected String shiftType;
         protected String shiftManagerID;
         protected String driverID;
@@ -99,7 +100,7 @@ public class DTO {
         //protected EnumMap<Qualifications,List<BussinessLayer.WorkersPackage.Worker>> workers;
 
 
-        public Shift(LocalDate date, String shiftType, String shiftManagerID, String driverID, int branchID) {
+        public Shift(Date date, String shiftType, String shiftManagerID, String driverID, int branchID) {
             this.date = date;
             this.shiftType = shiftType;
             this.shiftManagerID = shiftManagerID;
@@ -110,7 +111,7 @@ public class DTO {
 
     public static class ShiftDemands{
         protected int branchID;
-        protected LocalDate date;
+        protected Date date;
         protected ShiftType shiftType;
         protected int cashierAmount;
         protected int storeKeeperAmount;
@@ -119,7 +120,7 @@ public class DTO {
         protected int assistantAmount;
         protected boolean deliveryRequired;
 
-        public ShiftDemands(int branchID, LocalDate date, ShiftType shiftType, int cashierAmount, int storeKeeperAmount, int arrangerAmount, int guardAmount, int assistantAmount, boolean deliveryRequired) {
+        public ShiftDemands(int branchID, Date date, ShiftType shiftType, int cashierAmount, int storeKeeperAmount, int arrangerAmount, int guardAmount, int assistantAmount, boolean deliveryRequired) {
             this.branchID = branchID;
             this.date = date;
             this.shiftType = shiftType;
@@ -131,7 +132,7 @@ public class DTO {
             this.deliveryRequired = deliveryRequired;
         }
 
-        public ShiftDemands(int branchID, LocalDate date, ShiftType shiftType, int cashierAmount, int storeKeeperAmount, int arrangerAmount, int guardAmount, int assistantAmount) {
+        public ShiftDemands(int branchID, Date date, ShiftType shiftType, int cashierAmount, int storeKeeperAmount, int arrangerAmount, int guardAmount, int assistantAmount) {
             this.branchID = branchID;
             this.date = date;
             this.shiftType = shiftType;

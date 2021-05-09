@@ -1,5 +1,7 @@
 package BussinessLayer.WorkersPackage;
 
+import DataAccessLayer.Workers.Workers;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -11,8 +13,14 @@ public class BranchController {
     }
 
     public Worker findWorker(int branchID,String workerID){
-        Branch branch=getBranch(branchID);
-        return branch.FindWorker(workerID);
+        try{
+            return Workers.getWorker(workerID);
+        }catch(Exception e){
+            return null;
+        }
+//
+//        Branch branch=getBranch(branchID);
+//        return branch.FindWorker(workerID);
     }
     public Worker findWorkerByID(String ID){
         Worker w=null;
@@ -52,6 +60,10 @@ public class BranchController {
             throw new IllegalArgumentException("The branch manager and the HRD can't be the same person");
         Branch branch=new Branch(branchID,branchManager,activeHRD);
         branchList.add(branch);
+    }
+
+    public void addWorkerToDB(Worker worker,int branchID){
+        //Workers.
     }
 
     public void removeBranch(int branchID){

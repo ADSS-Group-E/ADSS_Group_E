@@ -3,6 +3,8 @@ package BussinessLayer.WorkersPackage;
 import BussinessLayer.DriverPackage.Driver;
 import BussinessLayer.Response;
 import BussinessLayer.ResponseT;
+import DataAccessLayer.Workers.Shifts;
+import DataAccessLayer.Workers.Workers;
 import PresentationLayer.*;
 
 import java.time.LocalDate;
@@ -39,6 +41,7 @@ public class WorkersFacade {
     public Response addShiftDemands(int branchID, LocalDate date, ShiftTypeDTO shiftType, ShiftDemandsDTO shiftDemands) {
         try {
             shiftController.addShiftDemands(branchID, date, convertShiftTypeToBusiness(shiftType), convertShiftDemandsToBusiness(shiftDemands));
+            Shifts.insertShiftDemands(date,shiftType.name(),branchID,shiftDemands.getCashierAmount(),shiftDemands.getStoreKeeperAmount(),shiftDemands.getArrangerAmount(),shiftDemands.getGuardAmount(),shiftDemands.getAssistantAmount(),shiftDemands.getDeliveryRequired()==true ? 1 : 0);
         }catch(Exception e){
             return new Response(e.getMessage());
         }
@@ -71,6 +74,7 @@ public class WorkersFacade {
     public Response addWorker(WorkerDTO worker, int branchID) {
         try {
             branchController.addWorker(convertWorkerToBusiness(worker), branchID);
+            Workers.insertWorker(convertWorkerToBusiness(worker),branchID);
         }catch(Exception e){
             return new Response(e.getMessage());
         }
@@ -80,6 +84,7 @@ public class WorkersFacade {
     public Response removeWorker(WorkerDTO worker, int branchID) {
         try{
         branchController.removeWorker(convertWorkerToBusiness(worker), branchID);
+        Workers.removeWorker(worker.getID());
         }catch(Exception e){
            return new Response(e.getMessage());
         }
