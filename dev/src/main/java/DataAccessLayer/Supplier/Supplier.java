@@ -1,6 +1,6 @@
 package DataAccessLayer.Supplier;
 
-import PresentationLayer.Supplier.DataTransferObjects.OrderDTO;
+import PresentationLayer.Supplier.DataTransferObjects.ContactDTO;
 import PresentationLayer.Supplier.DataTransferObjects.SupplierDTO;
 import PresentationLayer.Supplier.DataTransferObjects.SupplierItemDTO;
 
@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 class Supplier {
     private DBConnection db;
@@ -28,18 +27,38 @@ class Supplier {
         stmt = null;
     }
 
-    void insert(SupplierDTO sup) {
+    int insert(SupplierDTO sup) {
+        int generatedId = -1;
         try {
+            String[] key = {"companyNumber"};
             c = db.connect();
             stmt = c.createStatement();
             String sql = String.format("INSERT INTO Supplier (companyNumber, name, paymentMethod, bankAccount) " +
                     "VALUES (%d, '%s', '%s', '%s' );", sup.getCompanyNumber(), sup.getName(), sup.getPaymentMethod(), sup.getBankAccount());
+            c.prepareStatement(sql, key);
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                generatedId = rs.getInt(1);
+            }
             stmt.executeUpdate(sql);
             close();
+            Contact contact = new Contact(db);
+            for (ContactDTO contactDTO : sup.getContacts()) {
+                contact.insert(contactDTO);
+            }
+            Item item = new Item(db);
+            for (SupplierItemDTO itemDTO : sup.getItems()) {
+                item.insert(itemDTO);
+            }
+            if (sup.getQuantityWriter() != null) {
+                QuantityWriter quantityWriter = new QuantityWriter(db);
+                quantityWriter.insert(sup.getQuantityWriter());
+            }
         }
         catch (SQLException e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
         }
+        return generatedId;
     }
 
     ArrayList<SupplierDTO> select() {
@@ -51,8 +70,8 @@ class Supplier {
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 suppliers.add(new SupplierDTO(
-                        rs.getInt("companyNumber"), rs.getString("name"), rs.getString("bankAccount"), rs.getString("paymentMethod"),
-                        new ArrayList<>()));
+                        rs.getInt("companyNumber"), rs.getString("name"), rs.getString("bankAccount"), rs.getString("paymentMethod")
+                ));
             }
             close();
         }
@@ -62,45 +81,24 @@ class Supplier {
         return suppliers;
     }
 
-    ArrayList<SupplierItemDTO> selectAll() {
-        HashMap<SupplierDTO, ArrayList<OrderDTO>> supNorders = new HashMap<>();
-        HashMap<OrderDTO, ArrayList<SupplierItemDTO>> orders = new HashMap<>();
-        ArrayList<SupplierItemDTO> result = new ArrayList<>();
-        SupplierDTO supplier;
-        OrderDTO order;
-        SupplierItemDTO item;
+    SupplierDTO select(int id) {
+        SupplierDTO supplier = null;
         try {
             c = db.connect();
             stmt = c.createStatement();
-            String sql = "SELECT * FROM SupplierItem LEFT JOIN Order O on SupplierItem.orderID = O.orderID LEFT JOIN " +
-                    "Supplier S on O.companyNumber = S.companyNumber;";
+            String sql = String.format("SELECT * FROM Supplier WHERE companyNumber = %d;", id);
             ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                supplier = new SupplierDTO(rs.getInt("companyNumber"), rs.getString("name"), rs.getString("bankAccount"), rs.getString("paymentMethod"), new ArrayList<>());
-                if (!supNorders.containsKey(supplier))
-                    supNorders.put(supplier, new ArrayList<>());
-                order = new OrderDTO(rs.getInt("companyNumber"), rs.getString("date"), rs.getInt("periodicDelivery"), rs.getInt("needsDelivery"), new ArrayList<>());
-                if (!supNorders.get(supplier).contains(order))
-                    supNorders.get(supplier).add(order);
-                item = new SupplierItemDTO(rs.getInt("orderID"), rs.getString("name"), rs.getInt("quantity"), rs.getInt("price"), rs.getString("supplierCN"));
-                if (!orders.get(order).contains(item))
-                    orders.get(order).add(item);
-            }
-            for (SupplierDTO sup : supNorders.keySet()) {
-                for (int i = 0; i < supNorders.get(sup).size(); i++) {
-                    supNorders.get(sup).get(i).getOrderItems().addAll(orders.get(supNorders.get(sup).get(i)));
-                }
-            }
-            for (SupplierDTO sup : supNorders.keySet()) {
-                sup.getOrders().addAll(supNorders.get(sup));
-
+            if (rs.next()) {
+                supplier = new SupplierDTO(
+                        rs.getInt("companyNumber"), rs.getString("name"), rs.getString("bankAccount"), rs.getString("paymentMethod")
+                );
             }
             close();
         }
         catch (SQLException e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
         }
-        return result;
+        return supplier;
     }
 }
 

@@ -18,7 +18,6 @@ public class Main {
 
         // Prompt the user to optionally load the sample data
         System.out.println("Welcome to our system.");
-        /*
         System.out.println("Do you wish to load the sample data? (y/n) ");
         Scanner in = new Scanner(System.in);
         String verify = in.next().trim();
@@ -31,7 +30,7 @@ public class Main {
         else {
             System.out.println("Sample data not loaded.");
         }
-*/
+
         CLI.run();
     }
 }

@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 class Item {
     private DBConnection db;
@@ -32,7 +33,7 @@ class Item {
             c = db.connect();
             stmt = c.createStatement();
             String sql = String.format("INSERT INTO Item (name) " +
-                    "VALUES (%s);", item.getName());
+                    "VALUES ('%s');", item.getName());
             c.prepareStatement(sql, key);
             stmt.executeUpdate(sql);
             ResultSet rs = stmt.getGeneratedKeys();
@@ -40,8 +41,8 @@ class Item {
                 generatedId = rs.getInt(1);
             }
             item.setId(generatedId);
-            sql = String.format("INSERT INTO SupplierItem (ID, name, quantity, price, supplierCN, orderID) " +
-                    "VALUES (%d, %s, %d, %d, %s, NULL);", item.getId(), item.getName(), item.getQuantity(), item.getPrice(), item.getSupplierCN());
+            sql = String.format("INSERT INTO SupplierItem (name, quantity, price, supplierCN, orderID, companyNumber) " +
+                    "VALUES ('%s', %d, %d, '%s', NULL, %d);", item.getName(), item.getQuantity(), item.getPrice(), item.getSupplierCN(), item.getCompanyNumber());
             stmt.executeUpdate(sql);
             close();
         }
@@ -64,12 +65,12 @@ class Item {
         }
     }
 
-    void delete(SupplierItemDTO item) {
+    void delete(int id) {
         try {
             c = db.connect();
             stmt = c.createStatement();
             String sql = String.format("DELETE FROM SupplierItem WHERE " +
-                    "ID = %d;", item.getId());
+                    "ID = %d;", id);
             stmt.executeUpdate(sql);
             close();
         }
@@ -78,45 +79,84 @@ class Item {
         }
     }
 
-    ArrayList<SupplierItemDTO> selectFromSupplier(int companyNumber) {
-        ArrayList<SupplierItemDTO> suppliers = new ArrayList<>();
+    ArrayList<SupplierItemDTO> select() {
+        SupplierItemDTO item;
+        ArrayList<SupplierItemDTO> result = new ArrayList<>();
         try {
             c = db.connect();
             stmt = c.createStatement();
-            String sql = String.format("SELECT Item.* FROM SupplierItem LEFT JOIN Order O on SupplierItem.orderID = O.orderID LEFT JOIN " +
-                    "Supplier S on O.companyNumber = S.companyNumber WHERE companyNumber = %d;", companyNumber);
+            String sql = "SELECT * FROM SupplierItem WHERE orderID IS NOT NULL;";
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
-                suppliers.add(new SupplierItemDTO(
-                        rs.getInt("orderID"), rs.getString("name"), rs.getInt("quantity"), rs.getInt("price"), rs.getString("supplierCN")
-                ));
+                item = new SupplierItemDTO(rs.getInt("ID"), rs.getString("name"), rs.getInt("quantity"), rs.getInt("price"), rs.getString("supplierCN"));
+                item.setOrderID(rs.getInt("orderID"));
+                result.add(item);
             }
             close();
         }
         catch (SQLException e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
         }
-        return suppliers;
+        return result;
     }
 
-    SupplierItemDTO select(int orderID, int itemID) {
-        SupplierItemDTO supplier = null;
+    ArrayList<SupplierItemDTO> selectSC(int companyNumber) {
+        SupplierItemDTO item;
+        ArrayList<SupplierItemDTO> result = new ArrayList<>();
         try {
             c = db.connect();
             stmt = c.createStatement();
-            String sql = String.format("SELECT * FROM SupplierItem WHERE orderID = %s AND ID = %d", orderID, itemID);
+            String sql = String.format("SELECT * FROM SupplierItem WHERE orderID IS NULL AND companyNumber = %d;", companyNumber);
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
-                supplier = new SupplierItemDTO(
-                        rs.getInt("orderID"), rs.getString("name"), rs.getInt("quantity"), rs.getInt("price"), rs.getString("supplierCN")
-                );
+                item = new SupplierItemDTO(rs.getInt("ID"), rs.getString("name"), rs.getInt("quantity"), rs.getInt("price"), rs.getString("supplierCN"));
+                item.setOrderID(rs.getInt("orderID"));
+                result.add(item);
             }
             close();
         }
         catch (SQLException e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
         }
-        return supplier;
+        return result;
+    }
+
+    SupplierItemDTO select(int id) {
+        SupplierItemDTO item = null;
+        try {
+            c = db.connect();
+            stmt = c.createStatement();
+            String sql = String.format("SELECT * FROM SupplierItem WHERE " +
+                    "ID = %d AND orderID IS NOT NULL;", id);
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                item = new SupplierItemDTO(rs.getInt("ID"), rs.getString("name"), rs.getInt("quantity"), rs.getInt("price"), rs.getString("supplierCN"), rs.getInt("orderID"));
+            }
+            close();
+        }
+        catch (SQLException e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        }
+        return item;
+    }
+
+    SupplierItemDTO select(String name) {
+        SupplierItemDTO item = null;
+        try {
+            c = db.connect();
+            stmt = c.createStatement();
+            String sql = String.format("SELECT * FROM SupplierItem WHERE " +
+                    "name = '%s' AND orderID IS NULL;", name);
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                item = new SupplierItemDTO(rs.getInt("ID"), rs.getString("name"), rs.getInt("quantity"), rs.getInt("price"), rs.getString("supplierCN"));
+            }
+            close();
+        }
+        catch (SQLException e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        }
+        return item;
     }
 }
 

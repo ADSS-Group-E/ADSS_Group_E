@@ -3,6 +3,8 @@ package PresentationLayer.Supplier;
 import PresentationLayer.CommandLineInterface;
 import PresentationLayer.Option;
 import PresentationLayer.OptionsMenu;
+import PresentationLayer.Supplier.DataTransferObjects.OrderDTO;
+import PresentationLayer.Supplier.DataTransferObjects.SupplierItemDTO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,12 +23,12 @@ public class SupplierOptionsMenu extends OptionsMenu {
         options.put(i, new Option( "Back", this::back));
     }
 
-    InputService in = InputService.getInstance();
-    OutputService out = OutputService.getInstance();
-    ServiceController service = ServiceController.getInstance(); //initializes empty objects
+    private InputService in = InputService.getInstance();
+    private OutputService out = OutputService.getInstance();
+    private ServiceController service = ServiceController.getInstance(); //initializes empty objects
 
 
-    public void addSupplier(){
+    private void addSupplier(){
 
         //get supplier information
         String name = in.next("Enter supplier name: ");
@@ -50,12 +52,12 @@ public class SupplierOptionsMenu extends OptionsMenu {
         }
     }
 
-    public void createOrder(){
+    private void createOrder(){
         if (PresentationHandler.getInstance().showSupplierInfo()) { //if there are no suppliers to order from skip the case
             int input = 0;
-            ArrayList<String> supplierItems = null;
-            while (supplierItems == null) { //while the supplier number is illegal
-                input = in.nextInt("Enter number of the supplier: ");
+            ArrayList<SupplierItemDTO> supplierItems = new ArrayList<>();
+            while (supplierItems.size() == 0) { //while the supplier number is illegal
+                input = in.nextInt("Enter company number of the supplier: ");
                 supplierItems = service.getItemsFromSupplier(input);
             }
             boolean constantDelivery = in.nextBoolean("\nConstant Delivery? true/false "); //constant delivery?
@@ -67,58 +69,78 @@ public class SupplierOptionsMenu extends OptionsMenu {
         }
     }
 
-    public void getWeeklyOrders(){
-        ArrayList<String[]> orders = service.getRegularOrdersToStrings(); //gets data from the system
-        for (String[] order : orders) {
-            for (String s : order) { //print all orders
-                out.println(s);
+    private void getWeeklyOrders(){
+        ArrayList<OrderDTO> orders = service.getRegularOrdersToStrings(); //gets data from the system
+        for (OrderDTO order : orders) {
+            out.println(String.format("[ID: %d, Date: %s, Needs Delivery: %s, Periodic Delivery: %s]", order.getId(), order.getDate(), order.getNeedsDelivery() == 1, order.getPeriodicDelivery() == 1));
+            out.println("Items:");
+            for (SupplierItemDTO item : order.getOrderItems()) {
+                out.println(String.format("Name: %s\nPrice: %d\nQuantity: %d\nSupplier Catalog Number: %s\n]", item.getName(), item.getPrice(), item.getQuantity(), item.getSupplierCN()));
             }
         }
     }
 
-    public void updateQuantity(){
+    private void updateQuantity(){
         ArrayList<String[]> orders = service.getAllItems(); //gets all items
         if (orders.size() != 0) { //if there are no orders the case skips
-            for (int i = 0; i < orders.size(); i++) { //prints all of the items
-                String[] item = orders.get(i);
-                out.println(i + ") [Supplier Number: " + item[0] + "\n" +
-                        "Name: " + item[3] + "\n" +
-                        "Price: " + item[4] + "\n" +
-                        "Quantity: " + item[5] + "]\n");
+            for (String[] item : orders) { //prints all of the items
+                out.println("[ID: " + item[0] + "\n" +
+                        "Name: " + item[1] + "\n" +
+                        "Price: " + item[2] + "\n" +
+                        "Quantity: " + item[3] + "]\n" +
+                        "SupplierCN: " + item[4] + "]\n");
             }
-            int orderNumber = in.nextInt("Select an item Number: ");
-            int newQuantity = in.nextInt("Enter new quantity you wish to order for the item you chose: ");
-            if (orderNumber >= 0 && orderNumber < orders.size()) { //get order number
-                String[] orderToChange = orders.get(orderNumber);
-                if (!service.updateOrderItemQuantity(Integer.parseInt(orderToChange[0]), Integer.parseInt(orderToChange[1]),
-                        Integer.parseInt(orderToChange[2]), newQuantity)) { //if can't update
-                    out.println("The new quantity is illegal"); //the new quantity is illegal
+            int orderNumber;
+            int newQuantity;
+            String[] orderToChange = {};
+            boolean contains = false;
+            while (!contains) {
+                orderNumber = in.nextInt("Select an item ID: ");
+                for (String[] item : orders) {
+                    if (item[0].equals(orderNumber + "")) {
+                        contains = true;
+                        orderToChange = item;
+                        break;
+                    }
                 }
-            } else { //illegal item number
-                out.println("The item number is illegal");
+                if (!contains)
+                    out.println("Illegal Arguments, please try again.");
+            }
+            newQuantity = in.nextInt("Enter new quantity you wish to order for the item you chose: ");
+            if (!service.updateOrderItemQuantity(Integer.parseInt(orderToChange[0]),
+                    newQuantity)) { //if can't update
+                out.println("The new quantity is illegal"); //the new quantity is illegal
             }
         }
     }
 
-    public void deleteItem(){
+    private void deleteItem(){
         ArrayList<String[]> orders = service.getAllItems(); //gets all items
         if (orders.size() != 0) { //if there are no order we skip the case
-            for (int i = 0; i < orders.size(); i++) {
-                String[] item = orders.get(i);
-                out.println(i + ") [Supplier Number: " + item[0] + "\n" +
-                        "Name: " + item[3] + "\n" +
-                        "Price: " + item[4] + "\n" +
-                        "Quantity: " + item[5] + "]\n");
+            for (String[] item : orders) { //prints all of the items
+                out.println("[ID: " + item[0] + "\n" +
+                        "Name: " + item[1] + "\n" +
+                        "Price: " + item[2] + "\n" +
+                        "Quantity: " + item[3] + "]\n" +
+                        "SupplierCN: " + item[4] + "]\n");
             }
-            int orderNumber = in.nextInt("Select an item Number: ");
-            if (orderNumber >= 0 && orderNumber < orders.size()) {
-                String[] orderToChange = orders.get(orderNumber);
-                if (!service.deleteOrderItem(Integer.parseInt(orderToChange[0]), Integer.parseInt(orderToChange[1]),
-                        Integer.parseInt(orderToChange[2]))) {
+            boolean contains = false;
+            String[] orderToChange = {};
+            while (!contains) {
+                int orderNumber = in.nextInt("Select an item ID: ");
+                for (String[] item : orders) {
+                    if (item[0].equals(orderNumber + "")) {
+                        contains = true;
+                        orderToChange = item;
+                        break;
+                    }
+                }
+                if (!contains) {
+                    out.println("Illegal Arguments, please try again.");
+                }
+                if (!service.deleteOrderItem(Integer.parseInt(orderToChange[0]))) {
                     out.println("The new quantity is illegal");
                 }
-            } else {
-                out.println("The item number is illegal");
             }
         }
     }

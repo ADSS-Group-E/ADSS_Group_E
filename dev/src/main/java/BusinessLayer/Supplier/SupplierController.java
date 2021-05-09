@@ -1,7 +1,11 @@
 package BusinessLayer.Supplier;
 
 import DataAccessLayer.Supplier.DataController;
+import PresentationLayer.Inventory.DataTransferObjects.ItemDTO;
+import PresentationLayer.Supplier.DataTransferObjects.*;
 
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -9,17 +13,24 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class SupplierController {
-    private ArrayList<Supplier> suppliers;
+    private Contact contact;
+    private Item item;
+    private Order order;
+    private QuantityWriter quantityWriter;
+    private Supplier supplier;
     private DataController data;
     private final int maxDiscount = 100;
 
     public SupplierController() {
-        suppliers = new ArrayList<>();
+        contact = new Contact();
+        item = new Item();
+        order = new Order();
+        quantityWriter = new QuantityWriter();
+        supplier = new Supplier();
         data = new DataController();
     }
 
     public void initialize() {
-        suppliers = new ArrayList<>();
         data = new DataController();
         ArrayList<String[]> supplierOneItems = new ArrayList<>();//supplier one items
         supplierOneItems.add(new String[]{"Corn", 10 + "", 1500 + "", 5554 + ""});
@@ -39,16 +50,16 @@ public class SupplierController {
         register("Google", 54, "Paypal", "15144/455", supplierTwoItems, contacts, 10, 500, discounts);
         ArrayList<String[]> orderItems = new ArrayList<>();
         orderItems.add(new String[]{"Candy Corn", 30 + "", 100 + "", 8989 + ""});
-        createOrder(0, false, true, orderItems);
+        createOrder(10, false, true, orderItems);
         ArrayList<String[]> orderItems2 = new ArrayList<>();
         orderItems2.add(new String[]{"Dog", 3000 + "", 10 + "", 5041 + ""});
-        createOrder(1, true, true, orderItems2);
+        createOrder(54, true, true, orderItems2);
     }
 
     public ArrayList<String[]> getSuppliersInfo() {
         ArrayList<String[]> suppliersInfo = new ArrayList<>();
-        for (Supplier supplier : suppliers) {
-            String[] info = {supplier.getName(), supplier.getCompanyNumber(), supplier.getPaymentMethod(), supplier.getBankAccount()};
+        for (SupplierDTO supplier : data.getSuppliers()) {
+            String[] info = {supplier.getCompanyNumber() + "", supplier.getName(),  supplier.getPaymentMethod(), supplier.getBankAccount()};
             suppliersInfo.add(info);
         }
         return suppliersInfo;
@@ -56,121 +67,110 @@ public class SupplierController {
 
     public void register(String name, int companyNumber, String paymentMethod,
                  String bankAccount, ArrayList<String[]> items, ArrayList<String[]> contacts){
-        Item[] realItems = new Item[items.size()]; //create an arraylist with size of the number of items
-        Contact[] realContacts = new Contact[contacts.size()]; //create an arraylist with size of the number of contacts
-        for(int i = 0; i < realItems.length; i++){ //fills the item
-            realItems[i] = new Item(items.get(i)[0], Integer.parseInt(items.get(i)[1]), Integer.parseInt(items.get(i)[2]), Integer.parseInt(items.get(i)[3]));
+        ArrayList<SupplierItemDTO> itemDTOs = new ArrayList<>();
+        ArrayList<ContactDTO> contactDTOs = new ArrayList<>();
+        //create an arraylist with size of the number of items
+        //create an arraylist with size of the number of contacts
+        for (String[] strings : items) { //fills the item
+            itemDTOs.add(new SupplierItemDTO(strings[0], Integer.parseInt(strings[1]), Integer.parseInt(strings[2]), strings[3], companyNumber));
         }
-        for(int i = 0; i < realContacts.length; i++){ //fills the contacts
-            realContacts[i] = new Contact(contacts.get(i)[0], contacts.get(i)[1]);
+        for (String[] strings : contacts) { //fills the contacts
+            contactDTOs.add(new ContactDTO(strings[0], strings[1], companyNumber));
         }
-        suppliers.add(new Supplier(name, companyNumber, paymentMethod, bankAccount, Arrays.asList(realItems), Arrays.asList(realContacts))); //add a supplier
+        //add a supplier
+        SupplierDTO supplierDTO = new SupplierDTO(companyNumber, name, bankAccount, paymentMethod);
+        supplierDTO.setItems(itemDTOs);
+        supplierDTO.setContacts(contactDTOs);
+        data.insert(supplierDTO);
     }
 
     public void register(String name, int companyNumber, String paymentMethod, String bankAccount,
                          ArrayList<String[]> items, ArrayList<String[]> contacts, int regCostumer,
                          int minPrice, HashMap<Integer, Integer> discountSteps){
         //same as register only adds a quantity writer as well
-        Item[] realItems = new Item[items.size()];
-        Contact[] realContacts = new Contact[contacts.size()];
-        for(int i = 0; i < realItems.length; i++){
-            realItems[i] = new Item(items.get(i)[0], Integer.parseInt(items.get(i)[1]), Integer.parseInt(items.get(i)[2]), Integer.parseInt(items.get(i)[3]));
+        ArrayList<SupplierItemDTO> itemDTOs = new ArrayList<>();
+        ArrayList<ContactDTO> contactDTOs = new ArrayList<>();
+        ArrayList<DiscountStepDTO> discountStepDTOs = new ArrayList<>();
+        for (String[] strings : items) {
+            itemDTOs.add(new SupplierItemDTO(strings[0], Integer.parseInt(strings[1]), Integer.parseInt(strings[2]), strings[3], companyNumber));
         }
-        for(int i = 0; i < realContacts.length; i++){
-            realContacts[i] = new Contact(contacts.get(i)[0], contacts.get(i)[1]);
+        for (String[] strings : contacts) {
+            contactDTOs.add(new ContactDTO(strings[0], strings[1], companyNumber));
         }
-        QuantityWriter writer = new QuantityWriter(discountSteps, regCostumer, minPrice);
-        suppliers.add(new Supplier(name, companyNumber, paymentMethod, bankAccount, Arrays.asList(realItems), Arrays.asList(realContacts), writer));
+        for (Integer i : discountSteps.keySet()) {
+            DiscountStepDTO discount = new DiscountStepDTO(i, discountSteps.get(i));
+            discountStepDTOs.add(discount);
+        }
+        SupplierDTO supplierDTO = new SupplierDTO(companyNumber, name, bankAccount, paymentMethod);
+        supplierDTO.setItems(itemDTOs);
+        supplierDTO.setContacts(contactDTOs);
+        supplierDTO.setQuantityWriter(new QuantityWriterDTO(companyNumber, regCostumer, minPrice, discountStepDTOs));
+        data.insert(supplierDTO);
     }
 
     public int createOrder(int supplierNum, boolean needsDelivery, boolean constantDelivery, ArrayList<String[]> items){
-        Item[] realItems = new Item[items.size()];
-        for(int i = 0; i < realItems.length; i++){ //creates an item array from all the items provided
-            realItems[i] = new Item(items.get(i)[0], Integer.parseInt(items.get(i)[1]), Integer.parseInt(items.get(i)[2]), Integer.parseInt((items.get(i)[3])));
+        ArrayList<SupplierItemDTO> itemDTOs = new ArrayList<>();
+        for (String[] strings : items) { //creates an item array from all the items provided
+            itemDTOs.add(new SupplierItemDTO(strings[0], Integer.parseInt(strings[2]), Integer.parseInt(strings[1]), (strings[3]), supplierNum));
         }
-        Order order = new Order(constantDelivery, needsDelivery, Arrays.asList(realItems)); //creates the order
-        suppliers.get(supplierNum).addOrder(order); //adds the order
-        return suppliers.get(supplierNum).calcPrice(order); //calculates it's price
+        //creates the order
+        //adds the order
+        OrderDTO orderDTO = new OrderDTO(ZonedDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy-hh:mm:ss")), constantDelivery? 1 : 0, needsDelivery? 1 : 0, itemDTOs);
+        data.insert(orderDTO);
+        return quantityWriter.calcPrice(data.getSupplier(supplierNum).getQuantityWriter(), order.getPrice(orderDTO)); //calculates it's price
     }
 
-    public ArrayList<String[]> getRegularOrdersToStrings() {
-        ArrayList<String[]> regOrders = new ArrayList<>();
-        for (Supplier s : suppliers) {
-            ArrayList<Order> tempOrders = s.getOrders();
-            for (Order tempOrder : tempOrders) {
-                if (tempOrder.isConstantDelivery()) { //if order comes on a weekly basis
-                    ArrayList<String> items = tempOrder.getOrderItemsToString(); //get all orders to strings
-                    String[] bools = {"Weekly Delivery: " + tempOrder.isConstantDelivery(), "Delivery Needed: " + tempOrder.isNeedsDelivery() + "\nItems:"};
-                    String[] order = Stream.of(bools, items.toArray()).flatMap(Stream::of).toArray(String[]::new); //concat all the information
-                    regOrders.add(order); //add it to the tostring list
-                }
-            }
-        }
-        return regOrders;
+    public ArrayList<OrderDTO> getRegularOrdersToStrings() {
+        return data.selectRO();
     }
 
     public ArrayList<String[]> getAllItems() {
         ArrayList<String[]> regItems = new ArrayList<>();
-        for (int supplierNum = 0; supplierNum < suppliers.size(); supplierNum++) { //for each supplier
-            ArrayList<Order> tempOrders = suppliers.get(supplierNum).getOrders();
-            for (int orderNum = 0; orderNum < tempOrders.size(); orderNum++) { //for each order
-                Order tempOrder = tempOrders.get(orderNum);
-                for (int i = 0; i < tempOrder.getOrderItems().size(); i++) { //for each item
-                    Item item = tempOrder.getOrderItems().get(i);
-                    String[] itemString = {supplierNum + "", orderNum + "", i + "", item.getName(),
-                            item.getPrice() + "", item.getQuantity() + ""}; //put all the information in a string array
-                    regItems.add(itemString);
-                }
-            }
+        ArrayList<SupplierItemDTO> items = data.getItems();
+        for (SupplierItemDTO item : items) {
+            regItems.add(new String[]{item.getId() + "", item.getName(),
+                    item.getPrice() + "", item.getQuantity() + "", item.getSupplierCN(), item.getOrderID() + ""});
         }
         return regItems;
     }
 
     public String[] getSpecificItem(int supplierNum, int itemNum) {
-        if (supplierNum >= suppliers.size() || supplierNum < 0) return new String[]{}; //if supplier number is illegal
-        List<Item> items = suppliers.get(supplierNum).getItems();
-        if (itemNum >= items.size() || itemNum < 0) return new String[]{}; //if item number is illegal
-        return items.get(itemNum).toStringArray();
+        ArrayList<SupplierItemDTO> sup = data.getSupplierItems(supplierNum);
+        for (SupplierItemDTO item : sup) {
+            if (item.getId() == itemNum)
+                return new String[]{item.getId() + "", item.getName(), item.getPrice() + "", item.getQuantity() + "", item.getSupplierCN()};
+        }
+        return new String[]{};
     }
 
     public boolean updateSellerItemQuantity(int supplierNum, int itemNum, int quantity) {
-        if (supplierNum >= suppliers.size() || supplierNum < 0) return false; //if the supplier number not in range
-        List<Item> items = suppliers.get(supplierNum).getItems();
+        SupplierDTO sup = data.getSupplier(supplierNum);
+        if (sup == null) return false; //if the supplier number not in range
+        List<SupplierItemDTO> items = sup.getItems();
         if (itemNum >= items.size() || itemNum < 0) return false; //if the item number not in range
-        Item item = items.get(itemNum);
+        SupplierItemDTO item = items.get(itemNum);
         if (quantity <= 0 || quantity > item.getQuantity()) return false; //if the quantity we order is 0 or big than the quantity the supplier offers
         item.setQuantity(item.getQuantity() - quantity); //sets quantity
+        SupplierItemDTO supplierItemDTO = new SupplierItemDTO(itemNum, item.getName(), item.getQuantity(), item.getPrice(), "");
+        data.update(supplierItemDTO);
         return true;
     }
 
-    public boolean updateOrderItemQuantity(int supplierNum, int orderNum, int itemNum, int newQuantity) {
-        if (supplierNum >= suppliers.size() || supplierNum < 0) return false; //if supplier number is not in range
-        ArrayList<Order> orders = suppliers.get(supplierNum).getOrders();
-        if (orderNum >= orders.size() || orderNum < 0) return false; //if order number is not in range
-        Order order = orders.get(orderNum);
-        if (itemNum >= order.getOrderItems().size() || itemNum < 0) return false; //if item number is not in range
-        Item item = order.getOrderItems().get(itemNum);
-        int oldQuantity = item.getQuantity();
+    public boolean updateOrderItemQuantity(int itemNum, int newQuantity) {
         if (newQuantity <= 0) return false; //if the new quantity we order is illegal
-            item.setQuantity(newQuantity);
-        int supQuantity = suppliers.get(supplierNum).getItems().get(orderNum).getQuantity() - newQuantity + oldQuantity;
-        if (supQuantity < 0) return false; //if the new supplier quantity will be less than 0
-        suppliers.get(supplierNum).getItems().get(orderNum).setQuantity(supQuantity);
+        SupplierItemDTO item = data.select(itemNum);
+        int oldQuantity = item.getQuantity();
+        SupplierItemDTO supItem = data.select(item.getName());
+        int quan = supItem.getQuantity() - oldQuantity;
+        supItem.setQuantity(supItem.getQuantity() + oldQuantity - newQuantity);
+        item.setQuantity(newQuantity);
+        data.update(supItem);
+        data.update(item);
         return true;
     }
 
-    public boolean deleteCostumerItem(int supplierNum, int orderNum, int itemNum) {
-        if (supplierNum >= suppliers.size() || supplierNum < 0) return false; //if supplier number is not in range
-        ArrayList<Order> orders = suppliers.get(supplierNum).getOrders();
-        if (orderNum >= orders.size() || orderNum < 0) return false; //if order number is not in range
-        Order order = orders.get(orderNum);
-        if (itemNum >= order.getOrderItems().size() || itemNum < 0) return false; //if item number is not in range
-        ArrayList<Item> items = new ArrayList<>(order.getOrderItems());
-        int oldQuantity = items.get(itemNum).getQuantity();
-        items.remove(itemNum); //remove the item from a temporary list
-        order.setOrderItems(items); //set the order items to the items in temporary list
-        suppliers.get(supplierNum).getItems().get(itemNum).setQuantity(suppliers.get(supplierNum).getItems().get(itemNum).getQuantity()
-                 + oldQuantity); //set supplier quantity
+    public boolean deleteCostumerItem(int itemNum) {
+        data.delete(itemNum);
         return true;
     }
 
@@ -188,22 +188,16 @@ public class SupplierController {
         return false;
     }
 
-    public ArrayList<String> getItemsFromSupplier(int supplierNum) {
-        if (supplierNum >= suppliers.size() || supplierNum < 0) return null; //if supplier number is illegal
-        ArrayList<String> regOrders = new ArrayList<>();
-        List<Item> items = suppliers.get(supplierNum).getItems(); //get all items from a supplier
-        for (Item item : items) {
-            regOrders.add(item.toString());
-        }
-        return regOrders;
+    public ArrayList<SupplierItemDTO> getItemsFromSupplier(int supplierNum) {
+        return data.getSupplierItems(supplierNum); //get all items from a supplier
     }
 
-    public QuantityWriter getQuantityWriter(int idx){
-        return suppliers.get(idx).getQuantityWriter();
+    public QuantityWriterDTO getQuantityWriter(int idx){
+        return data.getSupplier(idx).getQuantityWriter();
     }
 
-    public Order getOrderFromSupplier(int supIdx, int orderIdx){
-        return suppliers.get(supIdx).getOrders().get(orderIdx);
+    public OrderDTO getOrderFromSupplier(int orderIdx){
+        return data.selectO(orderIdx);
     }
 
     public int getMaxDiscount() {

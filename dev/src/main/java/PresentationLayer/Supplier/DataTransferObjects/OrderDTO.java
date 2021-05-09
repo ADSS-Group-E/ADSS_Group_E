@@ -9,6 +9,14 @@ public class OrderDTO {
     private final int needsDelivery;
     private ArrayList<SupplierItemDTO> orderItems;
 
+    public OrderDTO(String date, int periodicDelivery, int needsDelivery, ArrayList<SupplierItemDTO> orderItems) {
+        this.id = -1;
+        this.date = date;
+        this.periodicDelivery = periodicDelivery;
+        this.needsDelivery = needsDelivery;
+        this.orderItems = orderItems;
+    }
+
     public OrderDTO(int id, String date, int periodicDelivery, int needsDelivery, ArrayList<SupplierItemDTO> orderItems) {
         this.id = id;
         this.date = date;
@@ -37,8 +45,7 @@ public class OrderDTO {
         return date;
     }
 
-    public void setOrderItems(ArrayList<SupplierItemDTO> orderItems) {
-        if (orderItems.equals(new ArrayList<>()))
-            this.orderItems = orderItems;
+    public void setOrderItems(ArrayList<SupplierItemDTO> items) {
+        this.orderItems = items;
     }
 }
