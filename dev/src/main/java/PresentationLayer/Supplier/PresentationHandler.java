@@ -79,10 +79,11 @@ public class PresentationHandler {
                 }
                 else { //if it doesn't exist
                     //user enters the rest of the data
+                    String inventoryId  = inputService.nextInt("Enter the item's ID in the Inventory System: ") + "";
                     String price = inputService.nextInt("Enter Item price: ") + "";
                     String quantity = inputService.nextInt("Enter Item quantity: ") + "";
                     String supplierCN = inputService.nextInt("Enter Item catalog number: ") + "";
-                    String[] order = {name, price, quantity, supplierCN}; //we create an order an add it to the list
+                    String[] order = {inventoryId, name, price, quantity, supplierCN}; //we create an order an add it to the list
                     list.add(order);
                 }
                 outputService.println("Add another Item? N/Y ");

@@ -120,7 +120,10 @@ public class ReportsOptionsMenu extends OptionsMenu {
                 if (!verify.equals("y")) {
                     break;
                 }
-                orderFromReportHandler.createOrderFromReport(lowStockRid);
+                System.out.println("Does this order need a delivery?: (y/n)");
+                verify = in.next().trim();
+                orderFromReportHandler.createOrderFromReport(lowStockRid, !verify.equals("y"));
+                System.out.println("The order was created successfully.");
                 break;
             case 3:
                 //Invalids report

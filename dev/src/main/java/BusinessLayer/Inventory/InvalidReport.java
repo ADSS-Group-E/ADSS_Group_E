@@ -13,6 +13,8 @@ public class InvalidReport extends Report{
     public InvalidReport(int rid, ArrayList<Product> products) {
         super(rid);
 
+        this.products = products;
+
         products.forEach((product) -> product.getExpiredItems().forEach(item -> AddRecord(item,product)));
     }
 

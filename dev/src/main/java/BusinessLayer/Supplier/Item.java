@@ -1,12 +1,15 @@
 package BusinessLayer.Supplier;
 
 public class Item {
+    private int inventoryId;
     private String name;
     private int price;
     private int quantity;
     private int supplierCN;
 
-    public Item(String name, int price, int quantity, int supplierCN) {
+
+    public Item(int inventoryId, String name, int price, int quantity, int supplierCN) {
+        this.inventoryId = inventoryId;
         this.name = name;
         this.price = price;
         this.quantity = quantity;
@@ -14,7 +17,7 @@ public class Item {
     }
 
     public String toString() {
-        return "Name: " + name + "\nPrice: " + price + "\nQuantity: " + quantity + "\nCatalog Number: " + supplierCN;
+        return "Name: " + name + "\nInventory ID: " + inventoryId + "\nPrice: " + price + "\nQuantity: " + quantity + "\nCatalog Number: " + supplierCN;
     }
 
     String[] toStringArray() {
