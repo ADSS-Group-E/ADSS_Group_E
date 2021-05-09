@@ -55,6 +55,8 @@ public class DataController {
         }
     }
 
+    public ArrayList<SupplierItemDTO> getSupplierItems(int id) { return items.selectSC(id); }
+
     public ArrayList<SupplierDTO> getSuppliers() {
         return supplier.select();
     }
@@ -102,6 +104,29 @@ public class DataController {
             itemDTOs.get(supplierItemDTO.getId()).setQuantity(supplierItemDTO.getQuantity());
         }
         items.update(supplierItemDTO);
+    }
+
+    public void delete(int id) {
+        itemDTOs.remove(id);
+        for (OrderDTO ord : orderDTOs.values()) {
+            for (SupplierItemDTO it : ord.getOrderItems()) {
+                if (it.getId() == id)
+                    ord.getOrderItems().remove(it);
+            }
+        }
+        for (SupplierDTO sup : suppliers.values()) {
+            for (OrderDTO ord : sup.getOrders()) {
+                for (SupplierItemDTO it : ord.getOrderItems()) {
+                    if (it.getId() == id)
+                        ord.getOrderItems().remove(it);
+                }
+            }
+        }
+        items.delete(id);
+    }
+
+    public OrderDTO selectO(int id) {
+        return orders.select(id);
     }
 }
 

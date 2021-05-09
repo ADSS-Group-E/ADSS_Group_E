@@ -105,22 +105,30 @@ class PresentationController {
                 case (4): {
                     ArrayList<String[]> orders = service.getAllItems(); //gets all items
                     if (orders.size() != 0) { //if there are no order we skip the case
-                        for (int i = 0; i < orders.size(); i++) {
-                            String[] item = orders.get(i);
-                            out.println(i + ") [Supplier Number: " + item[0] + "\n" +
-                                    "Name: " + item[3] + "\n" +
-                                    "Price: " + item[4] + "\n" +
-                                    "Quantity: " + item[5] + "]\n");
+                        for (String[] item : orders) { //prints all of the items
+                            out.println("[ID: " + item[0] + "\n" +
+                                    "Name: " + item[1] + "\n" +
+                                    "Price: " + item[2] + "\n" +
+                                    "Quantity: " + item[3] + "]\n" +
+                                    "SupplierCN: " + item[4] + "]\n");
                         }
-                        int orderNumber = in.nextInt("Select an item Number: ");
-                        if (orderNumber >= 0 && orderNumber < orders.size()) {
-                            String[] orderToChange = orders.get(orderNumber);
-                            if (!service.deleteOrderItem(Integer.parseInt(orderToChange[0]), Integer.parseInt(orderToChange[1]),
-                                    Integer.parseInt(orderToChange[2]))) {
+                        boolean contains = false;
+                        String[] orderToChange = {};
+                        while (!contains) {
+                            int orderNumber = in.nextInt("Select an item ID: ");
+                            for (String[] item : orders) {
+                                if (item[0].equals(orderNumber + "")) {
+                                    contains = true;
+                                    orderToChange = item;
+                                    break;
+                                }
+                            }
+                            if (!contains) {
+                                out.println("Illegal Arguments, please try again.");
+                            }
+                            if (!service.deleteOrderItem(Integer.parseInt(orderToChange[0]))) {
                                 out.println("The new quantity is illegal");
                             }
-                        } else {
-                            out.println("The item number is illegal");
                         }
                     }
                 }

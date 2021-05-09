@@ -35,10 +35,9 @@ class PresentationHandler {
                     outputService.println("[Name: " + realItem[0] + "]");
                 }
                 number = inputService.nextInt("Enter Item Number: "); //user enters number
-                int quantity;
-                quantity = inputService.nextInt("Enter Item quantity: "); //user enters quantity
+                int quantity = inputService.nextInt("Enter Item quantity: "); //user enters quantity
                 item = service.getSpecificItem(supplierNum, number); //we get the rest of the item from our data
-                while (item.length != 4) {
+                while (item.length != 5) {
                     //while we didn't recieve an item or the quantity can't be taken from the supplier
                     outputService.println("Please try again.");
                     number = inputService.nextInt("Enter Item Number: "); //user enters new number
@@ -91,7 +90,7 @@ class PresentationHandler {
                     String price = inputService.nextInt("Enter Item price: ") + "";
                     String quantity = inputService.nextInt("Enter Item quantity: ") + "";
                     String supplierCN = inputService.nextInt("Enter Item catalog number: ") + "";
-                    String[] order = {name, price, quantity, supplierCN}; //we create an order an add it to the list
+                    String[] order = {name, quantity, price, supplierCN}; //we create an order an add it to the list
                     list.add(order);
                 }
                 outputService.println("Add another Item? N/Y ");
@@ -169,9 +168,9 @@ class PresentationHandler {
      boolean showSupplierInfo(){
         ArrayList<String[]> sups = service.getSuppliersInfo();
         if (sups.size() == 0) return false; //we return false to release the user from picking a supplier when no supplier exists
-        for (int i = 0; i < sups.size(); i++) { //prints the suppliers info with an index the user has to put to pick a supplier
-            outputService.println(i + ": " + Arrays.toString(sups.get(i)));
-        }
+         for (String[] sup : sups) { //prints the suppliers info with an index the user has to put to pick a supplier
+             outputService.println(Arrays.toString(sup));
+         }
         return true;
     }
 
@@ -206,9 +205,9 @@ class PresentationHandler {
         StringBuilder result = new StringBuilder();
         int i;
         for (i = 0; i < items.size() - 1; i++) {
-            result.append(i).append(": ").append(String.format("ID: %d\nName: %s\nPrice: %d\nQuantity: %d\nSupplierCN: %s", items.get(i).getId(), items.get(i).getName(), items.get(i).getPrice(), items.get(i).getQuantity(), items.get(i).getSupplierCN())).append("\n\n"); //appends indexes to the items
+            result.append(String.format("ID: %d\nName: %s\nPrice: %d\nQuantity: %d\nSupplierCN: %s\n\n", items.get(i).getId(), items.get(i).getName(), items.get(i).getPrice(), items.get(i).getQuantity(), items.get(i).getSupplierCN())); //appends indexes to the items
         }
-        result.append(i).append(": ").append(items.get(i)); //appends last item without \n\n
+         result.append(String.format("ID: %d\nName: %s\nPrice: %d\nQuantity: %d\nSupplierCN: %s", items.get(i).getId(), items.get(i).getName(), items.get(i).getPrice(), items.get(i).getQuantity(), items.get(i).getSupplierCN())); //appends last item without \n\n
         return result.toString();
     }
 }

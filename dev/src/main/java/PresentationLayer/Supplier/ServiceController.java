@@ -77,9 +77,9 @@ public class ServiceController {
         return supplierController.updateOrderItemQuantity(itemNum, quantity);
     }
 
-    public boolean deleteOrderItem(int supplierNum, int orderNum, int itemNum) {
+    public boolean deleteOrderItem(int itemNum) {
         //deletes an item from an order and updates seller quantity of the item
-        return supplierController.deleteCostumerItem(supplierNum, orderNum, itemNum);
+        return supplierController.deleteCostumerItem(itemNum);
     }
 
     public boolean contains(String[] equal, ArrayList<String[]> list) {
@@ -97,9 +97,9 @@ public class ServiceController {
         return supplierController.getQuantityWriter(idx);
     }
 
-    public OrderDTO getOrderFromSupplier(int supIdx, int orderIdx){
+    public OrderDTO getOrderFromSupplier(int orderIdx){
         //gets specific order for test purposes
-        return supplierController.getOrderFromSupplier(supIdx, orderIdx);
+        return supplierController.getOrderFromSupplier(orderIdx);
     }
 
     public static ServiceController getInstance(){ //singleton pattern

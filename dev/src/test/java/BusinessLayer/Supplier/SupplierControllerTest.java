@@ -71,9 +71,9 @@ class SupplierControllerTest {
         ArrayList<SupplierItemDTO> items = new ArrayList<>();
         items.add(new SupplierItemDTO("Dog", 3000, 10, "5041"));
         controller.createOrder(0, true, true, supItems);
-        assertEquals(1, controller.getOrderFromSupplier(0, 1).getPeriodicDelivery());
-        assertEquals(1, controller.getOrderFromSupplier(0, 1).getNeedsDelivery());
-        assertEquals(controller.getOrderFromSupplier(0, 1).getOrderItems(), items);
+        assertEquals(1, controller.getOrderFromSupplier(1).getPeriodicDelivery());
+        assertEquals(1, controller.getOrderFromSupplier(1).getNeedsDelivery());
+        assertEquals(controller.getOrderFromSupplier(1).getOrderItems(), items);
     }
 
     @Test
@@ -94,16 +94,16 @@ class SupplierControllerTest {
 
     @Test
     void updateOrderItemQuantity() {
-        assertEquals(controller.getOrderFromSupplier(1, 0).getOrderItems().get(0).getQuantity(), 10);
+        assertEquals(controller.getOrderFromSupplier(1).getOrderItems().get(0).getQuantity(), 10);
         controller.updateOrderItemQuantity(1,0);
-        assertEquals(controller.getOrderFromSupplier(1, 0).getOrderItems().get(0).getQuantity(), 1);
+        assertEquals(controller.getOrderFromSupplier(1).getOrderItems().get(0).getQuantity(), 1);
     }
 
     @Test
     void deleteCostumerItem() {
-        assertEquals(controller.getOrderFromSupplier(1, 0).getOrderItems().get(0).getName(), "Dog");
-        controller.deleteOrderItem(1,0,0);
-        assertEquals(controller.getOrderFromSupplier(1, 0).getOrderItems().size(), 0);
+        assertEquals(controller.getOrderFromSupplier(1).getOrderItems().get(0).getName(), "Dog");
+        controller.deleteOrderItem(1);
+        assertEquals(controller.getOrderFromSupplier(1).getOrderItems().size(), 0);
     }
 
     @Test
