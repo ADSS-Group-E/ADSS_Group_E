@@ -23,6 +23,7 @@ public class Repo {
         Connection conn=openConnection();
         try (Statement stmt = conn.createStatement();) {
             createWorkers(conn);
+            createBranches(conn);
             createBankAccount(conn);
             createAvailableWorkDays(conn);
             createQualifications(conn);
@@ -311,11 +312,13 @@ public class Repo {
         try (Statement stmt = conn.createStatement();) {
 
             String sql1 = """
-                    CREATE TABLE IN NOT EXISTS "Branches" (
+                    CREATE TABLE IF NOT EXISTS "Branches" (
                     	"branchID"	INTEGER NOT NULL,
                     	"branchManagerID"	TEXT NOT NULL,
                     	"HRD_ID"	TEXT NOT NULL,
                     	PRIMARY KEY("branchID")
+                    	FOREIGN KEY (branchManagerID) REFERENCES Workers(id),            
+                        FOREIGN KEY (HRD_ID) REFERENCES Workers(id)
                     )
                         """;
             stmt.executeUpdate(sql1);
@@ -323,7 +326,6 @@ public class Repo {
         }catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     public static void createHiringConditions(Connection conn)  {
