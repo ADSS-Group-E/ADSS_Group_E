@@ -7,7 +7,7 @@ import BusinessLayer.Inventory.Category;
  * A DTO is an object that is used to encapsulate data and send it from one subsystem of an application to another.
  */
 
-public class CategoryDTO {
+public class CategoryDTO implements DataTransferObject{
     private final int cid;
     private final String name;
     private final int superCategoryId;
