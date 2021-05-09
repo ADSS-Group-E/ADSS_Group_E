@@ -10,6 +10,16 @@ import java.util.List;
 
 public class Delivery {
 
+    /*
+    "(ID VARCHAR(100) PRIMARY KEY NOT NULL," +
+                    "DELIVERY_DATE DATE    NOT NULL, " +
+                    "DELIVER_TIME  TIME NOT NULL ," +
+                    "DRIVER_ID TEXT NOT NULL, "+
+                    "SOURCE_LOCATION INT NOT NULL, "+
+                    "WEIGHT DOUBLE NOT NULL, "+
+                    "TRUCK_ID VARCHAR (100) NOT NULL, "+
+                    "STATUS VARCHAR (100) NOT NULL,"+
+     */
     public static void insertDelivery(DTO.Delivery d) throws SQLException {
         try (Connection conn = Repo.openConnection()) {
             String query = "INSERT OR IGNORE INTO Deliveries VALUES (?, ?, ? ,?,?,?,?,?)";
@@ -56,7 +66,20 @@ public class Delivery {
             throw e;
         }
     }
-
+    /*
+    "CREATE TABLE IF NOT EXISTS Deliveries" +
+                    "(ID VARCHAR(100) PRIMARY KEY NOT NULL," +
+                    "DELIVERY_DATE DATE    NOT NULL, " +
+                    "DELIVER_TIME  TIME NOT NULL ," +
+                    "DRIVER_ID TEXT NOT NULL, "+
+                    "SOURCE_LOCATION INT NOT NULL, "+
+                    "WEIGHT DOUBLE NOT NULL, "+
+                    "TRUCK_ID VARCHAR (100) NOT NULL, "+
+                    "STATUS VARCHAR (100) NOT NULL,"+
+                    "FOREIGN KEY (DRIVER_ID) REFERENCES Drivers(ID) ON DELETE RESTRICT ,"+
+                    "FOREIGN KEY (SOURCE_LOCATION) REFERENCES Locations(ID) ON DELETE RESTRICT ,"+
+                    "FOREIGN KEY (TRUCK_ID) REFERENCES Trucks(ID) ON DELETE RESTRICT )"
+     */
     public static BussinessLayer.DeliveryPackage.Delivery checkDelivery(String id) throws SQLException {
         try (Connection conn = Repo.openConnection()) {
             String sql = "SELECT * From Deliveries WHERE ID=?";
@@ -68,13 +91,16 @@ public class Delivery {
                 return null;
             List<Integer> locations=getTargetLocations(id);
             List<Integer> orders=getOrdersForDelivery(id);
-             return new BussinessLayer.DeliveryPackage.Delivery(results.getString(1),results.getDate(2),results.getTime(3),results.getString(4),results.getInt(5),
-                     locations,results.getDouble(6),results.getString(7),orders,results.getString(8));
-            } catch (Exception e) {
+            return new BussinessLayer.DeliveryPackage.Delivery(results.getString(1),results.getDate(2),results.getTime(3),results.getString(4),results.getInt(5),
+                    locations,results.getDouble(6),results.getString(7),orders,results.getString(8));
+        } catch (Exception e) {
             throw e;
         }
     }
-
+    /*
+    "(DELIVERY_ID VARCHAR(100)  NOT NULL," +
+                    "LOCATION_ID INT  NOT NULL, "
+     */
     public static List<Integer> getTargetLocations(String id) throws SQLException {
         List<Integer> locations=new ArrayList<>();
         try (Connection conn = Repo.openConnection()) {
@@ -90,7 +116,10 @@ public class Delivery {
         }
         return locations;
     }
-
+    /*
+    "(DELIVERY_ID VARCHAR(100)  NOT NULL," +
+                    "ORDER_ID INT  NOT NULL, "
+     */
     public static List<Integer> getOrdersForDelivery(String id) throws SQLException {
         List<Integer> orders=new ArrayList<>();
         try (Connection conn = Repo.openConnection()) {
@@ -362,7 +391,7 @@ public class Delivery {
         }
         return true;
     }
-        public static void printTargetLocation(String id) throws SQLException {
+    public static void printTargetLocation(String id) throws SQLException {
         try (Connection conn = Repo.openConnection()) {
             String sql = "SELECT * From LocationsForDelivery WHERE DELIVERY_ID=?";
             PreparedStatement pst = conn.prepareStatement(sql);
