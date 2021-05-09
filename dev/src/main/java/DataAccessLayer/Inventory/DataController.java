@@ -1,21 +1,23 @@
 package DataAccessLayer.Inventory;
 
+import DataAccessLayer.Inventory.DataAccessObjects.*;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class DataController {
-    private Category category;
-    private Discount discount;
-    private Item item;
-    private Product product;
-    private Report report;
+    private CategoryDAO category;
+    private DiscountDAO discount;
+    private ItemDAO item;
+    private ProductDAO product;
+    private ReportDAO report;
 
     public DataController() {
-        this.category = new Category(db);
-        this.discount = new Discount(db);
-        this.item = new Item(db);
-        this.product = new Product(db);
-        this.report = new Report(db);
+        this.category = new CategoryDAO(db);
+        this.discount = new DiscountDAO(db);
+        this.item = new ItemDAO(db);
+        this.product = new ProductDAO(db);
+        this.report = new ReportDAO(db);
     }
 
     private DBConnection db = () -> {

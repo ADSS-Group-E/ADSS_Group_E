@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * A DTO is an object that is used to encapsulate data and send it from one subsystem of an application to another.
  */
 
-public class DiscountDTO {
+public class DiscountDTO implements DataTransferObject{
     private final int did;
     private final String name;
     private final double discountPercent;
