@@ -323,7 +323,7 @@ public class Menu_Transport {
                 "10) change status\n11) display deliveries\n12) back to main menu");
         Scanner in = new Scanner(System.in);
         int choice = in.nextInt();
-        String id,name, licenseType, licenseExpDate, s2;
+        String id,name, licenseType, deliveryDate, s2;
         Date date;
         int s1;
         double totalWeight;
@@ -350,13 +350,22 @@ public class Menu_Transport {
                         orders.add(s1);
                         s1 = in.nextInt();
                     }
-                    System.out.println("please ender delivery details: id, delivery day, leaving time, driver id," +
-                            "\nsource location, truck id");
+                    System.out.println("please enter delivery id");
                     id=in.next();
-                    licenseExpDate = in.next();
-                    date = new SimpleDateFormat("dd/MM/yyyy").parse(licenseExpDate);
+                    System.out.println("please enter delivery day:");
+                    LocalDate localDate;
+                    do {
+                        System.out.println("delivery day must be next week date");
+                        deliveryDate = in.next();
+                        date = new SimpleDateFormat("dd/MM/yyyy").parse(deliveryDate);
+                        localDate=convertToLocalDateViaSqlDate(date);
+                    }
+                    while (!isDayNextWeek(localDate));
+                    System.out.println("please enter leaving time (must be between 08:00-23:00):");
                     String ss1 = in.next();
                     Time newTime1 = Time.valueOf(ss1);
+                    System.out.println("please enter: driver id," +
+                            "\nsource location, truck id");
                     String name1 = in.next();
                     int loc = in.nextInt();
                     s2 = in.next();
@@ -370,8 +379,8 @@ public class Menu_Transport {
                 case 3:
                     System.out.println("please enter the delivery id and the new delivery day");
                     id = in.next();
-                    licenseExpDate = in.next();
-                    date = new SimpleDateFormat("dd/MM/yyyy").parse(licenseExpDate);
+                    deliveryDate = in.next();
+                    date = new SimpleDateFormat("dd/MM/yyyy").parse(deliveryDate);
                     facade.updateDeliveryDate(id, date);
                     break;
                 case 4:
@@ -565,6 +574,36 @@ public class Menu_Transport {
     }
     */
 
+    public static boolean isDayNextWeek(LocalDate day){
+        LocalDate upcomingSunday=LocalDate.now();
+        switch (upcomingSunday.getDayOfWeek().getValue()){
+            case 1:
+                upcomingSunday=upcomingSunday.plusDays(6);
+                break;
+            case 2:
+                upcomingSunday=upcomingSunday.plusDays(5);
+                break;
+            case 3:
+                upcomingSunday=upcomingSunday.plusDays(4);
+                break;
+            case 4:
+                upcomingSunday=upcomingSunday.plusDays(3);
+                break;
+            case 5:
+                upcomingSunday=upcomingSunday.plusDays(2);
+                break;
+            case 6:
+                upcomingSunday=upcomingSunday.plusDays(1);
+                break;
+            case 7:
+                break;
+        }
+        LocalDate Nextsunday=upcomingSunday.plusDays(7);
+        return  day.isBefore(Nextsunday)&&(day.isAfter(upcomingSunday)||day.isEqual(upcomingSunday)) ? true : false;
+    }
+    public static LocalDate convertToLocalDateViaSqlDate(Date dateToConvert) {
+        return new java.sql.Date(dateToConvert.getTime()).toLocalDate();
+    }
 
     public static void init()
     {

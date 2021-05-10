@@ -2,10 +2,13 @@ package BussinessLayer.DeliveryPackage;
 import BussinessLayer.DriverPackage.Driver;
 import BussinessLayer.DriverPackage.DriverController;
 import BussinessLayer.Response;
+import BussinessLayer.WorkersPackage.Shift;
+import BussinessLayer.WorkersPackage.ShiftDemands;
 import BussinessLayer.WorkersPackage.Worker;
 import BussinessLayer.WorkersPackage.WorkersFacade;
 import DataAccessLayer.Transports.DTO;
 import DataAccessLayer.Transports.Drivers;
+import DataAccessLayer.Workers.Shifts;
 import DataAccessLayer.Workers.Workers;
 import PresentationLayer.DriverDTO;
 import PresentationLayer.WorkerDTO;
@@ -13,6 +16,7 @@ import PresentationLayer.WorkerDTO;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 public class DeliveryFacade {
@@ -59,7 +63,6 @@ public class DeliveryFacade {
             if(DataAccessLayer.Transports.Order.checkOrder(s)==null)
                 throw new Exception("the order doesn't exist");
             weight += orderController.getOrder(s).getTotalWeight();
-
         }
         weight += truckController.getTruck(truckId).getNetoWeight();
         Date date = new Date();
@@ -79,13 +82,29 @@ public class DeliveryFacade {
         if(DataAccessLayer.Transports.Delivery.checkDTforDate(id, new java.sql.Date(deliveryDay.getTime()),driverId,truckId))
             throw new Exception("the truck or driver is used at the same date");
         if(locationController.getLocation(srcLocation)==null)
-            throw new Exception("sorce location doesn't exists");
+            throw new Exception("source location doesn't exists");
         if(!checkArea(targetLocation))
             throw new Exception("locations are not in the another area");
-
+        if(shiftType(leavingTime)==null)
+            throw new Exception("leaving time must be between 08:00-23:00");
         Delivery delivery = new Delivery(id, deliveryDay, leavingTime, driverId, srcLocation, targetLocation, weight, truckId, orders);
         deliveryFacade.addDelivery(delivery);
+        updateShiftDemandsDeliveryRequired(deliveryDay,shiftType(leavingTime), srcLocation,true);
         return delivery;
+    }
+    public static String shiftType(Time time){
+        if((time.after(Time.valueOf("08:00:00"))||time.toString().equals("08:00:00"))&&time.before(Time.valueOf("16:00:00")))
+            return "Morning";
+        if((time.after(Time.valueOf("16:00:00"))||time.toString().equals("16:00:00"))&&(time.before(Time.valueOf("23:00:00"))||time.toString().equals("23:00:00")))
+            return "Evening";
+        return null;
+    }
+    public void updateShiftDemandsDeliveryRequired(Date date, String shiftType, int branchID, boolean deliveryRequired) throws SQLException {
+        ShiftDemands shiftDemand=Shifts.getShiftDemands(convertToLocalDateViaSqlDate(date),shiftType,branchID);
+        Shifts.setDeliveryRequired(convertToLocalDateViaSqlDate(date),shiftType,branchID,deliveryRequired);
+    }
+    public static LocalDate convertToLocalDateViaSqlDate(Date dateToConvert) {
+        return new java.sql.Date(dateToConvert.getTime()).toLocalDate();
     }
 
     public Delivery getDelivery(String id) throws Exception {
@@ -94,6 +113,7 @@ public class DeliveryFacade {
             throw new Exception("the delivery doesn't exists");
         return d;
     }
+
 
     public Location getLocation(int id) throws Exception {
         Location l=DataAccessLayer.Transports.Location.checkLocation(id);

@@ -41,6 +41,7 @@ public class Shifts {
                                         )
     */
 
+
     public static void insertShiftDemands(LocalDate localDate,String shiftType,int branchID,int cashierAmount,int storeKeeperAmount,int arrangerAmount,int guardAmount,int assistantAmount, int deliveryRequired) throws SQLException {
         try (Connection conn = Repo.openConnection()) {
             String query = "INSERT OR IGNORE INTO ShiftDemands VALUES (?, ?, ? , ? , ? , ? , ?, ? , ?)";
@@ -60,6 +61,8 @@ public class Shifts {
             throw e;
         }
     }
+
+
     /*
     CREATE TABLE IF NOT EXISTS Shifts (
                     	Date	DATE NOT NULL,
@@ -160,6 +163,27 @@ CREATE TABLE IF NOT EXISTS workersAtShift (
         } catch (SQLException e) {
             throw e;
         }
+    }
+
+    public static void setDeliveryRequired(LocalDate localDate,String shiftType,int branchID,boolean deliveryRequired) throws SQLException{
+        try (Connection conn = Repo.openConnection()) {
+            int required = deliveryRequired == true ? 1 : 0;
+            String sql = """
+                    UPDATE ShiftDemands
+                    SET deliveryRequired = ?
+                    WHERE ShiftDemands.Date=? AND ShiftDemands.ShiftType=? AND ShiftDemands.BranchID=?""";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            Date date=Date.valueOf(localDate);
+            pst.setInt(1,required);
+            pst.setDate(2,  date);
+            pst.setString(3, shiftType);
+            pst.setInt(4, branchID);
+
+            pst.executeUpdate();
+
+        } catch (Exception e) {
+            throw e;        }
+
     }
 
             /*

@@ -1080,7 +1080,7 @@ public class Workers {
         }
 
     }
-
+/*
     /*
     CREATE TABLE IF NOT EXISTS "Workers" (
                         	"ID"	TEXT NOT NULL,
@@ -1126,7 +1126,6 @@ public class Workers {
         } catch (Exception e) {
             throw e;
         }
-
     }
 
 
