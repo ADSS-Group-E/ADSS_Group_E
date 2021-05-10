@@ -23,24 +23,10 @@ public class ReportDAO extends DataAccessObject{
         return null;
     }
 
-    @Override
-    protected String createGetString(int id) {
-        return null;
-    }
 
     @Override
     <T extends DataTransferObject> T resultToDTO(ResultSet resultSet) throws SQLException {
         return null;
-    }
-
-    @Override
-    String createSelectAllString() {
-        return null;
-    }
-
-    @Override
-    String createInsertString(DataTransferObject report) {
-        return createInsertString((ReportDTO) report);
     }
 
     String createInsertString(ReportDTO report) {

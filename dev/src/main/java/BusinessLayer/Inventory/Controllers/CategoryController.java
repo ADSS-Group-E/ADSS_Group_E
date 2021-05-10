@@ -20,6 +20,7 @@ import java.util.HashMap;
 public class CategoryController {
     private final HashMap<Integer, Category> categories;
     private final CategoryDAO categoryDAO;
+    private boolean loadedAll = false;
 
     public CategoryController() {
         this.categories = new HashMap<>();
@@ -34,6 +35,11 @@ public class CategoryController {
         else{
             // Not in business layer, try to lazy load
             CategoryDTO categoryDTO = categoryDAO.get(cid);
+            if (categoryDTO == null){
+                System.err.println( "Category id " + cid + " does not exist.");
+                return null;
+            }
+
             Category category = new Category(categoryDTO);
             categories.put(category.getCid(),category);
             return category;
@@ -41,6 +47,18 @@ public class CategoryController {
     }
 
     public ArrayList<Category> getList() {
+        if (loadedAll)
+            return new ArrayList<>(categories.values());
+        // Load not yet loaded products from database
+        ArrayList<CategoryDTO> categoryDTOS = categoryDAO.selectAll();
+        for (CategoryDTO categoryDTO:
+                categoryDTOS) {
+            if (!categories.containsKey(categoryDTO.getCid())){
+                Category category = new Category(categoryDTO);
+                categories.put(category.getCid(),category);
+            }
+        }
+        loadedAll = true;
         return new ArrayList<>(categories.values());
     }
 
@@ -49,11 +67,8 @@ public class CategoryController {
      * @param category to add
      */
     public void addCategory(Category category) {
-        if (categories.containsKey(category.getCid())) {
-            throw new IllegalArgumentException("Category cid already exist");
-        } else {
-            categories.put(category.getCid(), category);
-        }
+        categoryDAO.insert(new CategoryDTO(category));
+        categories.put(category.getCid(),category);
     }
 
     /**
@@ -62,11 +77,9 @@ public class CategoryController {
      * @param name of the category
      */
     public void addCategory(int cid, String name) {
-        if (categories.containsKey(cid)) {
-            throw new IllegalArgumentException("Category cid already exist");
-        } else {
-            categories.put(cid, new Category(cid, name));
-        }
+        Category category = new Category(cid, name);
+        categoryDAO.insert(new CategoryDTO(category));
+        categories.put(category.getCid(),category);
     }
 
     /**
@@ -74,11 +87,7 @@ public class CategoryController {
      * @param cid the cid of the category to be removed
      */
     public void removeCategory (int cid) {
-        if (categories.containsKey(cid)) {
-            categories.remove(cid);
-        }
-        else {
-            throw new IllegalArgumentException("Category ID does not exist");
-        }
+        categoryDAO.delete(cid);
+        categories.remove(cid);
     }
 }

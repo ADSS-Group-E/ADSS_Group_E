@@ -23,23 +23,8 @@ public class DiscountDAO extends DataAccessObject{
     }
 
     @Override
-    protected String createGetString(int id) {
-        return null;
-    }
-
-    @Override
     <T extends DataTransferObject> T resultToDTO(ResultSet resultSet) throws SQLException {
         return null;
-    }
-
-    @Override
-    String createSelectAllString() {
-        return null;
-    }
-
-    @Override
-    String createInsertString(DataTransferObject discount) {
-        return createInsertString((DiscountDTO) discount);
     }
 
     String createInsertString(DiscountDTO discount) {

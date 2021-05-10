@@ -35,7 +35,16 @@ public class ProductController {
         else{
             // Not in business layer, try to lazy load
             ProductDTO productDTO = productDAO.get(pid);
+            if (productDTO == null){
+                System.err.println( "Product id " + pid + " does not exist.");
+                return null;
+            }
+
             Category category = cCont.getCategory(productDTO.getCategoryId());
+            if (category == null){
+                return null;
+            }
+
             Product product = new Product(productDTO, category);
             products.put(pid,product);
             return product;
@@ -50,13 +59,8 @@ public class ProductController {
 
     // Remover
     public void removeProduct (int pid) {
-
-        if (products.containsKey(pid)) {
-            products.remove(pid);
-        }
-        else {
-            throw new IllegalArgumentException("Product pid does not exist");
-        }
+        productDAO.delete(pid);
+        products.remove(pid);
     }
 
     // More getters
@@ -69,6 +73,9 @@ public class ProductController {
              productDTOs) {
             if (!products.containsKey(productDTO.getPid())){
                 Category category = cCont.getCategory(productDTO.getCategoryId());
+                if (category == null){
+                    return null;
+                }
                 Product product = new Product(productDTO, category);
                 products.put(productDTO.getPid(),product);
             }

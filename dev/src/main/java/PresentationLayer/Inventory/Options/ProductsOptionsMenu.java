@@ -50,8 +50,10 @@ public class ProductsOptionsMenu extends OptionsMenu {
      */
     public void getProductList(){
         ArrayList<ProductDTO> DTOlist = parentCLI.getFacade().getProductList();
-        System.out.printf("%-10s %s%n", "PID","Name");
-        DTOlist.forEach((DTO)->System.out.printf("%-10s %s%n", DTO.getPid(),DTO.getName()));
+        if (DTOlist != null){
+            System.out.printf("%-10s %s%n", "PID","Name");
+            DTOlist.forEach((DTO)->System.out.printf("%-10s %s%n", DTO.getPid(),DTO.getName()));
+        }
     }
 
     /**

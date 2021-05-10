@@ -43,7 +43,9 @@ public class CategoryDTO implements DataTransferObject{
         return name;
     }
 
-    public int getSuperCategoryId() {
+    public Integer getSuperCategoryId() {
+        if (superCategoryId == -1)
+            return null;
         return superCategoryId;
     }
 

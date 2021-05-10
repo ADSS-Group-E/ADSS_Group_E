@@ -9,14 +9,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductDAO extends DataAccessObject {
+
     public ProductDAO(String databaseUrl) {
         super(databaseUrl);
+        tableName = "Product";
+    }
+
+    public ProductDAO() {
+        super();
+        tableName = "Product";
     }
 
     @Override
     protected PreparedStatement createInsertPreparedStatement(DataTransferObject dataTransferObject) throws SQLException {
         return createInsertPreparedStatement((ProductDTO) dataTransferObject);
     }
+
 
     protected PreparedStatement createInsertPreparedStatement(ProductDTO productDTO) throws SQLException {
         String sql = "INSERT INTO Product (ID, name, storeLocation, storageLocation, " +
@@ -43,38 +51,9 @@ public class ProductDAO extends DataAccessObject {
         return pstmt;
     }
 
-    public ProductDAO() {
-        super();
-    }
-
-    @Override
-    protected String createGetString(int id) {
-        return  String.format("SELECT * FROM Product WHERE ID = %d", id);
-    }
-
-    @Override
-    String createSelectAllString() {
-        return "SELECT * FROM Product";
-    }
-
-    @Override
-    String createInsertString(DataTransferObject productDTO) {
-        return createInsertString((ProductDTO) productDTO);
-    }
-
-    String createInsertString(ProductDTO productDTO) {
-        return String.format("INSERT INTO Product (ID, name, storeLocation, storageLocation, " +
-                        "manufacturer, buyPrice, sellPrice, minAmount, categoryDTO, buyDiscountID, sellDiscountID) " +
-                        "VALUES (%d, %s, %s, %s, %s, %f, %f, %d, %d, %f, %f);", productDTO.getPid(), productDTO.getName(), productDTO.getStorageLocation(),
-                productDTO.getStoreLocation(), productDTO.getManufacturer(), productDTO.getBuyingPrice(), productDTO.getSellingPrice(), productDTO.getMinAmount(),
-                productDTO.getCategoryId(), productDTO.getBuyingPriceAfterDiscount(), productDTO.getSellingPriceAfterDiscount());
-    }
-
-
 
     public ArrayList<ProductDTO> selectAll () {
-        ArrayList<ProductDTO> productDTOS = (ArrayList<ProductDTO>) selectAllGeneric();
-        return productDTOS;
+        return (ArrayList<ProductDTO>) selectAllGeneric();
     }
 
     @Override

@@ -39,6 +39,9 @@ public class Facade {
 
     // Getters
     public ProductDTO getProduct(int pid){
+        Product product = pCont.getProduct(pid);
+        if (product == null)
+            return null;
         return new ProductDTO(pCont.getProduct(pid));
     }
 
@@ -46,6 +49,9 @@ public class Facade {
         ArrayList<ProductDTO> DTOlist = new ArrayList<>();
         //Turn products into DTOs
         ArrayList<Product> productList = pCont.getList();
+        if (productList == null){
+            return null;
+        }
         productList.forEach((product)-> DTOlist.add(new ProductDTO(product)));
         return DTOlist;
     }
@@ -86,6 +92,9 @@ public class Facade {
 
     // Getters
     public CategoryDTO getCategory(int cid) {
+        Category category = cCont.getCategory(cid);
+        if (category == null)
+            return null;
         return new CategoryDTO(cCont.getCategory(cid));
     }
 

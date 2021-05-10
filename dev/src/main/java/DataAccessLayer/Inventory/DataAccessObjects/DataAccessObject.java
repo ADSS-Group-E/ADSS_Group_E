@@ -8,7 +8,8 @@ import java.util.ArrayList;
 
 public abstract class DataAccessObject {
     Connection c = null;
-    String databaseUrl = null;
+    String databaseUrl;
+    protected String tableName;
 
     public DataAccessObject() {
         this.databaseUrl = "jdbc:sqlite:module.db";
@@ -42,7 +43,7 @@ public abstract class DataAccessObject {
         try {
             c = this.connect();
             Statement stmt = c.createStatement();
-            String sql = createSelectAllString();
+            String sql = "SELECT * FROM " + tableName;
             ResultSet result = stmt.executeQuery(sql);
 
             ArrayList<DataTransferObject> dataTransferObjects = new ArrayList<>();
@@ -54,7 +55,6 @@ public abstract class DataAccessObject {
         }
         catch (SQLException e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-            // TODO - don't catch exceptions - need to display and disrupt
             return null;
         }
     }
@@ -63,7 +63,7 @@ public abstract class DataAccessObject {
         try {
             c = this.connect();
             Statement stmt = c.createStatement();
-            String sql = createGetString(id);
+            String sql = String.format("SELECT * FROM %s WHERE ID = %d", tableName, id);;
             ResultSet result = stmt.executeQuery(sql);
             T dataTransferObject = null;
             if (result.next()){
@@ -74,18 +74,25 @@ public abstract class DataAccessObject {
         }
         catch (SQLException e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-            // TODO - don't catch exceptions - need to display and disrupt
             return null;
         }
     }
 
-    protected abstract String createGetString(int id);
+    public void delete(int id){
+        try {
+            c = this.connect();
+            Statement stmt = c.createStatement();
+            String sql = "DELETE FROM " + tableName + " WHERE ID = " + id;
+            stmt.executeUpdate(sql);
+            close();
+        }
+        catch (SQLException e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        }
+    }
 
     abstract <T extends DataTransferObject> T resultToDTO(ResultSet resultSet) throws SQLException;
 
-    abstract String createSelectAllString();
-
-    abstract String createInsertString(DataTransferObject dataTransferObject);
 
     private Connection connect() {
         // SQLite connection string

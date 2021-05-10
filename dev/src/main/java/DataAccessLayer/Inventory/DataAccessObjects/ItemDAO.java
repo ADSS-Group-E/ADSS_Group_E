@@ -24,23 +24,8 @@ public class ItemDAO extends DataAccessObject{
     }
 
     @Override
-    protected String createGetString(int id) {
-        return null;
-    }
-
-    @Override
     <T extends DataTransferObject> T resultToDTO(ResultSet resultSet) throws SQLException {
         return null;
-    }
-
-    @Override
-    String createSelectAllString() {
-        return null;
-    }
-
-    @Override
-    String createInsertString(DataTransferObject item) {
-        return createInsertString((ItemDTO) item);
     }
 
     String createInsertString(ItemDTO item) {

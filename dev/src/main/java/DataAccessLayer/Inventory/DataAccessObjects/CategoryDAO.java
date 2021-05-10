@@ -6,25 +6,42 @@ import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
 import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class CategoryDAO extends DataAccessObject{
 
+
     public CategoryDAO(String databaseUrl) {
         super(databaseUrl);
+        tableName = "Category";
     }
 
     @Override
     protected PreparedStatement createInsertPreparedStatement(DataTransferObject dataTransferObject) throws SQLException {
-        return null;
+        return createInsertPreparedStatement((CategoryDTO) dataTransferObject);
+    }
+
+    protected PreparedStatement createInsertPreparedStatement(CategoryDTO categoryDTO) throws SQLException {
+        String sql = "INSERT INTO " + tableName + " (ID, name, superID)  " +
+                "VALUES (?, ?, ?);";
+        PreparedStatement pstmt = this.c.prepareStatement(sql);
+        pstmt.setInt(1,categoryDTO.getCid());
+        pstmt.setString(2, categoryDTO.getName());
+        if (categoryDTO.getSuperCategoryId() == null)
+            pstmt.setNull(3,Types.INTEGER);
+        else
+            pstmt.setInt(3, categoryDTO.getSuperCategoryId());
+
+        return pstmt;
+    }
+
+    public ArrayList<CategoryDTO> selectAll () {
+        return (ArrayList<CategoryDTO>) selectAllGeneric();
     }
 
     public CategoryDAO() {
         super();
-    }
-
-    @Override
-    protected String createGetString(int id) {
-        return  String.format("SELECT * FROM Category WHERE ID = %d", id);
+        tableName = "Category";
     }
 
     @Override
@@ -32,22 +49,6 @@ public class CategoryDAO extends DataAccessObject{
         return new CategoryDTO(  resultSet.getInt("ID"),
                 resultSet.getString("name"),
                 resultSet.getInt("superID"));
-    }
-
-    @Override
-    String createSelectAllString() {
-        return null;
-    }
-
-
-    @Override
-    String createInsertString(DataTransferObject category) {
-        return createInsertString((CategoryDTO) category);
-    }
-
-    String createInsertString(CategoryDTO category) {
-        return String.format("INSERT INTO Category (ID, name, superID) " +
-                "VALUES (%d, %s, %d);", category.getCid(), category.getName(), category.getSuperCategoryId());
     }
 
 }
