@@ -9,6 +9,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 public class Shifts {
 
@@ -60,7 +61,7 @@ public class Shifts {
         }
     }
     /*
-    CREATE TABLE Shifts (
+    CREATE TABLE IF NOT EXISTS Shifts (
                     	Date	DATE NOT NULL,
                     	ShiftType	TEXT NOT NULL,
                     	BranchID	INTEGER NOT NULL,
@@ -68,6 +69,7 @@ public class Shifts {
                     	DriverID	TEXT,
                     	FOREIGN KEY(ShiftManagerID) REFERENCES Workers(ID) ON DELETE CASCADE ,
                     	FOREIGN KEY(DriverID) REFERENCES Drivers(ID) ON DELETE CASCADE ,
+                    	FOREIGN KEY (Date,ShiftType,BranchID) REFERENCES ShiftDemands(Date,ShiftType,BranchID) ON DELETE CASCADE ,
                     	PRIMARY KEY(Date,ShiftType,BranchID)
                     )
      */
@@ -76,9 +78,9 @@ public class Shifts {
 
     public static void insertShift(LocalDate localDate,String shiftType,int branchID,String shiftManagerID,String DriverID) throws SQLException {
         try (Connection conn = Repo.openConnection()) {
+            Date date=Date.valueOf(localDate);
             String query = "INSERT OR IGNORE INTO Shifts VALUES (?, ?, ? , ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(query);
-            Date date=Date.valueOf(localDate);
             stmt.setDate(1,  date);
             stmt.setString(2, shiftType);
             stmt.setInt(3, branchID);
@@ -109,6 +111,20 @@ public class Shifts {
     public static LocalDate convertToLocalDateViaSqlDate(Date dateToConvert) {
         return new java.sql.Date(dateToConvert.getTime()).toLocalDate();
     }
+
+    /*
+CREATE TABLE IF NOT EXISTS workersAtShift (
+                        Date	DATE NOT NULL,
+                    	ShiftType	TEXT NOT NULL,
+                    	BranchID	INTEGER NOT NULL,
+                    	workerID	TEXT NOT NULL,
+                    	FOREIGN KEY(Date) REFERENCES Shifts(Date) ON DELETE CASCADE ,
+                    	FOREIGN KEY(ShiftType) REFERENCES Shifts(ShiftType) ON DELETE CASCADE ,
+                    	FOREIGN KEY(BranchID) REFERENCES Shifts(BranchID) ON DELETE CASCADE ,
+                    	FOREIGN KEY(workerID) REFERENCES Workers(ID) ON DELETE CASCADE ,
+                    	PRIMARY KEY(Date,ShiftType,BranchID,WorkerID)
+                    )
+     */
 
     public static void insertWorkersAtShift(LocalDate localDate,String shiftType,int branchID,List<String>workersID) throws SQLException{
         PreparedStatement stmt;
@@ -184,15 +200,30 @@ public class Shifts {
     }
 
 
-    public static List<Worker> createShiftAssignment(LocalDate localDate, ShiftType shiftType, int branchID, List<Worker> workerList, Worker branchManager, Driver driver) throws Exception{
+    public static List<Worker> createShiftAssignment(LocalDate localDate, ShiftType shiftType, int branchID, List<Worker> workerList, Worker shiftManager, Driver driver) throws Exception{
+
+        if(!shiftManager.getQualifications().contains(Qualifications.ShiftManager)){
+            throw new IllegalArgumentException("The worker you assigned to be a shift manager is not qualified to this");
+        }
+
+        try{
+            Workers.isBranchExists(branchID);
+        }catch(Exception e){
+            throw e;
+        }
+
         int type = shiftType == ShiftType.Morning ? 0:1;
-        if(branchManager==null)
-            throw new IllegalArgumentException("The shiftAssignment must contains a branchManager");
+        if(shiftManager==null)
+            throw new IllegalArgumentException("The shiftAssignment must contains a shift Manager");
+
 
         try(Connection conn = Repo.openConnection()){
             ShiftDemands shiftDemands=getShiftDemands(localDate,shiftType.name(),branchID);
             if(shiftDemands==null)
                 throw new IllegalArgumentException("There is no shift demands for this shift");
+
+            if(shiftDemands.getDeliveryRequired() && driver==null)
+                throw new IllegalArgumentException("Shift with delivery must contain a driver");
 
             int dayOfWeek=localDate.getDayOfWeek().getValue();
             int ans=1;
@@ -220,13 +251,14 @@ public class Shifts {
                     break;
             }
 
-
             int dayAtWeek = ans-1;
+
             int arrangerAmount = shiftDemands.getArrangerAmount();
             int assistantAmount = shiftDemands.getAssistantAmount();
             int cashierAmount = shiftDemands.getCashierAmount();
             int guardAmount = shiftDemands.getGuardAmount();
             int storeKeeperAmount = shiftDemands.getStoreKeeperAmount();
+
             List<Worker> arrangers = new LinkedList<>();
             List<Worker> assistants = new LinkedList<>();
             List<Worker> cashiers = new LinkedList<>();
@@ -236,7 +268,7 @@ public class Shifts {
             List<Worker> notWorkYet = new LinkedList<>(workerList);
             List<Worker> workingList=new LinkedList<>();
             for (Worker w : workerList) {
-                List<Qualifications> qualifications=null;
+                List<Qualifications> qualifications;
                 qualifications = w.getQualifications();
 
                 if (arrangerAmount > 0 && qualifications.contains(Qualifications.Arranger)) {
@@ -291,17 +323,13 @@ public class Shifts {
             for(Worker w : assistants)
                 workersID.add(w.getID());
 
-
-
-            Shift shift = new Shift(localDate, shiftType, shiftDemands, cashiers, storeKeepers, arrangers, guards, assistants, branchManager,branchID, driver);
             if (arrangerAmount == 0 && assistantAmount == 0 && cashierAmount == 0 && guardAmount == 0 && storeKeeperAmount == 0){
                 insertWorkersAtShift(localDate,shiftType.name(),branchID,workersID);
-               // insertShift(localDate,shiftType.name(),branchID,);
+                insertShift(localDate,shiftType.name(),branchID,shiftManager.getID(),driver.getID());
+            }else{
+                throw new IllegalArgumentException("couldn't create the shift at : "+localDate+" in the "+shiftType.name().toLowerCase(Locale.ROOT)+ "because of lack in workers");
             }
-
             return workingList;
-
-
 
         }catch (Exception e){
             throw e;
@@ -309,29 +337,71 @@ public class Shifts {
 
     }
 
-//    public static void createWeeklyAssignment(int branchID, LocalDate startDate, WorkerDTO branchManager, List<Driver> drivers) {
-//        try (Connection conn = Repo.openConnection()) {
-//            String query = "SELECT * FROM ShiftDemands WHERE Date = ? AND ShiftType= ? AND BranchID = ?";
-//            PreparedStatement stmt = conn.prepareStatement(query);
-//            stmt.setDate(1,  date);
-//            stmt.setString(2, shiftType);
-//            stmt.setInt(3, branchID);
-//            ResultSet results=stmt.executeQuery();
-//            if(!results.next())
-//                return null;
-//            int cashierAmount=results.getInt("cashierAmount");
-//            int storeKeeperAmount=results.getInt("storeKeeperAmount");
-//            int arrangerAmount=results.getInt("arrangerAmount");
-//            int guardAmount=results.getInt("guardAmount");
-//            int assistantAmount=results.getInt("assistantAmount");
-//            Date sqlDate=results.getDate("Date");
-//            boolean deliveryRequired = results.getInt("deliveryRequired") == 1 ? true : false;
-//            ShiftType st= shiftType.equals("Morning") ? ShiftType.Morning :ShiftType.Evening;
-//            return new BussinessLayer.WorkersPackage.ShiftDemands(convertToLocalDateViaSqlDate(sqlDate),cashierAmount,storeKeeperAmount,arrangerAmount,guardAmount,assistantAmount,st,deliveryRequired);
-//        } catch (Exception e) {
-//            throw e;
-//        }
-//    }
+    public static void createWeeklyAssignment(int branchID, LocalDate startDate, Worker branchManager, List<Worker>workers , List<Worker>shiftManagers, List<Driver> drivers) throws Exception{
+        ShiftDemands[][] shiftDemands = new ShiftDemands[7][2];
+        String shiftType;
+        if(!branchManager.getQualifications().contains(Qualifications.BranchManager))
+            throw new IllegalArgumentException("the worker is not qualified to be a branch manager");
+
+        try {
+            if(!Workers.getBranchManager(branchID).getID().equals(branchManager.getID()))
+                throw new IllegalArgumentException("The branch manager you gave is not the branch manager of this branch");
+        }catch (Exception e){
+            throw e;
+        }
+
+        if (startDate.getDayOfWeek().getValue()!=7) throw new IllegalArgumentException("Weekly assignment must start on sunday");
+        try{
+            Workers.isBranchExists(branchID);
+
+            for(int i=0;i<7;i++){
+                for(int j=0;j<2;j++){
+                    shiftType= j==0 ? "Morning" : "Evening";
+                    shiftDemands[i][j]=getShiftDemands(startDate.plusDays(i+1),shiftType,branchID);
+                }
+            }
+
+
+        }catch (Exception e){
+            throw e;
+        }
+
+
+        ShiftType type;
+        Driver driver;
+        for(int i=0;i<7;i++){
+            List<Worker>ableToWork=new LinkedList<>(workers);
+            List <Driver> driversTemp=new LinkedList<>(drivers);
+            for(int j=0;j<2;j++){
+                if(j==0)
+                    type=ShiftType.Morning;
+                else
+                    type=ShiftType.Evening;
+                driver=null;
+                if(shiftDemands[i][j].getDeliveryRequired()) {
+                    for (Driver d : driversTemp) {
+                        if (d.getAvailableWorkDays().getFavoriteShifts()[i][j]) {
+                            driver = d;
+                            break;
+                        }
+                    }
+                }
+                if (driver!=null) {
+                    driversTemp.remove(driver);
+                }
+                if(shiftDemands[i][j].getDeliveryRequired()&& driver==null)
+                    throw new IllegalArgumentException("This shift must contain driver");
+                if (shiftDemands[i][j].getDeliveryRequired() && shiftDemands[i][j].getStoreKeeperAmount()<1)
+                    throw new IllegalArgumentException("This shift must contain storekeeper, because delivery is on the way to the store");
+                try{
+                    ableToWork=createShiftAssignment(startDate,type,branchID,ableToWork,branchManager, driver);
+                }catch(Exception e){
+                    throw e;
+                }
+            }
+            startDate=startDate.plusDays(1);
+        }
+    }
 
     }
 

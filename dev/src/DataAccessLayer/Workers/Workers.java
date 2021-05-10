@@ -1062,7 +1062,7 @@ public class Workers {
     public static List<Worker> getWorkersAtBranch(int branchID)throws Exception {
         try (Connection conn = Repo.openConnection()) {
             if (isBranchExists(branchID)) {
-                String sql = "SELECT ID From Workers WHERE BranchID=?";
+                String sql = "SELECT ID From Workers WHERE BranchID=? AND isWorking=1";
                 PreparedStatement pst = conn.prepareStatement(sql);
                 pst.setInt(1,branchID);
                 ResultSet results = pst.executeQuery();
@@ -1074,6 +1074,27 @@ public class Workers {
                 return workers;
             }
         return null;
+        } catch (Exception e) {
+            throw e;
+        }
+
+    }
+
+    public static List<Worker> WorkersOfQualificationAtBranch(int branchID, Qualifications shiftManager) {
+        try (Connection conn = Repo.openConnection()) {
+            if (isBranchExists(branchID)) {
+                String sql = "SELECT ID From Workers WHERE BranchID=? AND isWorking=1";
+                PreparedStatement pst = conn.prepareStatement(sql);
+                pst.setInt(1,branchID);
+                ResultSet results = pst.executeQuery();
+
+                List<Worker>workers=new LinkedList<>();
+                while(results.next()){
+                    workers.add(getWorker(results.getString("ID")));
+                }
+                return workers;
+            }
+            return null;
         } catch (Exception e) {
             throw e;
         }

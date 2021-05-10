@@ -130,6 +130,7 @@ public class WorkersFacade {
         try {
             //shiftController.createWeeklyAssignment(branchID, startDate, branchController.getBranch(branchID).getWorkersList(), convertWorkerToBusiness(branchManager), drivers);
            // Shifts.createWeeklyAssignment(branchID,startDate,branchManager,drivers);
+            Shifts.createWeeklyAssignment(branchID,startDate,convertWorkerToBusiness(branchManager),Workers.getWorkersAtBranch(branchID),Workers.WorkersOfQualificationAtBranch(branchID,Qualifications.ShiftManager),);
             Shifts.createShiftAssignment(startDate,ShiftType.Morning,branchID,Workers.getWorkersAtBranch(branchID),convertWorkerToBusiness(branchManager), null);
         }catch(Exception e){
             return new Response(e.getMessage());
