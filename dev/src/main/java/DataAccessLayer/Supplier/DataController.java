@@ -67,6 +67,17 @@ public class DataController {
         return items.select();
     }
 
+    public int chooseBestSupplier(ArrayList<String[]> itemList) {
+        StringBuilder query = new StringBuilder("(");
+        int counter = 0;
+        for (String[] i : itemList) {
+            query.append(String.format("%s,", i[0]));
+            counter++;
+        }
+        query = new StringBuilder(query.substring(0, query.length() - 1) + ")");
+        return items.chooseBestSupplier(query.toString(), counter);
+    }
+
     public void insert(SupplierDTO sup) {
         int id = supplier.insert(sup);
         if (id != -1)
