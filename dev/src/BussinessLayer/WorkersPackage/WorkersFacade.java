@@ -3,10 +3,15 @@ package BussinessLayer.WorkersPackage;
 import BussinessLayer.DriverPackage.Driver;
 import BussinessLayer.Response;
 import BussinessLayer.ResponseT;
+import DataAccessLayer.Repo;
 import DataAccessLayer.Workers.Shifts;
 import DataAccessLayer.Workers.Workers;
 import PresentationLayer.*;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -40,7 +45,7 @@ public class WorkersFacade {
 */
     public Response addShiftDemands(int branchID, LocalDate date, ShiftTypeDTO shiftType, ShiftDemandsDTO shiftDemands) {
         try {
-            shiftController.addShiftDemands(branchID, date, convertShiftTypeToBusiness(shiftType), convertShiftDemandsToBusiness(shiftDemands));
+            //shiftController.addShiftDemands(branchID, date, convertShiftTypeToBusiness(shiftType), convertShiftDemandsToBusiness(shiftDemands));
             Shifts.insertShiftDemands(date,shiftType.name(),branchID,shiftDemands.getCashierAmount(),shiftDemands.getStoreKeeperAmount(),shiftDemands.getArrangerAmount(),shiftDemands.getGuardAmount(),shiftDemands.getAssistantAmount(),shiftDemands.getDeliveryRequired()==true ? 1 : 0);
         }catch(Exception e){
             return new Response(e.getMessage());
@@ -124,7 +129,9 @@ public class WorkersFacade {
 
     public Response createWeeklyAssignment(int branchID, LocalDate startDate, WorkerDTO branchManager, List<Driver> drivers) {
         try {
-            shiftController.createWeeklyAssignment(branchID, startDate, branchController.getBranch(branchID).getWorkersList(), convertWorkerToBusiness(branchManager), drivers);
+            //shiftController.createWeeklyAssignment(branchID, startDate, branchController.getBranch(branchID).getWorkersList(), convertWorkerToBusiness(branchManager), drivers);
+           // Shifts.createWeeklyAssignment(branchID,startDate,branchManager,drivers);
+            Shifts.createShiftAssignment(startDate,ShiftType.Morning,branchID,Workers.getWorkersAtBranch(branchID),convertWorkerToBusiness(branchManager), null);
         }catch(Exception e){
             return new Response(e.getMessage());
         }
@@ -185,6 +192,17 @@ public class WorkersFacade {
         try {
             //branchController.showWorkers(branchID);
             Workers.displayWorkersByBranchID(branchID);
+        }catch(Exception e){
+            return new Response(e.getMessage());
+        }
+        return new Response();
+    }
+
+
+    public static Response displayFormerWorkersByBranchID(int brID){
+        try {
+            //branchController.showWorkers(branchID);
+            Workers.displayFormerWorkersByBranchID(brID);
         }catch(Exception e){
             return new Response(e.getMessage());
         }
@@ -302,7 +320,7 @@ public class WorkersFacade {
 
     public Response setWorkerFirstName(String WorkerID,String newFirstName) {
         try{
-            findBusinessWorkerByID(WorkerID).setFirstName(newFirstName);
+            Workers.updateFirstName(WorkerID,newFirstName);
         }catch(Exception e){
             return new Response(e.getMessage());
         }
@@ -310,9 +328,9 @@ public class WorkersFacade {
     }
 
 
-    public Response setWorkerLastName(String lastName, String ID) {
+    public Response setWorkerLastName(String ID, String lastName) {
         try{
-            findBusinessWorkerByID(ID).setLastName(lastName);
+            Workers.updateLastName(ID,lastName);
         }catch(Exception e){
             return new Response(e.getMessage());
         }
@@ -320,9 +338,9 @@ public class WorkersFacade {
     }
 
 
-    public Response setBankAccount(BankAccountDTO bankAccount, String WorkerID) {
+    public Response setBankAccount(String WorkerID,BankAccountDTO bankAccount) {
         try{
-            findBusinessWorkerByID(WorkerID).setBankAccount(convertBankAccountToBusiness(bankAccount));
+            Workers.updateBankAccount(WorkerID,bankAccount.getBankName(),bankAccount.getBranch(),bankAccount.getBankAccount());
         }catch(Exception e){
             return new Response(e.getMessage());
         }
@@ -340,9 +358,9 @@ public class WorkersFacade {
         return new ResponseT<>(bankAccount);
     }
 
-    public Response setHiringConditions(HiringConditionsDTO hiringConditions, String WorkerID) {
+    public Response setHiringConditions( String WorkerID,HiringConditionsDTO hiringConditions) {
         try{
-            findBusinessWorkerByID(WorkerID).setHiringConditions(convertHiringConditionsToBusiness(hiringConditions));
+            Workers.updateHiringConditions(WorkerID,hiringConditions.getSalaryPerHour(),hiringConditions.getFund(),hiringConditions.getVacationDays(),hiringConditions.getSickLeavePerMonth());
         }catch(Exception e){
             return new Response(e.getMessage());
         }
@@ -379,9 +397,9 @@ public class WorkersFacade {
         }
         return new ResponseT<>(name);
     }
-    public Response setWorkerQualifications(List<QualificationsDTO> qualifications, String ID) {
+    public Response setWorkerQualifications(String ID,List<QualificationsDTO> qualifications) {
         try{
-            findBusinessWorkerByID(ID).setQualifications(convertListQualificationsToBusiness(qualifications));
+            Workers.updateQualifications(ID,convertListQualificationsToBusiness(qualifications));
         }catch(Exception e){
             return new Response(e.getMessage());
         }
@@ -389,9 +407,12 @@ public class WorkersFacade {
     }
 
     public Response isExistingWorker(String ID){
-        if(findDTOWorkerByID(ID)!=null)
-            return new Response("The worker: "+ ID + " is already exist in the system");
-        return new Response();
+        try{
+            Workers.isWorkerExist(ID);
+            return new Response();
+        }catch(Exception e){
+            return new Response(e.getMessage());
+        }
     }
 
     public ResponseT<WorkerDTO> findWorkerBySerialNumber(int branchID, int serialNum){
@@ -706,13 +727,15 @@ public class WorkersFacade {
     }
     public Response addQualification(String ID, QualificationsDTO q){
         try{
-            Worker worker=findBusinessWorkerByID(ID);
+            if(findDTOWorkerByID(ID).isErrorOccurred())
+                return new Response(findDTOWorkerByID(ID).getErrorMessage());
+            Worker worker=convertWorkerToBusiness(findDTOWorkerByID(ID).getValue());
             if(q==QualificationsDTO.Human_Resources_Director&&worker.getQualifications().contains(Qualifications.BranchManager))
                 return new Response("HRD can't be branch manager as well ");
             if(q==QualificationsDTO.BranchManager&&worker.getQualifications().contains(Qualifications.Human_Resources_Director))
                 return new Response("Branch manager can't be HRD as well ");
             if(!worker.getQualifications().contains(convertQualificationsToBusiness(q)))
-                  findBusinessWorkerByID(ID).getQualifications().add(convertQualificationsToBusiness(q));
+                Workers.insertWorkerQualification(ID,q.name());
         }catch(Exception e){
             return new Response(e.getMessage());
         }
@@ -730,7 +753,8 @@ public class WorkersFacade {
 
     public Response displayWorkersByBranchID(int brID) {
         try{
-            branchController.displayWorkersByBranchID(brID);
+            //branchController.displayWorkersByBranchID(brID);
+            Workers.displayWorkersByBranchID(brID);
         }catch (Exception e){
             return new Response(e.getMessage());
         }
@@ -753,5 +777,41 @@ public class WorkersFacade {
             return new ResponseT(null,e.getMessage());
         }
 
+    }
+
+
+    public ResponseT<WorkerDTO> getBranchHRD(int branchID){
+        try{
+            return new ResponseT<>(convertWorkerToDTO(Workers.getBranchHRD(branchID)));
+        }catch (Exception e){
+            return new ResponseT(null,e.getMessage());
+        }
+
+    }
+
+    public Response changeWorkerBranch(String workerID, int newBranchID) {
+        try{
+            Workers.changeWorkerBranch(workerID,newBranchID);
+            return new Response();
+        }catch (Exception e){
+            return new Response(e.getMessage());
+        }
+    }
+
+    public ResponseT<Integer> getBranchID(String workerID){
+        try{
+            return new ResponseT<>(Workers.getBranchID(workerID));
+        }catch (Exception e){
+            return new ResponseT<>(null,e.getMessage());
+        }
+    }
+
+    public Response getBackToWork(String workerID) {
+        try{
+            Workers.getBackToWork(workerID);
+            return new Response();
+        }catch (Exception e){
+            return new Response(e.getMessage());
+        }
     }
 }
