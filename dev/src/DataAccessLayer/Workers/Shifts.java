@@ -67,7 +67,7 @@ public class Shifts {
                     	BranchID	INTEGER NOT NULL,
                     	ShiftManagerID	TEXT NOT NULL,
                     	DriverID	TEXT,
-                    	FOREIGN KEY(ShiftManagerID) REFERENCES Workers(ID) ON DELETE CASCADE ,
+                    	FOREIGN KEY(ShiftManagerID) REFERENCES Workers(ID) NOT NULL ON DELETE CASCADE ,
                     	FOREIGN KEY(DriverID) REFERENCES Drivers(ID) ON DELETE CASCADE ,
                     	FOREIGN KEY (Date,ShiftType,BranchID) REFERENCES ShiftDemands(Date,ShiftType,BranchID) ON DELETE CASCADE ,
                     	PRIMARY KEY(Date,ShiftType,BranchID)
@@ -126,18 +126,34 @@ CREATE TABLE IF NOT EXISTS workersAtShift (
                     )
      */
 
-    public static void insertWorkersAtShift(LocalDate localDate,String shiftType,int branchID,List<String>workersID) throws SQLException{
+
+
+    /*
+     CREATE TABLE IF NOT EXISTS workersAtShift (
+                        Date	DATE NOT NULL,
+                    	ShiftType	TEXT NOT NULL,
+                    	BranchID	INTEGER NOT NULL,
+                    	workerID	TEXT NOT NULL,
+                    	workAs      TEXT NOT NULL,
+                    	FOREIGN KEY (Date,ShiftType,BranchID) REFERENCES Shifts(Date,ShiftType,BranchID) ON DELETE CASCADE ,
+                    	FOREIGN KEY(workerID,workAs) REFERENCES Qualifications(ID,Qualification) ON DELETE CASCADE ,
+                    	PRIMARY KEY(Date,ShiftType,BranchID,WorkerID,workAs)
+                    )
+     */
+
+    public static void insertWorkersAtShift(LocalDate localDate,String shiftType,int branchID,List<DTO.WorkAs>workers) throws SQLException{
         PreparedStatement stmt;
         String query="";
         try (Connection conn = Repo.openConnection()) {
             Date date=Date.valueOf(localDate);
-            for(String ID : workersID){
-                query = "INSERT OR IGNORE INTO workersAtShift VALUES (?, ?, ? , ?)";
+            for(DTO.WorkAs workAs : workers){
+                query = "INSERT OR IGNORE INTO workersAtShift VALUES (?, ?, ? , ? , ?)";
                 stmt = conn.prepareStatement(query);
                 stmt.setDate(1,  date);
                 stmt.setString(2, shiftType);
                 stmt.setInt(3, branchID);
-                stmt.setString(4, ID);
+                stmt.setString(4, workAs.workerID);
+                stmt.setString(5, workAs.qualification);
                 stmt.executeUpdate();
             }
 
@@ -311,23 +327,34 @@ CREATE TABLE IF NOT EXISTS workersAtShift (
                     break;
             }
 
-            List<String>workersID=new LinkedList<>();
-            for(Worker w : cashiers)
-                workersID.add(w.getID());
-            for(Worker w : storeKeepers)
-                workersID.add(w.getID());
-            for(Worker w : arrangers)
-                workersID.add(w.getID());
-            for(Worker w : guards)
-                workersID.add(w.getID());
-            for(Worker w : assistants)
-                workersID.add(w.getID());
+            List<DTO.WorkAs>workersList=new LinkedList<>();
+            for(Worker w : cashiers){
+                workersList.add(new DTO.WorkAs(w.getID(),"Cashier"));
+            }
+            for(Worker w : storeKeepers){
+                workersList.add(new DTO.WorkAs(w.getID(),"Storekeeper"));
+            }
+
+            for(Worker w : arrangers){
+                workersList.add(new DTO.WorkAs(w.getID(),"Arranger"));
+            }
+
+            for(Worker w : guards){
+                workersList.add(new DTO.WorkAs(w.getID(),"Guard"));
+            }
+
+            for(Worker w : assistants){
+                workersList.add(new DTO.WorkAs(w.getID(),"Assistant"));
+            }
 
             if (arrangerAmount == 0 && assistantAmount == 0 && cashierAmount == 0 && guardAmount == 0 && storeKeeperAmount == 0){
-                insertWorkersAtShift(localDate,shiftType.name(),branchID,workersID);
-                insertShift(localDate,shiftType.name(),branchID,shiftManager.getID(),driver.getID());
+                if(driver!=null)
+                    insertShift(localDate,shiftType.name(),branchID,shiftManager.getID(),driver.getID());
+                else
+                    insertShift(localDate,shiftType.name(),branchID,shiftManager.getID(),null);
+                insertWorkersAtShift(localDate,shiftType.name(),branchID,workersList);
             }else{
-                throw new IllegalArgumentException("couldn't create the shift at : "+localDate+" in the "+shiftType.name().toLowerCase(Locale.ROOT)+ "because of lack in workers");
+                throw new IllegalArgumentException("couldn't create the shift at : "+localDate+" in the "+shiftType.name().toLowerCase(Locale.ROOT)+ " because of lack in workers");
             }
             return workingList;
 
@@ -366,19 +393,27 @@ CREATE TABLE IF NOT EXISTS workersAtShift (
             throw e;
         }
 
+        for(int i=0;i<workers.size();i++)
+            if(workers.get(i).getID().equals(branchManager.getID())) {
+                workers.remove(i);
+                break;
+            }
+
 
         ShiftType type;
         Driver driver;
+        Worker shiftManager;
         for(int i=0;i<7;i++){
             List<Worker>ableToWork=new LinkedList<>(workers);
             List <Driver> driversTemp=new LinkedList<>(drivers);
+            List <Worker> shiftManagersTemp=new LinkedList<>(shiftManagers);
             for(int j=0;j<2;j++){
                 if(j==0)
                     type=ShiftType.Morning;
                 else
                     type=ShiftType.Evening;
                 driver=null;
-                if(shiftDemands[i][j].getDeliveryRequired()) {
+                if(shiftDemands[i][j]!=null && shiftDemands[i][j].getDeliveryRequired()) {
                     for (Driver d : driversTemp) {
                         if (d.getAvailableWorkDays().getFavoriteShifts()[i][j]) {
                             driver = d;
@@ -386,17 +421,30 @@ CREATE TABLE IF NOT EXISTS workersAtShift (
                         }
                     }
                 }
+                if(shiftManagersTemp.isEmpty()){
+                    System.out.println("cant create the shift of "+startDate.plusDays(i) + " in the "+type.name().toLowerCase(Locale.ROOT)+ " because there is no shift manager");
+                    continue;
+                }
+                    //throw new IllegalArgumentException("cant create a shift without a shift manager");
+                shiftManager=shiftManagersTemp.remove(0);
+
                 if (driver!=null) {
                     driversTemp.remove(driver);
                 }
-                if(shiftDemands[i][j].getDeliveryRequired()&& driver==null)
-                    throw new IllegalArgumentException("This shift must contain driver");
-                if (shiftDemands[i][j].getDeliveryRequired() && shiftDemands[i][j].getStoreKeeperAmount()<1)
-                    throw new IllegalArgumentException("This shift must contain storekeeper, because delivery is on the way to the store");
+                if(shiftDemands[i][j]!=null&&shiftDemands[i][j].getDeliveryRequired()&& driver==null){
+                    System.out.println("the shift of "+startDate.plusDays(i) + " in the "+type.name().toLowerCase(Locale.ROOT)+ " must contain a driver");
+                    continue;
+                }
+
+                if (shiftDemands[i][j]!=null&&shiftDemands[i][j].getDeliveryRequired() && shiftDemands[i][j].getStoreKeeperAmount()<1){
+                    System.out.println("This shift must contain storekeeper, because delivery is on the way to the store");
+                    continue;
+                }
                 try{
-                    ableToWork=createShiftAssignment(startDate,type,branchID,ableToWork,branchManager, driver);
+                    ableToWork=createShiftAssignment(startDate,type,branchID,workers,shiftManager,driver);
+                    //ableToWork=createShiftAssignment(startDate,type,branchID,ableToWork,branchManager, driver);
                 }catch(Exception e){
-                    throw e;
+                    System.out.println(e.getMessage());
                 }
             }
             startDate=startDate.plusDays(1);

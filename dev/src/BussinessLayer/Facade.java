@@ -5,6 +5,7 @@ import BussinessLayer.DriverPackage.Driver;
 import BussinessLayer.WorkersPackage.Qualifications;
 import BussinessLayer.WorkersPackage.Worker;
 import BussinessLayer.WorkersPackage.WorkersFacade;
+import DataAccessLayer.Transports.Drivers;
 import PresentationLayer.*;
 
 import java.sql.Time;
@@ -434,7 +435,8 @@ public class Facade {
 
     public Response getDriver(String id)  {
         try{
-            dFacade.getDriver(id);
+            //dFacade.getDriver(id);
+            Drivers.getDriver(id);
         }catch(Exception e){
             return new Response(e.getMessage());
         }

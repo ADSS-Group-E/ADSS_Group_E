@@ -39,8 +39,8 @@ public class Repo {
             createOrdersForDelivery(conn);
             createLocationsForDelivery(conn);
             createShiftDemands(conn);
-            createWorkersAtShift(conn);
             createShifts(conn);
+            createWorkersAtShift(conn);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -463,11 +463,10 @@ public class Repo {
                     	ShiftType	TEXT NOT NULL,
                     	BranchID	INTEGER NOT NULL,
                     	workerID	TEXT NOT NULL,
-                    	FOREIGN KEY(Date) REFERENCES Shifts(Date) ON DELETE CASCADE ,
-                    	FOREIGN KEY(ShiftType) REFERENCES Shifts(ShiftType) ON DELETE CASCADE ,
-                    	FOREIGN KEY(BranchID) REFERENCES Shifts(BranchID) ON DELETE CASCADE ,
-                    	FOREIGN KEY(workerID) REFERENCES Workers(ID) ON DELETE CASCADE ,
-                    	PRIMARY KEY(Date,ShiftType,BranchID,WorkerID)
+                    	workAs      TEXT NOT NULL,
+                    	FOREIGN KEY (Date,ShiftType,BranchID) REFERENCES Shifts(Date,ShiftType,BranchID) ON DELETE CASCADE ,
+                    	FOREIGN KEY(workerID,workAs) REFERENCES Qualifications(ID,Qualification) ON DELETE CASCADE ,
+                    	PRIMARY KEY(Date,ShiftType,BranchID,WorkerID,workAs)
                     )
                     """;
             stmt.executeUpdate(sql1);

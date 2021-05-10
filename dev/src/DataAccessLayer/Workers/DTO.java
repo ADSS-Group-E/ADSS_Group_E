@@ -15,6 +15,16 @@ public class DTO {
         Evening
     }
 
+    public static class WorkAs{
+        protected String workerID;
+        protected String qualification;
+
+        public WorkAs(String workerID,String qualification){
+            this.workerID = workerID;
+            this.qualification=qualification;
+        }
+    }
+
     public static class AvailableWorkDays{
         protected String WorkerID;
         protected Boolean favoriteShifts[][];
