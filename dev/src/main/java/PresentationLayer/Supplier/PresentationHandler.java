@@ -1,5 +1,6 @@
 package PresentationLayer.Supplier;
 
+import BusinessLayer.Supplier.SupplierController;
 import PresentationLayer.Supplier.DataTransferObjects.SupplierItemDTO;
 
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.HashMap;
 
 class PresentationHandler {
     private static PresentationHandler instance = null;
-    private ServiceController service = ServiceController.getInstance();
+    private ServiceController service = new ServiceController(new SupplierController());
     private InputService inputService = InputService.getInstance();
     private OutputService outputService = OutputService.getInstance();
 

@@ -15,6 +15,7 @@ public abstract class Report {
     protected int rid;
     protected LocalDateTime created;
     protected ArrayList<String> records;
+    protected ArrayList<Product> products;
 
     public Report(int rid) {
         this.rid = rid;
@@ -37,4 +38,8 @@ public abstract class Report {
     }
 
     public abstract String getType();
+
+    public ArrayList<Product> getProducts() {
+        return products;
+    }
 }

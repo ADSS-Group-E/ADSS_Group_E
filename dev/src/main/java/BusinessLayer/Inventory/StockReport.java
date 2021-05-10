@@ -12,7 +12,7 @@ public class StockReport extends Report {
 
     public StockReport(int rid, ArrayList<Product> products) {
         super(rid);
-
+        this.products = products;
         products.forEach(this::AddRecord);
     }
 

@@ -1,5 +1,6 @@
 package PresentationLayer.Supplier;
 
+import BusinessLayer.Supplier.SupplierController;
 import PresentationLayer.CommandLineInterface;
 import PresentationLayer.Option;
 import PresentationLayer.OptionsMenu;
@@ -25,7 +26,7 @@ public class SupplierOptionsMenu extends OptionsMenu {
 
     private InputService in = InputService.getInstance();
     private OutputService out = OutputService.getInstance();
-    private ServiceController service = ServiceController.getInstance(); //initializes empty objects
+    private ServiceController service = new ServiceController(new SupplierController()); //initializes empty objects
 
 
     private void addSupplier(){

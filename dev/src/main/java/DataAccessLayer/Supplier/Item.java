@@ -1,6 +1,7 @@
 package DataAccessLayer.Supplier;
 
 import PresentationLayer.Supplier.DataTransferObjects.SupplierItemDTO;
+import com.sun.jdi.IntegerValue;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -155,6 +156,31 @@ class Item {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
         }
         return item;
+    }
+
+    int chooseBestSupplier(String group, int size) {
+        int supID = -1;
+        int minPrice = Integer.MAX_VALUE;
+        try {
+            c = db.connect();
+            stmt = c.createStatement();
+            String sql = String.format("SELECT companyNumber, quantity*price FROM SupplierItem WHERE productID IN %s" +
+                    "GROUP BY companyNumber HAVING COUNT(*) = %d;", group, size);
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                int tempID = rs.getInt("companyNumber");
+                int tempPrice = rs.getInt("quantity*price");
+                if (minPrice > tempPrice) {
+                    minPrice = tempPrice;
+                    supID = tempID;
+                }
+            }
+            close();
+        }
+        catch (SQLException e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        }
+        return supID;
     }
 }
 

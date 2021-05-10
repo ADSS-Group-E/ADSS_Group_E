@@ -203,5 +203,27 @@ public class SupplierController {
     public int getMaxDiscount() {
         return maxDiscount;
     }
+
+    public int chooseBestSupplierForItems(ArrayList<String[]> items){
+        // TODO Implement for OrderFromReportHandler
+        return data.chooseBestSupplier(items);
+    }
+
+    public String proposeOrder(int supplierNum, boolean needsDelivery, boolean constantDelivery, ArrayList<String[]> items){
+        ArrayList<SupplierItemDTO> itemDTOs = new ArrayList<>();
+        for (String[] strings : items) { //creates an item array from all the items provided
+            itemDTOs.add(new SupplierItemDTO(Integer.parseInt(strings[0]), strings[1], Integer.parseInt(strings[3]), Integer.parseInt(strings[2]), strings[4]));
+        }
+        //creates the order
+        //adds the order
+        OrderDTO order = new OrderDTO(ZonedDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy-hh:mm:ss")), constantDelivery? 1 : 0, needsDelivery? 1 : 0, itemDTOs);
+        StringBuilder output = new StringBuilder();
+        output.append(String.format("[ID: %d, Date: %s, Needs Delivery: %s, Periodic Delivery: %s]", order.getId(), order.getDate(), order.getNeedsDelivery() == 1, order.getPeriodicDelivery() == 1));
+        output.append("Items:");
+        for (SupplierItemDTO item : order.getOrderItems()) {
+            output.append(String.format("ID: %s\nPrice: %d\nQuantity: %d\nCompany Number: %d\n\n]", item.getId(), item.getPrice(), item.getQuantity(), item.getCompanyNumber()));
+        }
+        return output.toString();
+    }
 }
 

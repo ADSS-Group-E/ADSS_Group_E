@@ -18,7 +18,7 @@ class SupplierControllerTest {
     private ServiceController controller;
     @BeforeEach
     void setUp() {
-        controller = ServiceController.getInstance();
+        controller = new ServiceController(new SupplierController());
     }
 
     @Test
