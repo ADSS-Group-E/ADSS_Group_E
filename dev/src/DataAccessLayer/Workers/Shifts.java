@@ -408,7 +408,7 @@ CREATE TABLE IF NOT EXISTS workersAtShift (
             for(int i=0;i<7;i++){
                 for(int j=0;j<2;j++){
                     shiftType= j==0 ? "Morning" : "Evening";
-                    shiftDemands[i][j]=getShiftDemands(startDate.plusDays(i+1),shiftType,branchID);
+                    shiftDemands[i][j]=getShiftDemands(startDate.plusDays(i),shiftType,branchID);
                 }
             }
 
@@ -473,6 +473,56 @@ CREATE TABLE IF NOT EXISTS workersAtShift (
             }
             startDate=startDate.plusDays(1);
         }
+    }
+
+    public static void printWorkersAtShift(LocalDate localDate,String shiftType,int branchID)throws Exception{
+        int i=1;
+        Date date=Date.valueOf(localDate);
+        System.out.println("Date: "+ date);
+        System.out.println("Shift Type "+ shiftType);
+        //System.out.println("The manager of this shift is: "+shiftManager.getFirstName()+" "+shiftManager.getLastName()+ "and his Id is:"+shiftManager.getID());
+        System.out.println("The workers of this shift are: ");
+        try{
+            List<Worker> arrangers=Workers.WorkersOfQualificationAtBranch(branchID,Qualifications.Arranger);
+            List<Worker> Storekeepers=Workers.WorkersOfQualificationAtBranch(branchID,Qualifications.Storekeeper);
+            List<Worker> Assistants=Workers.WorkersOfQualificationAtBranch(branchID,Qualifications.Assistant);
+            List<Worker> Cashiers=Workers.WorkersOfQualificationAtBranch(branchID,Qualifications.Cashier);
+            List<Worker> Guards=Workers.WorkersOfQualificationAtBranch(branchID,Qualifications.Guard);
+
+            System.out.println("works as arranger :");
+            for(Worker w : arrangers){
+                System.out.println(i+")name:"+w.getFirstName()+" "+w.getLastName()+" ID:"+w.getID());
+                i++;
+            }
+
+            System.out.println("works as storekeeper :");
+            for(Worker w : Storekeepers){
+                System.out.println(i+")name:"+w.getFirstName()+" "+w.getLastName()+" ID:"+w.getID());
+                i++;
+            }
+
+            System.out.println("works as assistant :");
+            for(Worker w : Assistants){
+                System.out.println(i+")name:"+w.getFirstName()+" "+w.getLastName()+" ID:"+w.getID());
+                i++;
+            }
+
+            System.out.println("works as cashier :");
+            for(Worker w : Cashiers){
+                System.out.println(i+")name:"+w.getFirstName()+" "+w.getLastName()+" ID:"+w.getID());
+                i++;
+            }
+
+            System.out.println("works as guard :");
+            for(Worker w : Guards){
+                System.out.println(i+")name:"+w.getFirstName()+" "+w.getLastName()+" ID:"+w.getID());
+                i++;
+            }
+
+        }catch(Exception e){
+            throw e;
+        }
+
     }
 
     }
