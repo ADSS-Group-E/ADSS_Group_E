@@ -24,12 +24,11 @@ public class Facade {
     private final CategoryController cCont;
     private final DiscountController dCont;
 
-    public Facade() {
-        cCont = new CategoryController();
-        pCont = new ProductController(cCont);
-        rCont = new ReportController();
-
-        dCont = new DiscountController(pCont);
+    public Facade(ProductController pCont, ReportController rCont, CategoryController cCont, DiscountController dCont) {
+        this.pCont = pCont;
+        this.rCont = rCont;
+        this.cCont = cCont;
+        this.dCont = dCont;
     }
 
     // --------- PRODUCTS ------------
@@ -115,23 +114,23 @@ public class Facade {
     // --------- REPORTS ------------
 
     // Generators
-    public String generateStockReport(ArrayList<Integer> cids, ArrayList<Integer> pids){
+    public int generateStockReport(ArrayList<Integer> cids, ArrayList<Integer> pids){
         HashSet<Product> products =  new HashSet<>();
         cids.forEach((cid)-> products.addAll(pCont.getAllProductsOfCategory(cCont.getCategory(cid))));
         pids.forEach((pid)-> products.add(pCont.getProduct(pid)));
 
         Report report = rCont.generateStockReport(new ArrayList<>(products));
-        return report.toString();
+        return report.getRid();
     }
 
-    public String generateLowStockReport(){
+    public int generateLowStockReport(){
         Report report = rCont.generateLowStockReport(pCont.getList());
-        return report.toString();
+        return report.getRid();
     }
 
-    public String generateInvalidsReport(){
+    public int generateInvalidsReport(){
         Report report = rCont.generateInvalidsReport(pCont.getList());
-        return report.toString();
+        return report.getRid();
     }
 
     // Getters

@@ -65,10 +65,11 @@ public class CommandLineInterface {
     }
 
     public CommandLineInterface() {
-        ProductController pCont = new ProductController();
-        ReportController rCont = new ReportController();
         CategoryController cCont = new CategoryController();
-        DiscountController dCont = new DiscountController();
+        ProductController pCont = new ProductController(cCont);
+        ReportController rCont = new ReportController();
+
+        DiscountController dCont = new DiscountController(pCont);
         SupplierController sCont = new SupplierController();
 
         facade = new Facade(pCont, rCont, cCont, dCont);

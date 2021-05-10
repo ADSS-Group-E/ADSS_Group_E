@@ -1,7 +1,6 @@
 package DataAccessLayer.Supplier;
 
 import PresentationLayer.Supplier.DataTransferObjects.SupplierItemDTO;
-import com.sun.jdi.IntegerValue;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
