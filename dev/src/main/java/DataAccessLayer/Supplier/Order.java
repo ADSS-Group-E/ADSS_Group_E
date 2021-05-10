@@ -43,6 +43,7 @@ class Order {
                 generatedId = rs.getInt(1);
             }
             ArrayList<SupplierItemDTO> items = order.getOrderItems();
+            order.setId(generatedId);
             for (SupplierItemDTO item : items) {
                 sql = String.format("INSERT INTO OrderItems (productID, quantity, price, orderID, companyNumber) " +
                                 "VALUES (%d, %d, %d, %d, %d);",
@@ -144,7 +145,7 @@ class Order {
         try {
             c = db.connect();
             stmt = c.createStatement();
-            String sql = String.format("SELECT OrderItems.* FROM 'Order' LEFT JOIN OrderItems SI on 'Order'.orderID = SI.orderID WHERE 'Order'.orderID = %d;", id);
+            String sql = String.format("SELECT * FROM 'Order' LEFT JOIN OrderItems SI on 'Order'.orderID = SI.orderID WHERE 'Order'.orderID = %d;", id);
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 order = new OrderDTO(

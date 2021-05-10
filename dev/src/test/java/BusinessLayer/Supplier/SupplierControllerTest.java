@@ -1,6 +1,7 @@
 package BusinessLayer.Supplier;
 
 import PresentationLayer.Supplier.DataTransferObjects.DiscountStepDTO;
+import PresentationLayer.Supplier.DataTransferObjects.OrderDTO;
 import PresentationLayer.Supplier.DataTransferObjects.QuantityWriterDTO;
 import PresentationLayer.Supplier.DataTransferObjects.SupplierItemDTO;
 import PresentationLayer.Supplier.ServiceController;
@@ -70,29 +71,31 @@ class SupplierControllerTest {
     @Test
     void createOrder() {
         ArrayList<String[]> supItems = new ArrayList<>();
-        supItems.add(new String[]{10 + "", "Polaroid", 9000 + "", 500 + "", 1041 + ""});
+        supItems.add(new String[]{10 + "", "Polaroid", 100 + "", 500 + "", 1041 + ""});
         ArrayList<SupplierItemDTO> items = new ArrayList<>();
-        items.add(new SupplierItemDTO(10, "Polaroid", 1000, 500, "1041", 941));
-        controller.createOrder(10, true, true, supItems);
-        assertEquals(1, controller.getOrderFromSupplier(1).getPeriodicDelivery());
-        assertEquals(1, controller.getOrderFromSupplier(1).getNeedsDelivery());
-        assertEquals(controller.getOrderFromSupplier(1).getOrderItems(), items);
+        items.add(new SupplierItemDTO(10, "Polaroid", 100, 500, "1041", 941));
+        controller.createOrder(50, true, true, supItems);
+        OrderDTO order = controller.getOrderFromSupplier(1);
+        assertEquals(1, order.getPeriodicDelivery());
+        assertEquals(1, order.getNeedsDelivery());
     }
 
     @Test
     void getSpecificItem() {
-        String[] item = controller.getSpecificItem(1,0);
-        assertEquals(item[0], "Hot Dog");
-        assertEquals(item[1], 10 + "");
-        assertEquals(item[2], 1500 + "");
-        assertEquals(item[3], 100 + "");
+        String[] item = controller.getSpecificItem(50,11);
+        assertEquals(item[0], "11");
+        assertEquals(item[1], "Polaroid");
+        assertEquals(item[2], 9000 + "");
+        assertEquals(item[3], 500 + "");
+        assertEquals(item[4], 1041 + "");
     }
 
     @Test
     void updateSellerItemQuantity() {
-        assertEquals(controller.getSpecificItem(0, 1)[2], 500 + "");
-        controller.updateSellerItemQuantity(0, 1, 60);//ordering 60, remaining 440
-        assertEquals(controller.getSpecificItem(0, 1)[2], 440 + "");
+        String[] item = controller.getSpecificItem(50, 11);
+        assertEquals(item[3], 500 + "");
+        controller.updateSellerItemQuantity(50, 11, 60);//ordering 60, remaining 440
+        assertEquals(item[2], 440 + "");
     }
 
     @Test

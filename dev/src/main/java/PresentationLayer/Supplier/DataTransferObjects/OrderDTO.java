@@ -3,7 +3,7 @@ package PresentationLayer.Supplier.DataTransferObjects;
 import java.util.ArrayList;
 
 public class OrderDTO {
-    private final int id;
+    private int id;
     private final String date;
     private final int periodicDelivery;
     private final int needsDelivery;
@@ -48,4 +48,6 @@ public class OrderDTO {
     public void setOrderItems(ArrayList<SupplierItemDTO> items) {
         this.orderItems = items;
     }
+
+    public void setId(int id) { this.id = id; }
 }
