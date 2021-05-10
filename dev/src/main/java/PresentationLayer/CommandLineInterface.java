@@ -11,6 +11,13 @@ import PresentationLayer.MainOptionsMenu;
 import PresentationLayer.Supplier.ServiceController;
 import PresentationLayer.Supplier.SupplierOptionsMenu;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -87,6 +94,26 @@ public class CommandLineInterface {
 
     // Loads sample data because there is no data access layer in this part of the project.
     public void loadSampleData(){
+        try{
+            String url = "jdbc:sqlite:module.db";
+            String schema = Files.readString(Path.of("schema.sql"));
+            schema = schema.replace("\n","").replace("\r", "").replace("\t", " ");
+            String[] sqls = schema.split(";");
+            try (Connection conn = DriverManager.getConnection(url);)
+            {
+                for (String sql:
+                     sqls) {
+                    Statement stmt = conn.createStatement();
+                    stmt.execute(sql);
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+                return;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
         facade.addCategory(1,"Juice");
         facade.addCategory(new CategoryDTO(2,"<500 ML",1));
         facade.addProduct(new ProductDTO(1, "Test Juice", "AB01","B13", "Test Company",10.5, 10.1, 5,2, -1, -1));

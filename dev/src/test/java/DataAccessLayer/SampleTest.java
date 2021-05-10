@@ -1,10 +1,7 @@
 package DataAccessLayer;
 
-import DataAccessLayer.Inventory.DBConnection;
 import DataAccessLayer.Inventory.DataAccessObjects.ProductDAO;
 import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
-import junit.framework.TestCase;
-import org.apache.log4j.varia.NullAppender;
 import org.dbunit.Assertion;
 import org.dbunit.IDatabaseTester;
 import org.dbunit.JdbcDatabaseTester;
@@ -17,11 +14,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.DriverManager;
 
 public class SampleTest {
 

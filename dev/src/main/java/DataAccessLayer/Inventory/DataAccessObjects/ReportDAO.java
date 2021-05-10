@@ -1,8 +1,6 @@
 package DataAccessLayer.Inventory.DataAccessObjects;
 
 
-import DataAccessLayer.Inventory.DBConnection;
-import PresentationLayer.Inventory.DataTransferObjects.CategoryDTO;
 import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
 import PresentationLayer.Inventory.DataTransferObjects.ReportDTO;
 

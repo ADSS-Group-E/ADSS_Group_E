@@ -1,12 +1,10 @@
 package DataAccessLayer.Inventory.DataAccessObjects;
 
-import DataAccessLayer.Inventory.DBConnection;
 import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
 import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ProductDAO extends DataAccessObject {
 

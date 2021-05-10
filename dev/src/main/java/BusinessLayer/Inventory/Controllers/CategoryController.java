@@ -1,15 +1,9 @@
 package BusinessLayer.Inventory.Controllers;
 
 import BusinessLayer.Inventory.Category;
-import BusinessLayer.Inventory.Product;
-import DataAccessLayer.Inventory.DBConnection;
 import DataAccessLayer.Inventory.DataAccessObjects.CategoryDAO;
-import DataAccessLayer.Inventory.DataAccessObjects.ProductDAO;
 import PresentationLayer.Inventory.DataTransferObjects.CategoryDTO;
-import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 

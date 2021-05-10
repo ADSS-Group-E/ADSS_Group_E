@@ -1,10 +1,8 @@
 package DataAccessLayer.Inventory.DataAccessObjects;
 
 
-import DataAccessLayer.Inventory.DBConnection;
 import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
 import PresentationLayer.Inventory.DataTransferObjects.ItemDTO;
-import PresentationLayer.Inventory.DataTransferObjects.ReportDTO;
 
 import java.sql.*;
 
