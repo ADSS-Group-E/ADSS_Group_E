@@ -1,34 +1,58 @@
 package DataAccessLayer.Inventory.DataAccessObjects;
 
 import DataAccessLayer.Inventory.DBConnection;
+import PresentationLayer.Inventory.DataTransferObjects.CategoryDTO;
 import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
 import PresentationLayer.Inventory.DataTransferObjects.DiscountDTO;
 import PresentationLayer.Inventory.DataTransferObjects.ReportDTO;
 
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class DiscountDAO extends DataAccessObject{
 
     public DiscountDAO() {
         super();
+        tableName = "Discount";
     }
 
     public DiscountDAO(String databaseUrl) {
         super(databaseUrl);
+        tableName = "Discount";
+    }
+
+    public ArrayList<DiscountDTO> selectAll () {
+        return (ArrayList<DiscountDTO>) selectAllGeneric();
     }
 
     @Override
     protected PreparedStatement createInsertPreparedStatement(DataTransferObject dataTransferObject) throws SQLException {
-        return null;
+        return createInsertPreparedStatement((DiscountDTO)dataTransferObject);
+    }
+
+    protected PreparedStatement createInsertPreparedStatement(DiscountDTO discountDTO) throws SQLException {
+        String sql = "INSERT INTO " + tableName + " (ID, name,discPercentage, startDate, endDate, type)  " +
+                "VALUES (?, ?, ?, ?, ?, ?);";
+        PreparedStatement pstmt = this.c.prepareStatement(sql);
+        pstmt.setInt(1,discountDTO.getDid());
+        pstmt.setString(2, discountDTO.getName());
+        pstmt.setDouble(3,discountDTO.getDiscountPercent());
+        pstmt.setString(4, discountDTO.getStartDate().toString());
+        pstmt.setString(5, discountDTO.getEndDate().toString());
+        pstmt.setString(6, discountDTO.getType());
+
+        return pstmt;
     }
 
     @Override
-    <T extends DataTransferObject> T resultToDTO(ResultSet resultSet) throws SQLException {
-        return null;
-    }
-
-    String createInsertString(DiscountDTO discount) {
-        return String.format("INSERT INTO Discount (ID, name, discPrecentage, startDate, endDate, type) " +
-                "VALUES (%d, %s, %f, %s, %s, %s);", discount.getDid(), discount.getName(), discount.getDiscountPercent(), discount.getStartDate(), discount.getEndDate(), discount.getType());
+    DiscountDTO resultToDTO(ResultSet resultSet) throws SQLException {
+        return new DiscountDTO( resultSet.getInt("ID"),
+                resultSet.getString("name"),
+                resultSet.getDouble("discPercentage"),
+                LocalDateTime.parse(resultSet.getString("startDate")),
+                LocalDateTime.parse(resultSet.getString("endDate")),
+                null,
+                resultSet.getString("type"));
     }
 }

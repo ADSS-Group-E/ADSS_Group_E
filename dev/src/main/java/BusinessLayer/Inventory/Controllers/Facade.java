@@ -29,7 +29,7 @@ public class Facade {
         pCont = new ProductController(cCont);
         rCont = new ReportController();
 
-        dCont = new DiscountController();
+        dCont = new DiscountController(pCont);
     }
 
     // --------- PRODUCTS ------------

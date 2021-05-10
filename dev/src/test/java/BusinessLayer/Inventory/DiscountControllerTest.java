@@ -1,6 +1,8 @@
 package BusinessLayer.Inventory;
 
+import BusinessLayer.Inventory.Controllers.CategoryController;
 import BusinessLayer.Inventory.Controllers.DiscountController;
+import BusinessLayer.Inventory.Controllers.ProductController;
 import BusinessLayer.Inventory.Discount;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,11 +15,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class DiscountControllerTest {
 
+    private CategoryController categoryController;
     private DiscountController discountController;
+    private ProductController productController;
 
     @BeforeEach
     void setUp() {
-        discountController = new DiscountController();
+        categoryController = new CategoryController();
+        productController = new ProductController(categoryController);
+        discountController = new DiscountController(productController);
     }
     @Test
     void addDiscount() {

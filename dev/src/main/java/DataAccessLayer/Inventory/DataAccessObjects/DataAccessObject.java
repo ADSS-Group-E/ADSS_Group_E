@@ -34,6 +34,12 @@ public abstract class DataAccessObject {
         }
         catch (SQLException e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            try {
+                c.close();
+            }
+            catch (SQLException exception) {
+                System.err.println( exception.getClass().getName() + ": " + exception.getMessage() );
+            }
         }
     }
 
@@ -55,6 +61,12 @@ public abstract class DataAccessObject {
         }
         catch (SQLException e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            try {
+                c.close();
+            }
+            catch (SQLException exception) {
+                System.err.println( exception.getClass().getName() + ": " + exception.getMessage() );
+            }
             return null;
         }
     }
@@ -74,6 +86,12 @@ public abstract class DataAccessObject {
         }
         catch (SQLException e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            try {
+                c.close();
+            }
+            catch (SQLException exception) {
+                System.err.println( exception.getClass().getName() + ": " + exception.getMessage() );
+            }
             return null;
         }
     }
@@ -88,6 +106,12 @@ public abstract class DataAccessObject {
         }
         catch (SQLException e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            try {
+                c.close();
+            }
+            catch (SQLException exception) {
+                System.err.println( exception.getClass().getName() + ": " + exception.getMessage() );
+            }
         }
     }
 
