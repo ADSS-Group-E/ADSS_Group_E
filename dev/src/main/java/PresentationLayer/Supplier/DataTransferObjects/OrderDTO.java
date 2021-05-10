@@ -3,11 +3,19 @@ package PresentationLayer.Supplier.DataTransferObjects;
 import java.util.ArrayList;
 
 public class OrderDTO {
-    private final int id;
+    private int id;
     private final String date;
     private final int periodicDelivery;
     private final int needsDelivery;
-    private final ArrayList<SupplierItemDTO> orderItems;
+    private ArrayList<SupplierItemDTO> orderItems;
+
+    public OrderDTO(String date, int periodicDelivery, int needsDelivery, ArrayList<SupplierItemDTO> orderItems) {
+        this.id = -1;
+        this.date = date;
+        this.periodicDelivery = periodicDelivery;
+        this.needsDelivery = needsDelivery;
+        this.orderItems = orderItems;
+    }
 
     public OrderDTO(int id, String date, int periodicDelivery, int needsDelivery, ArrayList<SupplierItemDTO> orderItems) {
         this.id = id;
@@ -36,4 +44,10 @@ public class OrderDTO {
     public String getDate() {
         return date;
     }
+
+    public void setOrderItems(ArrayList<SupplierItemDTO> items) {
+        this.orderItems = items;
+    }
+
+    public void setId(int id) { this.id = id; }
 }

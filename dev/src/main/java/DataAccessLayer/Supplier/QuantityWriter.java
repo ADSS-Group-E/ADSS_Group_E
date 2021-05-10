@@ -29,11 +29,33 @@ class QuantityWriter {
 
     void insert(QuantityWriterDTO quan) {
         try {
+            String[] key = {"ID"};
+            int generatedId = -1;
             c = db.connect();
             stmt = c.createStatement();
-            String sql = String.format("INSERT INTO QuantityWriter (minPriceDiscount, reuglarCostumerDiscount, companyNumber) " +
+            String sql = String.format("INSERT INTO QuantityWriter (minPriceDiscount, regularCostumerDiscount, companyNumber) " +
                     "VALUES (%d, %d, %d);", quan.getMinPriceDiscount(), quan.getRegularCostumerDiscount(), quan.getCompanyNumber());
+            c.prepareStatement(sql, key);
             stmt.executeUpdate(sql);
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                generatedId = rs.getInt(1);
+            }
+            quan.setId(generatedId);
+            key = new String[]{"QWID"};
+            int id;
+            for (DiscountStepDTO step : quan.getDiscounts()) {
+                step.setQwid(generatedId);
+                sql = String.format("INSERT INTO StepDiscount (stepPrice, precentage, QWID) " +
+                        "VALUES (%d, %d, %d);", step.getStepPrice(), step.getPrecentage(), generatedId);
+                c.prepareStatement(sql, key);
+                stmt.executeUpdate(sql);
+                rs = stmt.getGeneratedKeys();
+                if (rs.next()) {
+                    id = rs.getInt(1);
+                    step.setQwid(id);
+                }
+            }
             close();
         }
         catch (SQLException e) {

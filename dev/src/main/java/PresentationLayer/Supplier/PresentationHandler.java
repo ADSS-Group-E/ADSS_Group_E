@@ -1,17 +1,19 @@
 package PresentationLayer.Supplier;
 
+import PresentationLayer.Supplier.DataTransferObjects.SupplierItemDTO;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class PresentationHandler {
+class PresentationHandler {
     private static PresentationHandler instance = null;
     private ServiceController service = ServiceController.getInstance();
     private InputService inputService = InputService.getInstance();
     private OutputService outputService = OutputService.getInstance();
 
     private PresentationHandler(){
-        service.initialize();
+
     }
 
     static PresentationHandler getInstance(){ //singleton method to make sure there is only one instance
@@ -20,7 +22,7 @@ public class PresentationHandler {
         return instance;
     }
 
-    public ArrayList<String[]> createItemList(int supplierNum) {
+    ArrayList<String[]> createItemList(int supplierNum) {
         //creates a list of items using input from the user to create an order from the supplier whose index is supplierNum
         ArrayList<String[]> list = new ArrayList<>();
         String ans = "Y";
@@ -32,14 +34,13 @@ public class PresentationHandler {
                 for(String[] realItem : list) { //prints existing items
                     outputService.println("[Name: " + realItem[0] + "]");
                 }
-                number = inputService.nextInt("Enter Item Number: "); //user enters number
-                int quantity;
-                quantity = inputService.nextInt("Enter Item quantity: "); //user enters quantity
+                number = inputService.nextInt("Enter Item ID: "); //user enters number
+                int quantity = inputService.nextInt("Enter Item quantity: "); //user enters quantity
                 item = service.getSpecificItem(supplierNum, number); //we get the rest of the item from our data
-                while (item.length != 4) {
+                while (item.length != 5) {
                     //while we didn't recieve an item or the quantity can't be taken from the supplier
                     outputService.println("Please try again.");
-                    number = inputService.nextInt("Enter Item Number: "); //user enters new number
+                    number = inputService.nextInt("Enter Item ID: "); //user enters new number
                     quantity = inputService.nextInt("Enter Item quantity: "); //user enters new quantity
                     item = service.getSpecificItem(supplierNum, number); //we get the rest of the item from our data
                 }
@@ -68,7 +69,7 @@ public class PresentationHandler {
         return list;
     }
 
-    public ArrayList<String[]> createItemList() {
+     ArrayList<String[]> createItemList() {
         //create a list of items for the supplier to supply
         ArrayList<String[]> list = new ArrayList<>();
         String ans = "Y";
@@ -77,10 +78,11 @@ public class PresentationHandler {
             if (ans.equalsIgnoreCase("Y")) { //if it's Y
                 outputService.println("Existing items:");
                 for(String[] item : list) { //prints existing items
-                    outputService.println("[Name: " + item[0] + "]");
+                    outputService.println("[ID: " + item[0] + ", Name: ]" + item[1]);
                 }
+                String id = inputService.nextInt("Enter Item ID:") + "";
                 String name = inputService.next("Enter Item Name: "); //gets item name from user
-                String[] equalBy = {name};
+                String[] equalBy = {id};
                 if (service.contains(equalBy, list)) { //checks if the item exists in the order using it's name
                     outputService.println("This item already exists.");
                 }
@@ -89,7 +91,7 @@ public class PresentationHandler {
                     String price = inputService.nextInt("Enter Item price: ") + "";
                     String quantity = inputService.nextInt("Enter Item quantity: ") + "";
                     String supplierCN = inputService.nextInt("Enter Item catalog number: ") + "";
-                    String[] order = {name, price, quantity, supplierCN}; //we create an order an add it to the list
+                    String[] order = {id, name, quantity, price, supplierCN}; //we create an order an add it to the list
                     list.add(order);
                 }
                 outputService.println("Add another Item? N/Y ");
@@ -102,7 +104,7 @@ public class PresentationHandler {
         return list;
     }
 
-    public ArrayList<String[]> createContactList() {
+     ArrayList<String[]> createContactList() {
         //creates a list of contacts for the supplier
         ArrayList<String[]> list = new ArrayList<>();
         String ans = "Y";
@@ -131,7 +133,7 @@ public class PresentationHandler {
         return list;
     }
 
-    public HashMap<Integer, Integer> createDiscountList() {
+     HashMap<Integer, Integer> createDiscountList() {
         // creates a discount step list for the quantity writer
         int maxDiscount = service.getMaxDiscount(); //gets a constant number that is in the system, usually 100 that suggests 100% discount is max
         HashMap<Integer, Integer> map = new HashMap<>();
@@ -164,16 +166,16 @@ public class PresentationHandler {
         return map;
     }
 
-    public boolean showSupplierInfo(){
+     boolean showSupplierInfo(){
         ArrayList<String[]> sups = service.getSuppliersInfo();
         if (sups.size() == 0) return false; //we return false to release the user from picking a supplier when no supplier exists
-        for (int i = 0; i < sups.size(); i++) { //prints the suppliers info with an index the user has to put to pick a supplier
-            outputService.println(i + ": " + Arrays.toString(sups.get(i)));
-        }
+         for (String[] sup : sups) { //prints the suppliers info with an index the user has to put to pick a supplier
+             outputService.println(Arrays.toString(sup));
+         }
         return true;
     }
 
-    public boolean manageQuantityWriter(){
+     boolean manageQuantityWriter(){
         //asks the user if he needs a quantity writer, and return true if Y and false if N
         String ny = inputService.next("Do you need a Quantity Writer? N/Y ");
         while (!ny.equalsIgnoreCase("N")) {
@@ -187,7 +189,7 @@ public class PresentationHandler {
         return false;
     }
 
-    public int showOptions(){
+     int showOptions(){
         //prints the options of the menu
         String[] options = new String[]{
                 "Add Supplier", "Create Order", "Get Weekly Orders", "Update Order Item Quantity", "Delete Item From Order"
@@ -199,14 +201,14 @@ public class PresentationHandler {
         return options.length;
     }
 
-    public String showSupplierItems(ArrayList<String> items) {
+     String showSupplierItems(ArrayList<SupplierItemDTO> items) {
         //prints to screen the items we got from the supplier
         StringBuilder result = new StringBuilder();
         int i;
         for (i = 0; i < items.size() - 1; i++) {
-            result.append(i).append(": ").append(items.get(i)).append("\n\n"); //appends indexes to the items
+            result.append(String.format("ID: %d\nName: %s\nPrice: %d\nQuantity: %d\nSupplierCN: %s\n\n", items.get(i).getId(), items.get(i).getName(), items.get(i).getPrice(), items.get(i).getQuantity(), items.get(i).getSupplierCN())); //appends indexes to the items
         }
-        result.append(i).append(": ").append(items.get(i)); //appends last item without \n\n
+         result.append(String.format("ID: %d\nName: %s\nPrice: %d\nQuantity: %d\nSupplierCN: %s", items.get(i).getId(), items.get(i).getName(), items.get(i).getPrice(), items.get(i).getQuantity(), items.get(i).getSupplierCN())); //appends last item without \n\n
         return result.toString();
     }
 }
