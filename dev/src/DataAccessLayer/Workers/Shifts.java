@@ -3,6 +3,7 @@ package DataAccessLayer.Workers;
 import BussinessLayer.DriverPackage.Driver;
 import BussinessLayer.WorkersPackage.*;
 import DataAccessLayer.Repo;
+import DataAccessLayer.Transports.Drivers;
 import PresentationLayer.WorkerDTO;
 
 import java.sql.*;
@@ -519,7 +520,7 @@ CREATE TABLE IF NOT EXISTS workersAtShift (
     public static BussinessLayer.WorkersPackage.Worker getShiftDriver(LocalDate localDate, String shiftType, int branchID) throws Exception {
         try {
             DTO.Shift shiftDTO = Shifts.getShiftDTO(localDate, shiftType, branchID);
-            return Workers.getWorker(shiftDTO.driverID);
+            return Drivers.getDriver(shiftDTO.driverID);
         }catch(Exception e){
             throw e;
         }
@@ -550,44 +551,54 @@ CREATE TABLE IF NOT EXISTS workersAtShift (
         System.out.println("The workers of this shift are: ");
         try{
             Worker shiftManager= Shifts.getShiftManager(localDate,shiftType,branchID);
-            System.out.println("The manager of this shift is: "+shiftManager.getFirstName()+" "+shiftManager.getLastName()+ "and his Id is:"+shiftManager.getID());
+            System.out.println("The manager of this shift is: "+shiftManager.getFirstName()+" "+shiftManager.getLastName()+ " and his Id is:"+shiftManager.getID());
             Worker driver=Shifts.getShiftDriver(localDate,shiftType,branchID);
             if(driver!=null)
-                System.out.println("The driver of this shift is: "+driver.getFirstName()+ " "+driver.getLastName()+ "and his Id is:"+driver.getID());
-            List<Worker> arrangers=Workers.WorkersOfQualificationAtBranch(branchID,Qualifications.Arranger);
-            List<Worker> Storekeepers=Workers.WorkersOfQualificationAtBranch(branchID,Qualifications.Storekeeper);
-            List<Worker> Assistants=Workers.WorkersOfQualificationAtBranch(branchID,Qualifications.Assistant);
-            List<Worker> Cashiers=Workers.WorkersOfQualificationAtBranch(branchID,Qualifications.Cashier);
-            List<Worker> Guards=Workers.WorkersOfQualificationAtBranch(branchID,Qualifications.Guard);
+                System.out.println("The driver of this shift is: "+driver.getFirstName()+ " "+driver.getLastName()+ " and his Id is:"+driver.getID());
+            List<Worker> arrangers=Shifts.getWorkersAtShiftByJob(localDate,shiftType,branchID,"Arranger");
+            List<Worker> Storekeepers=Shifts.getWorkersAtShiftByJob(localDate,shiftType,branchID,"Storekeeper");
+            List<Worker> Assistants=Shifts.getWorkersAtShiftByJob(localDate,shiftType,branchID,"Assistant");
+            List<Worker> Cashiers=Shifts.getWorkersAtShiftByJob(localDate,shiftType,branchID,"Cashier");
+            List<Worker> Guards=Shifts.getWorkersAtShiftByJob(localDate,shiftType,branchID,"Guard");
 
             System.out.println("works as arranger :");
             for(Worker w : arrangers){
-                System.out.println(i+")name:"+w.getFirstName()+" "+w.getLastName()+" ID:"+w.getID());
-                i++;
+                if(isWorkingInShift(localDate,shiftType,branchID,w.getID())) {
+                    System.out.println(i + ")name:" + w.getFirstName() + " " + w.getLastName() + " ID:" + w.getID());
+                    i++;
+                }
             }
 
             System.out.println("works as storekeeper :");
             for(Worker w : Storekeepers){
-                System.out.println(i+")name:"+w.getFirstName()+" "+w.getLastName()+" ID:"+w.getID());
-                i++;
+                if(isWorkingInShift(localDate,shiftType,branchID,w.getID())) {
+                    System.out.println(i + ")name:" + w.getFirstName() + " " + w.getLastName() + " ID:" + w.getID());
+                    i++;
+                }
             }
 
             System.out.println("works as assistant :");
             for(Worker w : Assistants){
-                System.out.println(i+")name:"+w.getFirstName()+" "+w.getLastName()+" ID:"+w.getID());
-                i++;
+                if(isWorkingInShift(localDate,shiftType,branchID,w.getID())) {
+                    System.out.println(i + ")name:" + w.getFirstName() + " " + w.getLastName() + " ID:" + w.getID());
+                    i++;
+                }
             }
 
             System.out.println("works as cashier :");
             for(Worker w : Cashiers){
-                System.out.println(i+")name:"+w.getFirstName()+" "+w.getLastName()+" ID:"+w.getID());
-                i++;
+                if(isWorkingInShift(localDate,shiftType,branchID,w.getID())) {
+                    System.out.println(i + ")name:" + w.getFirstName() + " " + w.getLastName() + " ID:" + w.getID());
+                    i++;
+                }
             }
 
             System.out.println("works as guard :");
             for(Worker w : Guards){
-                System.out.println(i+")name:"+w.getFirstName()+" "+w.getLastName()+" ID:"+w.getID());
-                i++;
+                if(isWorkingInShift(localDate,shiftType,branchID,w.getID())) {
+                    System.out.println(i + ")name:" + w.getFirstName() + " " + w.getLastName() + " ID:" + w.getID());
+                    i++;
+                }
             }
 
         }catch(Exception e){
@@ -619,6 +630,7 @@ CREATE TABLE IF NOT EXISTS workersAtShift (
             for(int i=0;i<7;i++){
                 for(int j=0;j<2;j++){
                     printWorkersAtShift(date.plusDays(i),j==0 ? "Morning" : "Evening",branchID);
+                    System.out.println("\n");
                 }
             }
 
@@ -628,5 +640,66 @@ CREATE TABLE IF NOT EXISTS workersAtShift (
 
 
     }
+
+    public static boolean isWorkingInShift(LocalDate localDate, String shiftType, int branchID, String workerID) throws SQLException {
+        try (Connection conn = Repo.openConnection()) {
+            Date date=Date.valueOf(localDate);
+            String query = "SELECT * FROM workersAtShift WHERE Date = ? AND ShiftType= ? AND BranchID = ? AND workerID=?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setDate(1,  date);
+            stmt.setString(2, shiftType);
+            stmt.setInt(3, branchID);
+            stmt.setString(4,workerID);
+            ResultSet results=stmt.executeQuery();
+            return results.next();
+        } catch (Exception e) {
+            throw e;
+        }
+
+    }
+
+    public static List<Worker> getWorkersAtShiftByJob(LocalDate localDate, String shiftType, int branchID,String qualification) throws Exception {
+        try (Connection conn = Repo.openConnection()) {
+            Date date=Date.valueOf(localDate);
+            String query = "SELECT workerID FROM workersAtShift WHERE Date = ? AND ShiftType= ? AND BranchID = ? AND workAs=?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setDate(1,  date);
+            stmt.setString(2, shiftType);
+            stmt.setInt(3, branchID);
+            stmt.setString(4,qualification);
+            ResultSet results=stmt.executeQuery();
+            List<Worker>workers=new LinkedList<>();
+            while(results.next()){
+                workers.add(Workers.getWorker(results.getString("workerID")));
+            }
+            return workers;
+        } catch (Exception e) {
+            throw e;
+        }
+
+    }
+
+    public static String getWorkerRoleAtShift(LocalDate localDate, String shiftType, int branchID,String workerID) throws Exception {
+        try (Connection conn = Repo.openConnection()) {
+            Date date=Date.valueOf(localDate);
+            String query = "SELECT workAs FROM workersAtShift WHERE Date = ? AND ShiftType= ? AND BranchID = ? AND workerID=?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setDate(1,  date);
+            stmt.setString(2, shiftType);
+            stmt.setInt(3, branchID);
+            stmt.setString(4,workerID);
+            ResultSet results=stmt.executeQuery();
+
+            if(results.next()){
+                return results.getString("workAs");
+            }
+
+            return null;
+        } catch (Exception e) {
+            throw e;
+        }
+
+    }
+
 }
 

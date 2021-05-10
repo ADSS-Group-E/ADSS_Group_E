@@ -226,7 +226,7 @@ public class MenuWorkers {
         System.out.println("Please enter the type of the first shift for morning press M and for evening press E");
         String type = reader.next();
         ShiftTypeDTO shiftTypeDTO = createShiftType(type);
-        ;
+
         if (shiftTypeDTO == null) {
             do {
                 System.out.println("The type was incorrect Please enter again the type of the first shift for morning press M and for evening press E");

@@ -155,7 +155,7 @@ public class Drivers {
                 status=results.getInt("STATUS");
                 return new Driver(worker,License_Type,date,status == 1 ? true : false);
             }
-            throw new IllegalArgumentException("this driver is not exists");
+           return null;
         }catch(Exception e){
             throw e;
         }
