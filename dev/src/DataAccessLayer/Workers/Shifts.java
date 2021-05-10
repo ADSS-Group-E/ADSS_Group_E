@@ -217,7 +217,7 @@ CREATE TABLE IF NOT EXISTS workersAtShift (
     public static DTO.Shift getShiftDTO(LocalDate localDate, String shiftType, int branchID) throws SQLException {
         try (Connection conn = Repo.openConnection()) {
             Date date=Date.valueOf(localDate);
-            String query = "SELECT ShiftManagerID DriverID FROM Shifts WHERE Date = ? AND ShiftType= ? AND BranchID = ?";
+            String query = "SELECT * FROM Shifts WHERE Date = ? AND ShiftType= ? AND BranchID = ?";
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setDate(1,  date);
             stmt.setString(2, shiftType);
@@ -225,10 +225,10 @@ CREATE TABLE IF NOT EXISTS workersAtShift (
             ResultSet results=stmt.executeQuery();
 
             if(results.next()){
-                String shiftManagerID=results.getString("ShiftManagerID");
-                String driverID=results.getString("DriverID");
+                String shiftManagerID=results.getString(4);
+                String driverID=results.getString(5);
                 return new DTO.Shift(date,shiftType,shiftManagerID,driverID,branchID);
-               // return Workers.getWorker(ID);
+                // return Workers.getWorker(ID);
             }
             return null;
 
@@ -479,7 +479,7 @@ CREATE TABLE IF NOT EXISTS workersAtShift (
                     System.out.println("cant create the shift of "+startDate.plusDays(i) + " in the "+type.name().toLowerCase(Locale.ROOT)+ " because there is no shift manager");
                     continue;
                 }
-                    //throw new IllegalArgumentException("cant create a shift without a shift manager");
+                //throw new IllegalArgumentException("cant create a shift without a shift manager");
                 shiftManager=shiftManagersTemp.remove(0);
 
                 if (driver!=null) {
@@ -533,6 +533,7 @@ CREATE TABLE IF NOT EXISTS workersAtShift (
 
             if(!isShiftExists(localDate,shiftType,branchID)){
                 System.out.println("There is no shift at "+localDate+" at the "+shiftType.toLowerCase(Locale.ROOT)+" in branch "+branchID);
+                return;
             }
 
 
@@ -596,9 +597,36 @@ CREATE TABLE IF NOT EXISTS workersAtShift (
     }
 
     public static boolean isShiftExists(LocalDate localDate, String shiftType, int branchID) throws SQLException {
+        try (Connection conn = Repo.openConnection()) {
+            Date date=Date.valueOf(localDate);
+            String query = "SELECT ShiftManagerID DriverID FROM Shifts WHERE Date = ? AND ShiftType= ? AND BranchID = ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setDate(1,  date);
+            stmt.setString(2, shiftType);
+            stmt.setInt(3, branchID);
+            ResultSet results=stmt.executeQuery();
+            return results.next();
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public static void printWeeklyAssignment(LocalDate date, int branchID)throws Exception {
+        try{
+            if(date.getDayOfWeek().getValue()!=7)
+                throw new IllegalArgumentException("must print the week starting with sunday");
+
+            for(int i=0;i<7;i++){
+                for(int j=0;j<2;j++){
+                    printWorkersAtShift(date.plusDays(i),j==0 ? "Morning" : "Evening",branchID);
+                }
+            }
+
+        }catch(Exception e){
+            throw e;
+        }
 
 
     }
-
 }
 

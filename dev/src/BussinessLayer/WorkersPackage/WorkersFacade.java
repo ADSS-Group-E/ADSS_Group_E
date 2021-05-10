@@ -287,7 +287,8 @@ public class WorkersFacade {
 
     public Response printWeeklyAssignment(int branchID, LocalDate date) {
         try {
-            shiftController.printWeeklyAssignment(branchID, date);
+            //shiftController.printWeeklyAssignment(branchID, date);
+            Shifts.printWeeklyAssignment(date,branchID);
         }catch(Exception e){
             return new Response(e.getMessage());
         }
@@ -687,7 +688,8 @@ public class WorkersFacade {
 
     public Response isLegalBranch(int branchID){
         try {
-            branchController.isLegalBranch(branchID);
+            //branchController.isLegalBranch(branchID);
+            Workers.isBranchExists(branchID);
         }catch(Exception e){
             return new Response(e.getMessage());
         }
