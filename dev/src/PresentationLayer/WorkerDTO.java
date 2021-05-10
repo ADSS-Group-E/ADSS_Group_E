@@ -1,6 +1,7 @@
 package PresentationLayer;
 
 import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.List;
 
 public class WorkerDTO {
@@ -9,7 +10,7 @@ public class WorkerDTO {
     private String ID;
     private BankAccountDTO bankAccount;
     private LocalDate startWorkingDay;
-    //private Boolean isCurrentWorker;
+    private Boolean isCurrentWorker;
     private HiringConditionsDTO hiringConditions;
     private AvailableWorkDaysDTO availableWorkDays;
     private List<QualificationsDTO> qualifications;
@@ -87,5 +88,16 @@ public class WorkerDTO {
         this.hiringConditions = hiringConditions;
         this.availableWorkDays = availableWorkDays;
         this.qualifications = qualifications;
+    }
+
+    public WorkerDTO(String firstName, String lastName, String ID, BankAccountDTO bankAccount, HiringConditionsDTO hiringConditions, AvailableWorkDaysDTO availableWorkDays) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.ID = ID;
+        this.bankAccount = bankAccount;
+        this.startWorkingDay = LocalDate.now();
+        this.hiringConditions = hiringConditions;
+        this.availableWorkDays = availableWorkDays;
+        this.qualifications = new LinkedList<>();
     }
 }

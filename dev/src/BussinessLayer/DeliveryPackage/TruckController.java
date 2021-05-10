@@ -10,7 +10,6 @@ public class TruckController {
     private static TruckController truckController = null;
 
     private TruckController() {
-
         this.trucks = new HashMap<>();
     }
 
@@ -48,7 +47,7 @@ public class TruckController {
     public void removeTruck(String id) throws Exception {
         if (DataAccessLayer.Transports.Truck.checkTruck(id)==null)
             throw new Exception("the truck doesn't exists");
-        //this.trucks.remove(id);
+        this.trucks.remove(id);
         try{
             DataAccessLayer.Transports.Truck.deleteTruck(id);
         }catch (Exception e)
@@ -60,14 +59,14 @@ public class TruckController {
     public void setTruckUsed(String id) throws Exception {
         if (DataAccessLayer.Transports.Truck.checkTruck(id)==null)
             throw new Exception("the truck doesn't exists");
-        //trucks.get(id).setUsed();
+        trucks.get(id).setUsed();
         DataAccessLayer.Transports.Truck.updateUsed(id,true);
     }
 
     public void setTruckNotUsed(String id) throws Exception {
         if (DataAccessLayer.Transports.Truck.checkTruck(id)==null)
             throw new Exception("the truck doesn't exists");
-        //trucks.get(id).setNotUsed();
+        trucks.get(id).setNotUsed();
         DataAccessLayer.Transports.Truck.updateUsed(id,false);
     }
 

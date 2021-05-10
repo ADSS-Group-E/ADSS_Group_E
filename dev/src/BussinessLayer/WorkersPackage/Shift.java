@@ -26,8 +26,8 @@ public class Shift {
     }
 
     public void printWorkersByQualification(Qualifications qualifications){
-       List<Worker>workerList= workers.get(qualifications);
-       int index=1;
+        List<Worker>workerList= workers.get(qualifications);
+        int index=1;
         System.out.println("The "+ qualifications.name()+ " of this shift are:");
         for(Worker w : workerList) {
             System.out.println(index + ") name:" + w.getFirstName() + " " + w.getLastName() + " ID:" + w.getID());
@@ -59,8 +59,8 @@ public class Shift {
     }
 
     public void setCashiers(List<Worker> cashiers) {
-         workers.remove(Qualifications.Cashier);
-         workers.put(Qualifications.Cashier,cashiers);
+        workers.remove(Qualifications.Cashier);
+        workers.put(Qualifications.Cashier,cashiers);
     }
 
     public List<Worker> getStoreKeepers() {
@@ -160,7 +160,7 @@ public class Shift {
         return null;
     }
 
-   // @Override
+    // @Override
 //    public String toString() {
 //        return "Shift{" +
 //                "date=" + date +
@@ -172,23 +172,23 @@ public class Shift {
 //                '}';
 //    }
 
-        @Override
+    @Override
     public String toString() {
-            String st = type + " shift at " + "date " + date +
-                    ", shift demands= " + demands +
-                    ", shiftManager name: " + shiftManager.getFirstName() + " " + shiftManager.getLastName() + "ID: " + shiftManager.getID() +
-                    ", branchID= " + branchID + "\n";
-            int i = 1;
-            for (Qualifications qualifications : Qualifications.values()) {
-                if (workers.containsKey(qualifications) && !workers.get(qualifications).isEmpty()) {
-                    st = st + i + ")" + qualifications.name() + ":\n";
-                    //if (workers.containsKey(qualifications) && !workers.get(qualifications).isEmpty()) {
-                    for (Worker worker : workers.get(qualifications)) {
-                        st = st + "name: " + worker.getFirstName() + " " + worker.getLastName() + " ID: " + worker.getID() + "\n";
-                    }
-                    i++;
+        String st = type + " shift at " + "date " + date +
+                ", shift demands= " + demands +
+                ", shiftManager name: " + shiftManager.getFirstName() + " " + shiftManager.getLastName() + "ID: " + shiftManager.getID() +
+                ", branchID= " + branchID + "\n";
+        int i = 1;
+        for (Qualifications qualifications : Qualifications.values()) {
+            if (workers.containsKey(qualifications) && !workers.get(qualifications).isEmpty()) {
+                st = st + i + ")" + qualifications.name() + ":\n";
+                //if (workers.containsKey(qualifications) && !workers.get(qualifications).isEmpty()) {
+                for (Worker worker : workers.get(qualifications)) {
+                    st = st + "name: " + worker.getFirstName() + " " + worker.getLastName() + " ID: " + worker.getID() + "\n";
                 }
+                i++;
             }
-            return st;
         }
+        return st;
+    }
 }

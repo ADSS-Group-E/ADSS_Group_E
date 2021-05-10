@@ -10,10 +10,10 @@ import java.util.List;
 
 public class DTO {
 
-//    public enum ShiftType {
-//        Morning,
-//        Evening
-//    }
+    public enum ShiftType {
+        Morning,
+        Evening
+    }
 
     public static class AvailableWorkDays{
         protected String WorkerID;
@@ -93,11 +93,11 @@ public class DTO {
         protected String shiftManagerID;
         protected String driverID;
         protected int branchID;
-        //protected ShiftType type;
-       // protected BussinessLayer.WorkersPackage.ShiftDemands demands; get by date and type
+        protected ShiftType type;
+        protected BussinessLayer.WorkersPackage.ShiftDemands demands;
 
-        //TODO add a table to the database that connect between qualification to the workers with the same qualification
-        //protected EnumMap<Qualifications,List<BussinessLayer.WorkersPackage.Worker>> workers;
+
+        protected EnumMap<Qualifications,List<BussinessLayer.WorkersPackage.Worker>> workers;
 
 
         public Shift(Date date, String shiftType, String shiftManagerID, String driverID, int branchID) {
@@ -163,16 +163,16 @@ public class DTO {
 
 
 
-//    public static class Branch{
-//        protected int branchID;
-//        protected Worker branchManager;
-//        protected Worker activeHRD;
-//        protected List<Shift> weeklyAssignmentsHistory ;
-//        protected List<Worker> workersList;
-//        protected List<Worker> formerWorkers;
-//        protected Shift[][] assignmentsBoard;
-//
-//    }
+    public static class Branch{
+        protected int branchID;
+        protected Worker branchManager;
+        protected Worker activeHRD;
+        protected List<Shift> weeklyAssignmentsHistory ;
+        protected List<Worker> workersList;
+        protected List<Worker> formerWorkers;
+        protected Shift[][] assignmentsBoard;
+
+    }
 
 
 }

@@ -15,19 +15,19 @@ public class ShiftDTO {
 
 
 
-//    public ShiftDTO(LocalDate date, ShiftTypeDTO type, ShiftDemandsDTO demands, List<WorkerDTO> cashiers, List<WorkerDTO> storeKeepers, List<WorkerDTO> arrangers, List<WorkerDTO> guards, List<WorkerDTO> assistants) {
-//        workers = new EnumMap<QualificationsDTO, List<WorkerDTO>>(QualificationsDTO.class);
-//        this.date = date;
-//        this.type = type;
-//        this.demands = demands;
-//        setArrangers(arrangers);
-//        setAssistants(assistants);
-//        setCashiers(cashiers);
-//        setGuards(guards);
-//        setStoreKeepers(storeKeepers);
-//        this.shiftManager = shiftManager;
-//        this.branchID = branchID;
-//    }
+    public ShiftDTO(LocalDate date, ShiftTypeDTO type, ShiftDemandsDTO demands, List<WorkerDTO> cashiers, List<WorkerDTO> storeKeepers, List<WorkerDTO> arrangers, List<WorkerDTO> guards, List<WorkerDTO> assistants) {
+        workers = new EnumMap<QualificationsDTO, List<WorkerDTO>>(QualificationsDTO.class);
+        this.date = date;
+        this.type = type;
+        this.demands = demands;
+        setArrangers(arrangers);
+        setAssistants(assistants);
+        setCashiers(cashiers);
+        setGuards(guards);
+        setStoreKeepers(storeKeepers);
+        this.shiftManager = shiftManager;
+        this.branchID = branchID;
+    }
 
     public int getBranchID() {
         return branchID;

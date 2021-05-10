@@ -1,8 +1,14 @@
 package BussinessLayer.DeliveryPackage;
 import BussinessLayer.DriverPackage.Driver;
 import BussinessLayer.DriverPackage.DriverController;
+import BussinessLayer.Response;
 import BussinessLayer.WorkersPackage.Worker;
+import BussinessLayer.WorkersPackage.WorkersFacade;
 import DataAccessLayer.Transports.DTO;
+import DataAccessLayer.Transports.Drivers;
+import DataAccessLayer.Workers.Workers;
+import PresentationLayer.DriverDTO;
+import PresentationLayer.WorkerDTO;
 
 import java.sql.SQLException;
 import java.sql.Time;
@@ -10,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class DeliveryFacade {
+    WorkersFacade wFacade=WorkersFacade.getInstance();
     private final Map<String, Double> licenseTypes = new HashMap<String, Double>() {
         {
             put("A", 5000.0);
@@ -132,7 +139,7 @@ public class DeliveryFacade {
             throw new Exception("the delivery doesn't exists");
         if(d.getStatus().equals(Delivery.Status.InProgress) ||d.getStatus().equals(Delivery.Status.Done))
             throw new Exception("edit delivery details only for Created delivery");
-        //this.deliveries.remove(id);
+        this.deliveries.remove(id);
         DataAccessLayer.Transports.Delivery.deleteDelivery(id);
     }
 
@@ -145,7 +152,7 @@ public class DeliveryFacade {
             throw new Exception("delivery date must be future date");
         if(d.getStatus().equals(Delivery.Status.InProgress) || d.getStatus().equals(Delivery.Status.Done))
             throw new Exception("edit delivery details only for Created delivery");
-        //deliveries.get(id).setDeliveryDay(deliveryDay);
+        deliveries.get(id).setDeliveryDate(deliveryDay);
         DataAccessLayer.Transports.Delivery.updateDeliveryDay(id,deliveryDay);
     }
 
@@ -160,7 +167,7 @@ public class DeliveryFacade {
             throw new Exception("delivery time must be future time");
         if(d.getStatus().equals(Delivery.Status.InProgress) || d.getStatus().equals(Delivery.Status.Done))
             throw new Exception("edit delivery details only for Created delivery");
-        //deliveries.get(id).setLeavingTime(leavingTime);
+        deliveries.get(id).setLeavingTime(leavingTime);
         DataAccessLayer.Transports.Delivery.updateLeavingTime(id,leavingTime);
     }
 
@@ -245,7 +252,7 @@ public class DeliveryFacade {
             throw new Exception("the weight of the order and the truck bigger than the max weight");
         if(d.getStatus().equals(Delivery.Status.InProgress) || d.getStatus().equals(Delivery.Status.Done))
             throw new Exception("edit delivery details only for Created delivery");
-        //deliveries.get(id).setWeight(weight);
+        deliveries.get(id).setWeight(weight);
         DataAccessLayer.Transports.Delivery.updateDelWeight(id,weight+truckController.getTruck(d.getTruckId()).getNetoWeight());
 
     }
@@ -265,7 +272,7 @@ public class DeliveryFacade {
 
         try {
 
-            //deliveries.get(id).setTruckId(truckId);
+            deliveries.get(id).setTruckId(truckId);
             DataAccessLayer.Transports.Delivery.updateTruckID(id,truckId);
         }
         catch (Exception e)
@@ -288,7 +295,7 @@ public class DeliveryFacade {
             DataAccessLayer.Transports.Delivery.updateStatus(id,status);
             truckController.getTruck(d.getTruckId()).setUsed();
             DataAccessLayer.Transports.Truck.updateUsed(d.getTruckId(),true);
-            //driverController.getDriver(deliveries.get(id).getDriverId()).setDriving();
+            driverController.getDriver(deliveries.get(id).getDriverId()).setDriving();
         }
         else
         if(status.compareTo("InTransit") == 0)
@@ -300,7 +307,7 @@ public class DeliveryFacade {
             DataAccessLayer.Transports.Delivery.updateStatus(id,status);
             truckController.getTruck(d.getTruckId()).setNotUsed();
             DataAccessLayer.Transports.Truck.updateUsed(d.getTruckId(),false);
-            //driverController.getDriver(deliveries.get(id).getDriverId()).setNotDriving();
+            driverController.getDriver(deliveries.get(id).getDriverId()).setNotDriving();
         }
         return true;
     }
@@ -478,18 +485,18 @@ public class DeliveryFacade {
         }
     }
 
-    public Truck createTruck(String id, String model, double netoWeight, double totalWeight) throws Exception
+    public Response createTruck(String id, String model, double netoWeight, double totalWeight) throws Exception
     {
         try
         {
             Truck t = truckController.createTruck(id, model, netoWeight, totalWeight);
             truckController.addTruck(t);
-            return t;
         }
         catch (Exception e)
         {
-            throw e;
+            return new Response(e.getMessage());
         }
+        return new Response();
     }
     public void addTruck(Truck truck) throws Exception
     {
@@ -514,7 +521,7 @@ public class DeliveryFacade {
         }
     }
 
-    public void removeTruck(String id) throws Exception
+    public Response removeTruck(String id) throws Exception
     {
         try
         {
@@ -522,8 +529,9 @@ public class DeliveryFacade {
         }
         catch (Exception e)
         {
-            throw e;
+            return new Response(e.getMessage());
         }
+        return new Response();
     }
     public void setTruckUsed(String id) throws Exception
     {
@@ -548,15 +556,19 @@ public class DeliveryFacade {
         }
     }
 
-    public Driver createDriver(Worker worker, String licenseType, Date expLicenseDate) throws Exception
+    public void createDriver(DriverDTO driver, int branchID) throws Exception
     {
         try
         {
-            if(!licenseTypes.containsKey(licenseType))
+            WorkerDTO worker=new WorkerDTO(driver.getFirstName(),driver.getLastName(),driver.getID(), driver.getBankAccount(), driver.getHiringConditions(), driver.getAvailableWorkDays());
+            Workers.insertWorker(wFacade.convertWorkerToBusiness(worker),branchID);
+            DTO.Driver driver1=new DTO.Driver(driver.getID(),driver.getLicenseType(),driver.getExpLicenseDate());
+            Drivers.insertDriver(driver1,branchID);
+         /*   if(!licenseTypes.containsKey(licenseType))
                 throw new Exception("Not Valid License Type");
-            Driver d = driverController.createDriver(worker, licenseType, expLicenseDate);
+            Driver d = driverController.createDriver(driver, licenseType, expLicenseDate);
             driverController.addDriver(d);
-            return d;
+            return d;*/
         }
         catch (Exception e)
         {

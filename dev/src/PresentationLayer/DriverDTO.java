@@ -9,8 +9,8 @@ public class DriverDTO extends WorkerDTO {
     private Date expLicenseDate;
     private boolean busy;
 
-    public DriverDTO(String firstName, String lastName, String ID, BankAccountDTO bankAccount, HiringConditionsDTO hiringConditions, AvailableWorkDaysDTO availableWorkDays, List<QualificationsDTO> qualifications, String licenseType,Date expLicenseDate) {
-        super(firstName, lastName, ID, bankAccount, hiringConditions, availableWorkDays, qualifications);
+    public DriverDTO(WorkerDTO w,String licenseType,Date expLicenseDate) {
+        super(w.getFirstName(), w.getLastName(), w.getID(), w.getBankAccount(), w.getHiringConditions(), w.getAvailableWorkDays() );
         this.licenseType = licenseType;
         this.expLicenseDate=expLicenseDate;
         busy=false;
@@ -27,4 +27,6 @@ public class DriverDTO extends WorkerDTO {
     public boolean isBusy() {
         return busy;
     }
+
+
 }

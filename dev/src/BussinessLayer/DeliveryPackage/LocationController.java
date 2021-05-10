@@ -58,7 +58,7 @@ public class LocationController {
     public void removeLocation(Location location) throws Exception {
         if(DataAccessLayer.Transports.Location.checkLocation(location.getId())==null)
             throw new Exception("the location doesn't exists");
-        //this.locations.remove(location.getId());
+        this.locations.remove(location.getId());
         DataAccessLayer.Transports.Location.deleteLocation(location.getId());
     }
 
@@ -67,7 +67,7 @@ public class LocationController {
             throw new Exception("the telephone number contains illegal numbers");
         if(DataAccessLayer.Transports.Location.checkLocation(id)==null)
             throw new Exception("the location doesn't exists");
-        //locations.get(id).setTelNumber(telNumber);
+        locations.get(id).setTelNumber(telNumber);
         DataAccessLayer.Transports.Location.updateTel(id,telNumber);
     }
 
@@ -76,7 +76,7 @@ public class LocationController {
             throw new Exception("the contact name contains illegal characters");
         if(DataAccessLayer.Transports.Location.checkLocation(id)==null)
             throw new Exception("the location doesn't exists");
-        //locations.get(id).setContactName(contactName);
+        locations.get(id).setContactName(contactName);
         DataAccessLayer.Transports.Location.updateName(id,contactName);
     }
 

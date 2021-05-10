@@ -12,7 +12,7 @@ public class Location {
 
     public static void insertLocation(DTO.Location l) throws SQLException {
         try (Connection conn = Repo.openConnection()) {
-            String query = "INSERT OR IGNORE INTO VALUES (?, ?, ? ,?,?,?)";
+            String query = "INSERT OR IGNORE INTO Locations VALUES (?, ?, ? ,?,?,?)";
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setInt(1, l.id);
             stmt.setString(2, l.name);

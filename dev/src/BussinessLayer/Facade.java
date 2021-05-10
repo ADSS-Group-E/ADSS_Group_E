@@ -165,7 +165,7 @@ public class Facade {
         return wFacade.displayWorkersByBranchID(brID);
     }
 
-    //////////////////////////////////////////////////////////////////////////
+
 
     public Response createDelivery(String id, Date deliveryDate, Time leavingTime, String driverId, int srcLocation, List<Integer> targets, String truckId, List<Integer> orders)
     {
@@ -417,9 +417,9 @@ public class Facade {
         return new Response();
     }
 
-    public Response createDriver(WorkerDTO w, String licenseType, Date expLicenseDate){
+    public Response createDriver(DriverDTO driver, int branchID){
         try{
-            dFacade.createDriver(wFacade.convertWorkerToBusiness(w),  licenseType,  expLicenseDate);
+            dFacade.createDriver(driver, branchID);
         }catch(Exception e){
             return new Response(e.getMessage());
         }

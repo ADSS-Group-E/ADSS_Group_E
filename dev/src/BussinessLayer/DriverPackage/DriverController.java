@@ -1,4 +1,4 @@
-package BussinessLayer.DriverPackage; //todo probably not necessary anymore
+package BussinessLayer.DriverPackage;
 
 import BussinessLayer.WorkersPackage.Worker;
 import PresentationLayer.WorkerDTO;

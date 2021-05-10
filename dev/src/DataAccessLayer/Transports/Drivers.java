@@ -4,9 +4,8 @@ import BussinessLayer.WorkersPackage.Worker;
 import DataAccessLayer.Repo;
 
 import java.sql.*;
-import java.util.List;
 
-public class Driver {
+public class Drivers {
 
     /*
     "CREATE TABLE IF NOT EXISTS Drivers" +
@@ -17,14 +16,14 @@ public class Driver {
                     "FOREIGN KEY (ID) REFERENCES Workers (ID) ON DELETE CASCADE )"
      */
 
-    public static void insertDriver(DTO.Driver d) throws SQLException {
+    public static void insertDriver(DTO.Driver d, int branchID) throws SQLException {
         try (Connection conn = Repo.openConnection()) {
             String query = "INSERT OR IGNORE INTO Drivers VALUES (?, ?, ?,?)";
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setString(1,d.id );
             stmt.setString(2, d.lType);
             stmt.setDate(3, (Date) d.expDate);
-            int status= d.status == true ? 1 : 0;
+            int status= d.busy == true ? 1 : 0;
             stmt.setInt(4,status);
             stmt.executeUpdate();
             conn.close();
@@ -47,7 +46,7 @@ public class Driver {
             if(results.next()==false)
                 return null;
             Worker e= DataAccessLayer.Workers.Workers.getWorker(id) ;
-            //boolean status= results.getInt(4) == 1 ? true : false;
+            boolean status= results.getInt(4) == 1 ? true : false;
 
             return new BussinessLayer.DriverPackage.Driver(e,results.getString("License_Type"),results.getDate("Expiration_Date"));
         } catch (Exception e) {

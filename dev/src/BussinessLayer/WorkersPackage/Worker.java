@@ -1,6 +1,7 @@
 package BussinessLayer.WorkersPackage;
 
 import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,7 +11,7 @@ public class Worker {
     private String ID;
     private BankAccount bankAccount;
     private LocalDate startWorkingDay;
-    //private Boolean isCurrentWorker;
+    private Boolean isCurrentWorker;
     private HiringConditions hiringConditions;
     private AvailableWorkDays availableWorkDays;
     private List<Qualifications> qualifications;
@@ -48,6 +49,17 @@ public class Worker {
         this.hiringConditions = hiringConditions;
         this.availableWorkDays = availableWorkDays;
         this.qualifications = qualifications;
+    }
+
+    public Worker(String firstName, String lastName, String ID, BankAccount bankAccount, HiringConditions hiringConditions, AvailableWorkDays availableWorkDays) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.ID = ID;
+        this.bankAccount = bankAccount;
+        this.startWorkingDay = LocalDate.now();
+        this.hiringConditions = hiringConditions;
+        this.availableWorkDays = availableWorkDays;
+        this.qualifications = new LinkedList<>();
     }
 
     public String getFirstName() {

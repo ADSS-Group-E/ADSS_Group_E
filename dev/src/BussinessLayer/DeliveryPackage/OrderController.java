@@ -55,7 +55,7 @@ public class OrderController {
     public void removeOrder(Order order) throws Exception {
         if(DataAccessLayer.Transports.Order.checkOrder(order.getId())==null)
             throw new Exception("the order doesn't exists");
-        //this.orders.remove(order.getId());
+        this.orders.remove(order.getId());
         DataAccessLayer.Transports.Order.deleteOrder(order.getId());
     }
 
@@ -66,7 +66,7 @@ public class OrderController {
             throw new Exception("the quantity is illegal");
         if(DataAccessLayer.Transports.Order.checkItem(id,item))
             throw new Exception("item already exists in order");
-        //orders.get(id).getItems().put(item, quantity);
+        orders.get(id).getItems().put(item, quantity);
         DataAccessLayer.Transports.Order.insertItemsForOrders(new DTO.ItemsForOrders(id,item,quantity));
     }
     public void removeItem(int id, String item) throws Exception
@@ -79,7 +79,7 @@ public class OrderController {
             throw new Exception("the item doesn't exists");
         if(o.getItems().size()==1)
             throw new Exception("orders can't have zero items");
-        //orders.get(id).getItems().remove(item);
+        orders.get(id).getItems().remove(item);
         DataAccessLayer.Transports.Order.deleteItem(id,item);
     }
     public void updateQuantity(int id, String item, int quantity) throws Exception

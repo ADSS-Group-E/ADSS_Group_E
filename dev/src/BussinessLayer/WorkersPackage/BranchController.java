@@ -144,7 +144,7 @@ public class BranchController {
         System.out.println("2) The HRD is: " +"Name:"+getBranch(brID).getActiveHRD().getFirstName()+" "+getBranch(brID).getActiveHRD().getLastName()+" ID:"+getBranch(brID).getActiveHRD().getID() + " Qualifications:"+getBranch(brID).getActiveHRD().getQualifications());
         for(Worker worker:getBranch(brID).getWorkersList()){
             if(!getBranch(brID).getBranchManager().getID().equals(worker.getID()) && !getBranch(brID).getActiveHRD().getID().equals(worker.getID()) )
-            System.out.println(index+") Name:"+worker.getFirstName()+" "+worker.getLastName()+" ID:"+worker.getID() + " Qualifications:"+worker.getQualifications());
+                System.out.println(index+") Name:"+worker.getFirstName()+" "+worker.getLastName()+" ID:"+worker.getID() + " Qualifications:"+worker.getQualifications());
             index++;
         }
     }

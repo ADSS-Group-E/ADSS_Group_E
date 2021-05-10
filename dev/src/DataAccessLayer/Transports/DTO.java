@@ -1,11 +1,7 @@
 package DataAccessLayer.Transports;
 
-import BussinessLayer.WorkersPackage.Worker;
-import DataAccessLayer.Repo;
-
 import java.sql.Time;
 import java.sql.Date;
-import java.util.Map;
 
 public class DTO {
     public static class Delivery{
@@ -105,14 +101,22 @@ public class DTO {
         protected String id;
         protected String lType;
         protected Date expDate;
-        protected boolean status;
+        protected boolean busy;
 
-        public Driver(String id, String lType, java.util.Date expDate, boolean status)
+        public Driver(String id, String lType, java.util.Date expDate, boolean busy)
         {
             this.id=id;
             this.lType=lType;
             this.expDate=new Date(expDate.getTime());
-            this.status=status;
+            this.busy =busy;
+        }
+
+        public Driver(String id, String lType, java.util.Date expDate)
+        {
+            this.id=id;
+            this.lType=lType;
+            this.expDate=new Date(expDate.getTime());
+            this.busy =false;
         }
 
         public Date getExpDate(){return expDate;}

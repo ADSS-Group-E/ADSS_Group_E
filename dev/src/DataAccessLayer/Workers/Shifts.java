@@ -70,7 +70,7 @@ public class Shifts {
                     )
      */
 
-    //TODO : check this func
+
 
     public static void insertShift(LocalDate localDate,String shiftType,int branchID,String shiftManagerID,String DriverID) throws SQLException {
         try (Connection conn = Repo.openConnection()) {

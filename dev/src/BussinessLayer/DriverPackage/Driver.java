@@ -8,9 +8,6 @@ import java.util.*;
 
 public class Driver extends Worker {
 
-    //private String id;
-    //private String name;
-
     private String licenseType;
     private Date expLicenseDate;
     private boolean busy;

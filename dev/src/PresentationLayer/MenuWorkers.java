@@ -103,7 +103,7 @@ public class MenuWorkers {
 
             System.out.println("next sunday:"+sunday);
 
-            //LocalDate date_ = createDate();
+            LocalDate date_ = createDate();
             ShiftDemandsDTO[][] sd;
             response= facade.createWeeklyAssignment(branchID, sunday, branchManger, drivers);
             if(response.isErrorOccurred())
@@ -1322,7 +1322,7 @@ public class MenuWorkers {
         }else{
             WorkerDTO workerDTO = workerDTOResponseT.getValue();
             while (workerDTO == null) {
-                //System.out.println("There is no worker with such ID please enter new ID");
+                System.out.println("There is no worker with such ID please enter new ID");
                 ID = reader.next();
                 ResponseT<WorkerDTO> workerDTOResponseT1= facade.findDTOWorkerByID(ID);
                 if(workerDTOResponseT1.isErrorOccurred())
