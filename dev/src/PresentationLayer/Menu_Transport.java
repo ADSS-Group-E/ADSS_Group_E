@@ -632,7 +632,7 @@ public class Menu_Transport {
             WorkerDTO eden = new WorkerDTO("eden", "bishela", "208060254", bankAccountDTO2, hiringConditionsDTO2, availableWorkDaysDTO2);
             WorkerDTO Gal = new WorkerDTO("Gal", "Brown", "207894326", bankAccountDTO3, hiringConditionsDTO3, availableWorkDaysDTO3);
             DriverDTO yarin= new DriverDTO(yarinw,"A",expDate);
-            facade.createDriver(yarin,3);
+            facade.createDriver(yarin,1 );
             //facade.createDriver("313577645", "yarin", "B", expDate);
             //facade.createDriver("123456789", "reem", "C", expDate);
             facade.createLocation(1, "superli", "lachish 151 shoham", "0543160553", "yossi", "center");
