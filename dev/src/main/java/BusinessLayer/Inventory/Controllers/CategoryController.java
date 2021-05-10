@@ -23,23 +23,7 @@ public class CategoryController {
 
     public CategoryController() {
         this.categories = new HashMap<>();
-
-        DBConnection db = () -> {
-            // SQLite connection string
-            Connection c = null;
-
-            try {
-                Class.forName("org.sqlite.JDBC");
-                c = DriverManager.getConnection("jdbc:sqlite:module.db");
-                c.setAutoCommit(false);
-            } catch ( Exception e ) {
-                System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-                System.exit(0);
-            }
-            System.out.println("Opened database successfully");
-            return c;
-        };
-        categoryDAO = new CategoryDAO(db);
+        categoryDAO = new CategoryDAO();
     }
 
     // Getters

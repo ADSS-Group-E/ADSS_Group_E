@@ -13,11 +13,11 @@ public class DataController {
     private ReportDAO report;
 
     public DataController() {
-        this.category = new CategoryDAO(db);
-        this.discount = new DiscountDAO(db);
-        this.item = new ItemDAO(db);
-        this.product = new ProductDAO(db);
-        this.report = new ReportDAO(db);
+        this.category = new CategoryDAO();
+        this.discount = new DiscountDAO();
+        this.item = new ItemDAO();
+        this.product = new ProductDAO();
+        this.report = new ReportDAO();
     }
 
     private DBConnection db = () -> {

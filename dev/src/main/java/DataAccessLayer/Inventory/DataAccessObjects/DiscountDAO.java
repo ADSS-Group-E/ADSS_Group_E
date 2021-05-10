@@ -5,15 +5,21 @@ import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
 import PresentationLayer.Inventory.DataTransferObjects.DiscountDTO;
 import PresentationLayer.Inventory.DataTransferObjects.ReportDTO;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class DiscountDAO extends DataAccessObject{
 
-    public DiscountDAO(DBConnection dbConnection) {
-        super(dbConnection);
+    public DiscountDAO() {
+        super();
+    }
+
+    public DiscountDAO(String databaseUrl) {
+        super(databaseUrl);
+    }
+
+    @Override
+    protected PreparedStatement createInsertPreparedStatement(DataTransferObject dataTransferObject) throws SQLException {
+        return null;
     }
 
     @Override

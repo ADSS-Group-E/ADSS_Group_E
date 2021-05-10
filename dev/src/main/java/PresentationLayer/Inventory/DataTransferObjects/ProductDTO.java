@@ -70,6 +70,18 @@ public class ProductDTO implements DataTransferObject{
         return categoryId;
     }
 
+    public Integer getBuyingDiscountID() {
+        if (buyingDiscountID == -1)
+            return null;
+        return buyingDiscountID;
+    }
+
+    public Integer getSellingDiscountID() {
+        if (sellingDiscountID == -1)
+            return null;
+        return sellingDiscountID;
+    }
+
     // Constructors
     public ProductDTO(int pid, String name, String storageLocation, String storeLocation, String manufacturer, double buyingPrice, double sellingPrice, int minAmount, int categoryId, int buyingDiscountID, int sellingDiscountID) {
         this.pid = pid;

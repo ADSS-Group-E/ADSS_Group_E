@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <Product ID='1' name='Test Juice' storeLocation='ABCD' storageLocation='ABCD' manufacturer='Test Company' buyPrice='12.5' sellPrice='15' minAmount='10' categoryID='1' buyDiscountID="[NULL]" sellDiscountID="[NULL]"/>
+    <Category ID='1' name='Test Juice Category' />
+
+</dataset>

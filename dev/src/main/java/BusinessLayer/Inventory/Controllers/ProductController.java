@@ -19,25 +19,12 @@ public class ProductController {
     private final HashMap<Integer, Product> products;
     private final ProductDAO productDAO;
     private final CategoryController cCont;
+    // Indicates all products have already been loaded so don't need to call selectAll again
+    private boolean loadedAll = false;
 
     public ProductController(CategoryController cCont) {
-        DBConnection db = () -> {
-            // SQLite connection string
-            Connection c = null;
-
-            try {
-                Class.forName("org.sqlite.JDBC");
-                c = DriverManager.getConnection("jdbc:sqlite:module.db");
-                c.setAutoCommit(false);
-            } catch ( Exception e ) {
-                System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-                System.exit(0);
-            }
-            System.out.println("Opened database successfully");
-            return c;
-        };
         this.products = new HashMap<>();
-        productDAO = new ProductDAO(db); // TODO decide what to do about db
+        productDAO = new ProductDAO("jdbc:sqlite:module.db");
         this.cCont = cCont;
     }
 
@@ -58,20 +45,24 @@ public class ProductController {
     // Adders
     public void addProduct(Product product){
         productDAO.insert(new ProductDTO(product));
+        products.put(product.getPid(),product);
     }
 
     // Remover
     public void removeProduct (int pid) {
+
         if (products.containsKey(pid)) {
             products.remove(pid);
         }
         else {
-            throw new IllegalArgumentException("Product pid is not exist");
+            throw new IllegalArgumentException("Product pid does not exist");
         }
     }
 
     // More getters
     public ArrayList<Product> getList() {
+        if (loadedAll)
+            return new ArrayList<>(products.values());
         // Load not yet loaded products from database
         ArrayList<ProductDTO> productDTOs = productDAO.selectAll();
         for (ProductDTO productDTO:
@@ -82,12 +73,14 @@ public class ProductController {
                 products.put(productDTO.getPid(),product);
             }
         }
+        loadedAll = true;
         return new ArrayList<>(products.values());
     }
 
     public ArrayList<Product> getAllProductsOfCategory(Category category){
         ArrayList<Product> productsOfCategory = new ArrayList<>();
-        products.values().forEach((product)->{
+        ArrayList<Product> allProducts = getList();
+        allProducts.forEach((product)->{
             if(product.isInCategory(category)){
                 productsOfCategory.add(product);
             }
