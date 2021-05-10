@@ -3,6 +3,7 @@ package DataAccessLayer.Workers;
 import BussinessLayer.DriverPackage.Driver;
 import BussinessLayer.WorkersPackage.*;
 import DataAccessLayer.Repo;
+import PresentationLayer.ShiftDTO;
 import PresentationLayer.WorkerDTO;
 
 import java.sql.*;
@@ -699,6 +700,15 @@ public class Workers {
         }
     }
 
+    public static BussinessLayer.WorkersPackage.Worker getShiftManager(LocalDate localDate, String shiftType, int branchID) throws Exception {
+        DTO.Shift shiftDTO=Shifts.getShiftDTO(localDate,shiftType,branchID);
+        return getWorker(shiftDTO.shiftManagerID);
+    }
+
+    public static BussinessLayer.WorkersPackage.Worker getShiftDriver(LocalDate localDate, String shiftType, int branchID) throws Exception {
+        DTO.Shift shiftDTO=Shifts.getShiftDTO(localDate,shiftType,branchID);
+        return getWorker(shiftDTO.driverID);
+    }
 
 
     public static BussinessLayer.WorkersPackage.Worker getWorker(String ID) throws Exception {

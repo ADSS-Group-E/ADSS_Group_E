@@ -214,6 +214,29 @@ CREATE TABLE IF NOT EXISTS workersAtShift (
                     """;
              */
 
+    public static DTO.Shift getShiftDTO(LocalDate localDate, String shiftType, int branchID) throws SQLException {
+        try (Connection conn = Repo.openConnection()) {
+            Date date=Date.valueOf(localDate);
+            String query = "SELECT * FROM ShiftDemands WHERE Date = ? AND ShiftType= ? AND BranchID = ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setDate(1,  date);
+            stmt.setString(2, shiftType);
+            stmt.setInt(3, branchID);
+            ResultSet results=stmt.executeQuery();
+            if(!results.next())
+                return null;
+            int branchIDsql=results.getInt("BranchID");
+            String shiftManagersql=results.getString("ShiftManagerID");
+            String driverIDsql=results.getString("DriverID");
+            Date sqlDate=results.getDate("Date");
+            boolean deliveryRequired = results.getInt("deliveryRequired") == 1 ? true : false;
+            ShiftType st= shiftType.equals("Morning") ? ShiftType.Morning :ShiftType.Evening;
+            return new DTO.Shift(sqlDate,shiftType,shiftManagersql,driverIDsql,branchIDsql);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
     public static BussinessLayer.WorkersPackage.ShiftDemands getShiftDemands(LocalDate localDate,String shiftType,int branchID) throws SQLException {
         try (Connection conn = Repo.openConnection()) {
             Date date=Date.valueOf(localDate);
