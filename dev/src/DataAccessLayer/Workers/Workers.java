@@ -578,7 +578,7 @@ public class Workers {
             while(results.next()){
                 res.add(results.getString("Qualification"));
             }
-            return res;
+               return res;
         } catch (Exception e) {
             throw e;
         }
@@ -1042,6 +1042,39 @@ public class Workers {
             }
 
         } catch (SQLException e) {
+            throw e;
+        }
+
+    }
+
+   /*
+   CREATE TABLE IF NOT EXISTS "Workers" (
+                        	"ID"	TEXT NOT NULL,
+                        	"BranchID"	INTEGER NOT NULL,
+                        	"First_Name"	INTEGER NOT NULL,
+                        	"Last_Name"	INTEGER NOT NULL,
+                        	"Start_Working_Day"	DATE NOT NULL,
+                        	"isWorking" INTEGER NOT NULL,
+                        	PRIMARY KEY("ID")
+                        )
+    */
+
+    public static List<Worker> getWorkersAtBranch(int branchID)throws Exception {
+        try (Connection conn = Repo.openConnection()) {
+            if (isBranchExists(branchID)) {
+                String sql = "SELECT ID From Workers WHERE BranchID=?";
+                PreparedStatement pst = conn.prepareStatement(sql);
+                pst.setInt(1,branchID);
+                ResultSet results = pst.executeQuery();
+
+                List<Worker>workers=new LinkedList<>();
+                while(results.next()){
+                    workers.add(getWorker(results.getString("ID")));
+                }
+                return workers;
+            }
+        return null;
+        } catch (Exception e) {
             throw e;
         }
 

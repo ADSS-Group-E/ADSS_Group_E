@@ -79,12 +79,17 @@ public class Facade {
         return wFacade.showWorkers( branchID);
     }
 
+    // display former workers at brID
+    public Response displayFormerWorkersByBranchID(int brID){
+        return wFacade.displayFormerWorkersByBranchID(brID);
+    }
+
     public ResponseT<List<QualificationsDTO>> getWorkerQualifications(WorkerDTO worker) {
         return wFacade.getWorkerQualifications(worker);
     }
 
     public Response printWorker(WorkerDTO worker) {
-        return wFacade.getWorkerQualifications(worker);
+        return wFacade.printWorker(worker);
     }
 
     public ResponseT<WorkerDTO> getShiftManager(ShiftDTO shift) {
@@ -112,21 +117,21 @@ public class Facade {
     }
 
 
-    public Response setWorkerLastName(String lastName, String ID) {
-        return wFacade.setWorkerLastName( lastName,  ID);
+    public Response setWorkerLastName(String ID, String lastName) {
+        return wFacade.setWorkerLastName( ID,  lastName);
     }
 
 
-    public Response setBankAccount(BankAccountDTO bankAccount, String WorkerID) {
-        return wFacade.setBankAccount( bankAccount,  WorkerID);
+    public Response setBankAccount(String WorkerID,BankAccountDTO bankAccount) {
+        return wFacade.setBankAccount(WorkerID,bankAccount);
     }
 
-    public Response setHiringConditions(HiringConditionsDTO hiringConditions, String WorkerID) {
-        return wFacade.setHiringConditions(hiringConditions,WorkerID);
+    public Response setHiringConditions(String WorkerID,HiringConditionsDTO hiringConditions) {
+        return wFacade.setHiringConditions(WorkerID,hiringConditions);
     }
 
-    public Response setWorkerQualifications(List<QualificationsDTO> qualifications, String ID) {
-        return wFacade.setWorkerQualifications( qualifications,  ID);
+    public Response setWorkerQualifications(String ID,List<QualificationsDTO> qualifications) {
+        return wFacade.setWorkerQualifications(ID,qualifications);
     }
 
     public Response isExistingWorker(String ID){
@@ -489,5 +494,21 @@ public class Facade {
 
     public ResponseT<WorkerDTO> getBranchManager(int branchID) {
         return wFacade.getBranchManager(branchID);
+    }
+
+    public ResponseT<WorkerDTO> getBranchHRD(int branchID){
+        return wFacade.getBranchHRD(branchID);
+    }
+
+    public Response changeWorkerBranch(String workerID, int newBranchID) {
+        return wFacade.changeWorkerBranch(workerID,newBranchID);
+    }
+
+    public ResponseT<Integer> getBranchID(String workerID){
+        return wFacade.getBranchID(workerID);
+    }
+
+    public Response getBackToWork(String workerID) {
+        return wFacade.getBackToWork(workerID);
     }
 }
