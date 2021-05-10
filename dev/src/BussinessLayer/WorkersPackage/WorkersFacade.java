@@ -182,7 +182,8 @@ public class WorkersFacade {
 
     public Response printWorkersAtShift(int branchID, LocalDate date, ShiftTypeDTO shiftType) {
         try{
-            shiftController.printWorkersAtShift(branchID, date,convertShiftTypeToBusiness(shiftType));
+            //shiftController.printWorkersAtShift(branchID, date,convertShiftTypeToBusiness(shiftType));
+            Shifts.printWorkersAtShift(date,shiftType.name(),branchID);
         }catch(Exception e){
             return new Response(e.getMessage());
         }

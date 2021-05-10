@@ -217,21 +217,28 @@ CREATE TABLE IF NOT EXISTS workersAtShift (
     public static DTO.Shift getShiftDTO(LocalDate localDate, String shiftType, int branchID) throws SQLException {
         try (Connection conn = Repo.openConnection()) {
             Date date=Date.valueOf(localDate);
-            String query = "SELECT * FROM ShiftDemands WHERE Date = ? AND ShiftType= ? AND BranchID = ?";
+            String query = "SELECT ShiftManagerID DriverID FROM Shifts WHERE Date = ? AND ShiftType= ? AND BranchID = ?";
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setDate(1,  date);
             stmt.setString(2, shiftType);
             stmt.setInt(3, branchID);
             ResultSet results=stmt.executeQuery();
-            if(!results.next())
-                return null;
-            int branchIDsql=results.getInt("BranchID");
-            String shiftManagersql=results.getString("ShiftManagerID");
-            String driverIDsql=results.getString("DriverID");
-            Date sqlDate=results.getDate("Date");
-            boolean deliveryRequired = results.getInt("deliveryRequired") == 1 ? true : false;
-            ShiftType st= shiftType.equals("Morning") ? ShiftType.Morning :ShiftType.Evening;
-            return new DTO.Shift(sqlDate,shiftType,shiftManagersql,driverIDsql,branchIDsql);
+
+            if(results.next()){
+                String shiftManagerID=results.getString("ShiftManagerID");
+                String driverID=results.getString("DriverID");
+                return new DTO.Shift(date,shiftType,shiftManagerID,driverID,branchID);
+               // return Workers.getWorker(ID);
+            }
+            return null;
+
+//            int branchIDsql=results.getInt("BranchID");
+//            String shiftManagersql=results.getString("ShiftManagerID");
+//            String driverIDsql=results.getString("DriverID");
+//            Date sqlDate=results.getDate("Date");
+//            boolean deliveryRequired = results.getInt("deliveryRequired") == 1 ? true : false;
+//            ShiftType st= shiftType.equals("Morning") ? ShiftType.Morning :ShiftType.Evening;
+//            return new DTO.Shift(sqlDate,shiftType,shiftManagersql,driverIDsql,branchIDsql);
         } catch (Exception e) {
             throw e;
         }
@@ -498,14 +505,54 @@ CREATE TABLE IF NOT EXISTS workersAtShift (
         }
     }
 
+    public static BussinessLayer.WorkersPackage.Worker getShiftManager(LocalDate localDate, String shiftType, int branchID) throws Exception {
+        try{
+            DTO.Shift shiftDTO=Shifts.getShiftDTO(localDate,shiftType,branchID);
+            if(shiftDTO==null)
+                throw new IllegalArgumentException("shiftDTO was not found");
+            return Workers.getWorker(shiftDTO.shiftManagerID);
+        }catch (Exception e){
+            throw e;
+        }
+    }
+
+    public static BussinessLayer.WorkersPackage.Worker getShiftDriver(LocalDate localDate, String shiftType, int branchID) throws Exception {
+        try {
+            DTO.Shift shiftDTO = Shifts.getShiftDTO(localDate, shiftType, branchID);
+            return Workers.getWorker(shiftDTO.driverID);
+        }catch(Exception e){
+            throw e;
+        }
+    }
+
+
     public static void printWorkersAtShift(LocalDate localDate,String shiftType,int branchID)throws Exception{
         int i=1;
+
+        try{
+
+            if(!isShiftExists(localDate,shiftType,branchID)){
+                System.out.println("There is no shift at "+localDate+" at the "+shiftType.toLowerCase(Locale.ROOT)+" in branch "+branchID);
+            }
+
+
+
+        }catch (Exception e){
+            throw e;
+        }
+
+
         Date date=Date.valueOf(localDate);
         System.out.println("Date: "+ date);
         System.out.println("Shift Type "+ shiftType);
-        //System.out.println("The manager of this shift is: "+shiftManager.getFirstName()+" "+shiftManager.getLastName()+ "and his Id is:"+shiftManager.getID());
+
         System.out.println("The workers of this shift are: ");
         try{
+            Worker shiftManager= Shifts.getShiftManager(localDate,shiftType,branchID);
+            System.out.println("The manager of this shift is: "+shiftManager.getFirstName()+" "+shiftManager.getLastName()+ "and his Id is:"+shiftManager.getID());
+            Worker driver=Shifts.getShiftDriver(localDate,shiftType,branchID);
+            if(driver!=null)
+                System.out.println("The driver of this shift is: "+driver.getFirstName()+ " "+driver.getLastName()+ "and his Id is:"+driver.getID());
             List<Worker> arrangers=Workers.WorkersOfQualificationAtBranch(branchID,Qualifications.Arranger);
             List<Worker> Storekeepers=Workers.WorkersOfQualificationAtBranch(branchID,Qualifications.Storekeeper);
             List<Worker> Assistants=Workers.WorkersOfQualificationAtBranch(branchID,Qualifications.Assistant);
@@ -548,5 +595,10 @@ CREATE TABLE IF NOT EXISTS workersAtShift (
 
     }
 
+    public static boolean isShiftExists(LocalDate localDate, String shiftType, int branchID) {
+
+
     }
+
+}
 
