@@ -595,7 +595,7 @@ CREATE TABLE IF NOT EXISTS workersAtShift (
 
     }
 
-    public static boolean isShiftExists(LocalDate localDate, String shiftType, int branchID) {
+    public static boolean isShiftExists(LocalDate localDate, String shiftType, int branchID) throws SQLException {
 
 
     }
