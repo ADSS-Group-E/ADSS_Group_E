@@ -58,7 +58,31 @@ public class DiscountController {
 
 
     public Discount getDiscount(int did){
-        return discounts.get(did);
+        if (discounts.containsKey(did)){
+            return discounts.get(did);
+        }
+        else{
+            // Not in business layer, try to lazy load
+            DiscountDTO discountDTO = discountDAO.get(did);
+            if (discountDTO == null){
+                System.err.println( "Discount id " + did + " does not exist.");
+                return null;
+            }
+            ArrayList<Product> products = new ArrayList<>();
+            if (discountDTO.getPids() != null)
+                for (Integer pid:
+                        discountDTO.getPids()) {
+                    products.add(pCont.getProduct(pid));
+                }
+            Discount discount;
+            if (discountDTO.getType().equals("Buying"))
+                discount = Discount.DiscountForBuying(discountDTO.getDid(), discountDTO.getName(), discountDTO.getDiscountPercent(), discountDTO.getStartDate(), discountDTO.getEndDate(), products);
+            else
+                discount = Discount.DiscountForSelling(discountDTO.getDid(), discountDTO.getName(), discountDTO.getDiscountPercent(), discountDTO.getStartDate(), discountDTO.getEndDate(), products);
+            discounts.put(discount.getDid(),discount);
+
+            return discount;
+        }
     }
 
     /**
