@@ -611,5 +611,22 @@ CREATE TABLE IF NOT EXISTS workersAtShift (
 
     }
 
+    public static boolean isWorkingInShift(LocalDate localDate, String shiftType, int branchID, String workerID) throws SQLException {
+        try (Connection conn = Repo.openConnection()) {
+            Date date=Date.valueOf(localDate);
+            String query = "SELECT * FROM workersAtShift WHERE Date = ? AND ShiftType= ? AND BranchID = ? AND workerID=?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setDate(1,  date);
+            stmt.setString(2, shiftType);
+            stmt.setInt(3, branchID);
+            stmt.setString(4,workerID);
+            ResultSet results=stmt.executeQuery();
+            return results.next();
+        } catch (Exception e) {
+            throw e;
+        }
+
+    }
+
 }
 
