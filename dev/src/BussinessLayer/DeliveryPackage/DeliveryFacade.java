@@ -69,8 +69,8 @@ public class DeliveryFacade {
         SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm");
         Calendar cal = Calendar.getInstance();
         Time time = new Time(timeFormat.parse(timeFormat.format(cal.getTime())).getTime());
-        if (DataAccessLayer.Transports.Delivery.checkDelivery(id)!=null)
-            throw new Exception("the delivery already exists");
+        //if (DataAccessLayer.Transports.Delivery.checkDelivery(id)!=null)
+            //throw new Exception("the delivery already exists");
         if (deliveryDay.compareTo(date) < 0 )
             throw new Exception("delivery date must be future date");
         if (leavingTime.compareTo(time) < 0)
@@ -84,7 +84,7 @@ public class DeliveryFacade {
         if(locationController.getLocation(srcLocation)==null)
             throw new Exception("source location doesn't exists");
         if(!checkArea(targetLocation))
-            throw new Exception("locations are not in the another area");
+            throw new Exception("locations are not in the same area");
         if(shiftType(leavingTime)==null)
             throw new Exception("leaving time must be between 08:00-23:00");
         Delivery delivery = new Delivery(id, deliveryDay, leavingTime, driverId, srcLocation, targetLocation, weight, truckId, orders);
@@ -139,9 +139,9 @@ public class DeliveryFacade {
     }
 
     public void addDelivery(Delivery delivery) throws Exception {
-        if (DataAccessLayer.Transports.Delivery.checkDelivery(delivery.getId())!=null)
-            throw new Exception("the delivery already exists");
-        this.deliveries.put(delivery.getId(), delivery);
+        //if (DataAccessLayer.Transports.Delivery.checkDelivery(delivery.getId())!=null)
+            //throw new Exception("the delivery already exists");
+        //this.deliveries.put(delivery.getId(), delivery);
         DataAccessLayer.Transports.Delivery.insertDelivery(new DTO.Delivery(delivery.getId(),delivery.getDeliveryDate(),delivery.getLeavingTime(),delivery.getDriverId(),delivery.getSrcLocation(),delivery.getWeight(),delivery.getTruckId(),delivery.getStatus().toString()));
         for (int l:delivery.getTargets()
         ) {

@@ -139,14 +139,11 @@ public class WorkersFacade {
         return new Response();
     }
 
-    public Response workerReplacement(int branchID, LocalDate date1, ShiftTypeDTO shiftType1, LocalDate date2, ShiftTypeDTO shiftType2, WorkerDTO worker1, WorkerDTO worker2, WorkerDTO branchManager) {
+    public Response workerReplacement(int branchID1, int branchID2, LocalDate date1,LocalDate date2, String shiftType1, String shiftType2, String worker1, String worker2) {
         try {
-            if(branchController.getBranch(branchID).FindWorker(convertWorkerToBusiness(worker1))==null)
-                return new Response("The first worker is not from branchID"+ branchID);
-            if(branchController.getBranch(branchID).FindWorker(convertWorkerToBusiness(worker2))==null)
-                return new Response("The second worker is not from branchID"+ branchID);
-            shiftController.workerReplacement(branchID, date1, convertShiftTypeToBusiness(shiftType1), date2, convertShiftTypeToBusiness(shiftType2), convertWorkerToBusiness(worker1), convertWorkerToBusiness(worker2), convertWorkerToBusiness(branchManager));
-        }catch (Exception e){
+            Shifts.SwitchBetweenWorkersShifts(date1, shiftType1, branchID1,  worker1,  date2,
+                     shiftType2,  branchID2,  worker2);
+            }catch (Exception e){
             return new Response(e.getMessage());
         }
         return new Response();

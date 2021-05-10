@@ -33,8 +33,8 @@ public class OrderController {
     }
 
     public Order createOrder(int id, Map<String, Integer> items, String supplierId, int locationId, double totalWeight) throws Exception {
-        if(DataAccessLayer.Transports.Order.checkOrder(id)!=null)
-            throw new Exception("the order already exists");
+        //if(DataAccessLayer.Transports.Order.checkOrder(id)!=null)
+            //throw new Exception("the order already exists");
         if(items.isEmpty())
             throw new Exception("can't create an order with no items");
         Order order = new Order(id, items, supplierId, locationId, totalWeight);
@@ -42,9 +42,9 @@ public class OrderController {
     }
 
     public void addOrder(Order order) throws Exception {
-        if(DataAccessLayer.Transports.Order.checkOrder(order.getId())!=null)
-            throw new Exception("the order already exists");
-        this.orders.put(order.getId(), order);
+        //if(DataAccessLayer.Transports.Order.checkOrder(order.getId())!=null)
+            //throw new Exception("the order already exists");
+        //this.orders.put(order.getId(), order);
         DataAccessLayer.Transports.Order.insertOrder(new DTO.Order(order.getId(),order.getSupplierId(),order.getLocationId(),order.getTotalWeight()));
         for (Map.Entry<String,Integer > entry: order.getItems().entrySet()
         ) {

@@ -699,8 +699,8 @@ public class Menu_Transport {
             Time newTime3 = Time.valueOf("11:25:30");
             List<Integer> centerLocations = new ArrayList<Integer>() {
                 {
-                    add(1);
                     add(3);
+                    add(4);
                 }
             };
             List<Integer> northLocations = new ArrayList<Integer>() {
@@ -725,9 +725,9 @@ public class Menu_Transport {
                     add(98);
                 }
             };
-            facade.createDelivery("101", newDate1, newTime1, "208938985", 4, centerLocations, "2360154", orders1);
-            facade.createDelivery("102", newDate2, newTime2, "312164668", 5, northLocations, "30122623", orders2);
-            facade.createDelivery("103", newDate3, newTime3, "123456789", 6, centerLocations, "11122333", orders3);
+            facade.createDelivery("101", newDate1, newTime1, "313577645", 1, centerLocations, "11122333", orders1);
+            //facade.createDelivery("102", newDate2, newTime2, "312164668", 5, northLocations, "30122623", orders2);
+            //facade.createDelivery("103", newDate3, newTime3, "123456789", 6, centerLocations, "11122333", orders3);
         }
         catch (Exception e)
         {

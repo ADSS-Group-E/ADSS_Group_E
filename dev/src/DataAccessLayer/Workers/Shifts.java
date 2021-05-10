@@ -641,34 +641,58 @@ CREATE TABLE IF NOT EXISTS workersAtShift (
 
     }
 
-    public void SwitchBetweenWorkersShifts(LocalDate localDate1, String shiftType1, int branchID1, String workerID1, LocalDate localDate2,
+    public static void SwitchBetweenWorkersShifts(LocalDate localDate1, String shiftType1, int branchID1, String workerID1, LocalDate localDate2,
                                            String shiftType2, int branchID2, String workerID2) throws Exception {
         try (Connection conn = Repo.openConnection()) {
-        if(!isWorkingInShift(localDate1,shiftType1, branchID1,workerID1) || !isWorkingInShift(localDate2,shiftType2, branchID2,workerID2))
-            throw new Exception("One of the workers (or both) is not working in the shift that was inserted");
-        if(!isWorkingInShift(localDate2,shiftType2, branchID2,workerID1) || !isWorkingInShift(localDate1,shiftType1, branchID1,workerID2))
-            throw new Exception("One of the workers (or both) is already working in the other shift");
-            if(!getWorkerRoleAtShift(localDate1,shiftType1, branchID1,workerID1).equals(getWorkerRoleAtShift(localDate1,shiftType1, branchID1,workerID1)))
-                throw new Exception("The workers are working on different roles in the specified shifts");
-        String sql = """
-               UPDATE WorkersAtShift
-               SET WorkerID = ?
-               WHERE WorkersAtShift.Date=? AND WorkersAtShift.ShiftType=? AND WorkersAtShift.BranchID=?""";
+            String role=getWorkerRoleAtShift(localDate1,shiftType1,branchID1,workerID1);
+            if(Workers.getWorker(workerID1)==null||Workers.getWorker(workerID2)==null)
+                throw new Exception("One of the workers (or both) doesn't exists");
+            if(!isWorkingInShift(localDate1,shiftType1, branchID1,workerID1) || !isWorkingInShift(localDate2,shiftType2, branchID2,workerID2))
+                throw new Exception("One of the workers (or both) is not working in the shift that was inserted");
+            if(isWorkingInShift(localDate2,shiftType2, branchID2,workerID1) || isWorkingInShift(localDate1,shiftType1, branchID1,workerID2))
+                throw new Exception("One of the workers (or both) is already working in the other shift");
+                if(!getWorkerRoleAtShift(localDate1,shiftType1, branchID1,workerID1).equals(getWorkerRoleAtShift(localDate1,shiftType1, branchID1,workerID1)))
+                    throw new Exception("The workers are working on different roles in the specified shifts");
+            String sql1 = """
+                   DELETE FROM WorkersAtShift
+                   WHERE WorkersAtShift.Date=? AND WorkersAtShift.ShiftType=? AND WorkersAtShift.BranchID=? AND WorkersAtShift.workerID=?""";
 
-            PreparedStatement pst = conn.prepareStatement(sql);
-            Date date=Date.valueOf(localDate2);
-            pst.setString(1,workerID1);
-            pst.setDate(2,  date);
-            pst.setString(3, shiftType2);
-            pst.setInt(4, branchID2);
+                PreparedStatement pst = conn.prepareStatement(sql1);
+                Date date=Date.valueOf(localDate1);
+                pst.setDate(1,  date);
+                pst.setString(2, shiftType1);
+                pst.setInt(3, branchID1);
+                pst.setString(4,workerID1);
+                pst.executeUpdate();
+
+                pst = conn.prepareStatement(sql1);
+                date=Date.valueOf(localDate2);
+                pst.setDate(1,  date);
+                pst.setString(2, shiftType2);
+                pst.setInt(3, branchID2);
+                pst.setString(4,workerID2);
+                pst.executeUpdate();
+
+            String sql2 = """
+                    INSERT INTO workersAtShift
+                    VALUES (?, ?, ?,?,?);""";
+
+            pst = conn.prepareStatement(sql2);
+            date=Date.valueOf(localDate2);
+            pst.setDate(1,  date);
+            pst.setString(2, shiftType2);
+            pst.setInt(3, branchID2);
+            pst.setString(4,workerID1);
+            pst.setString(5,role);
             pst.executeUpdate();
 
-            pst = conn.prepareStatement(sql);
+            pst = conn.prepareStatement(sql2);
             date=Date.valueOf(localDate1);
-            pst.setString(1,workerID2);
-            pst.setDate(2,  date);
-            pst.setString(3, shiftType1);
-            pst.setInt(4, branchID1);
+            pst.setDate(1, date);
+            pst.setString(2, shiftType1);
+            pst.setInt(3, branchID1);
+            pst.setString(4,workerID2);
+            pst.setString(5,role);
             pst.executeUpdate();
 
 

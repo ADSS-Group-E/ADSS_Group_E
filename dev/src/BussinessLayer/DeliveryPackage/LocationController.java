@@ -33,8 +33,8 @@ public class LocationController {
             throw new Exception("the telephone number contains illegal numbers");
         if(!contactName.matches("[a-zA-Z]+"))
             throw new Exception("the contact name contains illegal characters");
-        if(DataAccessLayer.Transports.Location.checkLocation(id)!=null)
-            throw new Exception("the location already exists");
+        //if(DataAccessLayer.Transports.Location.checkLocation(id)!=null)
+            //throw new Exception("the location already exists");
         if(shippingArea.compareTo("north") != 0 && shippingArea.compareTo("south") != 0 && shippingArea.compareTo("center") != 0)
             throw new Exception("the location area doesn't exist");
         Location location = new Location(id, name, address, telNumber, contactName, shippingArea);
@@ -46,8 +46,8 @@ public class LocationController {
             throw new Exception("the telephone number contains illegal numbers");
         if(!location.getContactName().matches("[a-zA-Z]+"))
             throw new Exception("the contact name contains illegal characters");
-        if(DataAccessLayer.Transports.Location.checkLocation(location.getId())!=null)
-            throw new Exception("the location already exists");
+        //if(DataAccessLayer.Transports.Location.checkLocation(location.getId())!=null)
+            //throw new Exception("the location already exists");
         if(location.getShippingArea().compareTo("north") != 0 && location.getShippingArea().compareTo("south") != 0 && location.getShippingArea().compareTo("center") != 0)
             throw new Exception("the location area doesn't exist");
         this.locations.put(location.getId(), location);

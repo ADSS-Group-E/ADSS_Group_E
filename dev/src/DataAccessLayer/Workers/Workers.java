@@ -713,6 +713,7 @@ public class Workers {
                 if(names.contains(q.name()))
                     qualifications.add(q);
             }
+            if (FirstName==null) return null;
             return new Worker(FirstName,LastName,ID,bankAccount,hiringConditions,availableWorkDays,qualifications);
         } catch (Exception e) {
             throw e;

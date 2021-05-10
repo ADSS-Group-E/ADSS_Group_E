@@ -123,80 +123,34 @@ public class MenuWorkers {
         else return null;
     }
 
-    private static void replaceAShiftBetweenTwoWorkers(WorkerDTO workerDTO) {
-        System.out.println("Please enter the branch ID");
-        int branchID = reader.nextInt();
-        Response response= facade.isLegalBranch(branchID);
+    private static void replaceAShiftBetweenTwoWorkers() {
+        System.out.println("Please enter the branch ID1");
+        int branchID1 = reader.nextInt();
+        System.out.println("Please enter the date1");
+        LocalDate date1 = createDate();
+        System.out.println("Please enter the shift type1:");
+        String shiftTypeDTO1=reader.next();
+        System.out.println("Please enter the worker id1:");
+        String id1=reader.next();
+
+        System.out.println("Please enter the branch ID2");
+        int branchID2 = reader.nextInt();
+        System.out.println("Please enter the date2");
+        LocalDate date2 = createDate();
+        System.out.println("Please enter the shift type2:");
+        String shiftTypeDTO2=reader.next();
+        System.out.println("Please enter the worker id2:");
+        String id2=reader.next();
+
+        Response response= facade.workerReplacement(branchID1, branchID2, date1, date2, shiftTypeDTO1, shiftTypeDTO2, id1, id2);
         if(response.isErrorOccurred())
             System.out.println(response.getErrorMessage());
-        else{
-            System.out.println("Please enter the Date of the first shift");
-            LocalDate date1 = createDate();
-            System.out.println("Please enter the type of the first shift for morning press M and for evening press E");
-            String type1 = reader.next();
-            ShiftTypeDTO shiftTypeDTO1 = createShiftType(type1);
-
-            if (shiftTypeDTO1 == null) {
-                do {
-                    System.out.println("The type was incorrect Please enter again the type of the first shift for morning press M and for evening press E");
-                    type1 = reader.next();
-                    shiftTypeDTO1 = createShiftType(type1);
-
-                } while (shiftTypeDTO1 == null);
-            }
-
-            System.out.println("Please enter the Date of the second shift");
-            LocalDate date2 = createDate();
-            System.out.println("Please enter the type of the second shift for morning press M and for evening press E");
-            String type2 = reader.next();
-            ShiftTypeDTO shiftTypeDTO2 = createShiftType(type2);
-
-            if (shiftTypeDTO2 == null) {
-                do {
-                    System.out.println("The type was incorrect Please enter again the type of the second shift for morning press M and for evening press E");
-                    type2 = reader.next();
-                    shiftTypeDTO2 = createShiftType(type2);
-
-                } while (shiftTypeDTO2 == null);
-            }
-
-            System.out.println("The workers in the first shift are: ");
-            response= facade.printWorkersAtShift(branchID, date1, shiftTypeDTO1);
-            if(response.isErrorOccurred())
-                System.out.println(response.getErrorMessage());
-            else{
-                int worker1SerialNumber, worker2SerialNumber;
-                System.out.println("Enter the worker's serial number you want to replace");
-                worker1SerialNumber = reader.nextInt();
-
-                System.out.println("Workers at second shift:");
-                response= facade.printWorkersAtShift(branchID, date2, shiftTypeDTO2);
-                if(response.isErrorOccurred())
-                    System.out.println(response.getErrorMessage());
-                else{
-                    System.out.println("Enter the worker's serial number you want to replace");
-                    worker2SerialNumber = reader.nextInt();
-
-                    ResponseT<WorkerDTO> response1= facade.findWorkerBySerialNumber(branchID,worker1SerialNumber - 1);
-                    ResponseT<WorkerDTO>response2= facade.findWorkerBySerialNumber(branchID,worker2SerialNumber - 1);
-                    if(!response1.isErrorOccurred()&&!response2.isErrorOccurred()){
-                        WorkerDTO workerDTO1 = response1.getValue();
-                        WorkerDTO workerDTO2 =  response2.getValue();
-                        response= facade.workerReplacement(branchID, date1, shiftTypeDTO1, date2, shiftTypeDTO2, workerDTO1, workerDTO2, workerDTO);
-                        if(response.isErrorOccurred())
-                            System.out.println(response.getErrorMessage());
-                    }else{
-                        System.out.println(response1.getErrorMessage());
-                        System.out.println(response2.getErrorMessage());
-                    }
-                }
-
-            }
-
-        }
-
 
     }
+
+
+
+
 
     private static void displayCurrentDayShift() {
         ShiftTypeDTO morning = ShiftTypeDTO.Morning;
@@ -450,7 +404,7 @@ public class MenuWorkers {
                     break;
 
                 case 2:
-                    replaceAShiftBetweenTwoWorkers(branchManager);
+                    replaceAShiftBetweenTwoWorkers();
                     break;
                 case 3:
                     displayCurrentDayShift();
