@@ -1,5 +1,6 @@
 package DataAccessLayer.Workers;
 
+import BussinessLayer.DriverPackage.Driver;
 import BussinessLayer.WorkersPackage.*;
 import DataAccessLayer.Repo;
 import PresentationLayer.WorkerDTO;
@@ -1080,12 +1081,39 @@ public class Workers {
 
     }
 
-    public static List<Worker> WorkersOfQualificationAtBranch(int branchID, Qualifications shiftManager) {
+    /*
+    CREATE TABLE IF NOT EXISTS "Workers" (
+                        	"ID"	TEXT NOT NULL,
+                        	"BranchID"	INTEGER NOT NULL,
+                        	"First_Name"	INTEGER NOT NULL,
+                        	"Last_Name"	INTEGER NOT NULL,
+                        	"Start_Working_Day"	DATE NOT NULL,
+                        	"isWorking" INTEGER NOT NULL,
+                        	PRIMARY KEY("ID")
+                        )
+     */
+
+    /*
+      CREATE TABLE IF NOT EXISTS "Qualifications" (
+                                	"ID"	TEXT NOT NULL,
+                                	"Qualification"	TEXT NOT NULL,
+                                	FOREIGN KEY (ID) REFERENCES Workers(ID) ON DELETE CASCADE ,
+                                	PRIMARY KEY("ID","Qualification")
+                                )
+     */
+
+    public static List<Worker> WorkersOfQualificationAtBranch(int branchID, Qualifications qualification) throws Exception{
         try (Connection conn = Repo.openConnection()) {
             if (isBranchExists(branchID)) {
-                String sql = "SELECT ID From Workers WHERE BranchID=? AND isWorking=1";
+                String sql = """
+                        SELECT Workers.ID
+                        FROM Workers
+                        INNER JOIN Qualifications ON Qualifications.ID=Workers.ID AND Qualifications.Qualification = ?
+                        WHERE Workers.BranchID = ?
+                        """;
                 PreparedStatement pst = conn.prepareStatement(sql);
-                pst.setInt(1,branchID);
+                pst.setString(1, qualification.name());
+                pst.setInt(2,branchID);
                 ResultSet results = pst.executeQuery();
 
                 List<Worker>workers=new LinkedList<>();
@@ -1100,6 +1128,8 @@ public class Workers {
         }
 
     }
+
+
 
 
 //    public static boolean CheckConstraint(String ID,int day,int shiftType) throws SQLException {

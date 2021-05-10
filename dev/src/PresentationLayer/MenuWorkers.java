@@ -107,7 +107,7 @@ public class MenuWorkers {
 
             LocalDate date_ = createDate();
             ShiftDemandsDTO[][] sd;
-            response= facade.createWeeklyAssignment(branchID, sunday, branchManger, drivers);
+            response= facade.createWeeklyAssignment(branchID, sunday, branchManger/*, drivers*/);
             if(response.isErrorOccurred())
                 System.out.println(response.getErrorMessage());
         }

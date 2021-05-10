@@ -52,8 +52,8 @@ public class Facade {
         return wFacade.getShift( branchID,  date,  shiftType);
     }
 
-    public Response createWeeklyAssignment(int branchID, LocalDate startDate, WorkerDTO branchManager, List<Driver> drivers) {
-        return wFacade.createWeeklyAssignment( branchID,  startDate,  branchManager, drivers);
+    public Response createWeeklyAssignment(int branchID, LocalDate startDate, WorkerDTO branchManager/*, List<Driver> drivers*/) {
+        return wFacade.createWeeklyAssignment( branchID,  startDate,  branchManager/*, drivers*/);
     }
 
     public Response workerReplacement(int branchID, LocalDate date1, ShiftTypeDTO shiftType1, LocalDate date2, ShiftTypeDTO shiftType2, WorkerDTO worker1, WorkerDTO worker2, WorkerDTO branchManager) {

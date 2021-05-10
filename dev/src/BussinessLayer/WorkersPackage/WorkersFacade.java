@@ -4,6 +4,7 @@ import BussinessLayer.DriverPackage.Driver;
 import BussinessLayer.Response;
 import BussinessLayer.ResponseT;
 import DataAccessLayer.Repo;
+import DataAccessLayer.Transports.Drivers;
 import DataAccessLayer.Workers.Shifts;
 import DataAccessLayer.Workers.Workers;
 import PresentationLayer.*;
@@ -126,12 +127,12 @@ public class WorkersFacade {
         return new ResponseT<ShiftDTO>(convertShiftToDTO(shiftController.getShift(branchID, date, convertShiftTypeToBusiness(shiftType))));
     }
 
-    public Response createWeeklyAssignment(int branchID, LocalDate startDate, WorkerDTO branchManager, List<Driver> drivers) {
+    public Response createWeeklyAssignment(int branchID, LocalDate startDate, WorkerDTO branchManager/*, List<Driver> drivers*/) {
         try {
             //shiftController.createWeeklyAssignment(branchID, startDate, branchController.getBranch(branchID).getWorkersList(), convertWorkerToBusiness(branchManager), drivers);
            // Shifts.createWeeklyAssignment(branchID,startDate,branchManager,drivers);
-            Shifts.createWeeklyAssignment(branchID,startDate,convertWorkerToBusiness(branchManager),Workers.getWorkersAtBranch(branchID),Workers.WorkersOfQualificationAtBranch(branchID,Qualifications.ShiftManager),);
-            Shifts.createShiftAssignment(startDate,ShiftType.Morning,branchID,Workers.getWorkersAtBranch(branchID),convertWorkerToBusiness(branchManager), null);
+            Shifts.createWeeklyAssignment(branchID,startDate,convertWorkerToBusiness(branchManager),Workers.getWorkersAtBranch(branchID),Workers.WorkersOfQualificationAtBranch(branchID,Qualifications.ShiftManager), Drivers.DriversAtBranch(branchID));
+            //Shifts.createShiftAssignment(startDate,ShiftType.Morning,branchID,Workers.getWorkersAtBranch(branchID),convertWorkerToBusiness(branchManager), null);
         }catch(Exception e){
             return new Response(e.getMessage());
         }

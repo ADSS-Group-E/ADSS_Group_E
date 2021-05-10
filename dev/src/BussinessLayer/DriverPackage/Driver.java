@@ -20,6 +20,13 @@ public class Driver extends Worker {
         this.busy = false;
     }
 
+    public Driver(Worker w,String licenseType, Date expLicenseDate,boolean busy) {
+        super(w.getFirstName(), w.getLastName(), w.getID(), w.getBankAccount(), w.getHiringConditions(), w.getAvailableWorkDays(),w.getQualifications());
+        this.licenseType = licenseType;
+        this.expLicenseDate = expLicenseDate;
+        this.busy = busy;
+    }
+
 
     public String getLicenseType() {
         return licenseType;
