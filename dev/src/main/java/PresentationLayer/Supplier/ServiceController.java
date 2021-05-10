@@ -3,6 +3,9 @@ package PresentationLayer.Supplier;
 import BusinessLayer.Supplier.Order;
 import BusinessLayer.Supplier.QuantityWriter;
 import BusinessLayer.Supplier.SupplierController;
+import PresentationLayer.Supplier.DataTransferObjects.OrderDTO;
+import PresentationLayer.Supplier.DataTransferObjects.QuantityWriterDTO;
+import PresentationLayer.Supplier.DataTransferObjects.SupplierItemDTO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,17 +46,17 @@ public class ServiceController {
         return supplierController.getSuppliersInfo();
     }
 
-    public ArrayList<String[]> getRegularOrdersToStrings() {
+    ArrayList<OrderDTO> getRegularOrdersToStrings() {
         //gets all the orders that come on a weekly basis
         return supplierController.getRegularOrdersToStrings();
     }
 
-    public ArrayList<String> getItemsFromSupplier(int supplierNum) {
+    ArrayList<SupplierItemDTO> getItemsFromSupplier(int supplierNum) {
         //gets all of the items information from a specific supplier that he sells
         return supplierController.getItemsFromSupplier(supplierNum);
     }
 
-    public ArrayList<String[]> getAllItems() {
+    ArrayList<String[]> getAllItems() {
         //gets all orders from all suppliers with all of their information including supplier number and more
         return supplierController.getAllItems();
     }
@@ -68,14 +71,14 @@ public class ServiceController {
         return supplierController.updateSellerItemQuantity(supplierNum, itemNum, quantity);
     }
 
-    public boolean updateOrderItemQuantity(int supplierNum, int orderNum, int itemNum, int quantity) {
+    public boolean updateOrderItemQuantity(int itemNum, int orderNum, int quantity) {
         //updates the quantity the seller and the costumer have for the item when an update happens
-        return supplierController.updateOrderItemQuantity(supplierNum, orderNum, itemNum, quantity);
+        return supplierController.updateOrderItemQuantity(itemNum, orderNum, quantity);
     }
 
-    public boolean deleteOrderItem(int supplierNum, int orderNum, int itemNum) {
+    public boolean deleteOrderItem(int itemNum, int orderNum) {
         //deletes an item from an order and updates seller quantity of the item
-        return supplierController.deleteCostumerItem(supplierNum, orderNum, itemNum);
+        return supplierController.deleteCostumerItem(itemNum, orderNum);
     }
 
     public boolean contains(String[] equal, ArrayList<String[]> list) {
@@ -88,14 +91,14 @@ public class ServiceController {
         supplierController.initialize();
     }
 
-    public QuantityWriter getQuantityWriter(int idx){
+    public QuantityWriterDTO getQuantityWriter(int idx){
         //gets quantity writer for test purposes
         return supplierController.getQuantityWriter(idx);
     }
 
-    public Order getOrderFromSupplier(int supIdx, int orderIdx){
+    public OrderDTO getOrderFromSupplier(int orderIdx){
         //gets specific order for test purposes
-        return supplierController.getOrderFromSupplier(supIdx, orderIdx);
+        return supplierController.getOrderFromSupplier(orderIdx);
     }
 
 }

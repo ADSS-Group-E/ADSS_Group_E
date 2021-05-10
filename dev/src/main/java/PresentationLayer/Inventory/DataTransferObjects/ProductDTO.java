@@ -7,7 +7,7 @@ import BusinessLayer.Inventory.Product;
  * A DTO is an object that is used to encapsulate data and send it from one subsystem of an application to another.
  */
 
-public class ProductDTO {
+public class ProductDTO implements DataTransferObject{
     private final int pid;
     private final String name;
     private final String storageLocation;
@@ -29,6 +29,14 @@ public class ProductDTO {
 
     public String getName() {
         return name;
+    }
+
+    public double getBuyingPriceAfterDiscount() {
+        return buyingPriceAfterDiscount;
+    }
+
+    public double getSellingPriceAfterDiscount() {
+        return sellingPriceAfterDiscount;
     }
 
     public String getStorageLocation() {

@@ -5,6 +5,7 @@ import BusinessLayer.Inventory.Discount;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -15,7 +16,7 @@ class DiscountControllerTest {
     private DiscountController discountController;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         discountController = new DiscountController();
     }
     @Test

@@ -7,6 +7,7 @@ import BusinessLayer.Inventory.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ProductControllerTest {
@@ -14,7 +15,7 @@ class ProductControllerTest {
     private ProductController productController;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         productController = new ProductController();
     }
 
