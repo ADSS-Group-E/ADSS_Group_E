@@ -6,6 +6,7 @@ import PresentationLayer.Inventory.DataTransferObjects.DiscountDTO;
 import PresentationLayer.Inventory.DataTransferObjects.ReportDTO;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -13,6 +14,21 @@ public class DiscountDAO extends DataAccessObject{
 
     public DiscountDAO(DBConnection dbConnection) {
         super(dbConnection);
+    }
+
+    @Override
+    protected String createGetString(int id) {
+        return null;
+    }
+
+    @Override
+    <T extends DataTransferObject> T resultToDTO(ResultSet resultSet) throws SQLException {
+        return null;
+    }
+
+    @Override
+    String createSelectAllString() {
+        return null;
     }
 
     @Override

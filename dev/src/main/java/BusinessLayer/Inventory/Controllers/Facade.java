@@ -25,9 +25,10 @@ public class Facade {
     private final DiscountController dCont;
 
     public Facade() {
-        pCont = new ProductController();
-        rCont = new ReportController();
         cCont = new CategoryController();
+        pCont = new ProductController(cCont);
+        rCont = new ReportController();
+
         dCont = new DiscountController();
     }
 

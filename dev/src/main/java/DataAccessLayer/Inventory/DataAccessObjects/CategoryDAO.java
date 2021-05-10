@@ -6,6 +6,7 @@ import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
 import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -13,6 +14,23 @@ public class CategoryDAO extends DataAccessObject{
 
     public CategoryDAO(DBConnection dbConnection) {
         super(dbConnection);
+    }
+
+    @Override
+    protected String createGetString(int id) {
+        return  String.format("SELECT * FROM Category WHERE ID = %d", id);
+    }
+
+    @Override
+    CategoryDTO resultToDTO(ResultSet resultSet) throws SQLException {
+        return new CategoryDTO(  resultSet.getInt("ID"),
+                resultSet.getString("name"),
+                resultSet.getInt("superID"));
+    }
+
+    @Override
+    String createSelectAllString() {
+        return null;
     }
 
 

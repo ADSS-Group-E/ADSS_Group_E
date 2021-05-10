@@ -1,5 +1,6 @@
 package PresentationLayer.Inventory.DataTransferObjects;
 
+import BusinessLayer.Inventory.Discount;
 import BusinessLayer.Inventory.Product;
 
 /**
@@ -21,6 +22,8 @@ public class ProductDTO implements DataTransferObject{
     private final double sellingPriceAfterDiscount;
     private final int minAmount;
     private final int categoryId;
+    private final int buyingDiscountID;
+    private final int sellingDiscountID;
 
     // Getters
     public int getPid() {
@@ -68,7 +71,7 @@ public class ProductDTO implements DataTransferObject{
     }
 
     // Constructors
-    public ProductDTO(int pid, String name, String storageLocation, String storeLocation, String manufacturer, double buyingPrice, double sellingPrice, int minAmount, int categoryId) {
+    public ProductDTO(int pid, String name, String storageLocation, String storeLocation, String manufacturer, double buyingPrice, double sellingPrice, int minAmount, int categoryId, int buyingDiscountID, int sellingDiscountID) {
         this.pid = pid;
         this.name = name;
         this.storageLocation = storageLocation;
@@ -82,6 +85,8 @@ public class ProductDTO implements DataTransferObject{
         this.buyingPriceAfterDiscount = buyingPrice;
         this.sellingPriceAfterDiscount = sellingPrice;
         this.categoryId = categoryId;
+        this.buyingDiscountID = buyingDiscountID;
+        this.sellingDiscountID = sellingDiscountID;
     }
 
     public ProductDTO(Product other) {
@@ -98,6 +103,14 @@ public class ProductDTO implements DataTransferObject{
         this.sellingPriceAfterDiscount = other.getSellingPriceAfterDiscount();
         this.minAmount = other.getMinAmount();
         this.categoryId = other.getCategory().getCid();
+        if (other.getBuyingDiscount() != null)
+            this.buyingDiscountID = other.getBuyingDiscount().getDid();
+        else
+            this.buyingDiscountID = -1;
+        if (other.getSellingDiscount() != null)
+            this.sellingDiscountID = other.getSellingDiscount().getDid();
+        else
+            this.sellingDiscountID = -1;
     }
 
     // Print

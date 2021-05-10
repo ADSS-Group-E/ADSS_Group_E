@@ -1,5 +1,7 @@
 package BusinessLayer.Inventory;
 
+import PresentationLayer.Inventory.DataTransferObjects.CategoryDTO;
+
 /**
  * This class represents the category of the product.
  * Each product belongs to a category, sub category, and optional super category.
@@ -13,6 +15,12 @@ public class Category {
     public Category(int cid, String name) {
         this.cid = cid;
         this.name = name;
+        this.superCategory = null;
+    }
+
+    public Category(CategoryDTO categoryDTO) {
+        this.cid = categoryDTO.getCid();
+        this.name = categoryDTO.getName();
         this.superCategory = null;
     }
 

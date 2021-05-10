@@ -70,6 +70,14 @@ public class Product {
         return category;
     }
 
+    public Discount getBuyingDiscount() {
+        return buyingDiscount;
+    }
+
+    public Discount getSellingDiscount() {
+        return sellingDiscount;
+    }
+
     // Constructors
     public Product(int pid, String name, String storageLocation, String storeLocation, String manufacturer, double buyingPrice, double sellingPrice, int minAmount, Category category) {
         this.pid = pid;

@@ -1,7 +1,15 @@
 package BusinessLayer.Inventory.Controllers;
 
 import BusinessLayer.Inventory.Category;
+import BusinessLayer.Inventory.Product;
+import DataAccessLayer.Inventory.DBConnection;
+import DataAccessLayer.Inventory.DataAccessObjects.CategoryDAO;
+import DataAccessLayer.Inventory.DataAccessObjects.ProductDAO;
+import PresentationLayer.Inventory.DataTransferObjects.CategoryDTO;
+import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -11,14 +19,41 @@ import java.util.HashMap;
  */
 public class CategoryController {
     private final HashMap<Integer, Category> categories;
+    private final CategoryDAO categoryDAO;
 
     public CategoryController() {
         this.categories = new HashMap<>();
+
+        DBConnection db = () -> {
+            // SQLite connection string
+            Connection c = null;
+
+            try {
+                Class.forName("org.sqlite.JDBC");
+                c = DriverManager.getConnection("jdbc:sqlite:module.db");
+                c.setAutoCommit(false);
+            } catch ( Exception e ) {
+                System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+                System.exit(0);
+            }
+            System.out.println("Opened database successfully");
+            return c;
+        };
+        categoryDAO = new CategoryDAO(db);
     }
 
     // Getters
     public Category getCategory(int cid){
-        return categories.get(cid);
+        if (categories.containsKey(cid)){
+            return categories.get(cid);
+        }
+        else{
+            // Not in business layer, try to lazy load
+            CategoryDTO categoryDTO = categoryDAO.get(cid);
+            Category category = new Category(categoryDTO);
+            categories.put(category.getCid(),category);
+            return category;
+        }
     }
 
     public ArrayList<Category> getList() {

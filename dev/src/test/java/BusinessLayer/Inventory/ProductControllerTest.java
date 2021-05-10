@@ -1,6 +1,7 @@
 package BusinessLayer.Inventory;
 
 import BusinessLayer.Inventory.Category;
+import BusinessLayer.Inventory.Controllers.CategoryController;
 import BusinessLayer.Inventory.Controllers.ProductController;
 
 import BusinessLayer.Inventory.Product;
@@ -13,10 +14,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class ProductControllerTest {
 
     private ProductController productController;
+    private CategoryController categoryController;
 
     @BeforeEach
     void setUp() {
-        productController = new ProductController();
+        categoryController = new CategoryController();
+        productController = new ProductController(categoryController);
+
     }
 
     @Test
