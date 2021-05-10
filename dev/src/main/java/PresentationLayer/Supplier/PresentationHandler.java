@@ -34,13 +34,13 @@ class PresentationHandler {
                 for(String[] realItem : list) { //prints existing items
                     outputService.println("[Name: " + realItem[0] + "]");
                 }
-                number = inputService.nextInt("Enter Item Number: "); //user enters number
+                number = inputService.nextInt("Enter Item ID: "); //user enters number
                 int quantity = inputService.nextInt("Enter Item quantity: "); //user enters quantity
                 item = service.getSpecificItem(supplierNum, number); //we get the rest of the item from our data
                 while (item.length != 5) {
                     //while we didn't recieve an item or the quantity can't be taken from the supplier
                     outputService.println("Please try again.");
-                    number = inputService.nextInt("Enter Item Number: "); //user enters new number
+                    number = inputService.nextInt("Enter Item ID: "); //user enters new number
                     quantity = inputService.nextInt("Enter Item quantity: "); //user enters new quantity
                     item = service.getSpecificItem(supplierNum, number); //we get the rest of the item from our data
                 }
@@ -78,10 +78,11 @@ class PresentationHandler {
             if (ans.equalsIgnoreCase("Y")) { //if it's Y
                 outputService.println("Existing items:");
                 for(String[] item : list) { //prints existing items
-                    outputService.println("[Name: " + item[0] + "]");
+                    outputService.println("[ID: " + item[0] + ", Name: ]" + item[1]);
                 }
+                String id = inputService.nextInt("Enter Item ID:") + "";
                 String name = inputService.next("Enter Item Name: "); //gets item name from user
-                String[] equalBy = {name};
+                String[] equalBy = {id};
                 if (service.contains(equalBy, list)) { //checks if the item exists in the order using it's name
                     outputService.println("This item already exists.");
                 }
@@ -90,7 +91,7 @@ class PresentationHandler {
                     String price = inputService.nextInt("Enter Item price: ") + "";
                     String quantity = inputService.nextInt("Enter Item quantity: ") + "";
                     String supplierCN = inputService.nextInt("Enter Item catalog number: ") + "";
-                    String[] order = {name, quantity, price, supplierCN}; //we create an order an add it to the list
+                    String[] order = {id, name, quantity, price, supplierCN}; //we create an order an add it to the list
                     list.add(order);
                 }
                 outputService.println("Add another Item? N/Y ");

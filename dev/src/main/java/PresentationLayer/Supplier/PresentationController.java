@@ -80,12 +80,11 @@ class PresentationController {
                                     "SupplierCN: " + item[4] + "]\n");
                         }
                         int orderNumber;
-                        int newQuantity = -1;
+                        int newQuantity;
                         String[] orderToChange = {};
                         boolean contains = false;
                         while (!contains) {
                             orderNumber = in.nextInt("Select an item ID: ");
-                            newQuantity = in.nextInt("Enter new quantity you wish to order for the item you chose: ");
                             for (String[] item : orders) {
                                 if (item[0].equals(orderNumber + "")) {
                                     contains = true;
@@ -96,7 +95,8 @@ class PresentationController {
                             if (!contains)
                                 out.println("Illegal Arguments, please try again.");
                         }
-                        if (!service.updateOrderItemQuantity(Integer.parseInt(orderToChange[0]),
+                        newQuantity = in.nextInt("Enter new quantity you wish to order for the item you chose: ");
+                        if (!service.updateOrderItemQuantity(Integer.parseInt(orderToChange[0]), Integer.parseInt(orderToChange[5]),
                                 newQuantity)) { //if can't update
                             out.println("The new quantity is illegal"); //the new quantity is illegal
                         }
@@ -126,7 +126,7 @@ class PresentationController {
                             if (!contains) {
                                 out.println("Illegal Arguments, please try again.");
                             }
-                            if (!service.deleteOrderItem(Integer.parseInt(orderToChange[0]))) {
+                            if (!service.deleteOrderItem(Integer.parseInt(orderToChange[0]), Integer.parseInt(orderToChange[5]))) {
                                 out.println("The new quantity is illegal");
                             }
                         }

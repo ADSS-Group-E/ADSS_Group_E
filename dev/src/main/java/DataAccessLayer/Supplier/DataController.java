@@ -55,7 +55,9 @@ public class DataController {
         }
     }
 
-    public ArrayList<SupplierItemDTO> getSupplierItems(int id) { return items.selectSC(id); }
+    public ArrayList<SupplierItemDTO> getSupplierItems(int id) {
+        return items.selectSC(id);
+    }
 
     public ArrayList<SupplierDTO> getSuppliers() {
         return supplier.select();
@@ -86,17 +88,17 @@ public class DataController {
         return orders.selectRO();
     }
 
-    public SupplierItemDTO select(int id) {
+    public SupplierItemDTO select(int id, int orderNum) {
         if (itemDTOs.containsKey(id)) {
             return itemDTOs.get(id);
         }
         else {
-            return items.select(id);
+            return items.select(id, orderNum);
         }
     }
 
-    public SupplierItemDTO select(String name) {
-        return items.select(name);
+    public SupplierItemDTO supplierSelect(int id, int companyNumber) {
+        return items.supplierSelect(id, companyNumber);
     }
 
     public void update(SupplierItemDTO supplierItemDTO) {
@@ -106,23 +108,27 @@ public class DataController {
         items.update(supplierItemDTO);
     }
 
-    public void delete(int id) {
+    public void delete(int id, int orderID) {
         itemDTOs.remove(id);
         for (OrderDTO ord : orderDTOs.values()) {
-            for (SupplierItemDTO it : ord.getOrderItems()) {
-                if (it.getId() == id)
-                    ord.getOrderItems().remove(it);
-            }
-        }
-        for (SupplierDTO sup : suppliers.values()) {
-            for (OrderDTO ord : sup.getOrders()) {
+            if (ord.getId() == orderID)
                 for (SupplierItemDTO it : ord.getOrderItems()) {
                     if (it.getId() == id)
                         ord.getOrderItems().remove(it);
                 }
+        }
+        for (SupplierDTO sup : suppliers.values()) {
+            for (OrderDTO ord : sup.getOrders()) {
+                if (ord.getId() == orderID) {
+                    for (SupplierItemDTO it : ord.getOrderItems()) {
+                        if (it.getId() == id) {
+                            ord.getOrderItems().remove(it);
+                        }
+                    }
+                }
             }
         }
-        items.delete(id);
+        items.delete(id, orderID);
     }
 
     public OrderDTO selectO(int id) {

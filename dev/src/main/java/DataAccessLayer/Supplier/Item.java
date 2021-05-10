@@ -29,20 +29,10 @@ class Item {
     void insert(SupplierItemDTO item) {
         try {
             String[] key = {"ID"};
-            int generatedId = -1;
             c = db.connect();
             stmt = c.createStatement();
-            String sql = String.format("INSERT INTO Item (name) " +
-                    "VALUES ('%s');", item.getName());
-            c.prepareStatement(sql, key);
-            stmt.executeUpdate(sql);
-            ResultSet rs = stmt.getGeneratedKeys();
-            if (rs.next()) {
-                generatedId = rs.getInt(1);
-            }
-            item.setId(generatedId);
-            sql = String.format("INSERT INTO SupplierItem (name, quantity, price, supplierCN, orderID, companyNumber) " +
-                    "VALUES ('%s', %d, %d, '%s', NULL, %d);", item.getName(), item.getQuantity(), item.getPrice(), item.getSupplierCN(), item.getCompanyNumber());
+            String sql = String.format("INSERT INTO SupplierItem (productID, name, quantity, price, supplierCN, companyNumber) " +
+                    "VALUES (%d, '%s', %d, %d, '%s', %d);", item.getId(), item.getName(), item.getQuantity(), item.getPrice(), item.getSupplierCN(), item.getCompanyNumber());
             stmt.executeUpdate(sql);
             close();
         }
@@ -53,24 +43,34 @@ class Item {
 
     void update(SupplierItemDTO item) {
         try {
-            c = db.connect();
-            stmt = c.createStatement();
-            String sql = String.format("Update SupplierItem SET quantity = %d WHERE " +
-                    "ID = %d;", item.getQuantity(), item.getId());
-            stmt.executeUpdate(sql);
-            close();
+            if (item.getOrderID() == -1) {
+                c = db.connect();
+                stmt = c.createStatement();
+                String sql = String.format("Update SupplierItem SET quantity = %d WHERE " +
+                        "productID = %d;", item.getQuantity(), item.getId());
+                stmt.executeUpdate(sql);
+                close();
+            }
+            else {
+                c = db.connect();
+                stmt = c.createStatement();
+                String sql = String.format("Update OrderItems SET quantity = %d WHERE " +
+                        "productID = %d AND orderID = %d;", item.getQuantity(), item.getId(), item.getOrderID());
+                stmt.executeUpdate(sql);
+                close();
+            }
         }
         catch (SQLException e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
         }
     }
 
-    void delete(int id) {
+    void delete(int id, int orderID) {
         try {
             c = db.connect();
             stmt = c.createStatement();
-            String sql = String.format("DELETE FROM SupplierItem WHERE " +
-                    "ID = %d;", id);
+            String sql = String.format("DELETE FROM OrderItems WHERE " +
+                    "productID = %d AND orderID = %d;", id, orderID);
             stmt.executeUpdate(sql);
             close();
         }
@@ -85,11 +85,10 @@ class Item {
         try {
             c = db.connect();
             stmt = c.createStatement();
-            String sql = "SELECT * FROM SupplierItem WHERE orderID IS NOT NULL;";
+            String sql = "SELECT * FROM OrderItems;";
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
-                item = new SupplierItemDTO(rs.getInt("ID"), rs.getString("name"), rs.getInt("quantity"), rs.getInt("price"), rs.getString("supplierCN"));
-                item.setOrderID(rs.getInt("orderID"));
+                item = new SupplierItemDTO(rs.getInt("productID"), rs.getInt("quantity"), rs.getInt("price"), rs.getInt("companyNumber"), rs.getInt("orderID"));
                 result.add(item);
             }
             close();
@@ -106,11 +105,10 @@ class Item {
         try {
             c = db.connect();
             stmt = c.createStatement();
-            String sql = String.format("SELECT * FROM SupplierItem WHERE orderID IS NULL AND companyNumber = %d;", companyNumber);
+            String sql = String.format("SELECT * FROM SupplierItem WHERE companyNumber = %d;", companyNumber);
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
-                item = new SupplierItemDTO(rs.getInt("ID"), rs.getString("name"), rs.getInt("quantity"), rs.getInt("price"), rs.getString("supplierCN"));
-                item.setOrderID(rs.getInt("orderID"));
+                item = new SupplierItemDTO(rs.getInt("productID"), rs.getString("name"), rs.getInt("quantity"), rs.getInt("price"), rs.getString("supplierCN"), rs.getInt("companyNumber"));
                 result.add(item);
             }
             close();
@@ -121,16 +119,16 @@ class Item {
         return result;
     }
 
-    SupplierItemDTO select(int id) {
+    SupplierItemDTO select(int id, int orderNum) {
         SupplierItemDTO item = null;
         try {
             c = db.connect();
             stmt = c.createStatement();
-            String sql = String.format("SELECT * FROM SupplierItem WHERE " +
-                    "ID = %d AND orderID IS NOT NULL;", id);
+            String sql = String.format("SELECT * FROM OrderItems WHERE " +
+                    "productID = %d AND orderID = %d;", id, orderNum);
             ResultSet rs = stmt.executeQuery(sql);
             if (rs.next()) {
-                item = new SupplierItemDTO(rs.getInt("ID"), rs.getString("name"), rs.getInt("quantity"), rs.getInt("price"), rs.getString("supplierCN"), rs.getInt("orderID"));
+                item = new SupplierItemDTO(rs.getInt("productID"), rs.getInt("quantity"), rs.getInt("price"), rs.getInt("companyNumber"), rs.getInt("orderID"));
             }
             close();
         }
@@ -140,16 +138,16 @@ class Item {
         return item;
     }
 
-    SupplierItemDTO select(String name) {
+    SupplierItemDTO supplierSelect(int id, int companyNumber) {
         SupplierItemDTO item = null;
         try {
             c = db.connect();
             stmt = c.createStatement();
             String sql = String.format("SELECT * FROM SupplierItem WHERE " +
-                    "name = '%s' AND orderID IS NULL;", name);
+                    "productID = %d AND companynumber = %d;", id, companyNumber);
             ResultSet rs = stmt.executeQuery(sql);
             if (rs.next()) {
-                item = new SupplierItemDTO(rs.getInt("ID"), rs.getString("name"), rs.getInt("quantity"), rs.getInt("price"), rs.getString("supplierCN"));
+                item = new SupplierItemDTO(rs.getInt("productID"), rs.getString("name"), rs.getInt("quantity"), rs.getInt("price"), rs.getString("supplierCN"), rs.getInt("companyNumber"));
             }
             close();
         }

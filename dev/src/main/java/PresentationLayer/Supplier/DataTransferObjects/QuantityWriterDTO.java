@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class QuantityWriterDTO {
-    private final int id;
+    private int id;
     private final int companyNumber;
     private final int regularCostumerDiscount;
     private final int minPriceDiscount;
@@ -44,4 +44,5 @@ public class QuantityWriterDTO {
 
     public ArrayList<DiscountStepDTO> getDiscounts() { return discounts; }
 
+    public void setId(int id) { this.id = id; }
 }

@@ -75,7 +75,7 @@ public class SupplierOptionsMenu extends OptionsMenu {
             out.println(String.format("[ID: %d, Date: %s, Needs Delivery: %s, Periodic Delivery: %s]", order.getId(), order.getDate(), order.getNeedsDelivery() == 1, order.getPeriodicDelivery() == 1));
             out.println("Items:");
             for (SupplierItemDTO item : order.getOrderItems()) {
-                out.println(String.format("Name: %s\nPrice: %d\nQuantity: %d\nSupplier Catalog Number: %s\n]", item.getName(), item.getPrice(), item.getQuantity(), item.getSupplierCN()));
+                out.println(String.format("ID: %s\nPrice: %d\nQuantity: %d\nCompany Number: %d\n\n]", item.getId(), item.getPrice(), item.getQuantity(), item.getCompanyNumber()));
             }
         }
     }
@@ -85,10 +85,10 @@ public class SupplierOptionsMenu extends OptionsMenu {
         if (orders.size() != 0) { //if there are no orders the case skips
             for (String[] item : orders) { //prints all of the items
                 out.println("[ID: " + item[0] + "\n" +
-                        "Name: " + item[1] + "\n" +
-                        "Price: " + item[2] + "\n" +
-                        "Quantity: " + item[3] + "]\n" +
-                        "SupplierCN: " + item[4] + "]\n");
+                        "Price: " + item[1] + "\n" +
+                        "Quantity: " + item[2] + "]\n" +
+                        "Company Number: " + item[3] + "]\n" +
+                        "Order ID: " + item[4] + "]\n");
             }
             int orderNumber;
             int newQuantity;
@@ -107,7 +107,7 @@ public class SupplierOptionsMenu extends OptionsMenu {
                     out.println("Illegal Arguments, please try again.");
             }
             newQuantity = in.nextInt("Enter new quantity you wish to order for the item you chose: ");
-            if (!service.updateOrderItemQuantity(Integer.parseInt(orderToChange[0]),
+            if (!service.updateOrderItemQuantity(Integer.parseInt(orderToChange[0]), Integer.parseInt(orderToChange[4]),
                     newQuantity)) { //if can't update
                 out.println("The new quantity is illegal"); //the new quantity is illegal
             }
@@ -119,10 +119,10 @@ public class SupplierOptionsMenu extends OptionsMenu {
         if (orders.size() != 0) { //if there are no order we skip the case
             for (String[] item : orders) { //prints all of the items
                 out.println("[ID: " + item[0] + "\n" +
-                        "Name: " + item[1] + "\n" +
-                        "Price: " + item[2] + "\n" +
-                        "Quantity: " + item[3] + "]\n" +
-                        "SupplierCN: " + item[4] + "]\n");
+                        "Price: " + item[1] + "\n" +
+                        "Quantity: " + item[2] + "]\n" +
+                        "Company Number: " + item[3] + "]\n" +
+                        "Order ID: " + item[4] + "]\n");
             }
             boolean contains = false;
             String[] orderToChange = {};
@@ -138,7 +138,7 @@ public class SupplierOptionsMenu extends OptionsMenu {
                 if (!contains) {
                     out.println("Illegal Arguments, please try again.");
                 }
-                if (!service.deleteOrderItem(Integer.parseInt(orderToChange[0]))) {
+                if (!service.deleteOrderItem(Integer.parseInt(orderToChange[0]), Integer.parseInt(orderToChange[4]))) {
                     out.println("The new quantity is illegal");
                 }
             }

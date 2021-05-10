@@ -36,11 +36,11 @@ class Supplier {
             String sql = String.format("INSERT INTO Supplier (companyNumber, name, paymentMethod, bankAccount) " +
                     "VALUES (%d, '%s', '%s', '%s' );", sup.getCompanyNumber(), sup.getName(), sup.getPaymentMethod(), sup.getBankAccount());
             c.prepareStatement(sql, key);
+            stmt.executeUpdate(sql);
             ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
                 generatedId = rs.getInt(1);
             }
-            stmt.executeUpdate(sql);
             close();
             Contact contact = new Contact(db);
             for (ContactDTO contactDTO : sup.getContacts()) {

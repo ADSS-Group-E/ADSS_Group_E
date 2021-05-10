@@ -33,13 +33,13 @@ public class SupplierController {
     public void initialize() {
         data = new DataController();
         ArrayList<String[]> supplierOneItems = new ArrayList<>();//supplier one items
-        supplierOneItems.add(new String[]{"Corn", 10 + "", 1500 + "", 5554 + ""});
-        supplierOneItems.add(new String[]{"Popcorn", 20 + "", 500 + "", 5666 + ""});
-        supplierOneItems.add(new String[]{"Candy Corn", 30 + "", 200 + "", 8989 + ""});
+        supplierOneItems.add(new String[]{10 + "", "Corn", 10 + "", 1500 + "", 5554 + ""});
+        supplierOneItems.add(new String[]{50 + "","Popcorn", 20 + "", 500 + "", 5666 + ""});
+        supplierOneItems.add(new String[]{100 + "", "Candy Corn", 30 + "", 200 + "", 8989 + ""});
         ArrayList<String[]> supplierTwoItems = new ArrayList<>();//supplier two items
-        supplierTwoItems.add(new String[]{"Hot Dog", 10 + "", 1500 + "", 100 + ""});
-        supplierTwoItems.add(new String[]{"Corn Dog", 20 + "", 500 + "", 206 + ""});
-        supplierTwoItems.add(new String[]{"Dog", 3000 + "", 10 + "", 5041 + ""});
+        supplierTwoItems.add(new String[]{54 + "", "Hot Dog", 10 + "", 1500 + "", 100 + ""});
+        supplierTwoItems.add(new String[]{110 + "", "Corn Dog", 20 + "", 500 + "", 206 + ""});
+        supplierTwoItems.add(new String[]{66 + "", "Dog", 3000 + "", 10 + "", 5041 + ""});
         ArrayList<String[]> contacts = new ArrayList<>();
         contacts.add(new String[]{"Tzahi", "tzahi@tzahi.com"});
         HashMap<Integer, Integer> discounts = new HashMap<>();
@@ -49,10 +49,10 @@ public class SupplierController {
         register("Amazon", 10, "Cheque", "8145441/24", supplierOneItems, contacts, 10, 500, discounts);
         register("Google", 54, "Paypal", "15144/455", supplierTwoItems, contacts, 10, 500, discounts);
         ArrayList<String[]> orderItems = new ArrayList<>();
-        orderItems.add(new String[]{"Candy Corn", 30 + "", 100 + "", 8989 + ""});
+        orderItems.add(new String[]{100 + "", "Candy Corn", 30 + "", 100 + "", 8989 + ""});
         createOrder(10, false, true, orderItems);
         ArrayList<String[]> orderItems2 = new ArrayList<>();
-        orderItems2.add(new String[]{"Dog", 3000 + "", 10 + "", 5041 + ""});
+        orderItems2.add(new String[]{66 + "", "Dog", 3000 + "", 10 + "", 5041 + ""});
         createOrder(54, true, true, orderItems2);
     }
 
@@ -72,7 +72,7 @@ public class SupplierController {
         //create an arraylist with size of the number of items
         //create an arraylist with size of the number of contacts
         for (String[] strings : items) { //fills the item
-            itemDTOs.add(new SupplierItemDTO(strings[0], Integer.parseInt(strings[1]), Integer.parseInt(strings[2]), strings[3], companyNumber));
+            itemDTOs.add(new SupplierItemDTO(Integer.parseInt(strings[0]), strings[1], Integer.parseInt(strings[2]), Integer.parseInt(strings[3]), strings[4], companyNumber));
         }
         for (String[] strings : contacts) { //fills the contacts
             contactDTOs.add(new ContactDTO(strings[0], strings[1], companyNumber));
@@ -92,7 +92,7 @@ public class SupplierController {
         ArrayList<ContactDTO> contactDTOs = new ArrayList<>();
         ArrayList<DiscountStepDTO> discountStepDTOs = new ArrayList<>();
         for (String[] strings : items) {
-            itemDTOs.add(new SupplierItemDTO(strings[0], Integer.parseInt(strings[1]), Integer.parseInt(strings[2]), strings[3], companyNumber));
+            itemDTOs.add(new SupplierItemDTO(Integer.parseInt(strings[0]), strings[1], Integer.parseInt(strings[3]), Integer.parseInt(strings[2]), strings[4], companyNumber));
         }
         for (String[] strings : contacts) {
             contactDTOs.add(new ContactDTO(strings[0], strings[1], companyNumber));
@@ -111,7 +111,7 @@ public class SupplierController {
     public int createOrder(int supplierNum, boolean needsDelivery, boolean constantDelivery, ArrayList<String[]> items){
         ArrayList<SupplierItemDTO> itemDTOs = new ArrayList<>();
         for (String[] strings : items) { //creates an item array from all the items provided
-            itemDTOs.add(new SupplierItemDTO(strings[0], Integer.parseInt(strings[2]), Integer.parseInt(strings[1]), (strings[3]), supplierNum));
+            itemDTOs.add(new SupplierItemDTO(Integer.parseInt(strings[0]), strings[1], Integer.parseInt(strings[3]), Integer.parseInt(strings[2]), strings[4], supplierNum));
         }
         //creates the order
         //adds the order
@@ -128,8 +128,8 @@ public class SupplierController {
         ArrayList<String[]> regItems = new ArrayList<>();
         ArrayList<SupplierItemDTO> items = data.getItems();
         for (SupplierItemDTO item : items) {
-            regItems.add(new String[]{item.getId() + "", item.getName(),
-                    item.getPrice() + "", item.getQuantity() + "", item.getSupplierCN(), item.getOrderID() + ""});
+            regItems.add(new String[]{item.getId() + "",
+                    item.getPrice() + "", item.getQuantity() + "", item.getCompanyNumber() + "", item.getOrderID() + ""});
         }
         return regItems;
     }
@@ -156,11 +156,11 @@ public class SupplierController {
         return true;
     }
 
-    public boolean updateOrderItemQuantity(int itemNum, int newQuantity) {
+    public boolean updateOrderItemQuantity(int itemNum, int orderNum, int newQuantity) {
         if (newQuantity <= 0) return false; //if the new quantity we order is illegal
-        SupplierItemDTO item = data.select(itemNum);
+        SupplierItemDTO item = data.select(itemNum, orderNum);
         int oldQuantity = item.getQuantity();
-        SupplierItemDTO supItem = data.select(item.getName());
+        SupplierItemDTO supItem = data.supplierSelect(itemNum, item.getCompanyNumber());
         int quan = supItem.getQuantity() - oldQuantity;
         supItem.setQuantity(supItem.getQuantity() + oldQuantity - newQuantity);
         item.setQuantity(newQuantity);
@@ -169,8 +169,8 @@ public class SupplierController {
         return true;
     }
 
-    public boolean deleteCostumerItem(int itemNum) {
-        data.delete(itemNum);
+    public boolean deleteCostumerItem(int itemNum, int orderNum) {
+        data.delete(itemNum, orderNum);
         return true;
     }
 

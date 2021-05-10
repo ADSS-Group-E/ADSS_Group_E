@@ -39,14 +39,34 @@ public class SupplierItemDTO {
         this.companyNumber = -1;
     }
 
-    public SupplierItemDTO(int id, String name, int quantity, int price, String supplierCN, int orderID) {
+    public SupplierItemDTO(int id, String name, int quantity, int price, String supplierCN, int companyNumber) {
         this.id = id;
         this.name = name;
         this.quantity = quantity;
         this.price = price;
         this.supplierCN = supplierCN;
+        this.orderID = -1;
+        this.companyNumber = companyNumber;
+    }
+
+    public SupplierItemDTO(int id, int quantity, int price, int companyNumber) {
+        this.id = id;
+        this.name = "";
+        this.quantity = quantity;
+        this.price = price;
+        this.supplierCN = "";
+        this.orderID = -1;
+        this.companyNumber = companyNumber;
+    }
+
+    public SupplierItemDTO(int id, int quantity, int price, int companyNumber, int orderID) {
+        this.id = id;
+        this.name = "";
+        this.quantity = quantity;
+        this.price = price;
+        this.supplierCN = "";
         this.orderID = orderID;
-        this.companyNumber = -1;
+        this.companyNumber = companyNumber;
     }
 
     public int getId() {

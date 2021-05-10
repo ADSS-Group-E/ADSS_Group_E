@@ -72,14 +72,14 @@ public class ServiceController {
         return supplierController.updateSellerItemQuantity(supplierNum, itemNum, quantity);
     }
 
-    public boolean updateOrderItemQuantity(int itemNum, int quantity) {
+    public boolean updateOrderItemQuantity(int itemNum, int orderNum, int quantity) {
         //updates the quantity the seller and the costumer have for the item when an update happens
-        return supplierController.updateOrderItemQuantity(itemNum, quantity);
+        return supplierController.updateOrderItemQuantity(itemNum, orderNum, quantity);
     }
 
-    public boolean deleteOrderItem(int itemNum) {
+    public boolean deleteOrderItem(int itemNum, int orderNum) {
         //deletes an item from an order and updates seller quantity of the item
-        return supplierController.deleteCostumerItem(itemNum);
+        return supplierController.deleteCostumerItem(itemNum, orderNum);
     }
 
     public boolean contains(String[] equal, ArrayList<String[]> list) {

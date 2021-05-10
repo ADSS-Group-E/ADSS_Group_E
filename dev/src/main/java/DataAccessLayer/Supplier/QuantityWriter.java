@@ -41,6 +41,7 @@ class QuantityWriter {
             if (rs.next()) {
                 generatedId = rs.getInt(1);
             }
+            quan.setId(generatedId);
             key = new String[]{"QWID"};
             int id;
             for (DiscountStepDTO step : quan.getDiscounts()) {

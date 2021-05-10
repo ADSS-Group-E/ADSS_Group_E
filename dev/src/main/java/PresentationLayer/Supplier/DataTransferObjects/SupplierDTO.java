@@ -55,7 +55,6 @@ public class SupplierDTO {
     public void setOrders(ArrayList<OrderDTO> orders) { this.orders = orders; }
 
     public void setQuantityWriter(QuantityWriterDTO quantityWriter) {
-        if (this.quantityWriter == null)
             this.quantityWriter = quantityWriter;
     }
 

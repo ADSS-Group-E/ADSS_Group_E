@@ -33,33 +33,36 @@ class SupplierControllerTest {
     @Test
     void register() {
         ArrayList<String[]> supplierItems = new ArrayList<>();
-        supplierItems.add(new String[]{"Polaroid", 9000 + "", 500 + "", 1041 + ""});
+        supplierItems.add(new String[]{11 + "", "Polaroid", 9000 + "", 500 + "", 1041 + ""});
         ArrayList<String[]> contacts = new ArrayList<>();
         contacts.add(new String[]{"Tzahi", "tzahi@apple.com"});
         HashMap<Integer, Integer> discounts = new HashMap<>();
         discounts.put(15000, 20);
-        DiscountStepDTO stepDTO = new DiscountStepDTO(1, 20, 5000, 1);
+        DiscountStepDTO stepDTO = new DiscountStepDTO(1, 15000, 20, 1);
         ArrayList<DiscountStepDTO> list = new ArrayList<>();
-        controller.register("Apple", 941, "Apple Pay", "49913/14", supplierItems, contacts, 10, 5000, discounts);
-        String[] appleinfo = controller.getSuppliersInfo().get(941);
-        assertEquals("Apple", appleinfo[0]);
-        assertEquals(appleinfo[1], 941 + "");
-        assertEquals("Apple Pay", appleinfo[2]);
-        assertEquals("49913/14", appleinfo[3]);
-        QuantityWriterDTO writer = controller.getQuantityWriter(941);
-        assertEquals(writer, new QuantityWriterDTO(1, 941, 10, 5000, list));
+        controller.register("Google", 50, "Google Pay", "69913/14", supplierItems, contacts, 10, 5000, discounts);
+        String[] appleinfo = controller.getSuppliersInfo().get(0);
+        assertEquals("Google", appleinfo[1]);
+        assertEquals(appleinfo[0], 50 + "");
+        assertEquals("Google Pay", appleinfo[2]);
+        assertEquals("69913/14", appleinfo[3]);
+        QuantityWriterDTO writer = controller.getQuantityWriter(50);
+        assertEquals(writer.getId(), 1);
+        assertEquals(writer.getCompanyNumber(), 50);
+        assertEquals(writer.getRegularCostumerDiscount(), 10);
+        assertEquals(writer.getMinPriceDiscount(), 5000);
     }
 
     @Test
     void registerWithoutQuantityWriter() {
         ArrayList<String[]> supplierItems = new ArrayList<>();
-        supplierItems.add(new String[]{"Polaroid", 9000 + "", 500 + "", 1041 + ""});
+        supplierItems.add(new String[]{10 + "", "Polaroid", 9000 + "", 500 + "", 1041 + ""});
         ArrayList<String[]> contacts = new ArrayList<>();
         contacts.add(new String[]{"Tzahi", "tzahi@apple.com"});
         controller.register("Apple", 941, "Apple Pay", "49913/14", supplierItems, contacts);
-        String[] appleinfo = controller.getSuppliersInfo().get(941);
-        assertEquals("Apple", appleinfo[0]);
-        assertEquals(appleinfo[1], 941 + "");
+        String[] appleinfo = controller.getSuppliersInfo().get(0);
+        assertEquals("Apple", appleinfo[1]);
+        assertEquals(appleinfo[0], 941 + "");
         assertEquals("Apple Pay", appleinfo[2]);
         assertEquals("49913/14", appleinfo[3]);
     }
@@ -67,10 +70,10 @@ class SupplierControllerTest {
     @Test
     void createOrder() {
         ArrayList<String[]> supItems = new ArrayList<>();
-        supItems.add(new String[]{"Dog", 3000 + "", 10 + "", 5041 + ""});
+        supItems.add(new String[]{10 + "", "Polaroid", 9000 + "", 500 + "", 1041 + ""});
         ArrayList<SupplierItemDTO> items = new ArrayList<>();
-        items.add(new SupplierItemDTO("Dog", 3000, 10, "5041"));
-        controller.createOrder(0, true, true, supItems);
+        items.add(new SupplierItemDTO(10, "Polaroid", 1000, 500, "1041", 941));
+        controller.createOrder(10, true, true, supItems);
         assertEquals(1, controller.getOrderFromSupplier(1).getPeriodicDelivery());
         assertEquals(1, controller.getOrderFromSupplier(1).getNeedsDelivery());
         assertEquals(controller.getOrderFromSupplier(1).getOrderItems(), items);
@@ -95,14 +98,14 @@ class SupplierControllerTest {
     @Test
     void updateOrderItemQuantity() {
         assertEquals(controller.getOrderFromSupplier(1).getOrderItems().get(0).getQuantity(), 10);
-        controller.updateOrderItemQuantity(1,0);
+        controller.updateOrderItemQuantity(1, 1,0);
         assertEquals(controller.getOrderFromSupplier(1).getOrderItems().get(0).getQuantity(), 1);
     }
 
     @Test
     void deleteCostumerItem() {
         assertEquals(controller.getOrderFromSupplier(1).getOrderItems().get(0).getName(), "Dog");
-        controller.deleteOrderItem(1);
+        controller.deleteOrderItem(1, 1);
         assertEquals(controller.getOrderFromSupplier(1).getOrderItems().size(), 0);
     }
 
