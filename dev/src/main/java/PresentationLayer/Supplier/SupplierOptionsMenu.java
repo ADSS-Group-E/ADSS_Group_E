@@ -76,7 +76,7 @@ public class SupplierOptionsMenu extends OptionsMenu {
             out.println(String.format("[ID: %d, Date: %s, Needs Delivery: %s, Periodic Delivery: %s]", order.getId(), order.getDate(), order.getNeedsDelivery() == 1, order.getPeriodicDelivery() == 1));
             out.println("Items:");
             for (SupplierItemDTO item : order.getOrderItems()) {
-                out.println(String.format("ID: %s\nPrice: %d\nQuantity: %d\nCompany Number: %d\n\n]", item.getId(), item.getPrice(), item.getQuantity(), item.getCompanyNumber()));
+                out.println(String.format("ID: %s\nPrice: %d\nQuantity: %d\nCompany Number: %d]\n\n", item.getId(), item.getPrice(), item.getQuantity(), item.getCompanyNumber()));
             }
         }
     }

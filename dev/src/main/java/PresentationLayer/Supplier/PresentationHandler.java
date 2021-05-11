@@ -81,7 +81,7 @@ class PresentationHandler {
                 for(String[] item : list) { //prints existing items
                     outputService.println("[ID: " + item[0] + ", Name: ]" + item[1]);
                 }
-                String id = inputService.nextInt("Enter Item ID:") + "";
+                String id = inputService.nextInt("Enter Item ID: ") + "";
                 String name = inputService.next("Enter Item Name: "); //gets item name from user
                 String[] equalBy = {id};
                 if (service.contains(equalBy, list)) { //checks if the item exists in the order using it's name
