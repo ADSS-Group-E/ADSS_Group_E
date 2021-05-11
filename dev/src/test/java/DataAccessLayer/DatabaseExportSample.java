@@ -19,7 +19,7 @@ public class DatabaseExportSample
     {
         // database connection
         Class driverClass = Class.forName("org.sqlite.JDBC");
-        Connection jdbcConnection = DriverManager.getConnection("jdbc:sqlite:copyModule.db");
+        Connection jdbcConnection = DriverManager.getConnection("jdbc:sqlite:copy:resource:module.db");
         IDatabaseConnection connection = new DatabaseConnection(jdbcConnection);
 
 

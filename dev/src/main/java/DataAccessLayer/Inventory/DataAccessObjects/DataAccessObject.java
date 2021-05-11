@@ -11,7 +11,7 @@ public abstract class DataAccessObject {
     protected String tableName;
 
     public DataAccessObject() {
-        this.databaseUrl = "jdbc:sqlite:module.db";
+        this.databaseUrl = "jdbc:sqlite::resource:module.db";
     }
 
     public DataAccessObject(String databaseUrl) {
@@ -119,7 +119,7 @@ public abstract class DataAccessObject {
 
     private Connection connect() {
         // SQLite connection string
-        String url = "jdbc:sqlite:module.db";
+        String url = "jdbc:sqlite::resource:module.db";
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(databaseUrl);

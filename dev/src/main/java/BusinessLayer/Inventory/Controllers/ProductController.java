@@ -21,7 +21,7 @@ public class ProductController {
 
     public ProductController(CategoryController cCont) {
         this.products = new HashMap<>();
-        productDAO = new ProductDAO("jdbc:sqlite:module.db");
+        productDAO = new ProductDAO("jdbc:sqlite::resource:module.db");
         this.cCont = cCont;
     }
 

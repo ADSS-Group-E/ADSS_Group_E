@@ -11,9 +11,12 @@ import PresentationLayer.MainOptionsMenu;
 import PresentationLayer.Supplier.ServiceController;
 import PresentationLayer.Supplier.SupplierOptionsMenu;
 
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -95,9 +98,27 @@ public class CommandLineInterface {
     // Loads sample data because there is no data access layer in this part of the project.
     public void loadSampleData(){
         try{
-            String url = "jdbc:sqlite:module.db";
-            String schema = Files.readString(Path.of("schema.sql"));
+            String url = "jdbc:sqlite::resource:module.db";
+
+
+            String schema;
+
+            // the stream holding the file content
+            InputStream is = getClass().getClassLoader().getResourceAsStream("schema.sql");
+
+            //Build string from the input stream
+            StringBuilder textBuilder = new StringBuilder();
+            try (Reader reader = new BufferedReader(new InputStreamReader
+                    (is, Charset.forName(StandardCharsets.UTF_8.name())))) {
+                int c = 0;
+                while ((c = reader.read()) != -1) {
+                    textBuilder.append((char) c);
+                }
+            }
+            schema = textBuilder.toString();
             schema = schema.replace("\n","").replace("\r", "").replace("\t", " ");
+
+            // Get individual statements
             String[] sqls = schema.split(";");
             try (Connection conn = DriverManager.getConnection(url);)
             {
