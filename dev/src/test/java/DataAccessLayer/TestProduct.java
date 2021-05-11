@@ -24,7 +24,6 @@ public class TestProduct extends TestDAO {
     public void setUp() throws Exception
     {
         table = "Product";
-        path = "dev/src/test/resources/data/"+table+"/";
         dataAccessObject = new ProductDAO(url);
         super.setUp();
     }

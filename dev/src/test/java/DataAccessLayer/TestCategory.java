@@ -12,7 +12,6 @@ public class TestCategory extends TestDAO {
     public void setUp() throws Exception
     {
         table = "Category";
-        path = "dev/src/test/resources/data/"+table+"/";
 
         dataAccessObject = new CategoryDAO(url);
         super.setUp();

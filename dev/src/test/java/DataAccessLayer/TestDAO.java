@@ -12,18 +12,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-
 public abstract class TestDAO {
 
     protected IDatabaseTester databaseTester;
     protected DataAccessObject dataAccessObject;
-    protected String path;
     protected String table;
-    protected String dataPath = "dev/src/test/resources/data/";
-    protected String url = "jdbc:sqlite:" +dataPath+ "testDatabase.db";
+    protected String dataPath = "data/";
+    protected String url = "jdbc:sqlite::resource:data/testDatabase.db";
     protected String dtd = dataPath + "schema.dtd";
 
     @Before
@@ -32,18 +27,10 @@ public abstract class TestDAO {
 
         databaseTester = new JdbcDatabaseTester("org.sqlite.JDBC", url);
 
-        // initialize your dataset here
-
-        File dtdFile = new File(dtd);
-        InputStream dtdStream = new FileInputStream(dtdFile);
-
         FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
-        builder.setMetaDataSetFromDtd(dtdStream);
+        builder.setMetaDataSetFromDtd(getClass().getClassLoader().getResourceAsStream(dtd));
 
-        // ...
-        File initialFile = new File(path + "before" + table + ".xml");
-        InputStream initialStream = new FileInputStream(initialFile);
-        IDataSet dataSet = builder.build(initialStream);
+        IDataSet dataSet = builder.build(getClass().getClassLoader().getResourceAsStream(dataPath + table + "/before" + table + ".xml"));
 
         databaseTester.setDataSet( dataSet );
 
@@ -59,13 +46,12 @@ public abstract class TestDAO {
     }
 
     private ITable getExpectedTable(String action) throws Exception{
-        File dtdFile = new File(dtd);
-        InputStream dtdStream = new FileInputStream(dtdFile);
 
         FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
-        builder.setMetaDataSetFromDtd(dtdStream);
+        builder.setMetaDataSetFromDtd(getClass().getClassLoader().getResourceAsStream(dtd));
         // Load expected data from an XML dataset
-        IDataSet expectedDataSet = builder.build(new File(path + "after" + action + table +".xml"));
+        IDataSet expectedDataSet = builder.build(getClass().getClassLoader().getResourceAsStream(dataPath + table + "/after" + action + table +".xml"));
+
         return expectedDataSet.getTable(table);
     }
 

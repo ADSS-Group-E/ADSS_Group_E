@@ -59,13 +59,7 @@ public abstract class DataAccessObject {
             return dataTransferObjects;
         }
         catch (SQLException e) {
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-            try {
-                c.close();
-            }
-            catch (SQLException exception) {
-                System.err.println( exception.getClass().getName() + ": " + exception.getMessage() );
-            }
+            handleError(e);
             return null;
         }
     }
@@ -84,13 +78,7 @@ public abstract class DataAccessObject {
             return dataTransferObject;
         }
         catch (SQLException e) {
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-            try {
-                c.close();
-            }
-            catch (SQLException exception) {
-                System.err.println( exception.getClass().getName() + ": " + exception.getMessage() );
-            }
+            handleError(e);
             return null;
         }
     }
@@ -104,13 +92,17 @@ public abstract class DataAccessObject {
             close();
         }
         catch (SQLException e) {
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-            try {
-                c.close();
-            }
-            catch (SQLException exception) {
-                System.err.println( exception.getClass().getName() + ": " + exception.getMessage() );
-            }
+            handleError(e);
+        }
+    }
+
+    private void handleError(SQLException e) {
+        System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        try {
+            c.close();
+        }
+        catch (SQLException exception) {
+            System.err.println( exception.getClass().getName() + ": " + exception.getMessage() );
         }
     }
 
