@@ -15,6 +15,8 @@ class Order {
     private Connection c = null;
     private Statement stmt = null;
 
+    private String tableName = "SOrder";
+
     Order(DBConnection dbConnection) {
         db = dbConnection;
     }
@@ -34,7 +36,7 @@ class Order {
             int id = -1;
             c = db.connect();
             stmt = c.createStatement();
-            String sql = String.format("INSERT INTO 'Order' (date, periodicDelivery, needsDelivery) " +
+            String sql = String.format("INSERT INTO " + tableName + " (date, periodicDelivery, needsDelivery) " +
                     "VALUES ('%s', %d, %d);", order.getDate(), order.getPeriodicDelivery(), order.getNeedsDelivery());
             c.prepareStatement(sql, key);
             stmt.executeUpdate(sql);
@@ -67,7 +69,7 @@ class Order {
         try {
             c = db.connect();
             stmt = c.createStatement();
-            String sql = String.format("DELETE FROM 'Order' WHERE " +
+            String sql = String.format("DELETE FROM " + tableName + " WHERE " +
                     "orderID = %d;", order.getId());
             stmt.executeUpdate(sql);
             close();
@@ -85,7 +87,7 @@ class Order {
         try {
             c = db.connect();
             stmt = c.createStatement();
-            String sql = "SELECT * FROM 'Order' LEFT JOIN OrderItems SI on 'Order'.orderID = SI.orderID WHERE 'Order'.periodicDelivery = 1;";
+            String sql = "SELECT * FROM " + tableName + " LEFT JOIN OrderItems SI on " + tableName + ".orderID = SI.orderID WHERE " + tableName + ".periodicDelivery = 1;";
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 order = new OrderDTO(
@@ -115,7 +117,7 @@ class Order {
         try {
             c = db.connect();
             stmt = c.createStatement();
-            String sql = "SELECT OrderItems.* FROM 'Order' LEFT JOIN OrderItems SI on 'Order'.orderID = SI.orderID;";
+            String sql = "SELECT OrderItems.* FROM " + tableName + " LEFT JOIN OrderItems SI on " + tableName + ".orderID = SI.orderID;";
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 order = new OrderDTO(
@@ -145,7 +147,7 @@ class Order {
         try {
             c = db.connect();
             stmt = c.createStatement();
-            String sql = String.format("SELECT * FROM 'Order' LEFT JOIN OrderItems SI on 'Order'.orderID = SI.orderID WHERE 'Order'.orderID = %d;", id);
+            String sql = String.format("SELECT * FROM " + tableName + " LEFT JOIN OrderItems SI on " + tableName + ".orderID = SI.orderID WHERE " + tableName + ".orderID = %d;", id);
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 order = new OrderDTO(
