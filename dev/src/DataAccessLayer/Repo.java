@@ -291,8 +291,8 @@ public class Repo {
                         CREATE TABLE IF NOT EXISTS "Workers" (
                         	"ID"	TEXT NOT NULL,
                         	"BranchID"	INTEGER NOT NULL,
-                        	"First_Name"	INTEGER NOT NULL,
-                        	"Last_Name"	INTEGER NOT NULL,
+                        	"First_Name"	TEXT NOT NULL,
+                        	"Last_Name"	TEXT NOT NULL,
                         	"Start_Working_Day"	DATE NOT NULL,
                         	"isWorking" INTEGER NOT NULL,
                         	PRIMARY KEY("ID")

@@ -7,6 +7,7 @@ import DataAccessLayer.Repo;
 import DataAccessLayer.Workers.Workers;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -60,11 +61,11 @@ public class Drivers {
 
     }
 
-    public static void updateExpDate(String id, Date expDate) throws SQLException {
+    public static void updateExpDate(String id, LocalDate expDate) throws SQLException {
         try (Connection conn = Repo.openConnection()) {
             String sql = "UPDATE Drivers SET Expiration_Date =? WHERE ID=?";
             PreparedStatement pst = conn.prepareStatement(sql);
-            pst.setDate(1,expDate);
+            pst.setDate(1,convertToDateViaSqlDate(expDate));
             pst.setString(2,id);
             pst.executeUpdate();
 
@@ -72,6 +73,9 @@ public class Drivers {
             throw e;        }
     }
 
+    public static Date convertToDateViaSqlDate(LocalDate dateToConvert) {
+        return java.sql.Date.valueOf(dateToConvert);
+    }
     public static void updateLicenseType(String id, String type) throws SQLException {
         try (Connection conn = Repo.openConnection()) {
             String sql = "UPDATE Drivers SET License_Type =? WHERE ID=?";

@@ -576,14 +576,14 @@ public class DeliveryFacade {
         }
     }
 
-    public void createDriver(DriverDTO driver, int branchID) throws Exception
+    public void createDriver(DTO.Driver driver, int branchID) throws Exception
     {
         try
         {
-            WorkerDTO worker=new WorkerDTO(driver.getFirstName(),driver.getLastName(),driver.getID(), driver.getBankAccount(), driver.getHiringConditions(), driver.getAvailableWorkDays());
-            Workers.insertWorker(wFacade.convertWorkerToBusiness(worker),branchID);
-            DTO.Driver driver1=new DTO.Driver(driver.getID(),driver.getLicenseType(),driver.getExpLicenseDate());
-            Drivers.insertDriver(driver1,branchID);
+            //WorkerDTO worker=new WorkerDTO(driver.getFirstName(),driver.getLastName(),driver.getID(), driver.getBankAccount(), driver.getHiringConditions(), driver.getAvailableWorkDays());
+            //Workers.insertWorker(wFacade.convertWorkerToBusiness(worker),branchID);
+            //DTO.Driver driver1=new DTO.Driver(driver.getID(),driver.getLicenseType(),driver.getExpLicenseDate());
+            Drivers.insertDriver(driver,branchID);
          /*   if(!licenseTypes.containsKey(licenseType))
                 throw new Exception("Not Valid License Type");
             Driver d = driverController.createDriver(driver, licenseType, expLicenseDate);
@@ -630,7 +630,7 @@ public class DeliveryFacade {
             throw e;
         }
     }
-    public void updateExpDate(String id, Date expLicenseDate) throws Exception
+    public void updateExpDate(String id, LocalDate expLicenseDate) throws Exception
     {
         try
         {

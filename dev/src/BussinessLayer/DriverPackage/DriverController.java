@@ -1,8 +1,9 @@
 package BussinessLayer.DriverPackage;
 
 import BussinessLayer.WorkersPackage.Worker;
-import PresentationLayer.WorkerDTO;
+import DataAccessLayer.Transports.Drivers;
 
+import java.time.LocalDate;
 import java.util.*;
 
 public class DriverController {
@@ -50,20 +51,24 @@ public class DriverController {
             throw new Exception("The Driver Doesn't Exists");
         this.drivers.remove(driver.getID());
     }
+    public static java.sql.Date convertToDateViaSqlDate(LocalDate dateToConvert) {
+        return java.sql.Date.valueOf(dateToConvert);
+    }
 
-    public void updateExpDate(String id, Date expLicenseDate) throws Exception {
-        Date date = new Date();
-        if(expLicenseDate.compareTo(date) < 0)
+    public void updateExpDate(String id, LocalDate expLicenseDate) throws Exception {
+        //Date date = new Date();
+        if(expLicenseDate.compareTo(expLicenseDate) < 0)
             throw new Exception("License Date Already Expired");
-        if(!drivers.containsKey(id))
-            throw new Exception("The Driver Doesn't Exists");
-        drivers.get(id).setExpLicenseDate(expLicenseDate);
+        //if(!drivers.containsKey(id))
+            // new Exception("The Driver Doesn't Exists");
+        //drivers.get(id).setExpLicenseDate(expLicenseDate);
+        Drivers.updateExpDate(id,  expLicenseDate);
     }
 
     public void updateLicenseType(String id, String licenseType) throws Exception {
-        if(!drivers.containsKey(id))
-            throw new Exception("The Driver Doesn't Exists");
-        drivers.get(id).setLicenseType(licenseType);
+        //if(!drivers.containsKey(id))
+            //throw new Exception("The Driver Doesn't Exists");
+        Drivers.updateLicenseType(id,licenseType);
     }
 
     public void setDriverToDrive(String id) throws Exception {

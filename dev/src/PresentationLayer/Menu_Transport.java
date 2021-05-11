@@ -1,18 +1,20 @@
 package PresentationLayer;
-import BussinessLayer.WorkersPackage.WorkersFacade;
 import BussinessLayer.DeliveryPackage.DeliveryFacade;
-import BussinessLayer.Facade;
 import BussinessLayer.Response;
+import BussinessLayer.WorkersPackage.WorkersFacade;
 import DataAccessLayer.Repo;
+import DataAccessLayer.Transports.DTO;
+
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Menu_Transport {
 
-    private static final DeliveryFacade facade=DeliveryFacade.getInstance();
-
+    private static final DeliveryFacade deliveryFacade =DeliveryFacade.getInstance();
+    private static final WorkersFacade workersFacade =WorkersFacade.getInstance();
 
     public static void createSystem(){
         Scanner in = new Scanner(System.in);
@@ -60,11 +62,11 @@ public class Menu_Transport {
     {
         switch(choice)
         {
-            /*
+
             case 1:
                 driversMenu();
                 break;
-                */
+
 
             case 2:
                 trucksMenu();
@@ -83,51 +85,38 @@ public class Menu_Transport {
                 break;
         }
     }
-/*
+
     public static void driversMenu()
     {
         System.out.println("Please enter the number of the function you wish to do");
-        System.out.println("Drivers Menu:\n1) Create New Driver\n2) Delete Driver\n3) Change License Expiration Date\n" +
-                "4) Change License Type\n5) Back To Main Menu");
+        System.out.println("Drivers Menu:\n1) Change License Expiration Date\n" +
+                "2) Change License Type\n3) Back To Main Menu");
         Scanner in = new Scanner(System.in);
         int choice = in.nextInt();
         String id, name, licenseType, licenseExpDate;
         int branchId;
-        Date date;
+        LocalDate date;
         try
         {
             switch (choice)
             {
                 case 1:
-                    System.out.println("Please enter driver details: branch id ");
-                    branchId = in.nextInt();
-
-                    WorkerDTO w=MenuWorkers.createWorkerWithoutAdd();
-                    System.out.println("Please enter driver details: licence type, expiration date");
-                    licenseType = in.next();
+                    System.out.println("Please enter the driver id");
+                    id = in.next();
+                    System.out.println("Please enter the new expiration date");
                     licenseExpDate = in.next();
-                    date = new SimpleDateFormat("dd/MM/yyyy").parse(licenseExpDate);
-                    facade.createDriver(w, licenseType, date);
+                    DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/ yyyy");
+                    date = LocalDate.parse(licenseExpDate, df);
+                    deliveryFacade.updateExpDate(id, date);
                     break;
                 case 2:
-                    System.out.println("Please enter the driver id that you want to erase from the system");
+                    System.out.println("Please enter the driver id");
                     id = in.next();
-                    facade.removeDriver(id);
+                    System.out.println("Please enter the new license type");
+                    licenseType = in.next();
+                    deliveryFacade.updateLicenseType(id, licenseType);
                     break;
                 case 3:
-                    System.out.println("Please enter the driver id and the new expiration date");
-                    id = in.next();
-                    licenseExpDate = in.next();
-                    date = new SimpleDateFormat("dd/MM/yyyy").parse(licenseExpDate);
-                    facade.updateExpDate(id, date);
-                    break;
-                case 4:
-                    System.out.println("Please enter the driver id and the new license type");
-                    id = in.next();
-                    licenseType = in.next();
-                    facade.updateLicenseType(id, licenseType);
-                    break;
-                case 5:
                     break;
             }
         }
@@ -135,7 +124,7 @@ public class Menu_Transport {
         {
             System.out.println(e.getMessage() + "\nYou entered wrong details, please try again");
         }
-    }*/
+    }
 
     public static void trucksMenu()
     {
@@ -156,7 +145,7 @@ public class Menu_Transport {
                     name = in.next();
                     netoWeight = in.nextDouble();
                     totalWeight = in.nextDouble();
-                    res=facade.createTruck(id, name, netoWeight, totalWeight);
+                    res= deliveryFacade.createTruck(id, name, netoWeight, totalWeight);
                     if (res.isErrorOccurred()){
                         System.out.println(res.getErrorMessage());
                     }
@@ -164,13 +153,13 @@ public class Menu_Transport {
                 case 2:
                     System.out.println("Please enter the truck id that you want to erase from the system");
                     id = in.next();
-                    res=facade.removeTruck(id);
+                    res= deliveryFacade.removeTruck(id);
                     if (res.isErrorOccurred()){
                         System.out.println(res.getErrorMessage());
                     }
                     break;
                 case 3:
-                    facade.printTrucks();
+                    deliveryFacade.printTrucks();
                     break;
                 case 4:
                     break;
@@ -204,27 +193,27 @@ public class Menu_Transport {
                     licenseExpDate = in.next();
                     s1 = in.next();
                     s2 = in.next();
-                    facade.createLocation(id, name, licenseType, licenseExpDate, s1, s2);
+                    deliveryFacade.createLocation(id, name, licenseType, licenseExpDate, s1, s2);
                     break;
                 case 2:
                     System.out.println("please enter the location id that you want to erase from the system");
                     id = in.nextInt();
-                    facade.removeLocation(id);
+                    deliveryFacade.removeLocation(id);
                     break;
                 case 3:
                     System.out.println("please enter location id and the new telephone number");
                     id = in.nextInt();
                     s1 = in.next();
-                    facade.updateTelNumber(id, s1);
+                    deliveryFacade.updateTelNumber(id, s1);
                     break;
                 case 4:
                     System.out.println("please enter location id and the new contact name");
                     id = in.nextInt();
                     s1 = in.next();
-                    facade.updateContactName(id, s1);
+                    deliveryFacade.updateContactName(id, s1);
                     break;
                 case 5:
-                    facade.printLocations();
+                    deliveryFacade.printLocations();
                     break;
                 case 6:
                     break;
@@ -268,41 +257,41 @@ public class Menu_Transport {
                     name = in.next();
                     int loc = in.nextInt();
                     totalWeight = in.nextDouble();
-                    facade.createOrder(id, items, name, loc, totalWeight);
+                    deliveryFacade.createOrder(id, items, name, loc, totalWeight);
                     break;
                 case 2:
                     System.out.println("please enter the order id that you want to erase from the system");
                     id = in.nextInt();
-                    facade.removeOrder(id);
+                    deliveryFacade.removeOrder(id);
                     break;
                 case 3:
                     System.out.println("please enter order id, item name, quantity");
                     id = in.nextInt();
                     name = in.next();
                     quantity = in.nextInt();
-                    facade.addItem(id, name, quantity);
+                    deliveryFacade.addItem(id, name, quantity);
                     break;
                 case 4:
                     System.out.println("please enter order id, item name");
                     id = in.nextInt();
                     name = in.next();
-                    facade.removeItem(id, name);
+                    deliveryFacade.removeItem(id, name);
                     break;
                 case 5:
                     System.out.println("please enter order id, item name, quantity");
                     id = in.nextInt();
                     name = in.next();
                     quantity = in.nextInt();
-                    facade.updateQuantity(id, name, quantity);
+                    deliveryFacade.updateQuantity(id, name, quantity);
                     break;
                 case 6:
                     System.out.println("please enter order id, total weight");
                     id = in.nextInt();
                     totalWeight = in.nextDouble();
-                    facade.updateTotalWeight(id, totalWeight);
+                    deliveryFacade.updateTotalWeight(id, totalWeight);
                     break;
                 case 7:
-                    facade.printOrders();
+                    deliveryFacade.printOrders();
                     break;
                 case 8:
                     break;
@@ -369,68 +358,68 @@ public class Menu_Transport {
                     String name1 = in.next();
                     int loc = in.nextInt();
                     s2 = in.next();
-                    facade.createDelivery(id, date, newTime1, name1, loc, targetLocations, s2, orders);
+                    deliveryFacade.createDelivery(id, date, newTime1, name1, loc, targetLocations, s2, orders);
                     break;
                 case 2:
                     System.out.println("please enter the delivery id that you want to erase from the system");
                     id = in.next();
-                    facade.removeDelivery(id);
+                    deliveryFacade.removeDelivery(id);
                     break;
                 case 3:
                     System.out.println("please enter the delivery id and the new delivery day");
                     id = in.next();
                     deliveryDate = in.next();
                     date = new SimpleDateFormat("dd/MM/yyyy").parse(deliveryDate);
-                    facade.updateDeliveryDate(id, date);
+                    deliveryFacade.updateDeliveryDate(id, date);
                     break;
                 case 4:
                     System.out.println("please enter the delivery id and the new delivery leaving time");
                     id = in.next();
                     String d = in.next();
                     Time newTime = Time.valueOf(d);
-                    facade.updateLeavingTime(id, newTime);
+                    deliveryFacade.updateLeavingTime(id, newTime);
                     break;
                 case 5:
                     System.out.println("please enter delivery id, new weight of delivery");
                     id = in.next();
                     totalWeight = in.nextDouble();
-                    facade.updateWeight(id, totalWeight);
+                    deliveryFacade.updateWeight(id, totalWeight);
                     break;
                 case 6:
                     System.out.println("please enter delivery id, truck id");
                     id = in.next();
                     String tid = in.next();
-                    facade.updateTruckId(id, tid);
+                    deliveryFacade.updateTruckId(id, tid);
                     break;
                 case 7:
                     System.out.println("please enter delivery id, driver id");
                     id = in.next();
                     String temp = in.next();
-                    facade.updateDriverId(id, temp);
+                    deliveryFacade.updateDriverId(id, temp);
                     break;
                 case 8:
                     System.out.println("please enter delivery id, location id, order id");
                     id = in.next();
                     s1 = in.nextInt();
                     int ss2 = in.nextInt();
-                    facade.addOrderAndLocation(id, s1, ss2);
+                    deliveryFacade.addOrderAndLocation(id, s1, ss2);
                     break;
                 case 9:
                     System.out.println("please enter delivery id, location id, order id");
                     id = in.next();
                     s1 = in.nextInt();
                     int sss2 = in.nextInt();
-                    facade.removeOrderAndLocation(id, s1, sss2);
+                    deliveryFacade.removeOrderAndLocation(id, s1, sss2);
                     break;
                 case 10:
                     System.out.println("please enter delivery id, new delivery status that could be" +
                             "\nInTransit or Delivered");
                     id = in.next();
                     String sta= in.next();
-                    facade.updateStatus(id, sta);
+                    deliveryFacade.updateStatus(id, sta);
                     break;
                 case 11:
-                    facade.printDeliveries();
+                    deliveryFacade.printDeliveries();
 
                     break;
                 case 12:
@@ -631,21 +620,23 @@ public class Menu_Transport {
             WorkerDTO yarinw = new WorkerDTO("yarin", "peretz", "313577645", bankAccountDTO1, hiringConditionsDTO1, availableWorkDaysDTO1);
             WorkerDTO eden = new WorkerDTO("eden", "bishela", "208060254", bankAccountDTO2, hiringConditionsDTO2, availableWorkDaysDTO2);
             WorkerDTO Gal = new WorkerDTO("Gal", "Brown", "207894326", bankAccountDTO3, hiringConditionsDTO3, availableWorkDaysDTO3);
-            DriverDTO yarin= new DriverDTO(yarinw,"A",expDate);
+            //DriverDTO yarin= new DriverDTO(yarinw,"A",expDate);
 
-            facade.createDriver(yarin,1);
+            workersFacade.addWorker(yarinw, 1);
+            DTO.Driver yarin=new DTO.Driver("313577645","A",expDate);
+            deliveryFacade.createDriver(yarin,1);
 
             //facade.createDriver("313577645", "yarin", "B", expDate);
             //facade.createDriver("123456789", "reem", "C", expDate);
-            facade.createLocation(1, "superli", "lachish 151 shoham", "0543160553", "yossi", "center");
-            facade.createLocation(2, "maxstock", "shoham 26 haifa", "0504616909", "ben", "north");
-            facade.createLocation(3, "shufersal", "azrieli tel aviv", "0543160550", "ronit", "center");
-            facade.createLocation(4, "tara", "bialik 32 ramat gan", "0581234567", "moshe", "center");
-            facade.createLocation(5, "tnuva", "rabin 12 beer sheva", "0538523644", "assaf", "south");
-            facade.createLocation(6, "osem", "shimshon 24 krayot", "0528549847", "shoshana", "north");
-            facade.createTruck("2360154", "volvo", 1000.0, 4500.0);
-            facade.createTruck("30122623", "chevrolet", 5000.0, 9000.5);
-            facade.createTruck("11122333", "honda", 10000.0, 15000.0);
+            deliveryFacade.createLocation(1, "superli", "lachish 151 shoham", "0543160553", "yossi", "center");
+            deliveryFacade.createLocation(2, "maxstock", "shoham 26 haifa", "0504616909", "ben", "north");
+            deliveryFacade.createLocation(3, "shufersal", "azrieli tel aviv", "0543160550", "ronit", "center");
+            deliveryFacade.createLocation(4, "tara", "bialik 32 ramat gan", "0581234567", "moshe", "center");
+            deliveryFacade.createLocation(5, "tnuva", "rabin 12 beer sheva", "0538523644", "assaf", "south");
+            deliveryFacade.createLocation(6, "osem", "shimshon 24 krayot", "0528549847", "shoshana", "north");
+            deliveryFacade.createTruck("2360154", "volvo", 1000.0, 4500.0);
+            deliveryFacade.createTruck("30122623", "chevrolet", 5000.0, 9000.5);
+            deliveryFacade.createTruck("11122333", "honda", 10000.0, 15000.0);
             Map<String, Integer> items1 = new HashMap<String, Integer>() {
                 {
                     put("milk", 20);
@@ -686,11 +677,11 @@ public class Menu_Transport {
                     put("fish", 10);
                 }
             };
-            facade.createOrder(12, items1, "487", 1, 1000.0);
-            facade.createOrder(34, items2, "159", 2, 3500.0);
-            facade.createOrder(56, items3, "263", 3, 2500.0);
-            facade.createOrder(78, items4, "546", 1, 2000.0);
-            facade.createOrder(98, items5, "943", 3, 2000.0);
+            deliveryFacade.createOrder(12, items1, "487", 1, 1000.0);
+            deliveryFacade.createOrder(34, items2, "159", 2, 3500.0);
+            deliveryFacade.createOrder(56, items3, "263", 3, 2500.0);
+            deliveryFacade.createOrder(78, items4, "546", 1, 2000.0);
+            deliveryFacade.createOrder(98, items5, "943", 3, 2000.0);
             Date newDate1 = new GregorianCalendar(2022, Calendar.MAY, 11).getTime();
             Date newDate2 = new GregorianCalendar(2020, Calendar.DECEMBER, 31).getTime();
             Date newDate3 = new GregorianCalendar(2020, Calendar.JULY, 7).getTime();
@@ -725,7 +716,7 @@ public class Menu_Transport {
                     add(98);
                 }
             };
-            facade.createDelivery("101", newDate1, newTime1, "313577645", 1, centerLocations, "11122333", orders1);
+            deliveryFacade.createDelivery("101", newDate1, newTime1, "313577645", 1, centerLocations, "11122333", orders1);
             //facade.createDelivery("102", newDate2, newTime2, "312164668", 5, northLocations, "30122623", orders2);
             //facade.createDelivery("103", newDate3, newTime3, "123456789", 6, centerLocations, "11122333", orders3);
         }

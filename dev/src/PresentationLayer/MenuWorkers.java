@@ -5,8 +5,10 @@ import BussinessLayer.DriverPackage.DriverController;
 import BussinessLayer.Facade;
 import BussinessLayer.Response;
 import BussinessLayer.ResponseT;
+import DataAccessLayer.Transports.DTO;
 import DataAccessLayer.Workers.Workers;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -789,6 +791,7 @@ public class MenuWorkers {
         }
         createWorker(ID,branchID);
 
+
     }
 
     private static void addNewBranch() {
@@ -944,6 +947,26 @@ public class MenuWorkers {
         Response response= facade.addWorker(newWorkerDTO, branchID);
         if(response.isErrorOccurred())
             System.out.println(response.getErrorMessage());
+        System.out.println("If you're adding driver, please insert 1\nelse press any other key");
+        try {
+            Scanner in = new Scanner(System.in);
+            String choice = in.next();
+            if (choice.equals("1")){
+                String licenseType, licenseExpDate;
+                System.out.println("Please enter driver details: licence type");
+                licenseType = in.next();
+                System.out.println("Please enter driver details: expiration date");
+                licenseExpDate = in.next();
+                Date date;
+                date = new SimpleDateFormat("dd/MM/yyyy").parse(licenseExpDate);
+                DTO.Driver driver=new DTO.Driver(ID,licenseType,date);
+                facade.createDriver(driver, branchID);
+            }
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
     }
 
     public static WorkerDTO createWorkerWithoutAdd() {

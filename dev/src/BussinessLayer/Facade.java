@@ -5,6 +5,7 @@ import BussinessLayer.DriverPackage.Driver;
 import BussinessLayer.WorkersPackage.Qualifications;
 import BussinessLayer.WorkersPackage.Worker;
 import BussinessLayer.WorkersPackage.WorkersFacade;
+import DataAccessLayer.Transports.DTO;
 import DataAccessLayer.Transports.Drivers;
 import PresentationLayer.*;
 
@@ -424,7 +425,7 @@ public class Facade {
         return new Response();
     }
 
-    public Response createDriver(DriverDTO driver, int branchID){
+    public Response createDriver(DTO.Driver driver, int branchID){
         try{
             dFacade.createDriver(driver, branchID);
         }catch(Exception e){
