@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="ADSS" target="11" />
+      <module name="ADSS" target="15" />
     </bytecodeTargetLevel>
   </component>
 </project>

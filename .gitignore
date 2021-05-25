@@ -2,10 +2,6 @@
 /shelf/
 /workspace.xml
 
-/dev/src/META-INF
-
-**/META-INF/
-
 ### Java ###
 # Compiled class file
 *.class
