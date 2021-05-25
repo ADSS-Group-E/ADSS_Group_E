@@ -1,0 +1,133 @@
+<!ELEMENT dataset (
+    Category*,
+    Contact*,
+    Discount*,
+    InventoryItem*,
+    Item*,
+    OrderItems*,
+    Product*,
+    QuantityWriter*,
+    Report*,
+    SOrder*,
+    SpecificProduct*,
+    StepDiscount*,
+    Supplier*,
+    SupplierItem*)>
+
+<!ELEMENT Category EMPTY>
+<!ATTLIST Category
+    ID CDATA #REQUIRED
+    name CDATA #REQUIRED
+    superID CDATA #IMPLIED
+>
+
+<!ELEMENT Contact EMPTY>
+<!ATTLIST Contact
+    contactName CDATA #REQUIRED
+    email CDATA #REQUIRED
+    companyNumber CDATA #REQUIRED
+>
+
+<!ELEMENT Discount EMPTY>
+<!ATTLIST Discount
+    ID CDATA #REQUIRED
+    name CDATA #REQUIRED
+    discPercentage CDATA #REQUIRED
+    startDate CDATA #REQUIRED
+    endDate CDATA #REQUIRED
+    type CDATA #REQUIRED
+>
+
+<!ELEMENT InventoryItem EMPTY>
+<!ATTLIST InventoryItem
+    name CDATA #REQUIRED
+    manufacturer CDATA #REQUIRED
+    location CDATA #REQUIRED
+    quantity CDATA #REQUIRED
+>
+
+<!ELEMENT Item EMPTY>
+<!ATTLIST Item
+    name CDATA #REQUIRED
+    ID CDATA #REQUIRED
+>
+
+<!ELEMENT OrderItems EMPTY>
+<!ATTLIST OrderItems
+    productID CDATA #REQUIRED
+    companyNumber CDATA #REQUIRED
+    orderID CDATA #REQUIRED
+    price CDATA #REQUIRED
+    quantity CDATA #REQUIRED
+>
+
+<!ELEMENT Product EMPTY>
+<!ATTLIST Product
+    ID CDATA #REQUIRED
+    name CDATA #REQUIRED
+    storeLocation CDATA #REQUIRED
+    storageLocation CDATA #REQUIRED
+    manufacturer CDATA #REQUIRED
+    buyPrice CDATA #REQUIRED
+    sellPrice CDATA #REQUIRED
+    minAmount CDATA #REQUIRED
+    categoryID CDATA #REQUIRED
+    buyDiscountID CDATA #IMPLIED
+    sellDiscountID CDATA #IMPLIED
+>
+
+<!ELEMENT QuantityWriter EMPTY>
+<!ATTLIST QuantityWriter
+    ID CDATA #REQUIRED
+    minPriceDiscount CDATA #IMPLIED
+    regularCostumerDiscount CDATA #IMPLIED
+    companyNumber CDATA #IMPLIED
+>
+
+<!ELEMENT Report EMPTY>
+<!ATTLIST Report
+    ID CDATA #REQUIRED
+    creationDate CDATA #REQUIRED
+    reportTag CDATA #REQUIRED
+>
+
+<!ELEMENT SOrder EMPTY>
+<!ATTLIST SOrder
+    orderID CDATA #REQUIRED
+    date CDATA #REQUIRED
+    periodicDelivery CDATA #REQUIRED
+    needsDelivery CDATA #REQUIRED
+>
+
+<!ELEMENT SpecificProduct EMPTY>
+<!ATTLIST SpecificProduct
+    ID CDATA #REQUIRED
+    ExpirationDate CDATA #REQUIRED
+>
+
+<!ELEMENT StepDiscount EMPTY>
+<!ATTLIST StepDiscount
+    ID CDATA #REQUIRED
+    stepPrice CDATA #REQUIRED
+    precentage CDATA #REQUIRED
+    QWID CDATA #REQUIRED
+>
+
+<!ELEMENT Supplier EMPTY>
+<!ATTLIST Supplier
+    companyNumber CDATA #REQUIRED
+    name CDATA #REQUIRED
+    paymentMethod CDATA #REQUIRED
+    bankAccount CDATA #REQUIRED
+>
+
+<!ELEMENT SupplierItem EMPTY>
+<!ATTLIST SupplierItem
+    productID CDATA #REQUIRED
+    companyNumber CDATA #REQUIRED
+    name CDATA #REQUIRED
+    quantity CDATA #REQUIRED
+    price CDATA #REQUIRED
+    supplierCN CDATA #IMPLIED
+>
+

@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <Discount ID="1" name="Test Spring Discount" discPercentage="0.1" startDate="2021-04-01T16:00" endDate="2021-05-01T16:00" type="Selling"/>
+  <Product ID="1" name="Test Juice" storeLocation="AB01" storageLocation="B13" manufacturer="Test Company" buyPrice="10.5" sellPrice="10.1" minAmount="5" categoryID="2"/>
+  <Product ID="2" name="Test Milk" storeLocation="AB01" storageLocation="B13" manufacturer="Test Company" buyPrice="10.5" sellPrice="10.1" minAmount="5" categoryID="2"/>
+  <SOrder orderID="1" date="10/05/2021-09:51:41" periodicDelivery="1" needsDelivery="0"/>
+  <SOrder orderID="2" date="10/05/2021-09:51:41" periodicDelivery="1" needsDelivery="1"/>
+  <Supplier companyNumber="10" name="Amazon" paymentMethod="Cheque" bankAccount="8145441/24"/>
+  <Supplier companyNumber="54" name="Google" paymentMethod="Paypal" bankAccount="15144/455"/>
+  <OrderItems productID="66" companyNumber="54" orderID="2" price="3000" quantity="10"/>
+  <OrderItems productID="100" companyNumber="10" orderID="1" price="30" quantity="100"/>
+  <SupplierItem productID="10" companyNumber="10" name="Corn" quantity="1500" price="10" supplierCN="5554"/>
+  <SupplierItem productID="50" companyNumber="10" name="Popcorn" quantity="500" price="20" supplierCN="5666"/>
+  <SupplierItem productID="54" companyNumber="54" name="Hot Dog" quantity="1500" price="10" supplierCN="100"/>
+  <SupplierItem productID="66" companyNumber="54" name="Dog" quantity="0" price="3000" supplierCN="5041"/>
+  <SupplierItem productID="100" companyNumber="10" name="Candy Corn" quantity="100" price="30" supplierCN="8989"/>
+  <SupplierItem productID="110" companyNumber="54" name="Corn Dog" quantity="500" price="20" supplierCN="206"/>
+  <Contact contactName="Tzahi" email="tzahi@tzahi.com" companyNumber="10"/>
+  <Contact contactName="Tzahi" email="tzahi@tzahi.com" companyNumber="54"/>
+  <QuantityWriter ID="1" minPriceDiscount="500" regularCostumerDiscount="10" companyNumber="10"/>
+  <QuantityWriter ID="2" minPriceDiscount="500" regularCostumerDiscount="10" companyNumber="54"/>
+  <StepDiscount ID="1" stepPrice="2000" precentage="15" QWID="1"/>
+  <StepDiscount ID="2" stepPrice="4000" precentage="20" QWID="1"/>
+  <StepDiscount ID="3" stepPrice="1000" precentage="10" QWID="1"/>
+  <StepDiscount ID="4" stepPrice="2000" precentage="15" QWID="2"/>
+  <StepDiscount ID="5" stepPrice="4000" precentage="20" QWID="2"/>
+  <StepDiscount ID="6" stepPrice="1000" precentage="10" QWID="2"/>
+</dataset>
