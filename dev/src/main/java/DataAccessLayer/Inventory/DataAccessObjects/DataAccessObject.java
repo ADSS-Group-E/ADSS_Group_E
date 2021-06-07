@@ -44,7 +44,7 @@ public abstract class DataAccessObject {
 
     protected abstract PreparedStatement createInsertPreparedStatement(DataTransferObject dataTransferObject) throws SQLException;
 
-    public ArrayList<? extends DataTransferObject> selectAllGeneric (){
+    public ArrayList<DataTransferObject> selectAllGeneric (){
         try {
             c = this.connect();
             Statement stmt = c.createStatement();

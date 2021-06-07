@@ -25,7 +25,7 @@ public class InvalidReport extends Report{
 
     // Print methods
     private static String formatAsRecord(Item item, Product product){
-        return String.format("%-10d %-15d %-20s %-20s",item.getId(),product.getPid(), product.getName(), item.getExpiration().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
+        return String.format("%-10d %-15d %-20s %-20s",item.getId(),product.getId(), product.getName(), item.getExpiration().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
     }
 
     @Override

@@ -47,7 +47,7 @@ public class Facade {
     public ArrayList<ProductDTO> getProductList(){
         ArrayList<ProductDTO> DTOlist = new ArrayList<>();
         //Turn products into DTOs
-        ArrayList<Product> productList = pCont.getList();
+        ArrayList<Product> productList = pCont.getAllProducts();
         if (productList == null){
             return null;
         }
@@ -86,7 +86,7 @@ public class Facade {
     }
 
     public void addCategory(int cid, String name){
-        cCont.addCategory(cid, name);
+        cCont.addCategory(new Category(cid, name));
     }
 
     // Getters
@@ -100,7 +100,7 @@ public class Facade {
     public ArrayList<CategoryDTO> getCategoryList(){
         ArrayList<CategoryDTO> DTOlist = new ArrayList<>();
         //Turn products into DTOs
-        ArrayList<Category> categoryList = cCont.getList();
+        ArrayList<Category> categoryList = cCont.getAllCategories();
         categoryList.forEach((category)-> DTOlist.add(new CategoryDTO(category)));
         return DTOlist;
     }
@@ -124,12 +124,12 @@ public class Facade {
     }
 
     public int generateLowStockReport(){
-        Report report = rCont.generateLowStockReport(pCont.getList());
+        Report report = rCont.generateLowStockReport(pCont.getAllProducts());
         return report.getRid();
     }
 
     public int generateInvalidsReport(){
-        Report report = rCont.generateInvalidsReport(pCont.getList());
+        Report report = rCont.generateInvalidsReport(pCont.getAllProducts());
         return report.getRid();
     }
 
@@ -163,7 +163,7 @@ public class Facade {
     public ArrayList<DiscountDTO> getDiscountList(){
         ArrayList<DiscountDTO> DTOlist = new ArrayList<>();
         //Turn products into DTOs
-        ArrayList<Discount> discountList = dCont.getList();
+        ArrayList<Discount> discountList = dCont.getAllDiscounts();
         discountList.forEach((discount)-> DTOlist.add(new DiscountDTO(discount)));
         return DTOlist;
     }

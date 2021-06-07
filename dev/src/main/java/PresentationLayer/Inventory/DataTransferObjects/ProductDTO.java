@@ -8,7 +8,7 @@ import BusinessLayer.Inventory.Product;
  * A DTO is an object that is used to encapsulate data and send it from one subsystem of an application to another.
  */
 
-public class ProductDTO implements DataTransferObject{
+public class ProductDTO extends DataTransferObject{
     private final int pid;
     private final String name;
     private final String storageLocation;
@@ -102,7 +102,7 @@ public class ProductDTO implements DataTransferObject{
     }
 
     public ProductDTO(Product other) {
-        this.pid = other.getPid();
+        this.pid = other.getId();
         this.name = other.getName();
         this.storageLocation = other.getStorageLocation();
         this.storeLocation = other.getStoreLocation();
@@ -114,13 +114,13 @@ public class ProductDTO implements DataTransferObject{
         this.sellingPrice = other.getSellingPrice();
         this.sellingPriceAfterDiscount = other.getSellingPriceAfterDiscount();
         this.minAmount = other.getMinAmount();
-        this.categoryId = other.getCategory().getCid();
+        this.categoryId = other.getCategory().getId();
         if (other.getBuyingDiscount() != null)
-            this.buyingDiscountID = other.getBuyingDiscount().getDid();
+            this.buyingDiscountID = other.getBuyingDiscount().getId();
         else
             this.buyingDiscountID = -1;
         if (other.getSellingDiscount() != null)
-            this.sellingDiscountID = other.getSellingDiscount().getDid();
+            this.sellingDiscountID = other.getSellingDiscount().getId();
         else
             this.sellingDiscountID = -1;
     }

@@ -33,9 +33,6 @@ public class CategoryDAO extends DataAccessObject{
         return pstmt;
     }
 
-    public ArrayList<CategoryDTO> selectAll () {
-        return (ArrayList<CategoryDTO>) selectAllGeneric();
-    }
 
     public CategoryDAO() {
         super();

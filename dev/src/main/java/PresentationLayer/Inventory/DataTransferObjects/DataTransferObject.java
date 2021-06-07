@@ -1,4 +1,9 @@
 package PresentationLayer.Inventory.DataTransferObjects;
 
-public interface DataTransferObject {
+public abstract class DataTransferObject {
+    int id;
+
+    public int getId() {
+        return id;
+    }
 }

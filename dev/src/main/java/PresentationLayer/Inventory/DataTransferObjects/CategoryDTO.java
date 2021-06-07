@@ -7,7 +7,7 @@ import BusinessLayer.Inventory.Category;
  * A DTO is an object that is used to encapsulate data and send it from one subsystem of an application to another.
  */
 
-public class CategoryDTO implements DataTransferObject{
+public class CategoryDTO extends DataTransferObject{
     private final int cid;
     private final String name;
     private final int superCategoryId;
@@ -24,13 +24,13 @@ public class CategoryDTO implements DataTransferObject{
     }
 
     public CategoryDTO (Category other) {
-        this.cid = other.getCid();
+        this.cid = other.getId();
         this.name = other.getName();
         if (other.getSuperCategory()==null){
             this.superCategoryId = -1;
         }
         else{
-            this.superCategoryId = other.getSuperCategory().getCid();
+            this.superCategoryId = other.getSuperCategory().getId();
         }
     }
 

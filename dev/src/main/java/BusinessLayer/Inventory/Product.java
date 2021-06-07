@@ -10,8 +10,7 @@ import java.util.HashMap;
  * This class represents Products.
  * Each product has a unique Product ID and other details like name, location, price, category and more.
  */
-public class Product {
-    private final int pid;
+public class Product extends DomainObject{
     private final String name;
     private final String storageLocation;
     private final String storeLocation;
@@ -26,10 +25,6 @@ public class Product {
     private Discount sellingDiscount;
 
     // Getters
-    public int getPid() {
-        return pid;
-    }
-
     public String getName() {
         return name;
     }
@@ -80,7 +75,7 @@ public class Product {
 
     // Constructors
     public Product(int pid, String name, String storageLocation, String storeLocation, String manufacturer, double buyingPrice, double sellingPrice, int minAmount, Category category) {
-        this.pid = pid;
+        super(pid);
         this.name = name;
         this.storageLocation = storageLocation;
         this.storeLocation = storeLocation;
@@ -96,7 +91,7 @@ public class Product {
     }
 
     public Product(ProductDTO other, Category category) {
-        this.pid = other.getPid();
+        super(other.getPid());
         this.name = other.getName();
         this.storageLocation = other.getStorageLocation();
         this.storeLocation = other.getStoreLocation();

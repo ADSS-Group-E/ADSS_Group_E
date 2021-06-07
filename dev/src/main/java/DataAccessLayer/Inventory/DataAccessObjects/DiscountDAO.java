@@ -18,10 +18,7 @@ public class DiscountDAO extends DataAccessObject{
         super(databaseUrl);
         tableName = "Discount";
     }
-
-    public ArrayList<DiscountDTO> selectAll () {
-        return (ArrayList<DiscountDTO>) selectAllGeneric();
-    }
+    
 
     @Override
     protected PreparedStatement createInsertPreparedStatement(DataTransferObject dataTransferObject) throws SQLException {

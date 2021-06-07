@@ -50,10 +50,6 @@ public class ProductDAO extends DataAccessObject {
     }
 
 
-    public ArrayList<ProductDTO> selectAll () {
-        return (ArrayList<ProductDTO>) selectAllGeneric();
-    }
-
     @Override
     ProductDTO resultToDTO(ResultSet resultSet) throws SQLException {
         return new ProductDTO(  resultSet.getInt("ID"),

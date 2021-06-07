@@ -21,7 +21,7 @@ public class StockReport extends Report {
     }
 
     private static String formatAsRecord(Product product){
-        return String.format("%-10d %-20s %-15d %-15d %-15d %-15d",product.getPid(),product.getName(), product.getAmountInStore(), product.getAmountInStorage(),product.getAmountInStore()+product.getAmountInStorage(),product.getMinAmount());
+        return String.format("%-10d %-20s %-15d %-15d %-15d %-15d",product.getId(),product.getName(), product.getAmountInStore(), product.getAmountInStorage(),product.getAmountInStore()+product.getAmountInStorage(),product.getMinAmount());
     }
 
     @Override

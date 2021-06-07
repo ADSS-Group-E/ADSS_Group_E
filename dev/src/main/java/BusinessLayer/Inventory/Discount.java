@@ -9,8 +9,7 @@ import java.util.ArrayList;
  * This class represents discounts for products.
  * Discounts Can be applied for specific products and/or categories.
  */
-public class Discount {
-    private final int did;
+public class Discount extends DomainObject{
     private final String name;
     private final double discountPercent;
     private final LocalDateTime startDate;
@@ -19,9 +18,6 @@ public class Discount {
     private String type;
 
     // Getters
-    public int getDid() {
-        return did;
-    }
 
     public double getDiscountPercent() {
         return discountPercent;
@@ -48,7 +44,7 @@ public class Discount {
     }
 
     private Discount(int did, String name, double discountPercent, LocalDateTime startDate, LocalDateTime endDate, ArrayList<Product> products) {
-        this.did = did;
+        super(did);
         this.name = name;
         this.discountPercent = discountPercent;
         this.startDate = startDate;
