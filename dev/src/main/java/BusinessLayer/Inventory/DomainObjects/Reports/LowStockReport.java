@@ -1,4 +1,6 @@
-package BusinessLayer.Inventory;
+package BusinessLayer.Inventory.DomainObjects.Reports;
+
+import BusinessLayer.Inventory.DomainObjects.Product;
 
 import java.util.ArrayList;
 

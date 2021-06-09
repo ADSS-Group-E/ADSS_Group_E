@@ -3,7 +3,7 @@ package BusinessLayer.Inventory;
 import BusinessLayer.Inventory.Controllers.CategoryController;
 import BusinessLayer.Inventory.Controllers.DiscountController;
 import BusinessLayer.Inventory.Controllers.ProductController;
-import BusinessLayer.Inventory.Discount;
+import BusinessLayer.Inventory.DomainObjects.Discount;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

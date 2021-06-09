@@ -1,11 +1,9 @@
 package BusinessLayer;
 
 import BusinessLayer.Inventory.Controllers.ReportController;
-import BusinessLayer.Inventory.Product;
-import BusinessLayer.Inventory.Report;
-import BusinessLayer.Supplier.Item;
+import BusinessLayer.Inventory.DomainObjects.Product;
+import BusinessLayer.Inventory.DomainObjects.Reports.Report;
 import BusinessLayer.Supplier.SupplierController;
-import PresentationLayer.Supplier.DataTransferObjects.SupplierItemDTO;
 
 import java.util.ArrayList;
 

@@ -1,9 +1,9 @@
 package BusinessLayer.Inventory;
 
-import BusinessLayer.Inventory.Category;
+import BusinessLayer.Inventory.DomainObjects.Category;
 import BusinessLayer.Inventory.Controllers.ReportController;
-import BusinessLayer.Inventory.Product;
-import BusinessLayer.Inventory.Report;
+import BusinessLayer.Inventory.DomainObjects.Product;
+import BusinessLayer.Inventory.DomainObjects.Reports.Report;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

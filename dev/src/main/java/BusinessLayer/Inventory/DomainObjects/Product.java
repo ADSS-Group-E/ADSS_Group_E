@@ -1,4 +1,4 @@
-package BusinessLayer.Inventory;
+package BusinessLayer.Inventory.DomainObjects;
 
 import DataAccessLayer.Inventory.DataAccessObjects.ItemGroupDAO;
 import PresentationLayer.Inventory.DataTransferObjects.ItemGroupDTO;

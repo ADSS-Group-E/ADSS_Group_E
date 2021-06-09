@@ -1,11 +1,8 @@
 package BusinessLayer.Inventory.Controllers;
 
-import BusinessLayer.Inventory.Category;
-import BusinessLayer.Inventory.DomainObject;
-import BusinessLayer.Inventory.Product;
+import BusinessLayer.Inventory.DomainObjects.DomainObject;
 import DataAccessLayer.Inventory.DataAccessObjects.DataAccessObject;
 import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
-import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
 
 import java.util.ArrayList;
 import java.util.HashMap;

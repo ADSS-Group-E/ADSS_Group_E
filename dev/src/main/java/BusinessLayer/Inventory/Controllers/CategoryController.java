@@ -1,14 +1,12 @@
 package BusinessLayer.Inventory.Controllers;
 
-import BusinessLayer.Inventory.Category;
-import BusinessLayer.Inventory.DomainObject;
-import BusinessLayer.Inventory.Product;
+import BusinessLayer.Inventory.DomainObjects.Category;
+import BusinessLayer.Inventory.DomainObjects.DomainObject;
 import DataAccessLayer.Inventory.DataAccessObjects.CategoryDAO;
 import PresentationLayer.Inventory.DataTransferObjects.CategoryDTO;
 import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * This class represents the category controller.

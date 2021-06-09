@@ -1,4 +1,4 @@
-package BusinessLayer.Inventory;
+package BusinessLayer.Inventory.DomainObjects;
 
 public abstract class DomainObject {
     int id;

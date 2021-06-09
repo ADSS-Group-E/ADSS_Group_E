@@ -1,6 +1,6 @@
 package BusinessLayer.Inventory;
 
-import BusinessLayer.Inventory.Category;
+import BusinessLayer.Inventory.DomainObjects.Category;
 import BusinessLayer.Inventory.Controllers.CategoryController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

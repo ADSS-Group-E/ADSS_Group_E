@@ -1,19 +1,13 @@
 package BusinessLayer.Inventory.Controllers;
 
-import BusinessLayer.Inventory.Category;
-import BusinessLayer.Inventory.Discount;
-import BusinessLayer.Inventory.DomainObject;
-import BusinessLayer.Inventory.Product;
-import DataAccessLayer.Inventory.DataAccessObjects.CategoryDAO;
+import BusinessLayer.Inventory.DomainObjects.Discount;
+import BusinessLayer.Inventory.DomainObjects.DomainObject;
+import BusinessLayer.Inventory.DomainObjects.Product;
 import DataAccessLayer.Inventory.DataAccessObjects.DiscountDAO;
-import DataAccessLayer.Inventory.DataAccessObjects.ProductDAO;
-import PresentationLayer.Inventory.DataTransferObjects.CategoryDTO;
 import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
 import PresentationLayer.Inventory.DataTransferObjects.DiscountDTO;
-import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * This class represents the discount controller

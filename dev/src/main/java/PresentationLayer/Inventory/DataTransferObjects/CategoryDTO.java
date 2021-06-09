@@ -1,6 +1,6 @@
 package PresentationLayer.Inventory.DataTransferObjects;
 
-import BusinessLayer.Inventory.Category;
+import BusinessLayer.Inventory.DomainObjects.Category;
 
 /**
  * This class represents the CategoryDTO.

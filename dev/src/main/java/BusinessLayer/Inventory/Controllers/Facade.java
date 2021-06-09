@@ -1,9 +1,9 @@
 package BusinessLayer.Inventory.Controllers;
 
-import BusinessLayer.Inventory.*;
+import BusinessLayer.Inventory.DomainObjects.*;
+import BusinessLayer.Inventory.DomainObjects.Reports.Report;
 import PresentationLayer.Inventory.DataTransferObjects.CategoryDTO;
 import PresentationLayer.Inventory.DataTransferObjects.DiscountDTO;
-import PresentationLayer.Inventory.DataTransferObjects.ItemGroupDTO;
 import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
 
 import java.time.LocalDateTime;

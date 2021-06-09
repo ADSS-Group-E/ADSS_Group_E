@@ -1,7 +1,6 @@
 package PresentationLayer.Inventory.DataTransferObjects;
 
-import BusinessLayer.Inventory.Discount;
-import BusinessLayer.Inventory.Product;
+import BusinessLayer.Inventory.DomainObjects.Product;
 
 /**
  * This class represents the ProductDTO.

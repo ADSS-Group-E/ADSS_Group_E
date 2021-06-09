@@ -1,6 +1,10 @@
 package BusinessLayer.Inventory.Controllers;
 
-import BusinessLayer.Inventory.*;
+import BusinessLayer.Inventory.DomainObjects.*;
+import BusinessLayer.Inventory.DomainObjects.Reports.InvalidReport;
+import BusinessLayer.Inventory.DomainObjects.Reports.LowStockReport;
+import BusinessLayer.Inventory.DomainObjects.Reports.Report;
+import BusinessLayer.Inventory.DomainObjects.Reports.StockReport;
 
 import java.util.ArrayList;
 import java.util.HashMap;

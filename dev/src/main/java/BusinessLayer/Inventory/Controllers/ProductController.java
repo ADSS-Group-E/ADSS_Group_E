@@ -1,9 +1,9 @@
 package BusinessLayer.Inventory.Controllers;
 
-import BusinessLayer.Inventory.Category;
-import BusinessLayer.Inventory.DomainObject;
-import BusinessLayer.Inventory.ItemGroup;
-import BusinessLayer.Inventory.Product;
+import BusinessLayer.Inventory.DomainObjects.Category;
+import BusinessLayer.Inventory.DomainObjects.DomainObject;
+import BusinessLayer.Inventory.DomainObjects.ItemGroup;
+import BusinessLayer.Inventory.DomainObjects.Product;
 import DataAccessLayer.Inventory.DataAccessObjects.ItemGroupDAO;
 import DataAccessLayer.Inventory.DataAccessObjects.ProductDAO;
 import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;

@@ -1,7 +1,6 @@
 package PresentationLayer.Inventory.DataTransferObjects;
 
-import BusinessLayer.Inventory.Category;
-import BusinessLayer.Inventory.ItemGroup;
+import BusinessLayer.Inventory.DomainObjects.ItemGroup;
 
 import java.time.LocalDateTime;
 

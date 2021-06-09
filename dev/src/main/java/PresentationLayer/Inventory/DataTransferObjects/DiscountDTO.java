@@ -1,6 +1,6 @@
 package PresentationLayer.Inventory.DataTransferObjects;
 
-import BusinessLayer.Inventory.Discount;
+import BusinessLayer.Inventory.DomainObjects.Discount;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
