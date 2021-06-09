@@ -6,6 +6,7 @@ import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * This class represents Products.
@@ -125,7 +126,7 @@ public class Product extends DomainObject{
         ItemGroupDTO itemGroupDTO = new ItemGroupDTO(itemGroup);
         itemGroupDTO.setLocation(ItemGroupDTO.Location.STORE);
         itemGroupDTO.setPid(this.id);
-        int id = itemGroupDAO.insert(itemGroupDTO);
+        int id = itemGroupDAO.insertWithAI(itemGroupDTO);
         if (id != -1)
             store.put(id, itemGroup);
     }
@@ -134,7 +135,7 @@ public class Product extends DomainObject{
         ItemGroupDTO itemGroupDTO = new ItemGroupDTO(itemGroup);
         itemGroupDTO.setLocation(ItemGroupDTO.Location.STORAGE);
         itemGroupDTO.setPid(this.id);
-        int id = itemGroupDAO.insert(itemGroupDTO);
+        int id = itemGroupDAO.insertWithAI(itemGroupDTO);
         if (id != -1)
             storage.put(id, itemGroup);
     }
@@ -223,5 +224,19 @@ public class Product extends DomainObject{
 
     public void loadStorage (HashMap<Integer, ItemGroup> storage){
         this.storage = storage;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Double.compare(product.buyingPrice, buyingPrice) == 0 && Double.compare(product.sellingPrice, sellingPrice) == 0 && minAmount == product.minAmount && name.equals(product.name) && storageLocation.equals(product.storageLocation) && storeLocation.equals(product.storeLocation) && manufacturer.equals(product.manufacturer) && Objects.equals(category, product.category) && Objects.equals(storage, product.storage) && Objects.equals(store, product.store) && Objects.equals(buyingDiscount, product.buyingDiscount) && Objects.equals(sellingDiscount, product.sellingDiscount) && itemGroupDAO.equals(product.itemGroupDAO);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, storageLocation, storeLocation, manufacturer, buyingPrice, sellingPrice, minAmount, category, storage, store, buyingDiscount, sellingDiscount, itemGroupDAO);
     }
 }

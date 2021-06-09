@@ -28,6 +28,13 @@ public class ProductController extends DomainController{
         itemGroupDAO = new ItemGroupDAO();
     }
 
+    // Internal for testing
+    protected ProductController(CategoryController cCont, ProductDAO productDAO, ItemGroupDAO itemGroupDAO) {
+        super(productDAO);
+        this.cCont = cCont;
+        this.itemGroupDAO = itemGroupDAO;
+    }
+
     // Getter
     public Product getProduct(int pid){
         return (Product) get(pid);

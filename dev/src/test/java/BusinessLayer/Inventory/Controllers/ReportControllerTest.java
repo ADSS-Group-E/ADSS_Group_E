@@ -1,4 +1,4 @@
-package BusinessLayer.Inventory;
+package BusinessLayer.Inventory.Controllers;
 
 import BusinessLayer.Inventory.DomainObjects.Category;
 import BusinessLayer.Inventory.Controllers.ReportController;

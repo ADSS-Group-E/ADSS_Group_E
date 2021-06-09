@@ -1,4 +1,4 @@
-package BusinessLayer.Inventory;
+package BusinessLayer.Inventory.Controllers;
 
 import BusinessLayer.Inventory.Controllers.CategoryController;
 import BusinessLayer.Inventory.Controllers.DiscountController;

@@ -18,6 +18,11 @@ public class CategoryController extends DomainController{
         super(new CategoryDAO());
     }
 
+    //Internal for testing
+    protected CategoryController(CategoryDAO categoryDAO){
+        super(categoryDAO);
+    }
+
     // Getters
     public Category getCategory(int cid){
         return (Category) get(cid);
