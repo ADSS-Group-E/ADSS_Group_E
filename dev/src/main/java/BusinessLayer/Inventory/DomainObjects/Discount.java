@@ -15,7 +15,6 @@ public class Discount extends DomainObject{
     private final LocalDateTime startDate;
     private final LocalDateTime endDate;
     private final ArrayList<Product> products;
-    private String type;
 
     // Getters
 
@@ -37,10 +36,6 @@ public class Discount extends DomainObject{
 
     public ArrayList<Product> getProducts() {
         return products;
-    }
-
-    public String getType() {
-        return type;
     }
 
     private Discount(int did, String name, double discountPercent, LocalDateTime startDate, LocalDateTime endDate, ArrayList<Product> products) {
@@ -65,29 +60,7 @@ public class Discount extends DomainObject{
     public static Discount DiscountForSelling(int did, String name, double discountPercent, LocalDateTime startDate, LocalDateTime endDate, ArrayList<Product> products){
         Discount discount = new Discount(did, name, discountPercent, startDate, endDate, products);
         products.forEach((product)-> product.setSellingDiscount(discount));
-        discount.type = "Selling";
         return discount;
-    }
-
-    /**
-     * This function creates a discount for buying products
-     * @param did discount ID
-     * @param name Name
-     * @param discountPercent Discount percent
-     * @param startDate Start date
-     * @param endDate End date
-     * @param products Products to apply to
-     * @return the discount
-     */
-    public static Discount DiscountForBuying(int did, String name, double discountPercent, LocalDateTime startDate, LocalDateTime endDate, ArrayList<Product> products){
-        Discount discount = new Discount(did, name, discountPercent, startDate, endDate, products);
-        products.forEach((product)-> product.setBuyingDiscount(discount));
-        discount.type = "Buying";
-        return discount;
-    }
-
-    public static Discount DiscountForBuying(DiscountDTO discountDTO, ArrayList<Product> products){
-        return DiscountForBuying(discountDTO.getDid(),discountDTO.getName(),discountDTO.getDiscountPercent(),discountDTO.getStartDate(),discountDTO.getEndDate(),products);
     }
 
     public static Discount DiscountForSelling(DiscountDTO discountDTO, ArrayList<Product> products){

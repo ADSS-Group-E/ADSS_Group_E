@@ -98,7 +98,7 @@ public class ProductsOptionsMenu extends OptionsMenu {
         int categoryId = in.nextInt();
 
         // Add the new product by calling the Facade function with the data the user just entered.
-        parentCLI.getFacade().addProduct(new ProductDTO(pid, name, storageLocation, storeLocation , manufacturer, buyingPrice, sellingPrice, minAmount,categoryId, -1, -1));
+        parentCLI.getFacade().addProduct(new ProductDTO(pid, name, storageLocation, storeLocation , manufacturer, sellingPrice, minAmount,categoryId, -1));
         System.out.println("The new product was added successfully.");
     }
 

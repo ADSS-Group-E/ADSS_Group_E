@@ -7,16 +7,12 @@ import BusinessLayer.Supplier.SupplierController;
 import PresentationLayer.Inventory.DataTransferObjects.CategoryDTO;
 import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
 import PresentationLayer.Inventory.Options.*;
-import PresentationLayer.MainOptionsMenu;
 import PresentationLayer.Supplier.ServiceController;
 import PresentationLayer.Supplier.SupplierOptionsMenu;
 
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -137,7 +133,7 @@ public class CommandLineInterface {
         }
         facade.addCategory(1,"Juice");
         facade.addCategory(new CategoryDTO(2,"<500 ML",1));
-        facade.addProduct(new ProductDTO(1, "Test Juice", "AB01","B13", "Test Company",10.5, 10.1, 5,2, -1, -1));
+        facade.addProduct(new ProductDTO(1, "Test Juice", "AB01","B13", "Test Company", 10.1, 5,2, -1));
         facade.addItemToStore(1,10, 10.5,  LocalDateTime.of(2021,4,24,16,0));
         facade.addItemToStorage(1,3, 11, LocalDateTime.of(2021,4,25,16,0));
         facade.addItemToStore(1,20, 11.5, LocalDateTime.of(2021,4,1,16,0));
@@ -150,8 +146,8 @@ public class CommandLineInterface {
                 LocalDateTime.of(2021,4,1,16,0),
                 LocalDateTime.of(2021,5,1,16,0),
                 cids,
-                pids,
-                "Selling");
+                pids
+        );
 
         serviceController.initialize();
     }

@@ -17,7 +17,6 @@ public class DiscountDTO extends DataTransferObject{
     private final LocalDateTime startDate;
     private final LocalDateTime endDate;
     private final ArrayList<Integer> pids;
-    private final String type;
 
     // Getters
     public int getDid() {
@@ -44,12 +43,8 @@ public class DiscountDTO extends DataTransferObject{
         return pids;
     }
 
-    public String getType() {
-        return type;
-    }
-
     // Constructors
-    public DiscountDTO(int did, String name, double discountPercent, LocalDateTime startDate, LocalDateTime endDate, ArrayList<Integer> pids, String type) {
+    public DiscountDTO(int did, String name, double discountPercent, LocalDateTime startDate, LocalDateTime endDate, ArrayList<Integer> pids) {
         super(did);
         this.did = did;
         this.name = name;
@@ -57,7 +52,6 @@ public class DiscountDTO extends DataTransferObject{
         this.startDate = startDate;
         this.endDate = endDate;
         this.pids = pids;
-        this.type = type;
     }
 
     public DiscountDTO(Discount other) {
@@ -67,7 +61,6 @@ public class DiscountDTO extends DataTransferObject{
         this.discountPercent = other.getDiscountPercent();
         this.startDate = other.getStartDate();
         this.endDate = other.getEndDate();
-        this.type = other.getType();
         this.pids = new ArrayList<>();
         other.getProducts().forEach((product)-> pids.add(product.getId()));
     }
@@ -79,7 +72,6 @@ public class DiscountDTO extends DataTransferObject{
                 "Discount Percent:   " + String.format("%.2f",discountPercent*100) + "%\n" +
                 "Start Date:         " + startDate.toLocalDate() + "\n" +
                 "End Date:           " + endDate.toLocalDate()  + "\n" +
-                "Type:               " + type + "\n" +
                 "Applies to PIDs:    " + pids;
     }
 }

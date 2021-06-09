@@ -17,13 +17,11 @@ public class Product extends DomainObject{
     private final String storageLocation;
     private final String storeLocation;
     private final String manufacturer;
-    private final double buyingPrice;
     private final double sellingPrice;
     private final int minAmount;
     private final Category category;
     private HashMap<Integer, ItemGroup> storage;
     private HashMap<Integer, ItemGroup> store;
-    private Discount buyingDiscount;
     private Discount sellingDiscount;
 
     private final ItemGroupDAO itemGroupDAO;
@@ -60,10 +58,6 @@ public class Product extends DomainObject{
         return manufacturer;
     }
 
-    public double getBuyingPrice() {
-        return buyingPrice;
-    }
-
     public double getSellingPrice() {
         return sellingPrice;
     }
@@ -74,10 +68,6 @@ public class Product extends DomainObject{
 
     public Category getCategory() {
         return category;
-    }
-
-    public Discount getBuyingDiscount() {
-        return buyingDiscount;
     }
 
     public Discount getSellingDiscount() {
@@ -93,13 +83,11 @@ public class Product extends DomainObject{
         this.storageLocation = storageLocation;
         this.storeLocation = storeLocation;
         this.manufacturer = manufacturer;
-        this.buyingPrice = buyingPrice;
         this.sellingPrice = sellingPrice;
         this.minAmount = minAmount;
         this.category = category;
         this.storage = new HashMap<>();
         this.store = new HashMap<>();
-        this.buyingDiscount = null;
         this.sellingDiscount = null;
 
         this.itemGroupDAO = new ItemGroupDAO();
@@ -111,7 +99,6 @@ public class Product extends DomainObject{
         this.storageLocation = other.getStorageLocation();
         this.storeLocation = other.getStoreLocation();
         this.manufacturer = other.getManufacturer();
-        this.buyingPrice = other.getBuyingPrice();
         this.sellingPrice = other.getSellingPrice();
         this.minAmount = other.getMinAmount();
         this.storage = new HashMap<>();
@@ -140,15 +127,6 @@ public class Product extends DomainObject{
             storage.put(id, itemGroup);
     }
 
-    // Setters
-    public void setBuyingDiscount(Discount buyingDiscount) {
-        // Remove the listing from the discount object of the previous discount
-        if (this.buyingDiscount != null){
-            this.buyingDiscount.removeProductFromDiscount(this);
-        }
-        this.buyingDiscount = buyingDiscount;
-    }
-
     public void setSellingDiscount(Discount sellingDiscount) {
         // Remove the listing from the discount object of the previous discount
         if (this.sellingDiscount != null){
@@ -158,15 +136,6 @@ public class Product extends DomainObject{
     }
 
     // More getters
-    public double getBuyingPriceAfterDiscount(){
-        if (buyingDiscount !=null && buyingDiscount.discountValid()){
-            return (1- buyingDiscount.getDiscountPercent()) * buyingPrice;
-        }
-        else{
-            return buyingPrice;
-        }
-    }
-
     public double getSellingPriceAfterDiscount(){
         if (sellingDiscount !=null && sellingDiscount.discountValid()){
             return (1- sellingDiscount.getDiscountPercent()) * sellingPrice;
@@ -227,16 +196,4 @@ public class Product extends DomainObject{
     }
 
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Product product = (Product) o;
-        return Double.compare(product.buyingPrice, buyingPrice) == 0 && Double.compare(product.sellingPrice, sellingPrice) == 0 && minAmount == product.minAmount && name.equals(product.name) && storageLocation.equals(product.storageLocation) && storeLocation.equals(product.storeLocation) && manufacturer.equals(product.manufacturer) && Objects.equals(category, product.category) && Objects.equals(storage, product.storage) && Objects.equals(store, product.store) && Objects.equals(buyingDiscount, product.buyingDiscount) && Objects.equals(sellingDiscount, product.sellingDiscount) && itemGroupDAO.equals(product.itemGroupDAO);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, storageLocation, storeLocation, manufacturer, buyingPrice, sellingPrice, minAmount, category, storage, store, buyingDiscount, sellingDiscount, itemGroupDAO);
-    }
 }

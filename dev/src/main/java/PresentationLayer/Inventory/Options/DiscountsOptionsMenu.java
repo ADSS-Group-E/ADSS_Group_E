@@ -150,7 +150,7 @@ public class DiscountsOptionsMenu extends OptionsMenu {
         }
 
         // Add the new discount by calling the Facade function with the data the user just entered.
-        parentCLI.getFacade().addDiscount(did,name,discountPercentage,startDate,endDate,cids,pids,type);
+        parentCLI.getFacade().addDiscount(did,name,discountPercentage,startDate,endDate,cids,pids);
         System.out.println("The new discount was added successfully.");
     }
 

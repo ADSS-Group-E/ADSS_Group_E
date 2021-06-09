@@ -26,15 +26,14 @@ public class DiscountDAO extends DataAccessObject{
     }
 
     protected PreparedStatement createInsertPreparedStatement(DiscountDTO discountDTO) throws SQLException {
-        String sql = "INSERT INTO " + tableName + " (ID, name,discPercentage, startDate, endDate, type)  " +
-                "VALUES (?, ?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO " + tableName + " (ID, name,discPercentage, startDate, endDate)  " +
+                "VALUES (?, ?, ?, ?, ?);";
         PreparedStatement pstmt = this.c.prepareStatement(sql);
         pstmt.setInt(1,discountDTO.getDid());
         pstmt.setString(2, discountDTO.getName());
         pstmt.setDouble(3,discountDTO.getDiscountPercent());
         pstmt.setString(4, discountDTO.getStartDate().toString());
         pstmt.setString(5, discountDTO.getEndDate().toString());
-        pstmt.setString(6, discountDTO.getType());
 
         return pstmt;
     }
@@ -46,7 +45,6 @@ public class DiscountDAO extends DataAccessObject{
                 resultSet.getDouble("discPercentage"),
                 LocalDateTime.parse(resultSet.getString("startDate")),
                 LocalDateTime.parse(resultSet.getString("endDate")),
-                null,
-                resultSet.getString("type"));
+                null);
     }
 }

@@ -44,7 +44,7 @@ public class OrderFromReportHandler {
         for (Product product:
              reportProducts) {
             // TODO: get min amount and total amount in product to calculate quantity to order
-            items.add(new String[]{product.getId() + "", product.getName(), (product.getMinAmount()- product.getAmountInStorage()- product.getAmountInStore())*2 + "", (int)product.getBuyingPrice() + "", ""});
+            items.add(new String[]{product.getId() + "", product.getName(), (product.getMinAmount()- product.getAmountInStorage()- product.getAmountInStore())*2 + "", -99 + "", ""});
         }
         return items;
     }

@@ -45,10 +45,7 @@ public class DiscountController extends DomainController{
                 products.add(pCont.getProduct(pid));
             }
 
-        if (discountDTO.getType().equals("Buying"))
-            return Discount.DiscountForBuying(discountDTO.getDid(), discountDTO.getName(), discountDTO.getDiscountPercent(), discountDTO.getStartDate(), discountDTO.getEndDate(), products);
-        else
-            return Discount.DiscountForSelling(discountDTO.getDid(), discountDTO.getName(), discountDTO.getDiscountPercent(), discountDTO.getStartDate(), discountDTO.getEndDate(), products);
+        return Discount.DiscountForSelling(discountDTO.getDid(), discountDTO.getName(), discountDTO.getDiscountPercent(), discountDTO.getStartDate(), discountDTO.getEndDate(), products);
     }
 
     @Override

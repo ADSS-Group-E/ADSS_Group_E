@@ -179,24 +179,17 @@ public class Facade {
      * @param endDate The date at which the discount ends
      * @param cids category ID
      * @param pids product ID
-     * @param type buying or selling
      */
-    public void addDiscount(int did, String name, double discountPercent, LocalDateTime startDate, LocalDateTime endDate, ArrayList<Integer> cids, ArrayList<Integer> pids ,String type){
+    public void addDiscount(int did, String name, double discountPercent, LocalDateTime startDate, LocalDateTime endDate, ArrayList<Integer> cids, ArrayList<Integer> pids){
         HashSet<Product> productsNoRep =  new HashSet<>();
         cids.forEach((cid)-> productsNoRep.addAll(pCont.getAllProductsOfCategory(cCont.getCategory(cid))));
         pids.forEach((pid)-> productsNoRep.add(pCont.getProduct(pid)));
         ArrayList<Product> products = new ArrayList<>(productsNoRep);
 
-        DiscountDTO discountDTO = new DiscountDTO(did, name, discountPercent, startDate, endDate, pids, type);
+        DiscountDTO discountDTO = new DiscountDTO(did, name, discountPercent, startDate, endDate, pids);
 
         try{
-            if (discountDTO.getType().equals("Buying")){
-                dCont.addDiscount(Discount.DiscountForBuying(discountDTO,products));
-            }
-            else
-            {
-                dCont.addDiscount(Discount.DiscountForSelling(discountDTO,products));
-            }
+            dCont.addDiscount(Discount.DiscountForSelling(discountDTO,products));
         }
         catch(IllegalArgumentException e){
             System.out.println(e.getMessage());
