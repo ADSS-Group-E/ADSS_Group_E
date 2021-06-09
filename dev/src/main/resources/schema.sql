@@ -12,8 +12,8 @@ CREATE TABLE IF NOT EXISTS "Contact" (
 	"contactName"	TEXT NOT NULL,
 	"email"	TEXT NOT NULL,
 	"companyNumber"	INTEGER NOT NULL,
-	FOREIGN KEY("companyNumber") REFERENCES "Supplier"("companyNumber"),
-	PRIMARY KEY("contactName","email","companyNumber")
+	PRIMARY KEY("contactName","email","companyNumber"),
+	FOREIGN KEY("companyNumber") REFERENCES "Supplier"("companyNumber")
 );
 DROP TABLE IF EXISTS "QuantityWriter";
 CREATE TABLE IF NOT EXISTS "QuantityWriter" (
@@ -21,8 +21,8 @@ CREATE TABLE IF NOT EXISTS "QuantityWriter" (
 	"minPriceDiscount"	INTEGER,
 	"regularCostumerDiscount"	INTEGER,
 	"companyNumber"	INTEGER,
-	FOREIGN KEY("companyNumber") REFERENCES "Supplier"("companyNumber"),
-	PRIMARY KEY("ID")
+	PRIMARY KEY("ID"),
+	FOREIGN KEY("companyNumber") REFERENCES "Supplier"("companyNumber")
 );
 DROP TABLE IF EXISTS "InventoryItem";
 CREATE TABLE IF NOT EXISTS "InventoryItem" (
@@ -30,8 +30,8 @@ CREATE TABLE IF NOT EXISTS "InventoryItem" (
 	"manufacturer"	TEXT NOT NULL,
 	"location"	INTEGER NOT NULL,
 	"quantity"	INTEGER NOT NULL,
-	FOREIGN KEY("name") REFERENCES "ItemGroup"("name"),
-	PRIMARY KEY("name","location")
+	PRIMARY KEY("name","location"),
+	FOREIGN KEY("name") REFERENCES "ItemGroup"("name")
 );
 DROP TABLE IF EXISTS "SpecificProduct";
 CREATE TABLE IF NOT EXISTS "SpecificProduct" (
@@ -44,8 +44,8 @@ CREATE TABLE IF NOT EXISTS "Category" (
 	"ID"	INTEGER NOT NULL,
 	"name"	TEXT NOT NULL,
 	"superID"	INTEGER,
-	FOREIGN KEY("superID") REFERENCES "Category"("ID"),
-	PRIMARY KEY("ID")
+	PRIMARY KEY("ID"),
+	FOREIGN KEY("superID") REFERENCES "Category"("ID")
 );
 DROP TABLE IF EXISTS "Report";
 CREATE TABLE IF NOT EXISTS "Report" (
@@ -60,8 +60,8 @@ CREATE TABLE IF NOT EXISTS "StepDiscount" (
 	"stepPrice"	INTEGER NOT NULL,
 	"precentage"	INTEGER NOT NULL,
 	"QWID"	INTEGER NOT NULL,
-	FOREIGN KEY("QWID") REFERENCES "QuantityWriter"("ID"),
-	PRIMARY KEY("ID" AUTOINCREMENT)
+	PRIMARY KEY("ID" AUTOINCREMENT),
+	FOREIGN KEY("QWID") REFERENCES "QuantityWriter"("ID")
 );
 DROP TABLE IF EXISTS "OrderItems";
 CREATE TABLE IF NOT EXISTS "OrderItems" (
@@ -70,10 +70,10 @@ CREATE TABLE IF NOT EXISTS "OrderItems" (
 	"orderID"	INTEGER NOT NULL,
 	"price"	INTEGER NOT NULL CHECK("price" >= 0),
 	"quantity"	INTEGER NOT NULL CHECK("quantity" >= 0),
+	PRIMARY KEY("productID","companyNumber","orderID"),
 	FOREIGN KEY("productID") REFERENCES "Product"("ID"),
-	FOREIGN KEY("companyNumber") REFERENCES "Supplier"("companyNumber"),
 	FOREIGN KEY("orderID") REFERENCES "SOrder"("orderID"),
-	PRIMARY KEY("productID","companyNumber","orderID")
+	FOREIGN KEY("companyNumber") REFERENCES "Supplier"("companyNumber")
 );
 DROP TABLE IF EXISTS "SupplierItem";
 CREATE TABLE IF NOT EXISTS "SupplierItem" (
@@ -83,9 +83,9 @@ CREATE TABLE IF NOT EXISTS "SupplierItem" (
 	"quantity"	TEXT NOT NULL CHECK("quantity" >= 0),
 	"price"	INTEGER NOT NULL,
 	"supplierCN"	INTEGER,
+	PRIMARY KEY("productID","companyNumber"),
 	FOREIGN KEY("productID") REFERENCES "Product"("ID"),
-	FOREIGN KEY("companyNumber") REFERENCES "Supplier"("companyNumber"),
-	PRIMARY KEY("productID","companyNumber")
+	FOREIGN KEY("companyNumber") REFERENCES "Supplier"("companyNumber")
 );
 DROP TABLE IF EXISTS "SOrder";
 CREATE TABLE IF NOT EXISTS "SOrder" (
@@ -103,8 +103,8 @@ CREATE TABLE IF NOT EXISTS "ItemGroup" (
 	"quantity"	INTEGER NOT NULL,
 	"priceBoughtAt"	REAL NOT NULL,
 	"expiration"	TEXT NOT NULL,
-	FOREIGN KEY("PID") REFERENCES "Product"("ID"),
-	PRIMARY KEY("ID" AUTOINCREMENT)
+	PRIMARY KEY("ID" AUTOINCREMENT),
+	FOREIGN KEY("PID") REFERENCES "Product"("ID")
 );
 DROP TABLE IF EXISTS "Discount";
 CREATE TABLE IF NOT EXISTS "Discount" (
@@ -126,7 +126,7 @@ CREATE TABLE IF NOT EXISTS "Product" (
 	"minAmount"	INTEGER NOT NULL,
 	"categoryID"	INTEGER NOT NULL,
 	"sellDiscountID"	INTEGER,
-	FOREIGN KEY("sellDiscountID") REFERENCES "Discount"("ID"),
-	PRIMARY KEY("ID")
+	PRIMARY KEY("ID"),
+	FOREIGN KEY("sellDiscountID") REFERENCES "Discount"("ID")
 );
 COMMIT;

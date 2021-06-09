@@ -106,6 +106,24 @@ public class Product extends DomainObject{
         this.storage = new HashMap<>();
         this.store = new HashMap<>();
         this.category = category;
+        this.discount = null;
+
+        this.productDAO = new ProductDAO();
+        this.itemGroupDAO = new ItemGroupDAO();
+    }
+
+    public Product(ProductDTO other, Category category, Discount discount) {
+        super(other.getPid());
+        this.name = other.getName();
+        this.storageLocation = other.getStorageLocation();
+        this.storeLocation = other.getStoreLocation();
+        this.manufacturer = other.getManufacturer();
+        this.sellingPrice = other.getSellingPrice();
+        this.minAmount = other.getMinAmount();
+        this.storage = new HashMap<>();
+        this.store = new HashMap<>();
+        this.category = category;
+        this.discount = discount;
 
         this.productDAO = new ProductDAO();
         this.itemGroupDAO = new ItemGroupDAO();

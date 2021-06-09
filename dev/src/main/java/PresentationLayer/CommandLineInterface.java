@@ -77,6 +77,8 @@ public class CommandLineInterface {
         ReportController rCont = new ReportController();
 
         DiscountController dCont = new DiscountController(pCont);
+        pCont.setDiscountController(dCont);
+
         SupplierController sCont = new SupplierController();
 
         facade = new Facade(pCont, rCont, cCont, dCont);

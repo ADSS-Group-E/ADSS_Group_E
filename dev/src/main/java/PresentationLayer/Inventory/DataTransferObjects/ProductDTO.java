@@ -64,7 +64,7 @@ public class ProductDTO extends DataTransferObject{
     }
 
     // Constructors
-    public ProductDTO(int pid, String name, String storageLocation, String storeLocation, String manufacturer, double sellingPrice, int minAmount, int categoryId, int discountID) {
+    public ProductDTO(int pid, String name,  String storeLocation, String storageLocation, String manufacturer, double sellingPrice, int minAmount, int categoryId, int discountID) {
         super(pid);
         this.name = name;
         this.storageLocation = storageLocation;

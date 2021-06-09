@@ -16,6 +16,7 @@ import java.util.HashMap;
  */
 public class ProductController extends DomainController{
     private final CategoryController cCont;
+    private DiscountController dCont;
     private final ItemGroupDAO itemGroupDAO;
 
 
@@ -23,6 +24,10 @@ public class ProductController extends DomainController{
         super(new ProductDAO("jdbc:sqlite::resource:module.db"));
         this.cCont = cCont;
         itemGroupDAO = new ItemGroupDAO();
+    }
+
+    public void setDiscountController(DiscountController dCont) {
+        this.dCont = dCont;
     }
 
     // Internal for testing
@@ -91,6 +96,8 @@ public class ProductController extends DomainController{
             return null;
         }
 
+        Discount discount = dCont.getDiscount(productDTO.getDiscountID());
+
         // Load a product's itemGroups
         ArrayList<ItemGroupDTO> itemGroupDTOS = itemGroupDAO.selectByProduct(productDTO.getPid());
         HashMap<Integer,ItemGroup> store = new HashMap<>();
@@ -105,7 +112,7 @@ public class ProductController extends DomainController{
                 storage.put(itemGroupDTO.getPid(), new ItemGroup(itemGroupDTO));
             }
         }
-        Product product = new Product(productDTO, category);
+        Product product = new Product(productDTO, category, discount);
         product.loadStorage(storage);
         product.loadStore(store);
 
