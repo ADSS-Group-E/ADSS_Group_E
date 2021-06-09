@@ -1,6 +1,7 @@
 package BusinessLayer.Inventory.Controllers;
 
 import BusinessLayer.Inventory.DomainObjects.*;
+import BusinessLayer.Workers_Transport.DeliveryPackage.Order;
 import DataAccessLayer.Inventory.DataAccessObjects.ItemGroupDAO;
 import DataAccessLayer.Inventory.DataAccessObjects.ProductDAO;
 import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
@@ -9,6 +10,8 @@ import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * This class represents the product controller.
@@ -35,6 +38,37 @@ public class ProductController extends DomainController{
         super(productDAO);
         this.cCont = cCont;
         this.itemGroupDAO = itemGroupDAO;
+    }
+
+    public void acceptOrder(Order order){
+        HashMap<Product, ItemGroup> itemGroups = new HashMap<>();
+
+        //TODO: Implement OrderItem, getOrderItems, getPid, ItemGroup constructor with OrderItem
+        /* Commented out code while it's not implemented
+        ArrayList<OrderItem> orderItems = order.getOrderItems();
+        for (OrderItem orderItem:
+             orderItems) {
+            Product product = getProduct(orderItem.getPid());
+            if (product == null){
+                System.err.println( "acceptOrder couldn't match pid " + orderItem.getPid());
+                return;
+            }
+
+            ItemGroup itemGroup = new ItemGroup(orderItem);
+            
+            itemGroups.put(product, itemGroup);
+        }
+        */
+        // Once every orderItem has been confirmed to have a matching product, add the itemGroups to storage
+        Iterator<Map.Entry<Product, ItemGroup>> it = itemGroups.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<Product, ItemGroup> pair = it.next();
+            System.out.println(pair.getKey() + " = " + pair.getValue());
+
+            pair.getKey().addItemGroupToStorage(pair.getValue());
+
+            it.remove(); // avoids a ConcurrentModificationException
+        }
     }
 
     // Getter
