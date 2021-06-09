@@ -43,8 +43,10 @@ public class ProductController extends DomainController{
     public void acceptOrder(Order order){
         HashMap<Product, ItemGroup> itemGroups = new HashMap<>();
 
-        //TODO: Implement OrderItem, getOrderItems, getPid, ItemGroup constructor with OrderItem
+        //TODO: Implement OrderItem, getOrderItems, getPid, ItemGroup constructor with OrderItem, Order.accept
         /* Commented out code while it's not implemented
+
+        // First iterate through orderItems to get it's corresponding product and create a new itemGroup for it
         ArrayList<OrderItem> orderItems = order.getOrderItems();
         for (OrderItem orderItem:
              orderItems) {
@@ -69,6 +71,8 @@ public class ProductController extends DomainController{
 
             it.remove(); // avoids a ConcurrentModificationException
         }
+
+        // order.accept();
     }
 
     // Getter
