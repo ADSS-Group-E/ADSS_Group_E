@@ -53,7 +53,7 @@ public class DiscountsOptionsMenu extends OptionsMenu {
     public void getDiscountList(){
         ArrayList<DiscountDTO> DTOlist = parentCLI.getFacade().getDiscountList();
         System.out.printf("%-10s %s%n", "DID","Name");
-        DTOlist.forEach((DTO)->System.out.printf("%-10s %s%n", DTO.getDid(),DTO.getName()));
+        DTOlist.forEach((DTO)->System.out.printf("%-10s %s%n", DTO.getId(),DTO.getName()));
     }
 
     /**
@@ -150,7 +150,7 @@ public class DiscountsOptionsMenu extends OptionsMenu {
         }
 
         // Add the new discount by calling the Facade function with the data the user just entered.
-        parentCLI.getFacade().addDiscount(did,name,discountPercentage,startDate,endDate,cids,pids);
+        parentCLI.getFacade().addDiscount(new DiscountDTO(did, name, discountPercentage, startDate, endDate), cids, pids);
         System.out.println("The new discount was added successfully.");
     }
 

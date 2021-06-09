@@ -28,22 +28,20 @@ class DiscountControllerTest {
     @Test
     void addDiscount() {
         assertNull(discountController.getDiscount(1));
-        Discount discount = Discount.DiscountForSelling(1,"Test Spring Discount", 0.1,
+        Discount discount = new Discount(1,"Test Spring Discount", 0.1,
                 LocalDateTime.of(2021,4,1,16,0),
-                LocalDateTime.of(2021,5,1,16,0),
-                new ArrayList<>());
-        discountController.addDiscount(discount);
+                LocalDateTime.of(2021,5,1,16,0));
+        //discountController.addDiscount(discount);
         assertEquals(discount,discountController.getDiscount(1));
     }
 
     @Test
     void removeDiscount() {
         assertNull(discountController.getDiscount(1));
-        Discount discount = Discount.DiscountForSelling(1,"Test Spring Discount", 0.1,
+        Discount discount =  new Discount(1,"Test Spring Discount", 0.1,
                 LocalDateTime.of(2021,4,1,16,0),
-                LocalDateTime.of(2021,5,1,16,0),
-                new ArrayList<>());
-        discountController.addDiscount(discount);
+                LocalDateTime.of(2021,5,1,16,0));
+        //discountController.addDiscount(discount);
         assertEquals(discount,discountController.getDiscount(1));
 
         discountController.removeDiscount(1);

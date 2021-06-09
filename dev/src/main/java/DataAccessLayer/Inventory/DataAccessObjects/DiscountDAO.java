@@ -22,18 +22,34 @@ public class DiscountDAO extends DataAccessObject{
 
     @Override
     protected PreparedStatement createInsertPreparedStatement(DataTransferObject dataTransferObject) throws SQLException {
-        return createInsertPreparedStatement((DiscountDTO)dataTransferObject);
-    }
+        DiscountDTO discountDTO = (DiscountDTO) dataTransferObject;
 
-    protected PreparedStatement createInsertPreparedStatement(DiscountDTO discountDTO) throws SQLException {
         String sql = "INSERT INTO " + tableName + " (ID, name,discPercentage, startDate, endDate)  " +
                 "VALUES (?, ?, ?, ?, ?);";
         PreparedStatement pstmt = this.c.prepareStatement(sql);
-        pstmt.setInt(1,discountDTO.getDid());
-        pstmt.setString(2, discountDTO.getName());
-        pstmt.setDouble(3,discountDTO.getDiscountPercent());
-        pstmt.setString(4, discountDTO.getStartDate().toString());
-        pstmt.setString(5, discountDTO.getEndDate().toString());
+        int i=1;
+        pstmt.setInt(i++,discountDTO.getId());
+        pstmt.setString(i++, discountDTO.getName());
+        pstmt.setDouble(i++,discountDTO.getDiscountPercent());
+        pstmt.setString(i++, discountDTO.getStartDate().toString());
+        pstmt.setString(i++, discountDTO.getEndDate().toString());
+
+        return pstmt;
+    }
+
+    @Override
+    protected PreparedStatement createUpdatePreparedStatement(DataTransferObject dataTransferObject) throws SQLException {
+        DiscountDTO discountDTO = (DiscountDTO) dataTransferObject;
+
+        String sql = "UPDATE " + tableName + " set name=?, discPercentage=?, startDate=?, endDate=? " +
+                "WHERE ID=?;";
+        PreparedStatement pstmt = this.c.prepareStatement(sql);
+        int i=1;
+        pstmt.setString(i++, discountDTO.getName());
+        pstmt.setDouble(i++,discountDTO.getDiscountPercent());
+        pstmt.setString(i++, discountDTO.getStartDate().toString());
+        pstmt.setString(i++, discountDTO.getEndDate().toString());
+        pstmt.setInt(i++,discountDTO.getId());
 
         return pstmt;
     }
@@ -44,7 +60,6 @@ public class DiscountDAO extends DataAccessObject{
                 resultSet.getString("name"),
                 resultSet.getDouble("discPercentage"),
                 LocalDateTime.parse(resultSet.getString("startDate")),
-                LocalDateTime.parse(resultSet.getString("endDate")),
-                null);
+                LocalDateTime.parse(resultSet.getString("endDate")));
     }
 }

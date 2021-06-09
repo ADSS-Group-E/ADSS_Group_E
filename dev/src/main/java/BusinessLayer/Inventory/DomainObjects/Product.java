@@ -1,6 +1,7 @@
 package BusinessLayer.Inventory.DomainObjects;
 
 import DataAccessLayer.Inventory.DataAccessObjects.ItemGroupDAO;
+import DataAccessLayer.Inventory.DataAccessObjects.ProductDAO;
 import PresentationLayer.Inventory.DataTransferObjects.ItemGroupDTO;
 import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
 
@@ -24,6 +25,7 @@ public class Product extends DomainObject{
     private HashMap<Integer, ItemGroup> store;
     private Discount sellingDiscount;
 
+    private final ProductDAO productDAO;
     private final ItemGroupDAO itemGroupDAO;
 
     // Getters
@@ -90,6 +92,7 @@ public class Product extends DomainObject{
         this.store = new HashMap<>();
         this.sellingDiscount = null;
 
+        this.productDAO = new ProductDAO();
         this.itemGroupDAO = new ItemGroupDAO();
     }
 
@@ -105,6 +108,7 @@ public class Product extends DomainObject{
         this.store = new HashMap<>();
         this.category = category;
 
+        this.productDAO = new ProductDAO();
         this.itemGroupDAO = new ItemGroupDAO();
     }
 
@@ -128,11 +132,9 @@ public class Product extends DomainObject{
     }
 
     public void setSellingDiscount(Discount sellingDiscount) {
-        // Remove the listing from the discount object of the previous discount
-        if (this.sellingDiscount != null){
-            this.sellingDiscount.removeProductFromDiscount(this);
-        }
         this.sellingDiscount = sellingDiscount;
+        productDAO.update(new ProductDTO(this));
+
     }
 
     // More getters

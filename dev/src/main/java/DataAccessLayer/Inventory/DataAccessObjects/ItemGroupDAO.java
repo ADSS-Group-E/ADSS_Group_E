@@ -38,6 +38,11 @@ public class ItemGroupDAO extends DataAccessObject{
     }
 
     @Override
+    protected PreparedStatement createUpdatePreparedStatement(DataTransferObject dataTransferObject) throws SQLException {
+        return null;
+    }
+
+    @Override
     ItemGroupDTO resultToDTO(ResultSet resultSet) throws SQLException {
         ItemGroupDTO itemGroupDTO = new ItemGroupDTO( resultSet.getInt("ID"),
                 resultSet.getInt("PID"),

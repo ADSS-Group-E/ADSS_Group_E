@@ -157,14 +157,15 @@ public class Facade {
 
     // Getters
     public DiscountDTO getDiscount(int did){
-        return new DiscountDTO(dCont.getDiscount(did));
+        Discount discount = dCont.getDiscount(did);
+        return new DiscountDTO(discount, pCont.getAllProductsWithDiscount(discount));
     }
 
     public ArrayList<DiscountDTO> getDiscountList(){
         ArrayList<DiscountDTO> DTOlist = new ArrayList<>();
         //Turn products into DTOs
         ArrayList<Discount> discountList = dCont.getAllDiscounts();
-        discountList.forEach((discount)-> DTOlist.add(new DiscountDTO(discount)));
+        discountList.forEach((discount)-> DTOlist.add(new DiscountDTO(discount,  pCont.getAllProductsWithDiscount(discount))));
         return DTOlist;
     }
 
@@ -172,24 +173,19 @@ public class Facade {
 
     /**
      * This function adds a discount to specific products or specific categories.
-     * @param did discount ID
-     * @param name of the discount
-     * @param discountPercent The value of the discount
-     * @param startDate The date at which the discount starts
-     * @param endDate The date at which the discount ends
+     * @param discountDTO
      * @param cids category ID
-     * @param pids product ID
      */
-    public void addDiscount(int did, String name, double discountPercent, LocalDateTime startDate, LocalDateTime endDate, ArrayList<Integer> cids, ArrayList<Integer> pids){
+    public void addDiscount(DiscountDTO discountDTO, ArrayList<Integer> cids, ArrayList<Integer> pids){
         HashSet<Product> productsNoRep =  new HashSet<>();
         cids.forEach((cid)-> productsNoRep.addAll(pCont.getAllProductsOfCategory(cCont.getCategory(cid))));
         pids.forEach((pid)-> productsNoRep.add(pCont.getProduct(pid)));
         ArrayList<Product> products = new ArrayList<>(productsNoRep);
 
-        DiscountDTO discountDTO = new DiscountDTO(did, name, discountPercent, startDate, endDate, pids);
+        Discount discount = new Discount(discountDTO);
 
         try{
-            dCont.addDiscount(Discount.DiscountForSelling(discountDTO,products));
+            dCont.addDiscount(discount , products);
         }
         catch(IllegalArgumentException e){
             System.out.println(e.getMessage());

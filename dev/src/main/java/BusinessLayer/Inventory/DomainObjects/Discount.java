@@ -14,7 +14,14 @@ public class Discount extends DomainObject{
     private final double discountPercent;
     private final LocalDateTime startDate;
     private final LocalDateTime endDate;
-    private final ArrayList<Product> products;
+
+    public Discount(DiscountDTO other) {
+        super(other.getId());
+        this.name = other.getName();
+        this.discountPercent = other.getDiscountPercent();
+        this.startDate = other.getStartDate();
+        this.endDate = other.getEndDate();
+    }
 
     // Getters
 
@@ -34,45 +41,12 @@ public class Discount extends DomainObject{
         return endDate;
     }
 
-    public ArrayList<Product> getProducts() {
-        return products;
-    }
-
-    private Discount(int did, String name, double discountPercent, LocalDateTime startDate, LocalDateTime endDate, ArrayList<Product> products) {
+    public Discount(int did, String name, double discountPercent, LocalDateTime startDate, LocalDateTime endDate) {
         super(did);
         this.name = name;
         this.discountPercent = discountPercent;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.products = products;
-    }
-
-    /**
-     * This function creates a discount for selling products
-     * @param did discount ID
-     * @param name Name
-     * @param discountPercent Discount percent
-     * @param startDate Start date
-     * @param endDate End date
-     * @param products Products to apply to
-     * @return the discount
-     */
-    public static Discount DiscountForSelling(int did, String name, double discountPercent, LocalDateTime startDate, LocalDateTime endDate, ArrayList<Product> products){
-        Discount discount = new Discount(did, name, discountPercent, startDate, endDate, products);
-        products.forEach((product)-> product.setSellingDiscount(discount));
-        return discount;
-    }
-
-    public static Discount DiscountForSelling(DiscountDTO discountDTO, ArrayList<Product> products){
-        return DiscountForSelling(discountDTO.getDid(),discountDTO.getName(),discountDTO.getDiscountPercent(),discountDTO.getStartDate(),discountDTO.getEndDate(),products);
-    }
-
-    /**
-     * This function removes a specific product from a discount.
-     * @param product the product ID
-     */
-    public void removeProductFromDiscount(Product product){
-        products.removeIf((x)->(x==product));
     }
 
     /**

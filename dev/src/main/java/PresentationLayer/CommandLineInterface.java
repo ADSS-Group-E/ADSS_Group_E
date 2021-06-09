@@ -5,6 +5,7 @@ import BusinessLayer.Inventory.Controllers.*;
 import BusinessLayer.OrderFromReportHandler;
 import BusinessLayer.Supplier.SupplierController;
 import PresentationLayer.Inventory.DataTransferObjects.CategoryDTO;
+import PresentationLayer.Inventory.DataTransferObjects.DiscountDTO;
 import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
 import PresentationLayer.Inventory.Options.*;
 import PresentationLayer.Supplier.ServiceController;
@@ -142,12 +143,13 @@ public class CommandLineInterface {
         ArrayList<Integer> pids = new ArrayList<>();
         cids.add(1);
         pids.add(1);
-        facade.addDiscount(1,"Test Spring Discount", 0.1,
-                LocalDateTime.of(2021,4,1,16,0),
-                LocalDateTime.of(2021,5,1,16,0),
-                cids,
-                pids
-        );
+
+        facade.addDiscount(new DiscountDTO(1,"Test Spring Discount", 0.1,
+                            LocalDateTime.of(2021,4,1,16,0),
+                            LocalDateTime.of(2022,5,1,16,0)
+                ),
+                        cids,
+                        pids);
 
         serviceController.initialize();
     }

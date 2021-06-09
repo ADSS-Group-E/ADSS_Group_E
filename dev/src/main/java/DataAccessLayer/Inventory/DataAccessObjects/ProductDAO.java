@@ -20,14 +20,34 @@ public class ProductDAO extends DataAccessObject {
 
     @Override
     protected PreparedStatement createInsertPreparedStatement(DataTransferObject dataTransferObject) throws SQLException {
-        return createInsertPreparedStatement((ProductDTO) dataTransferObject);
-    }
+        ProductDTO productDTO = (ProductDTO) dataTransferObject;
 
-
-    protected PreparedStatement createInsertPreparedStatement(ProductDTO productDTO) throws SQLException {
-        String sql = "INSERT INTO Product (ID, name, storeLocation, storageLocation, " +
+        String sql = "INSERT INTO " + tableName + " (ID, name, storeLocation, storageLocation, " +
                 "manufacturer, sellPrice, minAmount, categoryID, sellDiscountID) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        PreparedStatement pstmt = this.c.prepareStatement(sql);
+        pstmt.setInt(1,productDTO.getPid());
+        pstmt.setString(2, productDTO.getName());
+        pstmt.setString(3, productDTO.getStorageLocation());
+        pstmt.setString(4, productDTO.getStoreLocation());
+        pstmt.setString(5, productDTO.getManufacturer());
+        pstmt.setDouble(6, productDTO.getSellingPrice());
+        pstmt.setInt(7,productDTO.getMinAmount());
+        pstmt.setInt(8,productDTO.getCategoryId());
+        if (productDTO.getSellingDiscountID() == null)
+            pstmt.setNull(9,Types.INTEGER);
+        else
+            pstmt.setInt(9, productDTO.getSellingDiscountID());
+        return pstmt;
+    }
+
+    @Override
+    protected PreparedStatement createUpdatePreparedStatement(DataTransferObject dataTransferObject) throws SQLException {
+        ProductDTO productDTO = (ProductDTO) dataTransferObject;
+
+        String sql = "UPDATE " + tableName + " set name=?, storeLocation=?, storageLocation=?, " +
+                "manufacturer=?, sellPrice=?, minAmount=?, categoryID=?, sellDiscountID=? " +
+                "WHERE ID=?;";
         PreparedStatement pstmt = this.c.prepareStatement(sql);
         pstmt.setInt(1,productDTO.getPid());
         pstmt.setString(2, productDTO.getName());

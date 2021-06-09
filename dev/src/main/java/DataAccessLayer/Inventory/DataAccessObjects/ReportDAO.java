@@ -21,6 +21,11 @@ public class ReportDAO extends DataAccessObject{
         return null;
     }
 
+    @Override
+    protected PreparedStatement createUpdatePreparedStatement(DataTransferObject dataTransferObject) throws SQLException {
+        return null;
+    }
+
 
     @Override
     <T extends DataTransferObject> T resultToDTO(ResultSet resultSet) throws SQLException {

@@ -37,20 +37,13 @@ public class DiscountController extends DomainController{
     @Override
     protected DomainObject buildDomainObjectFromDto(DataTransferObject dataTransferObject) {
         DiscountDTO discountDTO = (DiscountDTO) dataTransferObject;
-
-        ArrayList<Product> products = new ArrayList<>();
-        if (discountDTO.getPids() != null)
-            for (Integer pid:
-                    discountDTO.getPids()) {
-                products.add(pCont.getProduct(pid));
-            }
-
-        return Discount.DiscountForSelling(discountDTO.getDid(), discountDTO.getName(), discountDTO.getDiscountPercent(), discountDTO.getStartDate(), discountDTO.getEndDate(), products);
+        return new Discount(discountDTO);
     }
 
     @Override
     protected DataTransferObject buildDtoFromDomainObject(DomainObject domainObject) {
-        return new DiscountDTO((Discount) domainObject);
+        Discount discount = (Discount) domainObject;
+        return new DiscountDTO(discount, pCont.getAllProductsWithDiscount(discount));
     }
 
 
@@ -62,7 +55,9 @@ public class DiscountController extends DomainController{
      * Add new discount by object to the hash map
      * @param discount The discount to add
      */
-    public void addDiscount(Discount discount){
+    public void addDiscount(Discount discount, ArrayList<Product> products){
+        // Apply the discount of each of the applicable products.
+        products.forEach((product)-> product.setSellingDiscount(discount));
         add(discount);
     }
 

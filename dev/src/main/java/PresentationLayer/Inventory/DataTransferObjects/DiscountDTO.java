@@ -1,6 +1,7 @@
 package PresentationLayer.Inventory.DataTransferObjects;
 
 import BusinessLayer.Inventory.DomainObjects.Discount;
+import BusinessLayer.Inventory.DomainObjects.Product;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -11,17 +12,10 @@ import java.util.ArrayList;
  */
 
 public class DiscountDTO extends DataTransferObject{
-    private final int did;
     private final String name;
     private final double discountPercent;
     private final LocalDateTime startDate;
     private final LocalDateTime endDate;
-    private final ArrayList<Integer> pids;
-
-    // Getters
-    public int getDid() {
-        return did;
-    }
 
     public String getName() {
         return name;
@@ -39,39 +33,29 @@ public class DiscountDTO extends DataTransferObject{
         return endDate;
     }
 
-    public ArrayList<Integer> getPids() {
-        return pids;
-    }
-
     // Constructors
-    public DiscountDTO(int did, String name, double discountPercent, LocalDateTime startDate, LocalDateTime endDate, ArrayList<Integer> pids) {
+    public DiscountDTO(int did, String name, double discountPercent, LocalDateTime startDate, LocalDateTime endDate) {
         super(did);
-        this.did = did;
         this.name = name;
         this.discountPercent = discountPercent;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.pids = pids;
     }
 
-    public DiscountDTO(Discount other) {
+    public DiscountDTO(Discount other, ArrayList<Product> products) {
         super(other.getId());
-        this.did = other.getId();
         this.name = other.getName();
         this.discountPercent = other.getDiscountPercent();
         this.startDate = other.getStartDate();
         this.endDate = other.getEndDate();
-        this.pids = new ArrayList<>();
-        other.getProducts().forEach((product)-> pids.add(product.getId()));
     }
 
     // Print
     public String toString(){
-        return  "DID:                " + did + "\n" +
+        return  "DID:                " + id + "\n" +
                 "Name:               " + name + "\n" +
                 "Discount Percent:   " + String.format("%.2f",discountPercent*100) + "%\n" +
                 "Start Date:         " + startDate.toLocalDate() + "\n" +
-                "End Date:           " + endDate.toLocalDate()  + "\n" +
-                "Applies to PIDs:    " + pids;
+                "End Date:           " + endDate.toLocalDate() ;
     }
 }

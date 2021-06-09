@@ -1,9 +1,6 @@
 package BusinessLayer.Inventory.Controllers;
 
-import BusinessLayer.Inventory.DomainObjects.Category;
-import BusinessLayer.Inventory.DomainObjects.DomainObject;
-import BusinessLayer.Inventory.DomainObjects.ItemGroup;
-import BusinessLayer.Inventory.DomainObjects.Product;
+import BusinessLayer.Inventory.DomainObjects.*;
 import DataAccessLayer.Inventory.DataAccessObjects.ItemGroupDAO;
 import DataAccessLayer.Inventory.DataAccessObjects.ProductDAO;
 import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
@@ -72,6 +69,17 @@ public class ProductController extends DomainController{
             }
         });
         return productsOfCategory;
+    }
+
+    public ArrayList<Product> getAllProductsWithDiscount(Discount discount){
+        ArrayList<Product> productsOfDiscount = new ArrayList<>();
+        ArrayList<Product> allProducts = getAllProducts();
+        allProducts.forEach((product)->{
+            if(product.getSellingDiscount() != null && product.getSellingDiscount().getId() == discount.getId()){
+                productsOfDiscount.add(product);
+            }
+        });
+        return productsOfDiscount;
     }
 
     @Override
