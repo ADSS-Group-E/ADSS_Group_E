@@ -38,8 +38,8 @@ public abstract class DomainController {
 
     // Adders
     protected void add(DomainObject domainObject){
-        DAO.insert(buildDtoFromDomainObject(domainObject));
-        identityMap.put(domainObject.getId(),domainObject);
+        if (DAO.insert(buildDtoFromDomainObject(domainObject)))
+            identityMap.put(domainObject.getId(),domainObject);
     }
 
     // Remover

@@ -21,6 +21,12 @@ public class DiscountController extends DomainController{
         this.pCont = pCont;
     }
 
+    // Internal for testing
+    protected DiscountController(ProductController pCont, DiscountDAO discountDAO) {
+        super(discountDAO);
+        this.pCont = pCont;
+    }
+
     // Getters
     public ArrayList<Discount> getAllDiscounts() {
         ArrayList<Discount> discounts = new ArrayList<>();

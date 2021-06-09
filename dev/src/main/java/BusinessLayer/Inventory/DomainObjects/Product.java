@@ -7,6 +7,7 @@ import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * This class represents Products.
@@ -215,4 +216,16 @@ public class Product extends DomainObject{
     }
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Double.compare(product.sellingPrice, sellingPrice) == 0 && minAmount == product.minAmount && name.equals(product.name) && storageLocation.equals(product.storageLocation) && storeLocation.equals(product.storeLocation) && manufacturer.equals(product.manufacturer) && category.equals(product.category) && storage.equals(product.storage) && store.equals(product.store) && Objects.equals(discount, product.discount);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, storageLocation, storeLocation, manufacturer, sellingPrice, minAmount, category, storage, store, discount);
+    }
 }

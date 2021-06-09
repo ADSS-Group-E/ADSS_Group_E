@@ -2,6 +2,8 @@ package BusinessLayer.Inventory.DomainObjects;
 
 import PresentationLayer.Inventory.DataTransferObjects.CategoryDTO;
 
+import java.util.Objects;
+
 /**
  * This class represents the category of the product.
  * Each product belongs to a category, sub category, and optional super category.
@@ -37,5 +39,18 @@ public class Category extends DomainObject{
 
     public Category getSuperCategory() {
         return superCategory;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Category category = (Category) o;
+        return name.equals(category.name) && Objects.equals(superCategory, category.superCategory);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, superCategory);
     }
 }

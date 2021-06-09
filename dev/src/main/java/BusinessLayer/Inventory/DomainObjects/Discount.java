@@ -4,6 +4,7 @@ import PresentationLayer.Inventory.DataTransferObjects.DiscountDTO;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * This class represents discounts for products.
@@ -57,4 +58,16 @@ public class Discount extends DomainObject{
         return (startDate.isBefore(LocalDateTime.now()) && endDate.isAfter(LocalDateTime.now()));
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Discount discount = (Discount) o;
+        return Double.compare(discount.discountPercent, discountPercent) == 0 && name.equals(discount.name) && startDate.equals(discount.startDate) && endDate.equals(discount.endDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, discountPercent, startDate, endDate);
+    }
 }

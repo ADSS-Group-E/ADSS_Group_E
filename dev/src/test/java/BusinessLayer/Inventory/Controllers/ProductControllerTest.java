@@ -23,6 +23,7 @@ class ProductControllerTest extends DomainControllerTest {
 
     //Sample data
     private Category sampleCategory;
+    private int sampleCategoryId;
 
     @BeforeEach
     void setUp() {
@@ -34,9 +35,12 @@ class ProductControllerTest extends DomainControllerTest {
         domainControllerSpy = spy(domainController);
 
         sampleDomainObjectId = 1;
-        sampleCategory = new Category(1,"Juice");
+        sampleCategoryId = 1;
+        sampleCategory = new Category(sampleCategoryId,"Juice");
         sampleDomainObject = new Product(sampleDomainObjectId, "Test Juice", "AB01","B13", "Test Company",10.5, 10.1, 5,sampleCategory);
         sampleDTO = new ProductDTO((Product) sampleDomainObject);
+
+        when(categoryController.getCategory(sampleCategoryId)).thenReturn(sampleCategory);
     }
 
     @Override

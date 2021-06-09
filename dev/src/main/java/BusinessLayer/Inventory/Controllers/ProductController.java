@@ -134,7 +134,9 @@ public class ProductController extends DomainController{
             return null;
         }
 
-        Discount discount = dCont.getDiscount(productDTO.getDiscountID());
+        Discount discount = null;
+        if (productDTO.getDiscountID() != null)
+            discount = dCont.getDiscount(productDTO.getDiscountID());
 
         // Load a product's itemGroups
         ArrayList<ItemGroupDTO> itemGroupDTOS = itemGroupDAO.selectByProduct(productDTO.getPid());

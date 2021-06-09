@@ -51,7 +51,7 @@ abstract class DomainControllerTest {
 
     @Test
     void addWhenNotAlreadyExists() {
-        when(domainControllerSpy.buildDtoFromDomainObject(sampleDomainObject)).thenReturn(sampleDTO);
+        doReturn(sampleDTO).when(domainControllerSpy).buildDtoFromDomainObject(sampleDomainObject);
         when(DAO.insert(sampleDTO)).thenReturn(true);
 
         callAddFunction(sampleDomainObject);
@@ -60,7 +60,7 @@ abstract class DomainControllerTest {
 
     @Test
     void addWhenAlreadyExists() {
-        when(domainControllerSpy.buildDtoFromDomainObject(sampleDomainObject)).thenReturn(sampleDTO);
+        doReturn(sampleDTO).when(domainControllerSpy).buildDtoFromDomainObject(sampleDomainObject);
         when(DAO.insert(sampleDTO)).thenReturn(false);
 
         callAddFunction(sampleDomainObject);
@@ -84,6 +84,12 @@ abstract class DomainControllerTest {
 
         callRemoveFunction(sampleDomainObjectId);
         assertNull(domainControllerSpy.identityMap.get(sampleDomainObjectId));
+    }
+
+    @Test
+    void buildDomainObjectFromDto(){
+        DomainObject result = domainControllerSpy.buildDomainObjectFromDto(sampleDTO);
+        assertEquals(sampleDomainObject , result);
     }
 
     abstract void callRemoveFunction(int id);
