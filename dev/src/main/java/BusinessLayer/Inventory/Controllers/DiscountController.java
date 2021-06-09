@@ -10,6 +10,7 @@ import DataAccessLayer.Inventory.DataAccessObjects.ProductDAO;
 import PresentationLayer.Inventory.DataTransferObjects.CategoryDTO;
 import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
 import PresentationLayer.Inventory.DataTransferObjects.DiscountDTO;
+import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,7 +59,7 @@ public class DiscountController extends DomainController{
 
     @Override
     protected DataTransferObject buildDtoFromDomainObject(DomainObject domainObject) {
-        return null;
+        return new DiscountDTO((Discount) domainObject);
     }
 
 

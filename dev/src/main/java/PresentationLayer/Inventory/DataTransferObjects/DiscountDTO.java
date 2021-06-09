@@ -50,6 +50,7 @@ public class DiscountDTO extends DataTransferObject{
 
     // Constructors
     public DiscountDTO(int did, String name, double discountPercent, LocalDateTime startDate, LocalDateTime endDate, ArrayList<Integer> pids, String type) {
+        super(did);
         this.did = did;
         this.name = name;
         this.discountPercent = discountPercent;
@@ -60,6 +61,7 @@ public class DiscountDTO extends DataTransferObject{
     }
 
     public DiscountDTO(Discount other) {
+        super(other.getId());
         this.did = other.getId();
         this.name = other.getName();
         this.discountPercent = other.getDiscountPercent();

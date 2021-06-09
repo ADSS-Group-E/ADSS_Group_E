@@ -28,7 +28,7 @@ public class ReportDAO extends DataAccessObject{
     }
 
     String createInsertString(ReportDTO report) {
-        return String.format("INSERT INTO Item (ID, creationDate, reportTag) " +
+        return String.format("INSERT INTO ItemGroup (ID, creationDate, reportTag) " +
                 "VALUES (%d, %s, %s);", report.getRid(), report.getCreated(), report.getTag());
     }
 }

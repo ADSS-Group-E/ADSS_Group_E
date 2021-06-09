@@ -9,7 +9,6 @@ import BusinessLayer.Inventory.Product;
  */
 
 public class ProductDTO extends DataTransferObject{
-    private final int pid;
     private final String name;
     private final String storageLocation;
     private final String storeLocation;
@@ -27,7 +26,7 @@ public class ProductDTO extends DataTransferObject{
 
     // Getters
     public int getPid() {
-        return pid;
+        return id;
     }
 
     public String getName() {
@@ -84,7 +83,7 @@ public class ProductDTO extends DataTransferObject{
 
     // Constructors
     public ProductDTO(int pid, String name, String storageLocation, String storeLocation, String manufacturer, double buyingPrice, double sellingPrice, int minAmount, int categoryId, int buyingDiscountID, int sellingDiscountID) {
-        this.pid = pid;
+        super(pid);
         this.name = name;
         this.storageLocation = storageLocation;
         this.storeLocation = storeLocation;
@@ -102,7 +101,7 @@ public class ProductDTO extends DataTransferObject{
     }
 
     public ProductDTO(Product other) {
-        this.pid = other.getId();
+        super(other.getId());
         this.name = other.getName();
         this.storageLocation = other.getStorageLocation();
         this.storeLocation = other.getStoreLocation();
@@ -127,7 +126,7 @@ public class ProductDTO extends DataTransferObject{
 
     // Print
     public String toString(){
-        return  "PID:                           " + pid + "\n" +
+        return  "PID:                           " + id + "\n" +
                 "Name:                          " + name + "\n" +
                 "Storage Location:              " + storageLocation + "\n" +
                 "Store Location:                " + storeLocation + "\n" +

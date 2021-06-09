@@ -18,12 +18,14 @@ public class CategoryDTO extends DataTransferObject{
     }
 
     public CategoryDTO(int cid, String name, int superCategoryId) {
+        super(cid);
         this.cid = cid;
         this.name = name;
         this.superCategoryId = superCategoryId;
     }
 
     public CategoryDTO (Category other) {
+        super(other.getId());
         this.cid = other.getId();
         this.name = other.getName();
         if (other.getSuperCategory()==null){

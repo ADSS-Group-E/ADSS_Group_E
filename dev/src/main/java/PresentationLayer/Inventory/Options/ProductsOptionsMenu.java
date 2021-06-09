@@ -124,7 +124,7 @@ public class ProductsOptionsMenu extends OptionsMenu {
     /**
      * This function adds a new item by prompting the user to enter the required information one field at a time.
      *
-     * The required data includes Product ID, Item ID, Expiration date (Year, month, day) and the item's location.
+     * The required data includes Product ID, ItemGroup ID, Expiration date (Year, month, day) and the item's location.
      *
      * Once entered, the Facade function is called to save the newly input item information.
      */
@@ -135,8 +135,11 @@ public class ProductsOptionsMenu extends OptionsMenu {
         System.out.println("Product ID:");
         int pid = in.nextInt();
 
-        System.out.println("Item ID:");
-        int id = in.nextInt();
+        System.out.println("Quantity:");
+        int quantity = in.nextInt();
+
+        System.out.println("Price Bought At:");
+        double priceBoughtAt = in.nextDouble();
 
         System.out.println("Expiration Year:");
         int expirationYear = in.nextInt();
@@ -151,17 +154,17 @@ public class ProductsOptionsMenu extends OptionsMenu {
         LocalDateTime expiration = LocalDate.of(expirationYear,expirationMonth,expirationDay).atStartOfDay();
 
         //Prompt the user for the item's location so it can be created accordingly
-        System.out.println("Item location?\n1 => Store\n2 => Storage");
+        System.out.println("ItemGroup location?\n1 => Store\n2 => Storage");
         int choice = in.nextInt();
 
         // Add the new item by calling the Facade function with the data the user just entered.
         switch (choice){
             case 1:
-                parentCLI.getFacade().addItemToStore(pid,id,expiration);
+                parentCLI.getFacade().addItemToStore(pid,quantity, priceBoughtAt, expiration);
                 System.out.println("The new item was added successfully.");
                 break;
             case 2:
-                parentCLI.getFacade().addItemToStorage(pid,id,expiration);
+                parentCLI.getFacade().addItemToStorage(pid, quantity, priceBoughtAt, expiration);
                 System.out.println("The new item was added successfully.");
                 break;
             default:
@@ -170,7 +173,7 @@ public class ProductsOptionsMenu extends OptionsMenu {
     }
 
     /**
-     * This function prompts the user to identify an existing item by entering it's Product ID and Item ID,
+     * This function prompts the user to identify an existing item by entering it's Product ID and ItemGroup ID,
      * and then proceeds to remove the item by calling the Facade function
      */
     public void removeItem(){
@@ -186,7 +189,7 @@ public class ProductsOptionsMenu extends OptionsMenu {
             System.out.println("The item was removed successfully.");
         }
         else {
-            System.out.println("Item removal was cancelled.");
+            System.out.println("ItemGroup removal was cancelled.");
         }
     }
 }

@@ -15,22 +15,22 @@ public class InvalidReport extends Report{
 
         this.products = products;
 
-        products.forEach((product) -> product.getExpiredItems().forEach(item -> AddRecord(item,product)));
+        products.forEach((product) -> product.getExpiredItems().forEach(itemGroup -> AddRecord(itemGroup,product)));
     }
 
     // Adder
-    private void AddRecord(Item item, Product product){
-        records.add(formatAsRecord(item, product));
+    private void AddRecord(ItemGroup itemGroup, Product product){
+        records.add(formatAsRecord(itemGroup, product));
     }
 
     // Print methods
-    private static String formatAsRecord(Item item, Product product){
-        return String.format("%-10d %-15d %-20s %-20s",item.getId(),product.getId(), product.getName(), item.getExpiration().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
+    private static String formatAsRecord(ItemGroup itemGroup, Product product){
+        return String.format("%-10d %-15d %-20s %-20s", itemGroup.getId(),product.getId(), product.getName(), itemGroup.getExpiration().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
     }
 
     @Override
     protected String headerRow() {
-        return String.format("%-10s %-15s %-20s %-20s","Item ID","Product PID","Product Name","Expiration");
+        return String.format("%-10s %-15s %-20s %-20s","ItemGroup ID","Product PID","Product Name","Expiration");
     }
 
     @Override

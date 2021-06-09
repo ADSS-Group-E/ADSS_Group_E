@@ -1,8 +1,9 @@
 package BusinessLayer.Inventory;
 
+import DataAccessLayer.Inventory.DataAccessObjects.ItemGroupDAO;
+import PresentationLayer.Inventory.DataTransferObjects.ItemGroupDTO;
 import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -19,22 +20,31 @@ public class Product extends DomainObject{
     private final double sellingPrice;
     private final int minAmount;
     private final Category category;
-    private final HashMap<Integer, Item> storage;
-    private final HashMap<Integer, Item> store;
+    private HashMap<Integer, ItemGroup> storage;
+    private HashMap<Integer, ItemGroup> store;
     private Discount buyingDiscount;
     private Discount sellingDiscount;
+
+    private final ItemGroupDAO itemGroupDAO;
 
     // Getters
     public String getName() {
         return name;
     }
 
-    public int getAmountInStorage(){
-        return storage.size();
-    }
+    public int getAmountInStorage(){ return getAmount(storage); }
 
     public int getAmountInStore(){
-        return store.size();
+        return getAmount(store);
+    }
+
+    private int getAmount(HashMap<Integer, ItemGroup> place){
+        int totalAmount = 0;
+        for (ItemGroup itemGroup:
+            place.values()) {
+            totalAmount += itemGroup.getQuantity();
+        }
+        return totalAmount;
     }
 
     public String getStorageLocation() {
@@ -73,6 +83,8 @@ public class Product extends DomainObject{
         return sellingDiscount;
     }
 
+
+
     // Constructors
     public Product(int pid, String name, String storageLocation, String storeLocation, String manufacturer, double buyingPrice, double sellingPrice, int minAmount, Category category) {
         super(pid);
@@ -88,6 +100,8 @@ public class Product extends DomainObject{
         this.store = new HashMap<>();
         this.buyingDiscount = null;
         this.sellingDiscount = null;
+
+        this.itemGroupDAO = new ItemGroupDAO();
     }
 
     public Product(ProductDTO other, Category category) {
@@ -102,15 +116,27 @@ public class Product extends DomainObject{
         this.storage = new HashMap<>();
         this.store = new HashMap<>();
         this.category = category;
+
+        this.itemGroupDAO = new ItemGroupDAO();
     }
 
     // Adders
-    public void addItemToStore(int id, LocalDateTime expiration){
-        store.put(id, new Item(id,expiration));
+    public void addItemGroupToStore(ItemGroup itemGroup){
+        ItemGroupDTO itemGroupDTO = new ItemGroupDTO(itemGroup);
+        itemGroupDTO.setLocation(ItemGroupDTO.Location.STORE);
+        itemGroupDTO.setPid(this.id);
+        int id = itemGroupDAO.insert(itemGroupDTO);
+        if (id != -1)
+            store.put(id, itemGroup);
     }
 
-    public void addItemToStorage(int id, LocalDateTime expiration){
-        storage.put(id, new Item(id,expiration));
+    public void addItemGroupToStorage(ItemGroup itemGroup){
+        ItemGroupDTO itemGroupDTO = new ItemGroupDTO(itemGroup);
+        itemGroupDTO.setLocation(ItemGroupDTO.Location.STORAGE);
+        itemGroupDTO.setPid(this.id);
+        int id = itemGroupDAO.insert(itemGroupDTO);
+        if (id != -1)
+            storage.put(id, itemGroup);
     }
 
     // Setters
@@ -165,27 +191,37 @@ public class Product extends DomainObject{
     }
 
 
-    public ArrayList<Item> getExpiredItems(){
-        ArrayList<Item> expiredItems = new ArrayList<>();
+    public ArrayList<ItemGroup> getExpiredItems(){
+        ArrayList<ItemGroup> expiredItemGroups = new ArrayList<>();
 
-        store.values().forEach((item)->{
-            if (item.isExpired()){
-                expiredItems.add(item);
+        store.values().forEach((itemGroup)->{
+            if (itemGroup.isExpired()){
+                expiredItemGroups.add(itemGroup);
             }
         });
 
-        storage.values().forEach((item)->{
-            if (item.isExpired()){
-                expiredItems.add(item);
+        storage.values().forEach((itemGroup)->{
+            if (itemGroup.isExpired()){
+                expiredItemGroups.add(itemGroup);
             }
         });
 
-        return expiredItems;
+        return expiredItemGroups;
     }
 
     // Remover
     public void removeItem(int id) {
         storage.remove(id);
         store.remove(id);
+    }
+
+
+
+    public void loadStore (HashMap<Integer, ItemGroup> store){
+        this.store = store;
+    }
+
+    public void loadStorage (HashMap<Integer, ItemGroup> storage){
+        this.storage = storage;
     }
 }

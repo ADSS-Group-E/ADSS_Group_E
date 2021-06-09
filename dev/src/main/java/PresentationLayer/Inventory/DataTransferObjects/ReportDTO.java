@@ -13,6 +13,7 @@ public class ReportDTO extends DataTransferObject{
     private String tag;
 
     public ReportDTO(int rid, LocalDateTime created, String tag) {
+        super(rid);
         this.rid = rid;
         this.created = created;
         this.tag = tag;

@@ -12,8 +12,8 @@ CREATE TABLE IF NOT EXISTS "Contact" (
 	"contactName"	TEXT NOT NULL,
 	"email"	TEXT NOT NULL,
 	"companyNumber"	INTEGER NOT NULL,
-	PRIMARY KEY("contactName","email","companyNumber"),
-	FOREIGN KEY("companyNumber") REFERENCES "Supplier"("companyNumber")
+	FOREIGN KEY("companyNumber") REFERENCES "Supplier"("companyNumber"),
+	PRIMARY KEY("contactName","email","companyNumber")
 );
 DROP TABLE IF EXISTS "QuantityWriter";
 CREATE TABLE IF NOT EXISTS "QuantityWriter" (
@@ -21,8 +21,8 @@ CREATE TABLE IF NOT EXISTS "QuantityWriter" (
 	"minPriceDiscount"	INTEGER,
 	"regularCostumerDiscount"	INTEGER,
 	"companyNumber"	INTEGER,
-	PRIMARY KEY("ID"),
-	FOREIGN KEY("companyNumber") REFERENCES "Supplier"("companyNumber")
+	FOREIGN KEY("companyNumber") REFERENCES "Supplier"("companyNumber"),
+	PRIMARY KEY("ID")
 );
 DROP TABLE IF EXISTS "InventoryItem";
 CREATE TABLE IF NOT EXISTS "InventoryItem" (
@@ -30,8 +30,8 @@ CREATE TABLE IF NOT EXISTS "InventoryItem" (
 	"manufacturer"	TEXT NOT NULL,
 	"location"	INTEGER NOT NULL,
 	"quantity"	INTEGER NOT NULL,
-	PRIMARY KEY("name","location"),
-	FOREIGN KEY("name") REFERENCES "Item"("name")
+	FOREIGN KEY("name") REFERENCES "ItemGroup"("name"),
+	PRIMARY KEY("name","location")
 );
 DROP TABLE IF EXISTS "SpecificProduct";
 CREATE TABLE IF NOT EXISTS "SpecificProduct" (
@@ -44,8 +44,8 @@ CREATE TABLE IF NOT EXISTS "Category" (
 	"ID"	INTEGER NOT NULL,
 	"name"	TEXT NOT NULL,
 	"superID"	INTEGER,
-	PRIMARY KEY("ID"),
-	FOREIGN KEY("superID") REFERENCES "Category"("ID")
+	FOREIGN KEY("superID") REFERENCES "Category"("ID"),
+	PRIMARY KEY("ID")
 );
 DROP TABLE IF EXISTS "Report";
 CREATE TABLE IF NOT EXISTS "Report" (
@@ -60,13 +60,7 @@ CREATE TABLE IF NOT EXISTS "StepDiscount" (
 	"stepPrice"	INTEGER NOT NULL,
 	"precentage"	INTEGER NOT NULL,
 	"QWID"	INTEGER NOT NULL,
-	PRIMARY KEY("ID" AUTOINCREMENT),
-	FOREIGN KEY("QWID") REFERENCES "QuantityWriter"("ID")
-);
-DROP TABLE IF EXISTS "Item";
-CREATE TABLE IF NOT EXISTS "Item" (
-	"name"	TEXT NOT NULL,
-	"ID"	INTEGER NOT NULL,
+	FOREIGN KEY("QWID") REFERENCES "QuantityWriter"("ID"),
 	PRIMARY KEY("ID" AUTOINCREMENT)
 );
 DROP TABLE IF EXISTS "OrderItems";
@@ -76,10 +70,10 @@ CREATE TABLE IF NOT EXISTS "OrderItems" (
 	"orderID"	INTEGER NOT NULL,
 	"price"	INTEGER NOT NULL CHECK("price" >= 0),
 	"quantity"	INTEGER NOT NULL CHECK("quantity" >= 0),
-	PRIMARY KEY("productID","companyNumber","orderID"),
-	FOREIGN KEY("productID") REFERENCES "Product"("ID"),
 	FOREIGN KEY("companyNumber") REFERENCES "Supplier"("companyNumber"),
-	FOREIGN KEY("orderID") REFERENCES "SOrder"("orderID")
+	FOREIGN KEY("orderID") REFERENCES "SOrder"("orderID"),
+	FOREIGN KEY("productID") REFERENCES "Product"("ID"),
+	PRIMARY KEY("productID","companyNumber","orderID")
 );
 DROP TABLE IF EXISTS "SupplierItem";
 CREATE TABLE IF NOT EXISTS "SupplierItem" (
@@ -89,9 +83,9 @@ CREATE TABLE IF NOT EXISTS "SupplierItem" (
 	"quantity"	TEXT NOT NULL CHECK("quantity" >= 0),
 	"price"	INTEGER NOT NULL,
 	"supplierCN"	INTEGER,
-	PRIMARY KEY("productID","companyNumber"),
 	FOREIGN KEY("companyNumber") REFERENCES "Supplier"("companyNumber"),
-	FOREIGN KEY("productID") REFERENCES "Product"("ID")
+	FOREIGN KEY("productID") REFERENCES "Product"("ID"),
+	PRIMARY KEY("productID","companyNumber")
 );
 DROP TABLE IF EXISTS "Product";
 CREATE TABLE IF NOT EXISTS "Product" (
@@ -106,9 +100,9 @@ CREATE TABLE IF NOT EXISTS "Product" (
 	"categoryID"	INTEGER NOT NULL,
 	"buyDiscountID"	INTEGER,
 	"sellDiscountID"	INTEGER,
-	PRIMARY KEY("ID"),
 	FOREIGN KEY("sellDiscountID") REFERENCES "Discount"("ID"),
-	FOREIGN KEY("buyDiscountID") REFERENCES "Discount"("ID")
+	FOREIGN KEY("buyDiscountID") REFERENCES "Discount"("ID"),
+	PRIMARY KEY("ID")
 );
 DROP TABLE IF EXISTS "Discount";
 CREATE TABLE IF NOT EXISTS "Discount" (
@@ -127,5 +121,16 @@ CREATE TABLE IF NOT EXISTS "SOrder" (
 	"periodicDelivery"	BOOLEAN NOT NULL CHECK("periodicDelivery" IN (0, 1)),
 	"needsDelivery"	BOOLEAN NOT NULL CHECK("needsDelivery" IN (0, 1)),
 	PRIMARY KEY("orderID" AUTOINCREMENT)
+);
+DROP TABLE IF EXISTS "ItemGroup";
+CREATE TABLE IF NOT EXISTS "ItemGroup" (
+	"ID"	INTEGER NOT NULL,
+	"PID"	INTEGER NOT NULL,
+	"location"	INTEGER NOT NULL,
+	"quantity"	INTEGER NOT NULL,
+	"priceBoughtAt"	REAL NOT NULL,
+	"expiration"	TEXT NOT NULL,
+	FOREIGN KEY("PID") REFERENCES "Product"("ID"),
+	PRIMARY KEY("ID" AUTOINCREMENT)
 );
 COMMIT;

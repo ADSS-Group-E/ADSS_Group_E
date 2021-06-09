@@ -2,12 +2,16 @@ package BusinessLayer.Inventory.Controllers;
 
 import BusinessLayer.Inventory.Category;
 import BusinessLayer.Inventory.DomainObject;
+import BusinessLayer.Inventory.ItemGroup;
 import BusinessLayer.Inventory.Product;
+import DataAccessLayer.Inventory.DataAccessObjects.ItemGroupDAO;
 import DataAccessLayer.Inventory.DataAccessObjects.ProductDAO;
 import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
+import PresentationLayer.Inventory.DataTransferObjects.ItemGroupDTO;
 import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * This class represents the product controller.
@@ -15,12 +19,13 @@ import java.util.ArrayList;
  */
 public class ProductController extends DomainController{
     private final CategoryController cCont;
-    // Indicates all products have already been loaded so don't need to call selectAll again
-    private boolean loadedAll = false;
+    private final ItemGroupDAO itemGroupDAO;
+
 
     public ProductController(CategoryController cCont) {
         super(new ProductDAO("jdbc:sqlite::resource:module.db"));
         this.cCont = cCont;
+        itemGroupDAO = new ItemGroupDAO();
     }
 
     // Getter
@@ -71,7 +76,25 @@ public class ProductController extends DomainController{
             return null;
         }
 
-        return new Product(productDTO, category);
+        // Load a product's itemGroups
+        ArrayList<ItemGroupDTO> itemGroupDTOS = itemGroupDAO.selectByProduct(productDTO.getPid());
+        HashMap<Integer,ItemGroup> store = new HashMap<>();
+        HashMap<Integer,ItemGroup> storage = new HashMap<>();
+
+        for (ItemGroupDTO itemGroupDTO:
+             itemGroupDTOS) {
+            if (itemGroupDTO.getLocation() == ItemGroupDTO.Location.STORE){
+                store.put(itemGroupDTO.getPid(), new ItemGroup(itemGroupDTO));
+            }
+            if (itemGroupDTO.getLocation() == ItemGroupDTO.Location.STORAGE){
+                storage.put(itemGroupDTO.getPid(), new ItemGroup(itemGroupDTO));
+            }
+        }
+        Product product = new Product(productDTO, category);
+        product.loadStorage(storage);
+        product.loadStore(store);
+
+        return product;
     }
 
     @Override

@@ -35,14 +35,14 @@ class PresentationHandler {
                 for(String[] realItem : list) { //prints existing items
                     outputService.println("[Name: " + realItem[0] + "]");
                 }
-                number = inputService.nextInt("Enter Item ID: "); //user enters number
-                int quantity = inputService.nextInt("Enter Item quantity: "); //user enters quantity
+                number = inputService.nextInt("Enter ItemGroup ID: "); //user enters number
+                int quantity = inputService.nextInt("Enter ItemGroup quantity: "); //user enters quantity
                 item = service.getSpecificItem(supplierNum, number); //we get the rest of the item from our data
                 while (item.length != 5) {
                     //while we didn't recieve an item or the quantity can't be taken from the supplier
                     outputService.println("Please try again.");
-                    number = inputService.nextInt("Enter Item ID: "); //user enters new number
-                    quantity = inputService.nextInt("Enter Item quantity: "); //user enters new quantity
+                    number = inputService.nextInt("Enter ItemGroup ID: "); //user enters new number
+                    quantity = inputService.nextInt("Enter ItemGroup quantity: "); //user enters new quantity
                     item = service.getSpecificItem(supplierNum, number); //we get the rest of the item from our data
                 }
                 String[] order = {item[0], item[1], (quantity) + "", item[3]}; //we create a string order using our data and the new quantity
@@ -60,7 +60,7 @@ class PresentationHandler {
                 else { //it exists
                     outputService.println("This item already exists.");
                 }
-                outputService.println("Add another Item? N/Y ");
+                outputService.println("Add another ItemGroup? N/Y ");
             }
             else { //else it's illegal input
                 outputService.println("please try again");
@@ -81,21 +81,21 @@ class PresentationHandler {
                 for(String[] item : list) { //prints existing items
                     outputService.println("[ID: " + item[0] + ", Name: ]" + item[1]);
                 }
-                String id = inputService.nextInt("Enter Item ID: ") + "";
-                String name = inputService.next("Enter Item Name: "); //gets item name from user
+                String id = inputService.nextInt("Enter ItemGroup ID: ") + "";
+                String name = inputService.next("Enter ItemGroup Name: "); //gets item name from user
                 String[] equalBy = {id};
                 if (service.contains(equalBy, list)) { //checks if the item exists in the order using it's name
                     outputService.println("This item already exists.");
                 }
                 else { //if it doesn't exist
                     //user enters the rest of the data
-                    String price = inputService.nextInt("Enter Item price: ") + "";
-                    String quantity = inputService.nextInt("Enter Item quantity: ") + "";
-                    String supplierCN = inputService.nextInt("Enter Item catalog number: ") + "";
+                    String price = inputService.nextInt("Enter ItemGroup price: ") + "";
+                    String quantity = inputService.nextInt("Enter ItemGroup quantity: ") + "";
+                    String supplierCN = inputService.nextInt("Enter ItemGroup catalog number: ") + "";
                     String[] order = {id, name, quantity, price, supplierCN}; //we create an order an add it to the list
                     list.add(order);
                 }
-                outputService.println("Add another Item? N/Y ");
+                outputService.println("Add another ItemGroup? N/Y ");
             }
             else {
                 outputService.println("please try again");
@@ -193,7 +193,7 @@ class PresentationHandler {
      int showOptions(){
         //prints the options of the menu
         String[] options = new String[]{
-                "Add Supplier", "Create Order", "Get Weekly Orders", "Update Order Item Quantity", "Delete Item From Order"
+                "Add Supplier", "Create Order", "Get Weekly Orders", "Update Order ItemGroup Quantity", "Delete ItemGroup From Order"
         };
         outputService.println("Menu:");
         for(int i = 0; i < options.length; i++){

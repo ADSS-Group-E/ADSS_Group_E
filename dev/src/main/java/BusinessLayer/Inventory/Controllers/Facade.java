@@ -1,11 +1,9 @@
 package BusinessLayer.Inventory.Controllers;
 
-import BusinessLayer.Inventory.Category;
-import BusinessLayer.Inventory.Discount;
-import BusinessLayer.Inventory.Product;
-import BusinessLayer.Inventory.Report;
+import BusinessLayer.Inventory.*;
 import PresentationLayer.Inventory.DataTransferObjects.CategoryDTO;
 import PresentationLayer.Inventory.DataTransferObjects.DiscountDTO;
+import PresentationLayer.Inventory.DataTransferObjects.ItemGroupDTO;
 import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
 
 import java.time.LocalDateTime;
@@ -56,12 +54,14 @@ public class Facade {
     }
 
     // Adders
-    public void addItemToStore(int pid, int id, LocalDateTime expiration){
-        pCont.getProduct(pid).addItemToStore(id,expiration);
+    public void addItemToStore(int pid, int quantity, double priceBoughtAt, LocalDateTime expiration){
+        ItemGroup itemGroup = new ItemGroup(quantity, priceBoughtAt, expiration);
+        pCont.getProduct(pid).addItemGroupToStore(itemGroup);
     }
 
-    public void addItemToStorage(int pid, int id, LocalDateTime expiration){
-        pCont.getProduct(pid).addItemToStorage(id,expiration);
+    public void addItemToStorage(int pid,  int quantity, double priceBoughtAt, LocalDateTime expiration){
+        ItemGroup itemGroup = new ItemGroup(quantity, priceBoughtAt, expiration);
+        pCont.getProduct(pid).addItemGroupToStorage(itemGroup);
     }
 
     // Removers
