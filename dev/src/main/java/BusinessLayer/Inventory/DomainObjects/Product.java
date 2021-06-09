@@ -7,7 +7,6 @@ import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 /**
  * This class represents Products.
@@ -23,7 +22,7 @@ public class Product extends DomainObject{
     private final Category category;
     private HashMap<Integer, ItemGroup> storage;
     private HashMap<Integer, ItemGroup> store;
-    private Discount sellingDiscount;
+    private Discount discount;
 
     private final ProductDAO productDAO;
     private final ItemGroupDAO itemGroupDAO;
@@ -72,8 +71,8 @@ public class Product extends DomainObject{
         return category;
     }
 
-    public Discount getSellingDiscount() {
-        return sellingDiscount;
+    public Discount getDiscount() {
+        return discount;
     }
 
 
@@ -90,7 +89,7 @@ public class Product extends DomainObject{
         this.category = category;
         this.storage = new HashMap<>();
         this.store = new HashMap<>();
-        this.sellingDiscount = null;
+        this.discount = null;
 
         this.productDAO = new ProductDAO();
         this.itemGroupDAO = new ItemGroupDAO();
@@ -131,16 +130,16 @@ public class Product extends DomainObject{
             storage.put(id, itemGroup);
     }
 
-    public void setSellingDiscount(Discount sellingDiscount) {
-        this.sellingDiscount = sellingDiscount;
+    public void setDiscount(Discount discount) {
+        this.discount = discount;
         productDAO.update(new ProductDTO(this));
 
     }
 
     // More getters
     public double getSellingPriceAfterDiscount(){
-        if (sellingDiscount !=null && sellingDiscount.discountValid()){
-            return (1- sellingDiscount.getDiscountPercent()) * sellingPrice;
+        if (discount !=null && discount.discountValid()){
+            return (1- discount.getDiscountPercent()) * sellingPrice;
         }
         else{
             return sellingPrice;

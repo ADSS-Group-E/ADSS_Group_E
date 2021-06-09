@@ -57,7 +57,7 @@ public class DiscountController extends DomainController{
      */
     public void addDiscount(Discount discount, ArrayList<Product> products){
         // Apply the discount of each of the applicable products.
-        products.forEach((product)-> product.setSellingDiscount(discount));
+        products.forEach((product)-> product.setDiscount(discount));
         add(discount);
     }
 

@@ -75,7 +75,7 @@ public class ProductController extends DomainController{
         ArrayList<Product> productsOfDiscount = new ArrayList<>();
         ArrayList<Product> allProducts = getAllProducts();
         allProducts.forEach((product)->{
-            if(product.getSellingDiscount() != null && product.getSellingDiscount().getId() == discount.getId()){
+            if(product.getDiscount() != null && product.getDiscount().getId() == discount.getId()){
                 productsOfDiscount.add(product);
             }
         });

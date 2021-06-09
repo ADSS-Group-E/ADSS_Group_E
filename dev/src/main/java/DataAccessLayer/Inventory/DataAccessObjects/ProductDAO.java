@@ -4,7 +4,6 @@ import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
 import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
 
 import java.sql.*;
-import java.util.ArrayList;
 
 public class ProductDAO extends DataAccessObject {
 
@@ -34,10 +33,10 @@ public class ProductDAO extends DataAccessObject {
         pstmt.setDouble(6, productDTO.getSellingPrice());
         pstmt.setInt(7,productDTO.getMinAmount());
         pstmt.setInt(8,productDTO.getCategoryId());
-        if (productDTO.getSellingDiscountID() == null)
+        if (productDTO.getDiscountID() == null)
             pstmt.setNull(9,Types.INTEGER);
         else
-            pstmt.setInt(9, productDTO.getSellingDiscountID());
+            pstmt.setInt(9, productDTO.getDiscountID());
         return pstmt;
     }
 
@@ -57,10 +56,10 @@ public class ProductDAO extends DataAccessObject {
         pstmt.setDouble(6, productDTO.getSellingPrice());
         pstmt.setInt(7,productDTO.getMinAmount());
         pstmt.setInt(8,productDTO.getCategoryId());
-        if (productDTO.getSellingDiscountID() == null)
+        if (productDTO.getDiscountID() == null)
             pstmt.setNull(9,Types.INTEGER);
         else
-            pstmt.setInt(9, productDTO.getSellingDiscountID());
+            pstmt.setInt(9, productDTO.getDiscountID());
         return pstmt;
     }
 

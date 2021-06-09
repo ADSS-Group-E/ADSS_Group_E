@@ -18,7 +18,7 @@ public class ProductDTO extends DataTransferObject{
     private final double sellingPriceAfterDiscount;
     private final int minAmount;
     private final int categoryId;
-    private final int sellingDiscountID;
+    private final int discountID;
 
     // Getters
     public int getPid() {
@@ -57,14 +57,14 @@ public class ProductDTO extends DataTransferObject{
         return categoryId;
     }
 
-    public Integer getSellingDiscountID() {
-        if (sellingDiscountID == -1)
+    public Integer getDiscountID() {
+        if (discountID == -1)
             return null;
-        return sellingDiscountID;
+        return discountID;
     }
 
     // Constructors
-    public ProductDTO(int pid, String name, String storageLocation, String storeLocation, String manufacturer, double sellingPrice, int minAmount, int categoryId, int sellingDiscountID) {
+    public ProductDTO(int pid, String name, String storageLocation, String storeLocation, String manufacturer, double sellingPrice, int minAmount, int categoryId, int discountID) {
         super(pid);
         this.name = name;
         this.storageLocation = storageLocation;
@@ -76,7 +76,7 @@ public class ProductDTO extends DataTransferObject{
         this.minAmount = minAmount;
         this.sellingPriceAfterDiscount = sellingPrice;
         this.categoryId = categoryId;
-        this.sellingDiscountID = sellingDiscountID;
+        this.discountID = discountID;
     }
 
     public ProductDTO(Product other) {
@@ -91,10 +91,10 @@ public class ProductDTO extends DataTransferObject{
         this.sellingPriceAfterDiscount = other.getSellingPriceAfterDiscount();
         this.minAmount = other.getMinAmount();
         this.categoryId = other.getCategory().getId();
-        if (other.getSellingDiscount() != null)
-            this.sellingDiscountID = other.getSellingDiscount().getId();
+        if (other.getDiscount() != null)
+            this.discountID = other.getDiscount().getId();
         else
-            this.sellingDiscountID = -1;
+            this.discountID = -1;
     }
 
     // Print
@@ -110,6 +110,6 @@ public class ProductDTO extends DataTransferObject{
                 "Selling Price after Discount:  " + sellingPriceAfterDiscount + "\n" +
                 "Min Amount:                    " + minAmount + "\n" +
                 "Category ID:                   " + categoryId + "\n" +
-                "Discount ID:                   " + sellingDiscountID ;
+                "Discount ID:                   " + discountID;
     }
 }
