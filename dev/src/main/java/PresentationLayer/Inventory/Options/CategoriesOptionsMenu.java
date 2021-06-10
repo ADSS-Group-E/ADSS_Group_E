@@ -58,7 +58,7 @@ public class CategoriesOptionsMenu extends OptionsMenu {
      *
      * The required data includes Category ID, name and Super-Category ID if relevant.
      *
-     * Once entered, the Facade function is called to save the newly input category information.
+     * Once entered, the InventoryFacade function is called to save the newly input category information.
      */
     public void addCategory(){
         System.out.println("Please enter the ID of the category you wish to add");
@@ -71,11 +71,11 @@ public class CategoriesOptionsMenu extends OptionsMenu {
         try{
             int superCategoryId;
             superCategoryId = Integer.parseInt(in.nextLine());
-            // Add the new category with super-category by calling the Facade function with the data the user just entered.
+            // Add the new category with super-category by calling the InventoryFacade function with the data the user just entered.
             parentCLI.getFacade().addCategory(new CategoryDTO(cid, name,superCategoryId));
         }
         catch(NumberFormatException e){
-            // Add the new category by calling the Facade function with the data the user just entered.
+            // Add the new category by calling the InventoryFacade function with the data the user just entered.
             parentCLI.getFacade().addCategory(cid,name);
         }
         System.out.println("The new category was added successfully.");
@@ -83,7 +83,7 @@ public class CategoriesOptionsMenu extends OptionsMenu {
 
     /**
      * This function prompts the user to end the ID of a category they wish to remove,
-     * and then proceeds to remove the category by calling the Facade function
+     * and then proceeds to remove the category by calling the InventoryFacade function
      */
     public void removeCategory(){
         System.out.println("Please enter the category id you wish to remove:");
@@ -91,7 +91,7 @@ public class CategoriesOptionsMenu extends OptionsMenu {
         System.out.println("Are you sure you want to remove the category? Enter \"y\" to remove.");
         String verify = in.next().trim();
         if (verify.equals("y")) {
-            // Remove the category by calling the Facade function with the ID the user just entered.
+            // Remove the category by calling the InventoryFacade function with the ID the user just entered.
             parentCLI.getFacade().removeCategory(cid);
             System.out.println("The category was removed successfully.");
         }

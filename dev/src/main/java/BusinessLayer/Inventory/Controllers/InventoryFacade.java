@@ -12,17 +12,17 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
- * This class represents the Facade of the project.
+ * This class represents the InventoryFacade of the project.
  * The purpose of the facade is to act as a go-between the Presentation and Business layers of the system,
  * thereby hiding it's complexities and providing an interface to the client using the system.
  */
-public class Facade {
+public class InventoryFacade {
     private final ProductController pCont;
     private final ReportController rCont;
     private final CategoryController cCont;
     private final DiscountController dCont;
 
-    public Facade(ProductController pCont, ReportController rCont, CategoryController cCont, DiscountController dCont) {
+    public InventoryFacade(ProductController pCont, ReportController rCont, CategoryController cCont, DiscountController dCont) {
         this.pCont = pCont;
         this.rCont = rCont;
         this.cCont = cCont;

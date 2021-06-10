@@ -62,7 +62,7 @@ public class ProductsOptionsMenu extends OptionsMenu {
      * The required data includes Product ID, name, store location, storage location, manufacturer,
      * buying and selling price, minimum amount and product category.
      *
-     * Once entered, the Facade function is called to save the newly input product information.
+     * Once entered, the InventoryFacade function is called to save the newly input product information.
      */
     public void addProduct(){
 
@@ -97,14 +97,14 @@ public class ProductsOptionsMenu extends OptionsMenu {
         System.out.println("Category ID:");
         int categoryId = in.nextInt();
 
-        // Add the new product by calling the Facade function with the data the user just entered.
+        // Add the new product by calling the InventoryFacade function with the data the user just entered.
         parentCLI.getFacade().addProduct(new ProductDTO(pid, name, storageLocation, storeLocation , manufacturer, sellingPrice, minAmount,categoryId, -1));
         System.out.println("The new product was added successfully.");
     }
 
     /**
      * This function prompts the user to end the ID of a product they wish to remove,
-     * and then proceeds to remove the product by calling the Facade function
+     * and then proceeds to remove the product by calling the InventoryFacade function
      */
     public void removeProduct(){
         System.out.println("Please enter the product id for the product you wish to remove:");
@@ -112,7 +112,7 @@ public class ProductsOptionsMenu extends OptionsMenu {
         System.out.println("Are you sure you want to remove the product? Enter \"y\" to remove.");
         String verify = in.next().trim();
         if (verify.equals("y")) {
-            // Remove the product by calling the Facade function with the ID the user just entered.
+            // Remove the product by calling the InventoryFacade function with the ID the user just entered.
             parentCLI.getFacade().removeProduct(pid);
             System.out.println("The product was removed successfully.");
         }
@@ -126,7 +126,7 @@ public class ProductsOptionsMenu extends OptionsMenu {
      *
      * The required data includes Product ID, ItemGroup ID, Expiration date (Year, month, day) and the item's location.
      *
-     * Once entered, the Facade function is called to save the newly input item information.
+     * Once entered, the InventoryFacade function is called to save the newly input item information.
      */
 
     public void addItem(){
@@ -157,7 +157,7 @@ public class ProductsOptionsMenu extends OptionsMenu {
         System.out.println("ItemGroup location?\n1 => Store\n2 => Storage");
         int choice = in.nextInt();
 
-        // Add the new item by calling the Facade function with the data the user just entered.
+        // Add the new item by calling the InventoryFacade function with the data the user just entered.
         switch (choice){
             case 1:
                 parentCLI.getFacade().addItemToStore(pid,quantity, priceBoughtAt, expiration);
@@ -174,7 +174,7 @@ public class ProductsOptionsMenu extends OptionsMenu {
 
     /**
      * This function prompts the user to identify an existing item by entering it's Product ID and ItemGroup ID,
-     * and then proceeds to remove the item by calling the Facade function
+     * and then proceeds to remove the item by calling the InventoryFacade function
      */
     public void removeItem(){
         System.out.println("Please enter the PRODUCT ID of the item you wish to remove:");
@@ -184,7 +184,7 @@ public class ProductsOptionsMenu extends OptionsMenu {
         System.out.println("Are you sure you want to remove the item? Enter \"y\" to remove.");
         String verify = in.next().trim();
         if (verify.equals("y")) {
-            // Remove the item by calling the Facade function with the data the user just entered.
+            // Remove the item by calling the InventoryFacade function with the data the user just entered.
             parentCLI.getFacade().removeItem(pid,id);
             System.out.println("The item was removed successfully.");
         }
