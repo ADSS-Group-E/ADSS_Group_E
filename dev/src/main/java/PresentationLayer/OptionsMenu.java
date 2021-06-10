@@ -3,9 +3,12 @@ package PresentationLayer;
 
 import PresentationLayer.CommandLineInterface;
 import PresentationLayer.Option;
+import PresentationLayer.Workers_Transport.QualificationsDTO;
+import PresentationLayer.Workers_Transport.WorkerDTO;
 
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.TreeMap;
 
 public abstract class OptionsMenu {
@@ -21,9 +24,12 @@ public abstract class OptionsMenu {
 
 
     protected TreeMap<Integer, Option> options;
+    protected TreeMap<Integer, Option> authorizedOptions;
+
     protected CommandLineInterface parentCLI;
     protected boolean goBack;
     protected Scanner in;
+    protected String prompt = "\nPlease choose an option:";
 
     public OptionsMenu(CommandLineInterface parentCLI) {
 
@@ -31,6 +37,16 @@ public abstract class OptionsMenu {
         this.parentCLI = parentCLI;
         goBack=false;
         in = new Scanner(System.in);
+        setAuthorizedOptions(parentCLI.getLoggedInWorker());
+    }
+
+    private void setAuthorizedOptions(WorkerDTO loggedInWorker){
+        int i = 1;
+        for (Map.Entry<Integer, Option> entry : options.entrySet()) {
+            Option option = entry.getValue();
+            if (option.checkQualified(loggedInWorker))
+                authorizedOptions.put(i, entry.getValue());
+        }
     }
 
     /*
@@ -38,7 +54,7 @@ public abstract class OptionsMenu {
      */
     public void displayOptions(){
 
-        System.out.println("\nPlease choose an option:");
+        System.out.println(prompt);
         for (Map.Entry<Integer, Option> entry : options.entrySet()) {
             System.out.println(ANSI_GREEN + entry.getKey()+ " => "  + entry.getValue().getDescription() +  ANSI_RESET);
         }

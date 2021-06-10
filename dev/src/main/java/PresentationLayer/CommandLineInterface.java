@@ -10,6 +10,7 @@ import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
 import PresentationLayer.Inventory.Options.*;
 import PresentationLayer.Supplier.ServiceController;
 import PresentationLayer.Supplier.SupplierOptionsMenu;
+import PresentationLayer.Workers_Transport.WorkerDTO;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -30,6 +31,7 @@ public class CommandLineInterface {
     private final InventoryFacade inventoryFacade;
     private final OrderFromReportHandler orderFromReportHandler;
     private final ServiceController serviceController;
+    private final LoginOptionsMenu loginOptionsMenu;
     private final MainOptionsMenu mainOptionsMenu;
     private final MainInventoryOptionsMenu mainInventoryOptionsMenu;
     private final SupplierOptionsMenu supplierOptionsMenu;
@@ -37,6 +39,7 @@ public class CommandLineInterface {
     private final CategoriesOptionsMenu categoriesOptionsMenu;
     private final DiscountsOptionsMenu discountsOptionsMenu;
     private final ReportsOptionsMenu reportsOptionsMenu;
+    private WorkerDTO loggedInWorker;
 
     // Getters
     public InventoryFacade getFacade() {
@@ -71,6 +74,14 @@ public class CommandLineInterface {
         return reportsOptionsMenu;
     }
 
+    public WorkerDTO getLoggedInWorker() {
+        return loggedInWorker;
+    }
+
+    public void setLoggedInWorker(WorkerDTO loggedInWorker) {
+        this.loggedInWorker = loggedInWorker;
+    }
+
     public CommandLineInterface() {
         CategoryController cCont = new CategoryController();
         ProductController pCont = new ProductController(cCont);
@@ -85,6 +96,7 @@ public class CommandLineInterface {
         orderFromReportHandler = new OrderFromReportHandler(rCont,sCont);
         serviceController = new ServiceController(sCont);
 
+        loginOptionsMenu = new LoginOptionsMenu(this);
         mainOptionsMenu = new MainOptionsMenu(this);
         mainInventoryOptionsMenu = new MainInventoryOptionsMenu(this);
         supplierOptionsMenu = new SupplierOptionsMenu(this);
@@ -155,10 +167,10 @@ public class CommandLineInterface {
 
         serviceController.initialize();
     }
-//    public ProductDTO(int pid, String name, String storageLocation, String storeLocation, int amountInStorage, int amountInStore, String manufacturer, double buyingPrice, double sellingPrice, int minAmount) {
+
     public void run() {
-        System.out.println("SUPER-LI Inventory and Supplier Module");
-        mainOptionsMenu.enter();
+        System.out.println("SUPER-LI Management System");
+        loginOptionsMenu.enter();
     }
 }
 
