@@ -1,12 +1,8 @@
 package BusinessLayer.Inventory.Controllers;
 
-import BusinessLayer.Inventory.Category;
 import BusinessLayer.Inventory.Discount;
 import BusinessLayer.Inventory.Product;
-import DataAccessLayer.Inventory.DataAccessObjects.CategoryDAO;
 import DataAccessLayer.Inventory.DataAccessObjects.DiscountDAO;
-import DataAccessLayer.Inventory.DataAccessObjects.ProductDAO;
-import PresentationLayer.Inventory.DataTransferObjects.CategoryDTO;
 import PresentationLayer.Inventory.DataTransferObjects.DiscountDTO;
 
 import java.util.ArrayList;

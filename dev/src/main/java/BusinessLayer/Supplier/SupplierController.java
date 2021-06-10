@@ -4,12 +4,10 @@ import DataAccessLayer.Supplier.DataController;
 import PresentationLayer.Inventory.DataTransferObjects.ItemDTO;
 import PresentationLayer.Supplier.DataTransferObjects.*;
 
+import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class SupplierController {
@@ -118,7 +116,8 @@ public class SupplierController {
         }
         //creates the order
         //adds the order
-        OrderDTO orderDTO = new OrderDTO(ZonedDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy-hh:mm:ss")), constantDelivery? 1 : 0, needsDelivery? 1 : 0, itemDTOs);
+        Date date = Calendar.getInstance().getTime();
+        OrderDTO orderDTO = new OrderDTO(new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date.getTime()), constantDelivery? 1 : 0, needsDelivery? 1 : 0, itemDTOs);
         data.insert(orderDTO);
         return quantityWriter.calcPrice(data.getSupplier(supplierNum).getQuantityWriter(), order.getPrice(orderDTO)); //calculates it's price
     }
@@ -207,7 +206,7 @@ public class SupplierController {
         return maxDiscount;
     }
 
-    public int chooseBestSupplierForItems(ArrayList<String[]> items){
+    public ArrayList<String[]> chooseBestSupplierForItems(ArrayList<String[]> items){
         // TODO Implement for OrderFromReportHandler
         return data.chooseBestSupplier(items);
     }
@@ -224,7 +223,7 @@ public class SupplierController {
         output.append(String.format("[Date: %s, Needs Delivery: %s, Periodic Delivery: %s]", order.getDate(), order.getNeedsDelivery() == 1, order.getPeriodicDelivery() == 1));
         output.append("\nItems:");
         for (SupplierItemDTO item : order.getOrderItems()) {
-            output.append(String.format("\nID: %s\nPrice: %d\nQuantity: %d\nCompany Number: %d]", item.getId(), item.getPrice(), item.getQuantity(), item.getCompanyNumber()));
+            output.append(String.format("\nID: %s\nPrice: %d\nQuantity: %d\nCompany Number: %d]\n", item.getId(), item.getPrice(), item.getQuantity(), item.getCompanyNumber()));
         }
         return output.toString();
     }

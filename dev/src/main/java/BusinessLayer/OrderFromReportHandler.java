@@ -8,6 +8,7 @@ import BusinessLayer.Supplier.SupplierController;
 import PresentationLayer.Supplier.DataTransferObjects.SupplierItemDTO;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class OrderFromReportHandler {
     private final ReportController rCont;
@@ -22,21 +23,30 @@ public class OrderFromReportHandler {
     public String proposeOrderFromReport(int reportId){
         Report report = rCont.getReport(reportId);
         ArrayList<String[]> items = makeItemsFromReport(report);
+        StringBuilder orders = new StringBuilder();
         // chooseBestSupplierForItems will assume one supplier has all items
         if (items.size() > 0) {
-            int supplierNum = sCont.chooseBestSupplierForItems(items);
+            ArrayList<String[]> supplierNum = sCont.chooseBestSupplierForItems(items);
             // TODO: make needsDelivery a prompt
-            return sCont.proposeOrder(supplierNum, true, false, items); // TODO what to do about needsDelivery?
+            for (String[] order : supplierNum) {
+                ArrayList<String[]> item = new ArrayList<>();
+                item.add(Arrays.copyOfRange(order, 1, order.length));
+                orders.append(sCont.proposeOrder(Integer.parseInt(order[0]), true, false, item)); // TODO what to do about needsDelivery?
+            }
         }
-        else return "";
+        return orders.toString();
     }
 
 
     public void createOrderFromReport(int reportId, boolean needsDelivery){
         Report report = rCont.getReport(reportId);
         ArrayList<String[]> items = makeItemsFromReport(report);
-        int supplierNum = sCont.chooseBestSupplierForItems(items);
-        sCont.createOrder(supplierNum, needsDelivery, false, items); // TODO what to do about needsDelivery?
+        ArrayList<String[]> supplierNum = sCont.chooseBestSupplierForItems(items);
+        for (String[] order : supplierNum) {
+            ArrayList<String[]> item = new ArrayList<>();
+            item.add(Arrays.copyOfRange(order, 1, order.length));
+            sCont.createOrder(Integer.parseInt(order[0]), needsDelivery, false, item); // TODO what to do about needsDelivery?
+        }
     }
 
     private ArrayList<String[]> makeItemsFromReport(Report report){
