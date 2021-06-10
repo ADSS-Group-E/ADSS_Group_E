@@ -34,18 +34,20 @@ public abstract class OptionsMenu {
     public OptionsMenu(CommandLineInterface parentCLI) {
 
         options = new TreeMap<>();
+        authorizedOptions = new TreeMap<>();
         this.parentCLI = parentCLI;
         goBack=false;
         in = new Scanner(System.in);
-        setAuthorizedOptions(parentCLI.getLoggedInWorker());
     }
 
     private void setAuthorizedOptions(WorkerDTO loggedInWorker){
         int i = 1;
         for (Map.Entry<Integer, Option> entry : options.entrySet()) {
             Option option = entry.getValue();
-            if (option.checkQualified(loggedInWorker))
+            if (option.checkQualified(loggedInWorker)){
                 authorizedOptions.put(i, entry.getValue());
+                i++;
+            }
         }
     }
 
@@ -53,16 +55,16 @@ public abstract class OptionsMenu {
     * Lists options in sorted order.
      */
     public void displayOptions(){
-
+        setAuthorizedOptions(parentCLI.getLoggedInWorker());
         System.out.println(prompt);
-        for (Map.Entry<Integer, Option> entry : options.entrySet()) {
+        for (Map.Entry<Integer, Option> entry : authorizedOptions.entrySet()) {
             System.out.println(ANSI_GREEN + entry.getKey()+ " => "  + entry.getValue().getDescription() +  ANSI_RESET);
         }
     }
 
     public void chooseOption(int choice){
-        if(options.containsKey(choice)){
-            options.get(choice).run();
+        if(authorizedOptions.containsKey(choice)){
+            authorizedOptions.get(choice).run();
         }
         else{
             System.out.println("Invalid choice.");

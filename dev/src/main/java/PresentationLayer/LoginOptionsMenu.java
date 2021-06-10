@@ -15,7 +15,10 @@ public class LoginOptionsMenu extends OptionsMenu {
         int i=1;
         options.put(i++, new Option( "DEV - Quick select worker type",() -> {quickSelectWorker.enter();}));
         options.put(i++, new Option( "Login with ID",() -> {quickSelectWorker.login();}));
-        options.put(i, new Option( "Back", this::back));
+        options.put(i, new Option( "Quit", () ->{
+            System.out.println("Exiting. Thank you for using our system.");
+            System.exit(0);
+        }));
     }
 
 
@@ -59,7 +62,8 @@ public class LoginOptionsMenu extends OptionsMenu {
             // TODO: Implement workerDTO toString
             System.out.printf("Logged in successfully as:\n%s\n%n",workerDTO.toString());
 
-            parentCLI.getMainInventoryOptionsMenu().enter();
+            parentCLI.getMainOptionsMenu().enter();
+            goBack = true;
         }
     }
 }

@@ -18,6 +18,13 @@ public class Option {
         this.requirements = new HashSet<>();
     }
 
+    public Option(String description, Runnable runOption, QualificationsDTO requirement) {
+        this.description = description;
+        this.runOption = runOption;
+        this.requirements = new HashSet<>();
+        this.requirements.add(requirement);
+    }
+
     public Option(String description, Runnable runOption, Set<QualificationsDTO> requirements) {
         this.description = description;
         this.runOption = runOption;
