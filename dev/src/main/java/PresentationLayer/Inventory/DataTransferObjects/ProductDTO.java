@@ -1,41 +1,32 @@
 package PresentationLayer.Inventory.DataTransferObjects;
 
-import BusinessLayer.Inventory.Discount;
-import BusinessLayer.Inventory.Product;
+import BusinessLayer.Inventory.DomainObjects.Product;
 
 /**
  * This class represents the ProductDTO.
  * A DTO is an object that is used to encapsulate data and send it from one subsystem of an application to another.
  */
 
-public class ProductDTO implements DataTransferObject{
-    private final int pid;
+public class ProductDTO extends DataTransferObject{
     private final String name;
     private final String storageLocation;
     private final String storeLocation;
     private final int amountInStorage;
     private final int amountInStore;
     private final String manufacturer;
-    private final double buyingPrice;
-    private final double buyingPriceAfterDiscount;
     private final double sellingPrice;
     private final double sellingPriceAfterDiscount;
     private final int minAmount;
     private final int categoryId;
-    private final int buyingDiscountID;
-    private final int sellingDiscountID;
+    private final int discountID;
 
     // Getters
     public int getPid() {
-        return pid;
+        return id;
     }
 
     public String getName() {
         return name;
-    }
-
-    public double getBuyingPriceAfterDiscount() {
-        return buyingPriceAfterDiscount;
     }
 
     public double getSellingPriceAfterDiscount() {
@@ -54,10 +45,6 @@ public class ProductDTO implements DataTransferObject{
         return manufacturer;
     }
 
-    public double getBuyingPrice() {
-        return buyingPrice;
-    }
-
     public double getSellingPrice() {
         return sellingPrice;
     }
@@ -70,75 +57,59 @@ public class ProductDTO implements DataTransferObject{
         return categoryId;
     }
 
-    public Integer getBuyingDiscountID() {
-        if (buyingDiscountID == -1)
+    public Integer getDiscountID() {
+        if (discountID == -1)
             return null;
-        return buyingDiscountID;
-    }
-
-    public Integer getSellingDiscountID() {
-        if (sellingDiscountID == -1)
-            return null;
-        return sellingDiscountID;
+        return discountID;
     }
 
     // Constructors
-    public ProductDTO(int pid, String name, String storageLocation, String storeLocation, String manufacturer, double buyingPrice, double sellingPrice, int minAmount, int categoryId, int buyingDiscountID, int sellingDiscountID) {
-        this.pid = pid;
+    public ProductDTO(int pid, String name,  String storeLocation, String storageLocation, String manufacturer, double sellingPrice, int minAmount, int categoryId, int discountID) {
+        super(pid);
         this.name = name;
         this.storageLocation = storageLocation;
         this.storeLocation = storeLocation;
         this.amountInStorage = 0;
         this.amountInStore = 0;
         this.manufacturer = manufacturer;
-        this.buyingPrice = buyingPrice;
         this.sellingPrice = sellingPrice;
         this.minAmount = minAmount;
-        this.buyingPriceAfterDiscount = buyingPrice;
         this.sellingPriceAfterDiscount = sellingPrice;
         this.categoryId = categoryId;
-        this.buyingDiscountID = buyingDiscountID;
-        this.sellingDiscountID = sellingDiscountID;
+        this.discountID = discountID;
     }
 
     public ProductDTO(Product other) {
-        this.pid = other.getPid();
+        super(other.getId());
         this.name = other.getName();
         this.storageLocation = other.getStorageLocation();
         this.storeLocation = other.getStoreLocation();
         this.amountInStorage = other.getAmountInStorage();
         this.amountInStore = other.getAmountInStore();
         this.manufacturer = other.getManufacturer();
-        this.buyingPrice = other.getBuyingPrice();
-        this.buyingPriceAfterDiscount = other.getBuyingPriceAfterDiscount();
         this.sellingPrice = other.getSellingPrice();
         this.sellingPriceAfterDiscount = other.getSellingPriceAfterDiscount();
         this.minAmount = other.getMinAmount();
-        this.categoryId = other.getCategory().getCid();
-        if (other.getBuyingDiscount() != null)
-            this.buyingDiscountID = other.getBuyingDiscount().getDid();
+        this.categoryId = other.getCategory().getId();
+        if (other.getDiscount() != null)
+            this.discountID = other.getDiscount().getId();
         else
-            this.buyingDiscountID = -1;
-        if (other.getSellingDiscount() != null)
-            this.sellingDiscountID = other.getSellingDiscount().getDid();
-        else
-            this.sellingDiscountID = -1;
+            this.discountID = -1;
     }
 
     // Print
     public String toString(){
-        return  "PID:                           " + pid + "\n" +
+        return  "PID:                           " + id + "\n" +
                 "Name:                          " + name + "\n" +
                 "Storage Location:              " + storageLocation + "\n" +
                 "Store Location:                " + storeLocation + "\n" +
                 "Amount In Storage:             " + amountInStorage + "\n" +
                 "Amount In Store:               " + amountInStore + "\n" +
                 "Manufacturer:                  " + manufacturer + "\n" +
-                "Buying Price:                  " + buyingPrice + "\n" +
-                "Buying Price after Discount:   " + buyingPriceAfterDiscount + "\n" +
                 "Selling Price:                 " + sellingPrice + "\n" +
                 "Selling Price after Discount:  " + sellingPriceAfterDiscount + "\n" +
                 "Min Amount:                    " + minAmount + "\n" +
-                "Category ID:                   " + categoryId;
+                "Category ID:                   " + categoryId + "\n" +
+                "Discount ID:                   " + discountID;
     }
 }

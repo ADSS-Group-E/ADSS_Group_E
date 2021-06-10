@@ -5,18 +5,15 @@ import BusinessLayer.Inventory.Controllers.*;
 import BusinessLayer.OrderFromReportHandler;
 import BusinessLayer.Supplier.SupplierController;
 import PresentationLayer.Inventory.DataTransferObjects.CategoryDTO;
+import PresentationLayer.Inventory.DataTransferObjects.DiscountDTO;
 import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
 import PresentationLayer.Inventory.Options.*;
-import PresentationLayer.MainOptionsMenu;
 import PresentationLayer.Supplier.ServiceController;
 import PresentationLayer.Supplier.SupplierOptionsMenu;
 
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -30,7 +27,7 @@ import java.util.*;
 public class CommandLineInterface {
 
 
-    private final Facade facade;
+    private final InventoryFacade inventoryFacade;
     private final OrderFromReportHandler orderFromReportHandler;
     private final ServiceController serviceController;
     private final MainOptionsMenu mainOptionsMenu;
@@ -42,8 +39,8 @@ public class CommandLineInterface {
     private final ReportsOptionsMenu reportsOptionsMenu;
 
     // Getters
-    public Facade getFacade() {
-        return facade;
+    public InventoryFacade getFacade() {
+        return inventoryFacade;
     }
 
     public OrderFromReportHandler getOrderFromReportHandler() {
@@ -80,9 +77,11 @@ public class CommandLineInterface {
         ReportController rCont = new ReportController();
 
         DiscountController dCont = new DiscountController(pCont);
+        pCont.setDiscountController(dCont);
+
         SupplierController sCont = new SupplierController();
 
-        facade = new Facade(pCont, rCont, cCont, dCont);
+        inventoryFacade = new InventoryFacade(pCont, rCont, cCont, dCont);
         orderFromReportHandler = new OrderFromReportHandler(rCont,sCont);
         serviceController = new ServiceController(sCont);
 
@@ -135,23 +134,24 @@ public class CommandLineInterface {
             e.printStackTrace();
             return;
         }
-        facade.addCategory(1,"Juice");
-        facade.addCategory(new CategoryDTO(2,"<500 ML",1));
-        facade.addProduct(new ProductDTO(1, "Test Juice", "AB01","B13", "Test Company",10.5, 10.1, 5,2, -1, -1));
-        facade.addItemToStore(1,1, LocalDateTime.of(2021,4,24,16,0));
-        facade.addItemToStorage(1,2, LocalDateTime.of(2021,4,25,16,0));
-        facade.addItemToStore(1,3, LocalDateTime.of(2021,4,1,16,0));
-        facade.addItemToStorage(1,4, LocalDateTime.of(2021,4,1,16,0));
+        inventoryFacade.addCategory(1,"Juice");
+        inventoryFacade.addCategory(new CategoryDTO(2,"<500 ML",1));
+        inventoryFacade.addProduct(new ProductDTO(1, "Test Juice", "AB01","B13", "Test Company", 10.1, 5,2, -1));
+        inventoryFacade.addItemToStore(1,10, 10.5,  LocalDateTime.of(2021,4,24,16,0));
+        inventoryFacade.addItemToStorage(1,3, 11, LocalDateTime.of(2021,4,25,16,0));
+        inventoryFacade.addItemToStore(1,20, 11.5, LocalDateTime.of(2021,4,1,16,0));
+        inventoryFacade.addItemToStorage(1,4, 12, LocalDateTime.of(2021,4,1,16,0));
         ArrayList<Integer> cids = new ArrayList<>();
         ArrayList<Integer> pids = new ArrayList<>();
         cids.add(1);
         pids.add(1);
-        facade.addDiscount(1,"Test Spring Discount", 0.1,
-                LocalDateTime.of(2021,4,1,16,0),
-                LocalDateTime.of(2021,5,1,16,0),
-                cids,
-                pids,
-                "Selling");
+
+        inventoryFacade.addDiscount(new DiscountDTO(1,"Test Spring Discount", 0.1,
+                            LocalDateTime.of(2021,4,1,16,0),
+                            LocalDateTime.of(2022,5,1,16,0)
+                ),
+                        cids,
+                        pids);
 
         serviceController.initialize();
     }

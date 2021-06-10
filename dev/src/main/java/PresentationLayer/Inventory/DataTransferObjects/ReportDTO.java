@@ -7,12 +7,13 @@ import java.time.LocalDateTime;
  * A DTO is an object that is used to encapsulate data and send it from one subsystem of an application to another.
  */
 
-public class ReportDTO implements DataTransferObject{
+public class ReportDTO extends DataTransferObject{
     private int rid;
     private LocalDateTime created;
     private String tag;
 
     public ReportDTO(int rid, LocalDateTime created, String tag) {
+        super(rid);
         this.rid = rid;
         this.created = created;
         this.tag = tag;

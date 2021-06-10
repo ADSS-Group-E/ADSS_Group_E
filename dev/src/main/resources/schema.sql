@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS "InventoryItem" (
 	"location"	INTEGER NOT NULL,
 	"quantity"	INTEGER NOT NULL,
 	PRIMARY KEY("name","location"),
-	FOREIGN KEY("name") REFERENCES "Item"("name")
+	FOREIGN KEY("name") REFERENCES "ItemGroup"("name")
 );
 DROP TABLE IF EXISTS "SpecificProduct";
 CREATE TABLE IF NOT EXISTS "SpecificProduct" (
@@ -63,12 +63,6 @@ CREATE TABLE IF NOT EXISTS "StepDiscount" (
 	PRIMARY KEY("ID" AUTOINCREMENT),
 	FOREIGN KEY("QWID") REFERENCES "QuantityWriter"("ID")
 );
-DROP TABLE IF EXISTS "Item";
-CREATE TABLE IF NOT EXISTS "Item" (
-	"name"	TEXT NOT NULL,
-	"ID"	INTEGER NOT NULL,
-	PRIMARY KEY("ID" AUTOINCREMENT)
-);
 DROP TABLE IF EXISTS "OrderItems";
 CREATE TABLE IF NOT EXISTS "OrderItems" (
 	"productID"	INTEGER NOT NULL,
@@ -78,8 +72,8 @@ CREATE TABLE IF NOT EXISTS "OrderItems" (
 	"quantity"	INTEGER NOT NULL CHECK("quantity" >= 0),
 	PRIMARY KEY("productID","companyNumber","orderID"),
 	FOREIGN KEY("productID") REFERENCES "Product"("ID"),
-	FOREIGN KEY("companyNumber") REFERENCES "Supplier"("companyNumber"),
-	FOREIGN KEY("orderID") REFERENCES "SOrder"("orderID")
+	FOREIGN KEY("orderID") REFERENCES "SOrder"("orderID"),
+	FOREIGN KEY("companyNumber") REFERENCES "Supplier"("companyNumber")
 );
 DROP TABLE IF EXISTS "SupplierItem";
 CREATE TABLE IF NOT EXISTS "SupplierItem" (
@@ -90,35 +84,8 @@ CREATE TABLE IF NOT EXISTS "SupplierItem" (
 	"price"	INTEGER NOT NULL,
 	"supplierCN"	INTEGER,
 	PRIMARY KEY("productID","companyNumber"),
-	FOREIGN KEY("companyNumber") REFERENCES "Supplier"("companyNumber"),
-	FOREIGN KEY("productID") REFERENCES "Product"("ID")
-);
-DROP TABLE IF EXISTS "Product";
-CREATE TABLE IF NOT EXISTS "Product" (
-	"ID"	INTEGER NOT NULL,
-	"name"	TEXT NOT NULL,
-	"storeLocation"	TEXT NOT NULL,
-	"storageLocation"	TEXT NOT NULL,
-	"manufacturer"	TEXT NOT NULL,
-	"buyPrice"	REAL NOT NULL,
-	"sellPrice"	REAL NOT NULL,
-	"minAmount"	INTEGER NOT NULL,
-	"categoryID"	INTEGER NOT NULL,
-	"buyDiscountID"	INTEGER,
-	"sellDiscountID"	INTEGER,
-	PRIMARY KEY("ID"),
-	FOREIGN KEY("sellDiscountID") REFERENCES "Discount"("ID"),
-	FOREIGN KEY("buyDiscountID") REFERENCES "Discount"("ID")
-);
-DROP TABLE IF EXISTS "Discount";
-CREATE TABLE IF NOT EXISTS "Discount" (
-	"ID"	INTEGER NOT NULL,
-	"name"	TEXT NOT NULL,
-	"discPercentage"	REAL NOT NULL,
-	"startDate"	TEXT NOT NULL,
-	"endDate"	TEXT NOT NULL,
-	"type"	TEXT NOT NULL,
-	PRIMARY KEY("ID")
+	FOREIGN KEY("productID") REFERENCES "Product"("ID"),
+	FOREIGN KEY("companyNumber") REFERENCES "Supplier"("companyNumber")
 );
 DROP TABLE IF EXISTS "SOrder";
 CREATE TABLE IF NOT EXISTS "SOrder" (
@@ -127,5 +94,39 @@ CREATE TABLE IF NOT EXISTS "SOrder" (
 	"periodicDelivery"	BOOLEAN NOT NULL CHECK("periodicDelivery" IN (0, 1)),
 	"needsDelivery"	BOOLEAN NOT NULL CHECK("needsDelivery" IN (0, 1)),
 	PRIMARY KEY("orderID" AUTOINCREMENT)
+);
+DROP TABLE IF EXISTS "ItemGroup";
+CREATE TABLE IF NOT EXISTS "ItemGroup" (
+	"ID"	INTEGER NOT NULL,
+	"PID"	INTEGER NOT NULL,
+	"location"	INTEGER NOT NULL,
+	"quantity"	INTEGER NOT NULL,
+	"priceBoughtAt"	REAL NOT NULL,
+	"expiration"	TEXT NOT NULL,
+	PRIMARY KEY("ID" AUTOINCREMENT),
+	FOREIGN KEY("PID") REFERENCES "Product"("ID")
+);
+DROP TABLE IF EXISTS "Discount";
+CREATE TABLE IF NOT EXISTS "Discount" (
+	"ID"	INTEGER NOT NULL,
+	"name"	TEXT NOT NULL,
+	"discPercentage"	REAL NOT NULL,
+	"startDate"	TEXT NOT NULL,
+	"endDate"	TEXT NOT NULL,
+	PRIMARY KEY("ID")
+);
+DROP TABLE IF EXISTS "Product";
+CREATE TABLE IF NOT EXISTS "Product" (
+	"ID"	INTEGER NOT NULL,
+	"name"	TEXT NOT NULL,
+	"storeLocation"	TEXT NOT NULL,
+	"storageLocation"	TEXT NOT NULL,
+	"manufacturer"	TEXT NOT NULL,
+	"sellPrice"	REAL NOT NULL,
+	"minAmount"	INTEGER NOT NULL,
+	"categoryID"	INTEGER NOT NULL,
+	"sellDiscountID"	INTEGER,
+	PRIMARY KEY("ID"),
+	FOREIGN KEY("sellDiscountID") REFERENCES "Discount"("ID")
 );
 COMMIT;

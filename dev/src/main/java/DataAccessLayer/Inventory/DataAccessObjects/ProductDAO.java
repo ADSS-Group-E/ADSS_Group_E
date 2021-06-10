@@ -4,7 +4,6 @@ import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
 import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
 
 import java.sql.*;
-import java.util.ArrayList;
 
 public class ProductDAO extends DataAccessObject {
 
@@ -20,52 +19,64 @@ public class ProductDAO extends DataAccessObject {
 
     @Override
     protected PreparedStatement createInsertPreparedStatement(DataTransferObject dataTransferObject) throws SQLException {
-        return createInsertPreparedStatement((ProductDTO) dataTransferObject);
-    }
+        ProductDTO productDTO = (ProductDTO) dataTransferObject;
 
-
-    protected PreparedStatement createInsertPreparedStatement(ProductDTO productDTO) throws SQLException {
-        String sql = "INSERT INTO Product (ID, name, storeLocation, storageLocation, " +
-                "manufacturer, buyPrice, sellPrice, minAmount, categoryID, buyDiscountID, sellDiscountID) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO " + tableName + " (ID, name, storeLocation, storageLocation, " +
+                "manufacturer, sellPrice, minAmount, categoryID, sellDiscountID) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
         PreparedStatement pstmt = this.c.prepareStatement(sql);
         pstmt.setInt(1,productDTO.getPid());
         pstmt.setString(2, productDTO.getName());
         pstmt.setString(3, productDTO.getStorageLocation());
         pstmt.setString(4, productDTO.getStoreLocation());
         pstmt.setString(5, productDTO.getManufacturer());
-        pstmt.setDouble(6, productDTO.getBuyingPrice());
-        pstmt.setDouble(7, productDTO.getSellingPrice());
-        pstmt.setInt(8,productDTO.getMinAmount());
-        pstmt.setInt(9,productDTO.getCategoryId());
-        if (productDTO.getBuyingDiscountID() == null)
-            pstmt.setNull(10,Types.INTEGER);
+        pstmt.setDouble(6, productDTO.getSellingPrice());
+        pstmt.setInt(7,productDTO.getMinAmount());
+        pstmt.setInt(8,productDTO.getCategoryId());
+        if (productDTO.getDiscountID() == null)
+            pstmt.setNull(9,Types.INTEGER);
         else
-            pstmt.setInt(10, productDTO.getBuyingDiscountID());
-        if (productDTO.getSellingDiscountID() == null)
-            pstmt.setNull(11,Types.INTEGER);
-        else
-            pstmt.setInt(11, productDTO.getSellingDiscountID());
+            pstmt.setInt(9, productDTO.getDiscountID());
         return pstmt;
     }
 
+    @Override
+    protected PreparedStatement createUpdatePreparedStatement(DataTransferObject dataTransferObject) throws SQLException {
+        ProductDTO productDTO = (ProductDTO) dataTransferObject;
 
-    public ArrayList<ProductDTO> selectAll () {
-        return (ArrayList<ProductDTO>) selectAllGeneric();
+        String sql = "UPDATE " + tableName + " set name=?, storeLocation=?, storageLocation=?, " +
+                "manufacturer=?, sellPrice=?, minAmount=?, categoryID=?, sellDiscountID=? " +
+                "WHERE ID=?;";
+        PreparedStatement pstmt = this.c.prepareStatement(sql);
+        int i = 1;
+        pstmt.setString(i++, productDTO.getName());
+        pstmt.setString(i++, productDTO.getStoreLocation());
+        pstmt.setString(i++, productDTO.getStorageLocation());
+        pstmt.setString(i++, productDTO.getManufacturer());
+        pstmt.setDouble(i++, productDTO.getSellingPrice());
+        pstmt.setInt(i++,productDTO.getMinAmount());
+        pstmt.setInt(i++,productDTO.getCategoryId());
+        if (productDTO.getDiscountID() == null)
+            pstmt.setNull(i++,Types.INTEGER);
+        else
+            pstmt.setInt(i++, productDTO.getDiscountID());
+
+        pstmt.setInt(i++,productDTO.getPid());
+
+        return pstmt;
     }
+
 
     @Override
     ProductDTO resultToDTO(ResultSet resultSet) throws SQLException {
         return new ProductDTO(  resultSet.getInt("ID"),
                                 resultSet.getString("name"),
-                                resultSet.getString("storageLocation"),
                                 resultSet.getString("storeLocation"),
+                                resultSet.getString("storageLocation"),
                                 resultSet.getString("manufacturer"),
-                                resultSet.getDouble("buyPrice"),
                                 resultSet.getDouble("sellPrice"),
                                 resultSet.getInt("minAmount"),
                                 resultSet.getInt("categoryID"),
-                                resultSet.getInt("buyDiscountID"),
                                 resultSet.getInt("sellDiscountID"));
     }
 }

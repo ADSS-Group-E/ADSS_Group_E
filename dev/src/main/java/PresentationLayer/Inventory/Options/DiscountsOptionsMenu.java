@@ -53,7 +53,7 @@ public class DiscountsOptionsMenu extends OptionsMenu {
     public void getDiscountList(){
         ArrayList<DiscountDTO> DTOlist = parentCLI.getFacade().getDiscountList();
         System.out.printf("%-10s %s%n", "DID","Name");
-        DTOlist.forEach((DTO)->System.out.printf("%-10s %s%n", DTO.getDid(),DTO.getName()));
+        DTOlist.forEach((DTO)->System.out.printf("%-10s %s%n", DTO.getId(),DTO.getName()));
     }
 
     /**
@@ -62,7 +62,7 @@ public class DiscountsOptionsMenu extends OptionsMenu {
      * The required data includes Discount type (Buying or Selling), ID, name, actual discount percentage,
      * start and end dates (year, month and day),and the Category and Product ID's that the discount can be applied to.
      *
-     * Once entered, the Facade function is called to save the newly input Discount information.
+     * Once entered, the InventoryFacade function is called to save the newly input Discount information.
      */
     public void addDiscount(){
         System.out.println("Discount type?\n1 => Buying\n2 => Selling");
@@ -149,14 +149,14 @@ public class DiscountsOptionsMenu extends OptionsMenu {
             return;
         }
 
-        // Add the new discount by calling the Facade function with the data the user just entered.
-        parentCLI.getFacade().addDiscount(did,name,discountPercentage,startDate,endDate,cids,pids,type);
+        // Add the new discount by calling the InventoryFacade function with the data the user just entered.
+        parentCLI.getFacade().addDiscount(new DiscountDTO(did, name, discountPercentage, startDate, endDate), cids, pids);
         System.out.println("The new discount was added successfully.");
     }
 
     /**
      * This function prompts the user to identify an existing discount by entering it's ID,
-     * and then proceeds to remove the discount by calling the Facade function
+     * and then proceeds to remove the discount by calling the InventoryFacade function
      */
     public void removeDiscount(){
         System.out.println("Please enter the discount id you wish to remove:");
@@ -164,7 +164,7 @@ public class DiscountsOptionsMenu extends OptionsMenu {
         System.out.println("Are you sure you want to remove the discount? Enter \"y\" to remove.");
         String verify = in.next().trim();
         if (verify.equals("y")) {
-            // Remove the discount by calling the Facade function with the data the user just entered.
+            // Remove the discount by calling the InventoryFacade function with the data the user just entered.
             parentCLI.getFacade().removeDiscount(did);
             System.out.println("The discount was removed successfully.");
         }

@@ -138,7 +138,7 @@ public class ReportsOptionsMenu extends OptionsMenu {
 
     /**
      * This function prompts the user to identify an existing report by entering it's ID,
-     * and then proceeds to remove the report by calling the Facade function
+     * and then proceeds to remove the report by calling the InventoryFacade function
      */
     public void removeReport(){
         System.out.println("Please enter the report id for the report you wish to remove:");
@@ -146,7 +146,7 @@ public class ReportsOptionsMenu extends OptionsMenu {
         System.out.println("Are you sure you want to remove the report? Enter \"y\" to remove.");
         String verify = in.next().trim();
         if (verify.equals("y")) {
-           // Remove the report by calling the Facade function with the data the user just entered.
+           // Remove the report by calling the InventoryFacade function with the data the user just entered.
            parentCLI.getFacade().removeReport(rid);
             System.out.println("The report was removed successfully.");
         }

@@ -1,16 +1,13 @@
 package BusinessLayer.Supplier;
 
 import DataAccessLayer.Supplier.DataController;
-import PresentationLayer.Inventory.DataTransferObjects.ItemDTO;
 import PresentationLayer.Supplier.DataTransferObjects.*;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class SupplierController {
     private Contact contact;

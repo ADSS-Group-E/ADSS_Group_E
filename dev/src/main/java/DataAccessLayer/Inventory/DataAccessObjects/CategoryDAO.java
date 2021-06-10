@@ -19,6 +19,11 @@ public class CategoryDAO extends DataAccessObject{
         return createInsertPreparedStatement((CategoryDTO) dataTransferObject);
     }
 
+    @Override
+    protected PreparedStatement createUpdatePreparedStatement(DataTransferObject dataTransferObject) throws SQLException {
+        return null;
+    }
+
     protected PreparedStatement createInsertPreparedStatement(CategoryDTO categoryDTO) throws SQLException {
         String sql = "INSERT INTO " + tableName + " (ID, name, superID)  " +
                 "VALUES (?, ?, ?);";
@@ -33,9 +38,6 @@ public class CategoryDAO extends DataAccessObject{
         return pstmt;
     }
 
-    public ArrayList<CategoryDTO> selectAll () {
-        return (ArrayList<CategoryDTO>) selectAllGeneric();
-    }
 
     public CategoryDAO() {
         super();
