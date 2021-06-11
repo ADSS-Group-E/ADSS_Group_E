@@ -2,15 +2,9 @@ package BusinessLayer.Supplier.Controllers;
 
 import BusinessLayer.Inventory.Controllers.DomainController;
 import BusinessLayer.Inventory.DomainObjects.*;
-import BusinessLayer.Supplier.DomainObjects.Contact;
-import BusinessLayer.Supplier.DomainObjects.Order;
-import BusinessLayer.Supplier.DomainObjects.Supplier;
-import BusinessLayer.Supplier.DomainObjects.SupplierProduct;
+import BusinessLayer.Supplier.DomainObjects.*;
 import DataAccessLayer.Inventory.DataAccessObjects.DataAccessObject;
-import DataAccessLayer.Supplier.DataAccessObjects.ContactDAO;
-import DataAccessLayer.Supplier.DataAccessObjects.OrderDAO;
-import DataAccessLayer.Supplier.DataAccessObjects.SupplierDAO;
-import DataAccessLayer.Supplier.DataAccessObjects.SupplierProductDAO;
+import DataAccessLayer.Supplier.DataAccessObjects.*;
 import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
 import PresentationLayer.Inventory.DataTransferObjects.ItemGroupDTO;
 import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
@@ -24,12 +18,14 @@ public class SupplierController extends DomainController {
     SupplierProductDAO supplierProductDAO;
     OrderDAO orderDAO;
     ContactDAO contactDAO;
+    QuantityWriterDAO quantityWriterDAO;
 
     public SupplierController(SupplierDAO DAO) {
         super(DAO);
         supplierProductDAO = new SupplierProductDAO();
         orderDAO = new OrderDAO();
         contactDAO = new ContactDAO();
+        quantityWriterDAO = new QuantityWriterDAO();
     }
 
     @Override
@@ -65,10 +61,15 @@ public class SupplierController extends DomainController {
             contacts.put(contact.getId(), contact);
         }
 
+        QuantityWriterDTO quantityWriterDTO = quantityWriterDAO.get(supplierDTO.getQuantityWriterId());
+        QuantityWriter quantityWriter = new QuantityWriter(quantityWriterDTO);
+
+
         Supplier supplier = new Supplier(supplierDTO);
         supplier.loadProducts(products);
         supplier.loadOrders(orders);
         supplier.loadContacts(contacts);
+        supplier.loadQuantityWriter(quantityWriter);
 
         return supplier;
     }
@@ -77,4 +78,6 @@ public class SupplierController extends DomainController {
     protected DataTransferObject buildDtoFromDomainObject(DomainObject domainObject) {
         return null;
     }
+
+
 }

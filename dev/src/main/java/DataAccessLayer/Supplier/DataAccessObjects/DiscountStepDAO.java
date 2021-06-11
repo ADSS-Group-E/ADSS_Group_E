@@ -4,10 +4,13 @@ import DataAccessLayer.Inventory.DataAccessObjects.DataAccessObject;
 import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
 import PresentationLayer.Supplier.DataTransferObjects.ContactDTO;
 import PresentationLayer.Supplier.DataTransferObjects.DiscountStepDTO;
+import PresentationLayer.Supplier.DataTransferObjects.QuantityWriterDTO;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 
 public class DiscountStepDAO extends DataAccessObject {
     public DiscountStepDAO(String databaseUrl) {
@@ -46,5 +49,25 @@ public class DiscountStepDAO extends DataAccessObject {
                 resultSet.getInt("stepPrice"),
                 resultSet.getInt("percentage"),
                 resultSet.getInt("quantityWriterID"));
+    }
+
+    public ArrayList<DiscountStepDTO> selectByQuantityWriter(int pid){
+        try {
+            c = this.connect();
+            Statement stmt = c.createStatement();
+            String sql = String.format("SELECT * FROM %s WHERE quantityWriterID = %d", tableName, pid);
+            ResultSet result = stmt.executeQuery(sql);
+
+            ArrayList<DiscountStepDTO> dataTransferObjects = new ArrayList<>();
+            while (result.next()){
+                dataTransferObjects.add(resultToDTO(result));
+            }
+            close();
+            return dataTransferObjects;
+        }
+        catch (SQLException e) {
+            handleError(e);
+            return null;
+        }
     }
 }

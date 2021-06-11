@@ -54,6 +54,8 @@ public class Supplier extends DomainObject {
         this.contacts = contacts;
     }
 
+    public void loadQuantityWriter (QuantityWriter quantityWriter) {this.quantityWriter = quantityWriter;}
+
     public void addOrder(Order order){
 
     }
