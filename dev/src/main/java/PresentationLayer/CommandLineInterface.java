@@ -7,9 +7,8 @@ import BusinessLayer.Supplier.SupplierController;
 import PresentationLayer.Inventory.DataTransferObjects.CategoryDTO;
 import PresentationLayer.Inventory.DataTransferObjects.DiscountDTO;
 import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
-import PresentationLayer.Inventory.Options.*;
 import PresentationLayer.Supplier.ServiceController;
-import PresentationLayer.Supplier.SupplierOptionsMenu;
+import PresentationLayer.Workers_Transport.WorkerDTO;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -30,13 +29,9 @@ public class CommandLineInterface {
     private final InventoryFacade inventoryFacade;
     private final OrderFromReportHandler orderFromReportHandler;
     private final ServiceController serviceController;
+    private final LoginOptionsMenu loginOptionsMenu;
     private final MainOptionsMenu mainOptionsMenu;
-    private final MainInventoryOptionsMenu mainInventoryOptionsMenu;
-    private final SupplierOptionsMenu supplierOptionsMenu;
-    private final ProductsOptionsMenu productsOptionsMenu;
-    private final CategoriesOptionsMenu categoriesOptionsMenu;
-    private final DiscountsOptionsMenu discountsOptionsMenu;
-    private final ReportsOptionsMenu reportsOptionsMenu;
+    private WorkerDTO loggedInWorker;
 
     // Getters
     public InventoryFacade getFacade() {
@@ -51,24 +46,14 @@ public class CommandLineInterface {
         return serviceController;
     }
 
-    public MainInventoryOptionsMenu getMainInventoryOptionsMenu() { return mainInventoryOptionsMenu; }
 
-    public SupplierOptionsMenu getSupplierOptionsMenu() { return supplierOptionsMenu; }
 
-    public ProductsOptionsMenu getProductsOptionsMenu() {
-        return productsOptionsMenu;
+    public WorkerDTO getLoggedInWorker() {
+        return loggedInWorker;
     }
 
-    public CategoriesOptionsMenu getCategoriesOptionsMenu() {
-        return categoriesOptionsMenu;
-    }
-
-    public DiscountsOptionsMenu getDiscountsOptionsMenu() {
-        return discountsOptionsMenu;
-    }
-
-    public ReportsOptionsMenu getReportsOptionsMenu() {
-        return reportsOptionsMenu;
+    public void setLoggedInWorker(WorkerDTO loggedInWorker) {
+        this.loggedInWorker = loggedInWorker;
     }
 
     public CommandLineInterface() {
@@ -85,13 +70,8 @@ public class CommandLineInterface {
         orderFromReportHandler = new OrderFromReportHandler(rCont,sCont);
         serviceController = new ServiceController(sCont);
 
+        loginOptionsMenu = new LoginOptionsMenu(this);
         mainOptionsMenu = new MainOptionsMenu(this);
-        mainInventoryOptionsMenu = new MainInventoryOptionsMenu(this);
-        supplierOptionsMenu = new SupplierOptionsMenu(this);
-        productsOptionsMenu = new ProductsOptionsMenu(this);
-        categoriesOptionsMenu = new CategoriesOptionsMenu(this);
-        discountsOptionsMenu = new DiscountsOptionsMenu(this);
-        reportsOptionsMenu = new ReportsOptionsMenu(this);
     }
 
     // Loads sample data because there is no data access layer in this part of the project.
@@ -155,10 +135,14 @@ public class CommandLineInterface {
 
         serviceController.initialize();
     }
-//    public ProductDTO(int pid, String name, String storageLocation, String storeLocation, int amountInStorage, int amountInStore, String manufacturer, double buyingPrice, double sellingPrice, int minAmount) {
+
     public void run() {
-        System.out.println("SUPER-LI Inventory and Supplier Module");
-        mainOptionsMenu.enter();
+        System.out.println("SUPER-LI Management System");
+        loginOptionsMenu.enter();
+    }
+
+    public MainOptionsMenu getMainOptionsMenu() {
+        return mainOptionsMenu;
     }
 }
 

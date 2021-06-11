@@ -1,6 +1,8 @@
 package PresentationLayer;
 
-import java.util.Scanner;
+import PresentationLayer.Inventory.OptionMenus.MainInventoryOptionsMenu;
+import PresentationLayer.Supplier.SupplierOptionsMenu;
+import PresentationLayer.Transport.OptionMenus.MainTransportOptionsMenu;
 
 /**
  * This class represents the main menu of the system.
@@ -12,20 +14,26 @@ import java.util.Scanner;
  *  */
 
 public class MainOptionsMenu extends OptionsMenu {
+    private final MainInventoryOptionsMenu mainInventoryOptionsMenu;
+    private final SupplierOptionsMenu supplierOptionsMenu;
+    private final MainTransportOptionsMenu mainTransportOptionsMenu;
+
+
     public MainOptionsMenu(CommandLineInterface parentCLI) {
         super(parentCLI);
 
-        // Prompt the user for their module selection
-        Scanner in = new Scanner(System.in);
-        options.put(1, new Option( "Inventory options",() -> {
-            parentCLI.getMainInventoryOptionsMenu().enter();
-        }));
-        options.put(2, new Option( "Supplier options",() -> {
-            parentCLI.getSupplierOptionsMenu().enter();
-        }));
-        options.put(3, new Option( "Quit",() -> {
-            System.out.println("Exiting. Thank you for using our system.");
-            System.exit(0);
+        mainInventoryOptionsMenu = new MainInventoryOptionsMenu(parentCLI);
+        supplierOptionsMenu = new SupplierOptionsMenu(parentCLI);
+        mainTransportOptionsMenu = new MainTransportOptionsMenu(parentCLI);
+
+        int i = 1;
+        options.put(i++, new Option( "Inventory options", mainInventoryOptionsMenu::enter));
+        options.put(i++, new Option( "Supplier options", supplierOptionsMenu::enter));
+        options.put(i++, new Option( "Transport options", mainTransportOptionsMenu::enter));
+        options.put(i++, new Option( "Log out",() -> {
+            System.out.println("Logging out.");
+            parentCLI.setLoggedInWorker(null);
+            goBack=true;
         }));
     }
 }

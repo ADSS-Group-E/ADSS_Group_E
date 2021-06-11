@@ -1,4 +1,4 @@
-package PresentationLayer.Inventory.Options;
+package PresentationLayer.Inventory.OptionMenus;
 
 import PresentationLayer.Inventory.DataTransferObjects.CategoryDTO;
 import PresentationLayer.CommandLineInterface;

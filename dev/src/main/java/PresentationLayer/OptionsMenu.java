@@ -3,9 +3,12 @@ package PresentationLayer;
 
 import PresentationLayer.CommandLineInterface;
 import PresentationLayer.Option;
+import PresentationLayer.Workers_Transport.QualificationsDTO;
+import PresentationLayer.Workers_Transport.WorkerDTO;
 
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.TreeMap;
 
 public abstract class OptionsMenu {
@@ -21,32 +24,47 @@ public abstract class OptionsMenu {
 
 
     protected TreeMap<Integer, Option> options;
+    protected TreeMap<Integer, Option> authorizedOptions;
+
     protected CommandLineInterface parentCLI;
     protected boolean goBack;
     protected Scanner in;
+    protected String prompt = "\nPlease choose an option:";
 
     public OptionsMenu(CommandLineInterface parentCLI) {
 
         options = new TreeMap<>();
+        authorizedOptions = new TreeMap<>();
         this.parentCLI = parentCLI;
         goBack=false;
         in = new Scanner(System.in);
+    }
+
+    private void setAuthorizedOptions(WorkerDTO loggedInWorker){
+        int i = 1;
+        for (Map.Entry<Integer, Option> entry : options.entrySet()) {
+            Option option = entry.getValue();
+            if (option.checkQualified(loggedInWorker)){
+                authorizedOptions.put(i, entry.getValue());
+                i++;
+            }
+        }
     }
 
     /*
     * Lists options in sorted order.
      */
     public void displayOptions(){
-
-        System.out.println("\nPlease choose an option:");
-        for (Map.Entry<Integer, Option> entry : options.entrySet()) {
+        setAuthorizedOptions(parentCLI.getLoggedInWorker());
+        System.out.println(prompt);
+        for (Map.Entry<Integer, Option> entry : authorizedOptions.entrySet()) {
             System.out.println(ANSI_GREEN + entry.getKey()+ " => "  + entry.getValue().getDescription() +  ANSI_RESET);
         }
     }
 
     public void chooseOption(int choice){
-        if(options.containsKey(choice)){
-            options.get(choice).run();
+        if(authorizedOptions.containsKey(choice)){
+            authorizedOptions.get(choice).run();
         }
         else{
             System.out.println("Invalid choice.");
