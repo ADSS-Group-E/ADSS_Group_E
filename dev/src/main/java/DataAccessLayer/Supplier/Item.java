@@ -7,7 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.stream.Stream;
 
 class Item {
     private DBConnection db;
@@ -157,21 +159,19 @@ class Item {
         return item;
     }
 
-    int chooseBestSupplier(String group, int size) {
-        int supID = -1;
-        int minPrice = Integer.MAX_VALUE;
+    ArrayList<String[]> chooseBestSupplier(ArrayList<String[]> group, int size) {
+        ArrayList<String[]> res = new ArrayList<>();
         try {
             c = db.connect();
             stmt = c.createStatement();
-            String sql = String.format("SELECT companyNumber, quantity*price FROM SupplierItem WHERE productID IN %s" +
-                    "GROUP BY companyNumber HAVING COUNT(*) = %d;", group, size);
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                int tempID = rs.getInt("companyNumber");
-                int tempPrice = rs.getInt("quantity*price");
-                if (minPrice > tempPrice) {
-                    minPrice = tempPrice;
-                    supID = tempID;
+            for (String[] item : group) {
+                String sql = String.format("SELECT companyNumber FROM SupplierItem WHERE productID = %d AND quantity >= %d " +
+                        "ORDER BY price ASC;", Integer.parseInt(item[0]), Integer.parseInt(item[2]));
+                ResultSet rs = stmt.executeQuery(sql);
+                if (rs.next()) {
+                    String[] num = new String[]{rs.getString("companyNumber")};
+                    String[] both = Stream.concat(Arrays.stream(num), Arrays.stream(item)).toArray(String[]::new);
+                    res.add(both);
                 }
             }
             close();
@@ -179,7 +179,7 @@ class Item {
         catch (SQLException e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
         }
-        return supID;
+        return res;
     }
 }
 
