@@ -117,7 +117,7 @@ public class SupplierController {
         //creates the order
         //adds the order
         Date date = Calendar.getInstance().getTime();
-        OrderDTO orderDTO = new OrderDTO(new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date.getTime()), constantDelivery? 1 : 0, needsDelivery? 1 : 0, itemDTOs);
+        OrderDTO orderDTO = new OrderDTO(new SimpleDateFormat("MM-dd-yyyy HH:mm:ss", Locale.ENGLISH).format(date.getTime()), constantDelivery? 1 : 0, needsDelivery? 1 : 0, itemDTOs);
         data.insert(orderDTO);
         return quantityWriter.calcPrice(data.getSupplier(supplierNum).getQuantityWriter(), order.getPrice(orderDTO)); //calculates it's price
     }
