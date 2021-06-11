@@ -106,7 +106,7 @@ public class SupplierController {
         SupplierDTO supplierDTO = new SupplierDTO(companyNumber, name, bankAccount, paymentMethod);
         supplierDTO.setItems(itemDTOs);
         supplierDTO.setContacts(contactDTOs);
-        supplierDTO.setQuantityWriter(new QuantityWriterDTO(companyNumber, regCostumer, minPrice, discountStepDTOs));
+        supplierDTO.setQuantityWriter(new QuantityWriterDTO(companyNumber, regCostumer, minPrice));
         data.insert(supplierDTO);
     }
 
@@ -118,7 +118,7 @@ public class SupplierController {
         //creates the order
         //adds the order
         Date date = Calendar.getInstance().getTime();
-        OrderDTO orderDTO = new OrderDTO(new SimpleDateFormat("MM-dd-yyyy HH:mm:ss", Locale.ENGLISH).format(date.getTime()), constantDelivery? 1 : 0, needsDelivery? 1 : 0, itemDTOs);
+        OrderDTO orderDTO = new OrderDTO(new SimpleDateFormat("MM-dd-yyyy HH:mm:ss", Locale.ENGLISH).format(date.getTime()), constantDelivery? 1 : 0, needsDelivery? 1 : 0);
         data.insert(orderDTO);
         return quantityWriter.calcPrice(data.getSupplier(supplierNum).getQuantityWriter(), order.getPrice(orderDTO)); //calculates it's price
     }
@@ -219,7 +219,7 @@ public class SupplierController {
         }
         //creates the order
         //adds the order
-        OrderDTO order = new OrderDTO(ZonedDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy-hh:mm:ss")), constantDelivery? 1 : 0, needsDelivery? 1 : 0, itemDTOs);
+        OrderDTO order = new OrderDTO(ZonedDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy-hh:mm:ss")), constantDelivery? 1 : 0, needsDelivery? 1 : 0);
         StringBuilder output = new StringBuilder();
         output.append(String.format("[Date: %s, Needs Delivery: %s, Periodic Delivery: %s]", order.getDate(), order.getNeedsDelivery() == 1, order.getPeriodicDelivery() == 1));
         output.append("\nItems:");

@@ -45,7 +45,7 @@ class QuantityWriter {
             key = new String[]{"QWID"};
             int id;
             for (DiscountStepDTO step : quan.getDiscounts()) {
-                step.setQwid(generatedId);
+                step.setQuantityWriterId(generatedId);
                 sql = String.format("INSERT INTO StepDiscount (stepPrice, precentage, QWID) " +
                         "VALUES (%d, %d, %d);", step.getStepPrice(), step.getPercentage(), generatedId);
                 c.prepareStatement(sql, key);
@@ -53,7 +53,7 @@ class QuantityWriter {
                 rs = stmt.getGeneratedKeys();
                 if (rs.next()) {
                     id = rs.getInt(1);
-                    step.setQwid(id);
+                    step.setQuantityWriterId(id);
                 }
             }
             close();
@@ -74,7 +74,7 @@ class QuantityWriter {
             DiscountStepDTO discount;
             QuantityWriterDTO writer;
             while (rs.next()) {
-                writer = new QuantityWriterDTO(rs.getInt("ID"), rs.getInt("companyNumber"), rs.getInt("regularCostumerDiscount"), rs.getInt("minPriceDiscount"), new ArrayList<>());
+                writer = new QuantityWriterDTO(rs.getInt("ID"), rs.getInt("companyNumber"), rs.getInt("regularCostumerDiscount"), rs.getInt("minPriceDiscount"));
                 if (!quan.containsKey(writer)) {
                     quan.put(writer, new ArrayList<>());
                 }

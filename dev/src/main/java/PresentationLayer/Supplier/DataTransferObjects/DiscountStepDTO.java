@@ -1,26 +1,28 @@
 package PresentationLayer.Supplier.DataTransferObjects;
 
-public class DiscountStepDTO {
-    private int id = -1;
+import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
+
+public class DiscountStepDTO extends DataTransferObject {
     private final int stepPrice;
     private final int percentage;
-    private int qwid = -1;
+    private int quantityWriterId = -1;
 
     public DiscountStepDTO(int stepPrice, int percentage) {
+        super(-1);
         this.stepPrice = stepPrice;
         this.percentage = percentage;
     }
 
-    public DiscountStepDTO(int id, int stepPrice, int percentage, int qwid) {
-        this.id = id;
+    public DiscountStepDTO(int id, int stepPrice, int percentage, int quantityWriterId) {
+        super(id);
         this.stepPrice = stepPrice;
         this.percentage = percentage;
-        this.qwid = qwid;
+        this.quantityWriterId = quantityWriterId;
     }
 
     public int getId() { return id; }
 
-    public int getQwid() { return qwid; }
+    public int getQuantityWriterId() { return quantityWriterId; }
 
     public int getPercentage() {
         return percentage;
@@ -35,8 +37,8 @@ public class DiscountStepDTO {
             this.id = id;
     }
 
-    public void setQwid(int qwid) {
-        if (this.qwid == -1)
-            this.qwid = qwid;
+    public void setQuantityWriterId(int quantityWriterId) {
+        if (this.quantityWriterId == -1)
+            this.quantityWriterId = quantityWriterId;
     }
 }

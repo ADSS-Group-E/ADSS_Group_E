@@ -7,8 +7,8 @@ public class Contact extends DomainObject {
     private final String name;
     private final String email;
 
-    public Contact(int companyNumber, String name, String email) {
-        super(companyNumber);
+    public Contact(int id, String name, String email) {
+        super(id);
         this.name = name;
         this.email = email;
     }
