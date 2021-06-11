@@ -1,5 +1,8 @@
 package BusinessLayer.Supplier;
 
+import BusinessLayer.Supplier.DomainObjects.Contact;
+import BusinessLayer.Supplier.DomainObjects.Order;
+import BusinessLayer.Supplier.DomainObjects.QuantityWriter;
 import DataAccessLayer.Supplier.DataController;
 import PresentationLayer.Supplier.DataTransferObjects.*;
 
@@ -7,7 +10,6 @@ import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Stream;
 
 public class SupplierController {
     private Contact contact;

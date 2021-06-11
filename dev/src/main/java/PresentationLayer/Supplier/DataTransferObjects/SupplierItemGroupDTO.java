@@ -1,9 +1,7 @@
 package PresentationLayer.Supplier.DataTransferObjects;
 
-import BusinessLayer.Inventory.DomainObjects.ItemGroup;
-import BusinessLayer.Supplier.SupplierItemGroup;
+import BusinessLayer.Supplier.DomainObjects.SupplierItemGroup;
 import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
-import PresentationLayer.Inventory.DataTransferObjects.ItemGroupDTO;
 
 import java.time.LocalDateTime;
 

@@ -1,4 +1,4 @@
-package DataAccessLayer.Supplier;
+package DataAccessLayer.Supplier.DataAccessObjects;
 
 import DataAccessLayer.Inventory.DataAccessObjects.DataAccessObject;
 import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;

@@ -1,4 +1,4 @@
-package BusinessLayer.Supplier;
+package BusinessLayer.Supplier.DomainObjects;
 
 import BusinessLayer.Inventory.DomainObjects.DomainObject;
 import PresentationLayer.Supplier.DataTransferObjects.DiscountStepDTO;
@@ -36,7 +36,7 @@ public class QuantityWriter extends DomainObject {
         this.discounts = null; //TODO
     }
 
-    int calcPrice(QuantityWriterDTO quantityWriterDTO, int price) {
+    public int calcPrice(QuantityWriterDTO quantityWriterDTO, int price) {
         if (quantityWriterDTO != null) {
             //calculates the price
             int maxPrecenet = 0;

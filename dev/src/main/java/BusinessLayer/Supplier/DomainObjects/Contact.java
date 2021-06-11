@@ -1,9 +1,9 @@
-package BusinessLayer.Supplier;
+package BusinessLayer.Supplier.DomainObjects;
 
 import BusinessLayer.Inventory.DomainObjects.DomainObject;
 import PresentationLayer.Supplier.DataTransferObjects.ContactDTO;
 
-class Contact extends DomainObject {
+public class Contact extends DomainObject {
     private final String name;
     private final String email;
 

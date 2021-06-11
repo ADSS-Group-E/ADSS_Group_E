@@ -1,12 +1,10 @@
-package BusinessLayer.Supplier;
+package BusinessLayer.Supplier.DomainObjects;
 
 import BusinessLayer.Inventory.DomainObjects.DomainObject;
 import PresentationLayer.Supplier.DataTransferObjects.OrderDTO;
 import PresentationLayer.Supplier.DataTransferObjects.SupplierItemDTO;
 
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Order extends DomainObject {
     private final String date;
@@ -45,7 +43,7 @@ public class Order extends DomainObject {
         return orderItems;
     }
 
-    ArrayList<String> getOrderItemsToString(ArrayList<SupplierItemDTO> orderItems) {
+    public ArrayList<String> getOrderItemsToString(ArrayList<SupplierItemDTO> orderItems) {
         ArrayList<String> retItems = new ArrayList<>();
         for (SupplierItemDTO i : orderItems) {
             retItems.add(String.format("ID: %d\nName: %s\nPrice: %d\nQuantity: %d\nSupplier CN: %s",i.getId(), i.getName(), i.getPrice(), i.getQuantity(), i.getSupplierCN()));
@@ -53,7 +51,7 @@ public class Order extends DomainObject {
         return retItems;
     }
 
-    int getPrice(OrderDTO order) {
+    public int getPrice(OrderDTO order) {
         int sum = 0;
         for (SupplierItemDTO supplierItemDTO : order.getOrderItems()) {
             sum += supplierItemDTO.getQuantity() * supplierItemDTO.getPrice();

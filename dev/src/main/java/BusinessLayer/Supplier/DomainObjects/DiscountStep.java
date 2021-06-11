@@ -1,4 +1,4 @@
-package BusinessLayer.Supplier;
+package BusinessLayer.Supplier.DomainObjects;
 
 import BusinessLayer.Inventory.DomainObjects.DomainObject;
 import PresentationLayer.Supplier.DataTransferObjects.DiscountStepDTO;

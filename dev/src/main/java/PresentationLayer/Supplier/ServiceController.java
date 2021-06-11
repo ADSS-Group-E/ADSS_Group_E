@@ -1,7 +1,5 @@
 package PresentationLayer.Supplier;
 
-import BusinessLayer.Supplier.Order;
-import BusinessLayer.Supplier.QuantityWriter;
 import BusinessLayer.Supplier.SupplierController;
 import PresentationLayer.Supplier.DataTransferObjects.OrderDTO;
 import PresentationLayer.Supplier.DataTransferObjects.QuantityWriterDTO;

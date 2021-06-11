@@ -1,10 +1,9 @@
-package BusinessLayer.Supplier;
+package BusinessLayer.Supplier.DomainObjects;
 
 import BusinessLayer.Inventory.DomainObjects.DomainObject;
 import PresentationLayer.Supplier.DataTransferObjects.*;
 
 import java.util.ArrayList;
-import java.util.List;
 
 class Supplier extends DomainObject {
 

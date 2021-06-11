@@ -1,6 +1,6 @@
 package PresentationLayer.Supplier.DataTransferObjects;
 
-import BusinessLayer.Supplier.OrderItemGroup;
+import BusinessLayer.Supplier.DomainObjects.OrderItemGroup;
 import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
 
 import java.time.LocalDateTime;
