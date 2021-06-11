@@ -1,17 +1,18 @@
 package PresentationLayer.Supplier.DataTransferObjects;
 
+import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class QuantityWriterDTO {
-    private int id;
+public class QuantityWriterDTO extends DataTransferObject {
     private final int companyNumber;
     private final int regularCostumerDiscount;
     private final int minPriceDiscount;
     private final ArrayList<DiscountStepDTO> discounts;
 
     public QuantityWriterDTO(int id, int companyNumber, int regularCostumerDiscount, int minPriceDiscount, ArrayList<DiscountStepDTO> discounts) {
-        this.id = id;
+        super(id);
         this.companyNumber = companyNumber;
         this.regularCostumerDiscount = regularCostumerDiscount;
         this.minPriceDiscount = minPriceDiscount;
@@ -19,15 +20,11 @@ public class QuantityWriterDTO {
     }
 
     public QuantityWriterDTO(int companyNumber, int regularCostumerDiscount, int minPriceDiscount, ArrayList<DiscountStepDTO> discounts) {
-        this.id = -1;
+        super(-1);
         this.companyNumber = companyNumber;
         this.regularCostumerDiscount = regularCostumerDiscount;
         this.minPriceDiscount = minPriceDiscount;
         this.discounts = discounts;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public int getCompanyNumber() {

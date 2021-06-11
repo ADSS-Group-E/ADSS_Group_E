@@ -10,24 +10,19 @@ import java.time.LocalDateTime;
  */
 
 public class ItemGroupDTO extends DataTransferObject{
-    public ItemGroupDTO(ItemGroup other) {
-        super(other.getId());
-        this.quantity = other.getQuantity();
-        this.priceBoughtAt = other.getPriceBoughtAt();
-        this.expiration = other.getExpiration();
-    }
+
 
     public enum Location{
         STORE,
-        STORAGE
+        STORAGE;
     }
     private int pid;
     private Location location;
     private int quantity;
     private double priceBoughtAt;
     private final LocalDateTime expiration;
-
     // Constructor
+
     public ItemGroupDTO(int id, int pid, Location location, int quantity, double priceBoughtAt, LocalDateTime expiration) {
         super(id);
         this.pid = pid;
@@ -35,6 +30,13 @@ public class ItemGroupDTO extends DataTransferObject{
         this.quantity = quantity;
         this.priceBoughtAt = priceBoughtAt;
         this.expiration = expiration;
+    }
+
+    public ItemGroupDTO(ItemGroup other) {
+        super(other.getId());
+        this.quantity = other.getQuantity();
+        this.priceBoughtAt = other.getPriceBoughtAt();
+        this.expiration = other.getExpiration();
     }
 
     public int getPid() {

@@ -1,27 +1,30 @@
-package BusinessLayer.Inventory.DomainObjects;
+package BusinessLayer.Supplier;
 
+import BusinessLayer.Inventory.DomainObjects.DomainObject;
+import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
 import PresentationLayer.Inventory.DataTransferObjects.ItemGroupDTO;
+import PresentationLayer.Supplier.DataTransferObjects.OrderItemGroupDTO;
 
 import java.time.LocalDateTime;
 
-/**
- * This class represents specific items of each product that exists.
- * Each item has an ID, and date-time of expiration.
- */
-public class ItemGroup {
-    private int id;
+public class OrderItemGroup {
+    private int id; // Autoincrement?
+    // Product ID
+    private final int pid;
     private int quantity;
-    private double priceBoughtAt;
+    private final double priceBoughtAt;
     private final LocalDateTime expiration;
 
-    public ItemGroup(int quantity, double priceBoughtAt, LocalDateTime expiration) {
+    public OrderItemGroup(int pid, int quantity, double priceBoughtAt, LocalDateTime expiration) {
+        this.pid = pid;
         this.quantity = quantity;
         this.priceBoughtAt = priceBoughtAt;
         this.expiration = expiration;
     }
 
-    public ItemGroup(ItemGroupDTO other) {
+    public OrderItemGroup(OrderItemGroupDTO other) {
         this.id = other.getId();
+        this.pid = other.getPid();
         this.quantity = other.getQuantity();
         this.priceBoughtAt = other.getPriceBoughtAt();
         this.expiration = other.getExpiration();
@@ -29,6 +32,10 @@ public class ItemGroup {
 
     public int getId() {
         return id;
+    }
+
+    public int getPid() {
+        return pid;
     }
 
     public int getQuantity() {
@@ -47,7 +54,4 @@ public class ItemGroup {
         this.id = id;
     }
 
-    public boolean isExpired(){
-        return (expiration.isBefore(LocalDateTime.now()));
-    }
 }

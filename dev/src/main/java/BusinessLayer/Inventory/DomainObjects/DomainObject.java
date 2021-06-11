@@ -1,7 +1,7 @@
 package BusinessLayer.Inventory.DomainObjects;
 
 public abstract class DomainObject {
-    int id;
+    protected int id;
 
     public int getId() {
         return id;

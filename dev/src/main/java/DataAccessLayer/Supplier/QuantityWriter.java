@@ -47,7 +47,7 @@ class QuantityWriter {
             for (DiscountStepDTO step : quan.getDiscounts()) {
                 step.setQwid(generatedId);
                 sql = String.format("INSERT INTO StepDiscount (stepPrice, precentage, QWID) " +
-                        "VALUES (%d, %d, %d);", step.getStepPrice(), step.getPrecentage(), generatedId);
+                        "VALUES (%d, %d, %d);", step.getStepPrice(), step.getPercentage(), generatedId);
                 c.prepareStatement(sql, key);
                 stmt.executeUpdate(sql);
                 rs = stmt.getGeneratedKeys();

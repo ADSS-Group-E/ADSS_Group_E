@@ -1,7 +1,7 @@
 package PresentationLayer.Inventory.DataTransferObjects;
 
 public abstract class DataTransferObject {
-    int id;
+    protected int id;
 
     public DataTransferObject(int id) {
         this.id = id;

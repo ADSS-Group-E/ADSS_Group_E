@@ -1,7 +1,8 @@
 package PresentationLayer.Supplier.DataTransferObjects;
 
-public class SupplierItemDTO {
-    private int id;
+import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
+
+public class SupplierItemDTO extends DataTransferObject {
     private final String name;
     private int quantity;
     private final int price;
@@ -10,7 +11,7 @@ public class SupplierItemDTO {
     private int companyNumber;
 
     public SupplierItemDTO(String name, int quantity, int price, String supplierCN) {
-        this.id = -1;
+        super(-1);
         this.name = name;
         this.quantity = quantity;
         this.price = price;
@@ -20,7 +21,7 @@ public class SupplierItemDTO {
     }
 
     public SupplierItemDTO(int id, String name, int quantity, int price) {
-        this.id = id;
+        super(id);
         this.name = name;
         this.quantity = quantity;
         this.price = price;
@@ -30,7 +31,7 @@ public class SupplierItemDTO {
     }
 
     public SupplierItemDTO(String name, int quantity, int price, String supplierCN, int companyNumber) {
-        this.id = -1;
+        super(-1);
         this.name = name;
         this.quantity = quantity;
         this.price = price;
@@ -40,7 +41,7 @@ public class SupplierItemDTO {
     }
 
     public SupplierItemDTO(int id, String name, int quantity, int price, String supplierCN) {
-        this.id = id;
+        super(-1);
         this.name = name;
         this.quantity = quantity;
         this.price = price;
@@ -50,7 +51,7 @@ public class SupplierItemDTO {
     }
 
     public SupplierItemDTO(int id, String name, int quantity, int price, String supplierCN, int companyNumber) {
-        this.id = id;
+        super(id);
         this.name = name;
         this.quantity = quantity;
         this.price = price;
@@ -60,7 +61,7 @@ public class SupplierItemDTO {
     }
 
     public SupplierItemDTO(int id, int quantity, int price, int companyNumber) {
-        this.id = id;
+        super(id);
         this.name = "";
         this.quantity = quantity;
         this.price = price;
@@ -70,7 +71,7 @@ public class SupplierItemDTO {
     }
 
     public SupplierItemDTO(int id, int quantity, int price, int companyNumber, int orderID) {
-        this.id = id;
+        super(id);
         this.name = "";
         this.quantity = quantity;
         this.price = price;

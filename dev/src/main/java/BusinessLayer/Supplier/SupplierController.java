@@ -14,7 +14,7 @@ public class SupplierController {
     private Item item;
     private Order order;
     private QuantityWriter quantityWriter;
-    private Supplier supplier;
+    //private Supplier supplier;
     private DataController data;
     private final int maxDiscount = 100;
 
@@ -23,7 +23,7 @@ public class SupplierController {
         item = new Item();
         order = new Order();
         quantityWriter = new QuantityWriter();
-        supplier = new Supplier();
+        //supplier = new Supplier();
         data = new DataController();
     }
 

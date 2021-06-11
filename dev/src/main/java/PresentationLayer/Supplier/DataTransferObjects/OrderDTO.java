@@ -1,16 +1,17 @@
 package PresentationLayer.Supplier.DataTransferObjects;
 
+import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
+
 import java.util.ArrayList;
 
-public class OrderDTO {
-    private int id;
+public class OrderDTO extends DataTransferObject {
     private final String date;
     private final int periodicDelivery;
     private final int needsDelivery;
     private ArrayList<SupplierItemDTO> orderItems;
 
     public OrderDTO(String date, int periodicDelivery, int needsDelivery, ArrayList<SupplierItemDTO> orderItems) {
-        this.id = -1;
+        super(-1);
         this.date = date;
         this.periodicDelivery = periodicDelivery;
         this.needsDelivery = needsDelivery;
@@ -18,15 +19,11 @@ public class OrderDTO {
     }
 
     public OrderDTO(int id, String date, int periodicDelivery, int needsDelivery, ArrayList<SupplierItemDTO> orderItems) {
-        this.id = id;
+        super(id);
         this.date = date;
         this.periodicDelivery = periodicDelivery;
         this.needsDelivery = needsDelivery;
         this.orderItems = orderItems;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public int getPeriodicDelivery() {
