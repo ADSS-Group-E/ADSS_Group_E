@@ -4,16 +4,17 @@ import BusinessLayer.Inventory.DomainObjects.DomainObject;
 import PresentationLayer.Supplier.DataTransferObjects.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-class Supplier extends DomainObject {
+public class Supplier extends DomainObject {
 
     private final String name;
     private final String bankAccount;
     private final String paymentMethod;
     private QuantityWriter quantityWriter; //TODO
-    private ArrayList<Order> orders;
-    private ArrayList<SupplierProduct> products;
-    private ArrayList<Contact> contacts;
+    private HashMap<Integer,Order> orders;
+    private HashMap<Integer,SupplierProduct> products;
+    private HashMap<Integer,Contact> contacts;
 
     public Supplier(int id, String name, String bankAccount, String paymentMethod) {
         super(id);
@@ -40,5 +41,23 @@ class Supplier extends DomainObject {
     public String getPaymentMethod() {
         return paymentMethod;
     }
+
+    public void loadOrders(HashMap<Integer, Order> orders) {
+        this.orders = orders;
+    }
+
+    public void loadProducts(HashMap<Integer, SupplierProduct> products) {
+        this.products = products;
+    }
+
+    public void loadContacts(HashMap<Integer, Contact> contacts) {
+        this.contacts = contacts;
+    }
+
+    public void addOrder(Order order){
+
+    }
+
+
 }
 

@@ -3,21 +3,26 @@ package BusinessLayer.Supplier.DomainObjects;
 import BusinessLayer.Inventory.DomainObjects.DomainObject;
 import PresentationLayer.Supplier.DataTransferObjects.OrderDTO;
 import PresentationLayer.Supplier.DataTransferObjects.SupplierItemDTO;
+import PresentationLayer.Supplier.DataTransferObjects.SupplierItemGroupDTO;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Order extends DomainObject {
-    private final String date;
-    private final int periodicDelivery;
-    private final int needsDelivery;
-    private ArrayList<OrderItemGroup> orderItems;
+    private final LocalDateTime date;
+    private final boolean periodicDelivery;
+    private final boolean needsDelivery;
+    private HashMap<Integer, OrderItemGroup> orderItems;
 
-    public Order(int id, String date, int periodicDelivery, int needsDelivery) {
+    private boolean loaded = false;
+
+    public Order(int id, LocalDateTime date, boolean periodicDelivery, boolean needsDelivery) {
         super(id);
         this.date = date;
         this.periodicDelivery = periodicDelivery;
         this.needsDelivery = needsDelivery;
-        orderItems= new ArrayList<>();
+        orderItems= new HashMap<>();
     }
 
     public Order(OrderDTO other){
@@ -27,19 +32,20 @@ public class Order extends DomainObject {
         this.needsDelivery = other.getNeedsDelivery();
     }
 
-    public String getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public int getPeriodicDelivery() {
+    public boolean getPeriodicDelivery() {
         return periodicDelivery;
     }
 
-    public int getNeedsDelivery() {
+    public boolean getNeedsDelivery() {
         return needsDelivery;
     }
 
-    public ArrayList<OrderItemGroup> getOrderItems() {
+    public HashMap<Integer, OrderItemGroup> getOrderItems() {
+        loadItems();
         return orderItems;
     }
 
@@ -57,6 +63,24 @@ public class Order extends DomainObject {
             sum += supplierItemDTO.getQuantity() * supplierItemDTO.getPrice();
         }
         return sum;
+    }
+
+    public void loadItems(){
+        // Load a product's itemGroups
+        if (!loaded){
+            ArrayList<SupplierItemGroupDTO> supplierItemGroupDTOS = supplierItemGroupDAO.selectByProduct(this.getId());
+            HashMap<Integer,SupplierItemGroup> items = new HashMap<>();
+
+            for (SupplierItemGroupDTO supplierItemGroupDTO:
+                    supplierItemGroupDTOS) {
+                SupplierItemGroup supplierItemGroup = new SupplierItemGroup(supplierItemGroupDTO);
+                items.put(supplierItemGroup.getId(), supplierItemGroup);
+            }
+
+            this.orderItems = items;
+
+            loaded = true;
+        }
     }
 }
 
