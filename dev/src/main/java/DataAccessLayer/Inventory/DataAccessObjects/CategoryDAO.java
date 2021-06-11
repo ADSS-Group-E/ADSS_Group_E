@@ -45,7 +45,7 @@ public class CategoryDAO extends DataAccessObject{
     }
 
     @Override
-    CategoryDTO resultToDTO(ResultSet resultSet) throws SQLException {
+    protected CategoryDTO resultToDTO(ResultSet resultSet) throws SQLException {
         return new CategoryDTO(  resultSet.getInt("ID"),
                 resultSet.getString("name"),
                 resultSet.getInt("superID"));

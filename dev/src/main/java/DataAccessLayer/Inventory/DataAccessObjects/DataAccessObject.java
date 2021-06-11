@@ -6,9 +6,10 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public abstract class DataAccessObject {
-    Connection c = null;
-    String databaseUrl;
+    protected Connection c = null;
+    protected String databaseUrl;
     protected String tableName;
+    protected String primaryKey = "ID";
 
     public DataAccessObject() {
         this.databaseUrl = "jdbc:sqlite::resource:module.db";
@@ -126,7 +127,7 @@ public abstract class DataAccessObject {
         try {
             c = this.connect();
             Statement stmt = c.createStatement();
-            String sql = String.format("SELECT * FROM %s WHERE ID = %d", tableName, id);;
+            String sql = String.format("SELECT * FROM %s WHERE %s = %d", tableName,primaryKey, id);;
             ResultSet result = stmt.executeQuery(sql);
             T dataTransferObject = null;
             if (result.next()){
@@ -145,7 +146,7 @@ public abstract class DataAccessObject {
         try {
             c = this.connect();
             Statement stmt = c.createStatement();
-            String sql = "DELETE FROM " + tableName + " WHERE ID = " + id;
+            String sql = "DELETE FROM " + tableName + " WHERE "+ primaryKey +" = " + id;
             int rowsAffected = stmt.executeUpdate(sql);
             close();
 
@@ -167,7 +168,7 @@ public abstract class DataAccessObject {
         }
     }
 
-    abstract <T extends DataTransferObject> T resultToDTO(ResultSet resultSet) throws SQLException;
+    protected abstract <T extends DataTransferObject> T resultToDTO(ResultSet resultSet) throws SQLException;
 
 
     Connection connect() {

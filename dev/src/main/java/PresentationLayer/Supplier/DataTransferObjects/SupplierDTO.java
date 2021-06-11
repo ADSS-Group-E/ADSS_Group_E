@@ -1,9 +1,11 @@
 package PresentationLayer.Supplier.DataTransferObjects;
 
+import DataAccessLayer.Inventory.DataAccessObjects.DataAccessObject;
+import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
+
 import java.util.ArrayList;
 
-public class SupplierDTO {
-    private final int companyNumber;
+public class SupplierDTO extends DataTransferObject {
     private final String name;
     private final String bankAccount;
     private final String paymentMethod;
@@ -13,7 +15,7 @@ public class SupplierDTO {
     private ArrayList<ContactDTO> contacts;
 
     public SupplierDTO(int companyNumber, String name, String bankAccount, String paymentMethod) {
-        this.companyNumber = companyNumber;
+        super(companyNumber); // TODO ID things
         this.name = name;
         this.bankAccount = bankAccount;
         this.paymentMethod = paymentMethod;
@@ -24,7 +26,7 @@ public class SupplierDTO {
     }
 
     public int getCompanyNumber() {
-        return companyNumber;
+        return getId();
     }
 
     public String getName() {

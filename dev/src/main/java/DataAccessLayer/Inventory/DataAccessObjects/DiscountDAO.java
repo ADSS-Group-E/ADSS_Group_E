@@ -55,7 +55,7 @@ public class DiscountDAO extends DataAccessObject{
     }
 
     @Override
-    DiscountDTO resultToDTO(ResultSet resultSet) throws SQLException {
+    protected DiscountDTO resultToDTO(ResultSet resultSet) throws SQLException {
         return new DiscountDTO( resultSet.getInt("ID"),
                 resultSet.getString("name"),
                 resultSet.getDouble("discPercentage"),

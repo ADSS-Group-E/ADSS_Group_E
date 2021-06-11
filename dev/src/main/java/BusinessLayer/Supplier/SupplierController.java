@@ -1,7 +1,6 @@
 package BusinessLayer.Supplier;
 
 import DataAccessLayer.Supplier.DataController;
-import PresentationLayer.Inventory.DataTransferObjects.ItemDTO;
 import PresentationLayer.Supplier.DataTransferObjects.*;
 
 import java.text.SimpleDateFormat;

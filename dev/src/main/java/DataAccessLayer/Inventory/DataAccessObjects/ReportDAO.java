@@ -28,7 +28,7 @@ public class ReportDAO extends DataAccessObject{
 
 
     @Override
-    <T extends DataTransferObject> T resultToDTO(ResultSet resultSet) throws SQLException {
+    protected  <T extends DataTransferObject> T resultToDTO(ResultSet resultSet) throws SQLException {
         return null;
     }
 

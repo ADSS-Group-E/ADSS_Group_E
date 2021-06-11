@@ -68,7 +68,7 @@ public class ProductDAO extends DataAccessObject {
 
 
     @Override
-    ProductDTO resultToDTO(ResultSet resultSet) throws SQLException {
+    protected ProductDTO resultToDTO(ResultSet resultSet) throws SQLException {
         return new ProductDTO(  resultSet.getInt("ID"),
                                 resultSet.getString("name"),
                                 resultSet.getString("storeLocation"),

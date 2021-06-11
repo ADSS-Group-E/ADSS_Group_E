@@ -43,7 +43,7 @@ public class ItemGroupDAO extends DataAccessObject{
     }
 
     @Override
-    ItemGroupDTO resultToDTO(ResultSet resultSet) throws SQLException {
+    protected ItemGroupDTO resultToDTO(ResultSet resultSet) throws SQLException {
         ItemGroupDTO itemGroupDTO = new ItemGroupDTO( resultSet.getInt("ID"),
                 resultSet.getInt("PID"),
                 ItemGroupDTO.Location.values()[resultSet.getInt("location")],
