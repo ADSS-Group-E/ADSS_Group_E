@@ -2,7 +2,6 @@ package DataAccessLayer.Supplier.DataAccessObjects;
 
 import DataAccessLayer.Inventory.DataAccessObjects.DataAccessObject;
 import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
-import PresentationLayer.Supplier.DataTransferObjects.ContactDTO;
 import PresentationLayer.Supplier.DataTransferObjects.OrderDTO;
 
 import java.sql.PreparedStatement;
@@ -49,7 +48,7 @@ public class OrderDAO extends DataAccessObject {
     @Override
     protected OrderDTO resultToDTO(ResultSet resultSet) throws SQLException {
         return new OrderDTO(  resultSet.getInt(primaryKey),
-                LocalDateTime.parse(resultSet.getString("date")),
+                companyNumber, LocalDateTime.parse(resultSet.getString("date")),
                 resultSet.getBoolean("periodicDelivery"),
                 resultSet.getBoolean("needsDelivery"));
     }

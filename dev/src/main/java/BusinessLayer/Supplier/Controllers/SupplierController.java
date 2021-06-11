@@ -28,6 +28,10 @@ public class SupplierController extends DomainController {
         quantityWriterDAO = new QuantityWriterDAO();
     }
 
+    public Supplier getSupplier(int id){
+        return (Supplier) get(id);
+    }
+
     @Override
     protected DomainObject buildDomainObjectFromDto(DataTransferObject dataTransferObject) {
         SupplierDTO supplierDTO = (SupplierDTO) dataTransferObject;
@@ -39,9 +43,10 @@ public class SupplierController extends DomainController {
                 supplierProductDTOS) {
             SupplierProduct supplierProduct = new SupplierProduct(supplierProductDTO);
             supplierProduct.loadItems();
-            products.put(supplierProduct.getId(), supplierProduct);
+            products.put(supplierProduct.getPid(), supplierProduct);
         }
 
+        /*
         // Load a supplier's orders but don't populate them
         ArrayList<OrderDTO> orderDTOs = orderDAO.selectBySupplier(supplierDTO.getId());
         HashMap<Integer, Order> orders = new HashMap<>();
@@ -51,7 +56,7 @@ public class SupplierController extends DomainController {
             order.loadItems(); // TODO Can implement lazy loading?
             orders.put(order.getId(), order);
         }
-
+*/
         // Load a supplier's contacts
         ArrayList<ContactDTO> contactDTOS = contactDAO.selectBySupplier(supplierDTO.getId());
         HashMap<Integer, Contact> contacts = new HashMap<>();
@@ -67,16 +72,51 @@ public class SupplierController extends DomainController {
 
         Supplier supplier = new Supplier(supplierDTO);
         supplier.loadProducts(products);
-        supplier.loadOrders(orders);
+        //supplier.loadOrders(orders);
         supplier.loadContacts(contacts);
         supplier.loadQuantityWriter(quantityWriter);
 
         return supplier;
     }
 
+    public ArrayList<Supplier> getAllSuppliers() {
+        ArrayList<Supplier> suppliers = new ArrayList<>();
+        ArrayList<DomainObject> domainObjects = getList();
+
+        for (DomainObject domainObject:
+                domainObjects) {
+            suppliers.add((Supplier)domainObject);
+        }
+
+        return suppliers;
+    }
+
     @Override
     protected DataTransferObject buildDtoFromDomainObject(DomainObject domainObject) {
         return null;
+    }
+
+
+    // ---------------- TRANSLATED FUNCTIONALITY ------------------
+
+    // Done
+    public ArrayList<String[]> getSuppliersInfo() {
+        ArrayList<String[]> suppliersInfo = new ArrayList<>();
+        for (Supplier supplier : getAllSuppliers()) {
+            String[] info = {supplier.getId() + "", supplier.getName(),  supplier.getPaymentMethod(), supplier.getBankAccount()};
+            suppliersInfo.add(info);
+        }
+        return suppliersInfo;
+    }
+
+    public ArrayList<SupplierProduct> getProductsFromSupplier(int supplierNum) {
+        Supplier supplier = getSupplier(supplierNum);
+        return supplier.getAllProducts();
+    }
+
+    public SupplierProduct getSpecificProduct(int supplierNum, int pid) {
+        Supplier supplier = getSupplier(supplierNum);
+        return supplier.getProduct(pid);
     }
 
 

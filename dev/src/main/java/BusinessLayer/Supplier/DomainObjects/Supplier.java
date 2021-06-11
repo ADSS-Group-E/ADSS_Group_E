@@ -12,7 +12,8 @@ public class Supplier extends DomainObject {
     private final String bankAccount;
     private final String paymentMethod;
     private QuantityWriter quantityWriter; //TODO
-    private HashMap<Integer,Order> orders;
+    //private HashMap<Integer,Order> orders;
+    // Kept in the hashmap with PID, not the ID
     private HashMap<Integer,SupplierProduct> products;
     private HashMap<Integer,Contact> contacts;
 
@@ -42,10 +43,11 @@ public class Supplier extends DomainObject {
         return paymentMethod;
     }
 
+    /*
     public void loadOrders(HashMap<Integer, Order> orders) {
         this.orders = orders;
     }
-
+*/
     public void loadProducts(HashMap<Integer, SupplierProduct> products) {
         this.products = products;
     }
@@ -60,6 +62,13 @@ public class Supplier extends DomainObject {
 
     }
 
+    public SupplierProduct getProduct(int pid){
+        return products.get(pid);
+    }
+
+    public ArrayList<SupplierProduct> getAllProducts(){
+        return new ArrayList<>(products.values());
+    }
 
 }
 

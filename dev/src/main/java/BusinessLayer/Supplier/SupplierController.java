@@ -58,6 +58,7 @@ public class SupplierController {
         createOrder(54, true, true, orderItems2);
     }
 
+    /*
     public ArrayList<String[]> getSuppliersInfo() {
         ArrayList<String[]> suppliersInfo = new ArrayList<>();
         for (SupplierDTO supplier : data.getSuppliers()) {
@@ -66,7 +67,7 @@ public class SupplierController {
         }
         return suppliersInfo;
     }
-
+*/
     public void register(String name, int companyNumber, String paymentMethod,
                  String bankAccount, ArrayList<String[]> items, ArrayList<String[]> contacts){
         ArrayList<SupplierItemDTO> itemDTOs = new ArrayList<>();
@@ -136,7 +137,7 @@ public class SupplierController {
         }
         return regItems;
     }
-
+/*
     public String[] getSpecificItem(int supplierNum, int itemNum) {
         ArrayList<SupplierItemDTO> sup = data.getSupplierItems(supplierNum);
         for (SupplierItemDTO item : sup) {
@@ -145,7 +146,7 @@ public class SupplierController {
         }
         return new String[]{};
     }
-
+*/
     public boolean updateSellerItemQuantity(int supplierNum, int itemNum, int quantity) {
         SupplierDTO sup = data.getSupplier(supplierNum);
         if (sup == null) return false; //if the supplier number not in range
@@ -191,9 +192,11 @@ public class SupplierController {
         return false;
     }
 
+    /*
     public ArrayList<SupplierItemDTO> getItemsFromSupplier(int supplierNum) {
         return data.getSupplierItems(supplierNum); //get all items from a supplier
     }
+    */
 
     public QuantityWriterDTO getQuantityWriter(int idx){
         return data.getSupplier(idx).getQuantityWriter();

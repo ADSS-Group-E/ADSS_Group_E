@@ -91,7 +91,7 @@ class Order {
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 order = new OrderDTO(
-                        rs.getInt("orderID"), rs.getString("date"), rs.getInt("periodicDelivery"), rs.getInt("needsDelivery")
+                        rs.getInt("orderID"), companyNumber, rs.getString("date"), rs.getInt("periodicDelivery"), rs.getInt("needsDelivery")
                 );
                 if (!regularOrders.containsKey(order)) {
                     regularOrders.put(order, new ArrayList<>());
@@ -121,7 +121,7 @@ class Order {
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 order = new OrderDTO(
-                        rs.getInt("orderID"), rs.getString("date"), rs.getInt("periodicDelivery"), rs.getInt("needsDelivery")
+                        rs.getInt("orderID"), companyNumber, rs.getString("date"), rs.getInt("periodicDelivery"), rs.getInt("needsDelivery")
                 );
                 if (!regularOrders.containsKey(order)) {
                     regularOrders.put(order, new ArrayList<>());
@@ -151,7 +151,7 @@ class Order {
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 order = new OrderDTO(
-                        rs.getInt("orderID"), rs.getString("date"), rs.getInt("periodicDelivery"), rs.getInt("needsDelivery")
+                        rs.getInt("orderID"), companyNumber, rs.getString("date"), rs.getInt("periodicDelivery"), rs.getInt("needsDelivery")
                 );
                 if (!regularOrders.containsKey(order)) {
                     regularOrders.put(order, new ArrayList<>());

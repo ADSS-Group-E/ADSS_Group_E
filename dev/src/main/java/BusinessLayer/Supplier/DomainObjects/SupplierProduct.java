@@ -42,6 +42,14 @@ public class SupplierProduct extends DomainObject {
         supplierItemGroupDAO = new SupplierItemGroupDAO();
     }
 
+    public int getPid() {
+        return pid;
+    }
+
+    public String getSupplierCN() {
+        return supplierCN;
+    }
+
     public String getName() {
         return name;
     }
