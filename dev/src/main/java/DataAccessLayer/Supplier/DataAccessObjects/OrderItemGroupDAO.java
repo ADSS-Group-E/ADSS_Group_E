@@ -8,7 +8,9 @@ import PresentationLayer.Supplier.DataTransferObjects.SupplierItemGroupDTO;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class OrderItemGroupDAO extends DataAccessObject {
     public OrderItemGroupDAO(String databaseUrl) {
@@ -52,5 +54,25 @@ public class OrderItemGroupDAO extends DataAccessObject {
                 resultSet.getInt("quantity"),
                 resultSet.getDouble("priceBoughtAt"),
                 LocalDateTime.parse(resultSet.getString("expiration")));
+    }
+
+    public ArrayList<OrderItemGroupDTO> selectByOrder(int pid){
+        try {
+            c = this.connect();
+            Statement stmt = c.createStatement();
+            String sql = String.format("SELECT * FROM %s WHERE supplierProductID = %d", tableName, pid);
+            ResultSet result = stmt.executeQuery(sql);
+
+            ArrayList<OrderItemGroupDTO> dataTransferObjects = new ArrayList<>();
+            while (result.next()){
+                dataTransferObjects.add(resultToDTO(result));
+            }
+            close();
+            return dataTransferObjects;
+        }
+        catch (SQLException e) {
+            handleError(e);
+            return null;
+        }
     }
 }

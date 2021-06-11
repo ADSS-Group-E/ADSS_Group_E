@@ -2,12 +2,15 @@ package DataAccessLayer.Supplier.DataAccessObjects;
 
 import DataAccessLayer.Inventory.DataAccessObjects.DataAccessObject;
 import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
+import PresentationLayer.Inventory.DataTransferObjects.ItemGroupDTO;
 import PresentationLayer.Supplier.DataTransferObjects.ContactDTO;
 import PresentationLayer.Supplier.DataTransferObjects.SupplierProductDTO;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 
 public class ContactDAO extends DataAccessObject {
     public ContactDAO(String databaseUrl) {
@@ -46,5 +49,25 @@ public class ContactDAO extends DataAccessObject {
                 resultSet.getInt("companyNumber"),
                 resultSet.getString("name"),
                 resultSet.getString("email"));
+    }
+
+    public ArrayList<ContactDTO> selectBySupplier(int pid){
+        try {
+            c = this.connect();
+            Statement stmt = c.createStatement();
+            String sql = String.format("SELECT * FROM %s WHERE companyNumber = %d", tableName, pid);
+            ResultSet result = stmt.executeQuery(sql);
+
+            ArrayList<ContactDTO> dataTransferObjects = new ArrayList<>();
+            while (result.next()){
+                dataTransferObjects.add(resultToDTO(result));
+            }
+            close();
+            return dataTransferObjects;
+        }
+        catch (SQLException e) {
+            handleError(e);
+            return null;
+        }
     }
 }

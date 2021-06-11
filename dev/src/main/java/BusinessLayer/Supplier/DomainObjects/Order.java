@@ -1,7 +1,9 @@
 package BusinessLayer.Supplier.DomainObjects;
 
 import BusinessLayer.Inventory.DomainObjects.DomainObject;
+import DataAccessLayer.Supplier.DataAccessObjects.OrderItemGroupDAO;
 import PresentationLayer.Supplier.DataTransferObjects.OrderDTO;
+import PresentationLayer.Supplier.DataTransferObjects.OrderItemGroupDTO;
 import PresentationLayer.Supplier.DataTransferObjects.SupplierItemDTO;
 import PresentationLayer.Supplier.DataTransferObjects.SupplierItemGroupDTO;
 
@@ -15,6 +17,8 @@ public class Order extends DomainObject {
     private final boolean needsDelivery;
     private HashMap<Integer, OrderItemGroup> orderItems;
 
+    private OrderItemGroupDAO orderItemGroupDAO;
+
     private boolean loaded = false;
 
     public Order(int id, LocalDateTime date, boolean periodicDelivery, boolean needsDelivery) {
@@ -23,6 +27,8 @@ public class Order extends DomainObject {
         this.periodicDelivery = periodicDelivery;
         this.needsDelivery = needsDelivery;
         orderItems= new HashMap<>();
+
+        orderItemGroupDAO = new OrderItemGroupDAO();
     }
 
     public Order(OrderDTO other){
@@ -30,6 +36,9 @@ public class Order extends DomainObject {
         this.date = other.getDate();
         this.periodicDelivery = other.getPeriodicDelivery();
         this.needsDelivery = other.getNeedsDelivery();
+
+        orderItemGroupDAO = new OrderItemGroupDAO();
+
     }
 
     public LocalDateTime getDate() {
@@ -68,13 +77,13 @@ public class Order extends DomainObject {
     public void loadItems(){
         // Load a product's itemGroups
         if (!loaded){
-            ArrayList<SupplierItemGroupDTO> supplierItemGroupDTOS = supplierItemGroupDAO.selectByProduct(this.getId());
-            HashMap<Integer,SupplierItemGroup> items = new HashMap<>();
+            ArrayList<OrderItemGroupDTO> orderItemGroupDTOS = orderItemGroupDAO.selectByOrder(this.getId());
+            HashMap<Integer,OrderItemGroup> items = new HashMap<>();
 
-            for (SupplierItemGroupDTO supplierItemGroupDTO:
-                    supplierItemGroupDTOS) {
-                SupplierItemGroup supplierItemGroup = new SupplierItemGroup(supplierItemGroupDTO);
-                items.put(supplierItemGroup.getId(), supplierItemGroup);
+            for (OrderItemGroupDTO orderItemGroupDTO:
+                    orderItemGroupDTOS) {
+                OrderItemGroup orderItemGroup = new OrderItemGroup(orderItemGroupDTO);
+                items.put(orderItemGroup.getId(), orderItemGroup);
             }
 
             this.orderItems = items;

@@ -26,6 +26,8 @@ public class SupplierProduct extends DomainObject {
         this.price = price;
         this.supplierCN = supplierCN;
         items = new HashMap<>();
+
+        supplierItemGroupDAO = new SupplierItemGroupDAO();
     }
 
     public SupplierProduct(SupplierProductDTO other){
@@ -36,6 +38,8 @@ public class SupplierProduct extends DomainObject {
         this.price = other.getPrice();
         this.supplierCN = other.getSupplierCN();
         items = new HashMap<>();
+
+        supplierItemGroupDAO = new SupplierItemGroupDAO();
     }
 
     public String getName() {

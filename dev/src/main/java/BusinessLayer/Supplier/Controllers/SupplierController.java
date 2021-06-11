@@ -7,7 +7,10 @@ import BusinessLayer.Supplier.DomainObjects.Order;
 import BusinessLayer.Supplier.DomainObjects.Supplier;
 import BusinessLayer.Supplier.DomainObjects.SupplierProduct;
 import DataAccessLayer.Inventory.DataAccessObjects.DataAccessObject;
+import DataAccessLayer.Supplier.DataAccessObjects.ContactDAO;
+import DataAccessLayer.Supplier.DataAccessObjects.OrderDAO;
 import DataAccessLayer.Supplier.DataAccessObjects.SupplierDAO;
+import DataAccessLayer.Supplier.DataAccessObjects.SupplierProductDAO;
 import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
 import PresentationLayer.Inventory.DataTransferObjects.ItemGroupDTO;
 import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
@@ -18,8 +21,15 @@ import java.util.HashMap;
 
 public class SupplierController extends DomainController {
 
+    SupplierProductDAO supplierProductDAO;
+    OrderDAO orderDAO;
+    ContactDAO contactDAO;
+
     public SupplierController(SupplierDAO DAO) {
         super(DAO);
+        supplierProductDAO = new SupplierProductDAO();
+        orderDAO = new OrderDAO();
+        contactDAO = new ContactDAO();
     }
 
     @Override
@@ -32,6 +42,7 @@ public class SupplierController extends DomainController {
         for (SupplierProductDTO supplierProductDTO:
                 supplierProductDTOS) {
             SupplierProduct supplierProduct = new SupplierProduct(supplierProductDTO);
+            supplierProduct.loadItems();
             products.put(supplierProduct.getId(), supplierProduct);
         }
 
@@ -41,6 +52,7 @@ public class SupplierController extends DomainController {
         for (OrderDTO orderDTO:
                 orderDTOs) {
             Order order = new Order(orderDTO);
+            order.loadItems(); // TODO Can implement lazy loading?
             orders.put(order.getId(), order);
         }
 

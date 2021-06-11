@@ -19,7 +19,7 @@ public abstract class DataAccessObject {
         this.databaseUrl = databaseUrl;
     }
 
-    void close() throws SQLException {
+    protected void close() throws SQLException {
         c.commit();
         c.close();
         c  = null;
@@ -158,7 +158,7 @@ public abstract class DataAccessObject {
         }
     }
 
-    void handleError(SQLException e) {
+    protected void handleError(SQLException e) {
         System.err.println( e.getClass().getName() + ": On table " + tableName + " : " + e.getMessage() );
         try {
             c.close();
@@ -171,7 +171,7 @@ public abstract class DataAccessObject {
     protected abstract <T extends DataTransferObject> T resultToDTO(ResultSet resultSet) throws SQLException;
 
 
-    Connection connect() {
+    protected Connection connect() {
         // SQLite connection string
         String url = "jdbc:sqlite::resource:module.db";
         Connection conn = null;
