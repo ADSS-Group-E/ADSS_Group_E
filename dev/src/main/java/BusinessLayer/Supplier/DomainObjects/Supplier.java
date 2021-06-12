@@ -2,6 +2,7 @@ package BusinessLayer.Supplier.DomainObjects;
 
 import BusinessLayer.Inventory.DomainObjects.DomainObject;
 import DataAccessLayer.Supplier.DataAccessObjects.ContactDAO;
+import DataAccessLayer.Supplier.DataAccessObjects.OrderItemGroupDAO;
 import DataAccessLayer.Supplier.DataAccessObjects.QuantityWriterDAO;
 import DataAccessLayer.Supplier.DataAccessObjects.SupplierProductDAO;
 import PresentationLayer.Supplier.DataTransferObjects.*;
@@ -181,5 +182,39 @@ public class Supplier extends DomainObject {
         return this.quantityWriter;
     }
 
+    public int getMatchingId(int inventoryPid) {
+        ArrayList<SupplierProduct> products = getAllProducts();
+        for (SupplierProduct supplierProduct :
+                products) {
+            if (supplierProduct.getPid() == inventoryPid){
+                return supplierProduct.getId();
+            }
+        }
+        return -1;
+    }
+
+    // --------------------------
+
+
+    public ArrayList<OrderItemGroup> makeOrderItemGroups(int supplierProductID, int quantity) {
+        ArrayList<OrderItemGroup> orderItemGroups = new ArrayList<>();
+        ArrayList<SupplierItemGroup> supplierItemGroups = getAllSupplierProductItemGroups(supplierProductID);
+        SupplierProduct product = getProduct(supplierProductID);
+
+        int total = 0;
+        for (SupplierItemGroup supplierItemGroup: supplierItemGroups) {
+
+            if (total + supplierItemGroup.getQuantity() > quantity){
+                orderItemGroups.add(new OrderItemGroup(product.getPid(), quantity - total, product.getPrice(), supplierItemGroup.getExpiration()));
+                return orderItemGroups;
+            }
+            else{
+                orderItemGroups.add(new OrderItemGroup(product.getPid(), supplierItemGroup.getQuantity(), product.getPrice(), supplierItemGroup.getExpiration()));
+                total += supplierItemGroup.getQuantity();
+            }
+
+        }
+        return null;
+    }
 }
 

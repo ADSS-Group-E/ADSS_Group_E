@@ -10,8 +10,10 @@ import PresentationLayer.Inventory.DataTransferObjects.ItemGroupDTO;
 import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
 import PresentationLayer.Supplier.DataTransferObjects.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class SupplierController extends DomainController {
     SupplierProductDAO supplierProductDAO;
@@ -136,6 +138,35 @@ public class SupplierController extends DomainController {
         return supplier.getQuantityWriter();
     }
 
+
+
+    // --------------------- OTHER ------------------------
+
+
+    // TODO test proposeOrder
+    /**
+     Returns an order object which is not persisted, which represents a possible order which needs to be confirmed
+     @param itemsAndTheirQuantities A hashmap between inventory product IDs and the quantity which needs to be ordered from them.
+    */
+    public Order proposeOrder(int supplierId, HashMap<Integer, Integer> itemsAndTheirQuantities, LocalDateTime date,  boolean periodicDelivery, boolean needsDelivery){
+        Supplier supplier = getSupplier(supplierId);
+
+        Order proposedOrder = new Order(date, periodicDelivery, needsDelivery);
+        for (Map.Entry<Integer, Integer> entry: itemsAndTheirQuantities.entrySet() ) {
+            int inventoryPid = entry.getKey();
+            int quantity = entry.getValue();
+
+            int supplierProductID = supplier.getMatchingId(inventoryPid);
+            if (supplierProductID == -1)
+                return null;
+
+            ArrayList<OrderItemGroup> orderItemGroups = supplier.makeOrderItemGroups(supplierProductID, quantity);
+            if (orderItemGroups == null)
+                return null;
+            orderItemGroups.forEach(proposedOrder::proposeAddItemGroup);
+        }
+        return proposedOrder;
+    }
 
 
 

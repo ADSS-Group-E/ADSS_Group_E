@@ -42,12 +42,13 @@ public abstract class DomainController {
             identityMap.put(domainObject.getId(),domainObject);
     }
 
-    protected void addWithAI(DomainObject domainObject){
+    protected int addWithAI(DomainObject domainObject){
         int id = DAO.insertWithAI(buildDtoFromDomainObject(domainObject));
         if (id != -1){
             domainObject.setId(id);
             identityMap.put(domainObject.getId(),domainObject);
         }
+        return id;
     }
 
     // Remover

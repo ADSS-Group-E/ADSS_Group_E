@@ -6,7 +6,9 @@ import BusinessLayer.Supplier.DomainObjects.*;
 import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
 import PresentationLayer.Supplier.DataTransferObjects.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class SupplierFacade {
     SupplierController supplierController;
@@ -170,7 +172,6 @@ public class SupplierFacade {
     // -------------------------- ORDERS ----------------------------------
     // --------------------------------------------------------------------
 
-
     // -------------------- ADDERS ------------------------
 
     public void addOrder(OrderDTO orderDTO){
@@ -234,5 +235,11 @@ public class SupplierFacade {
         });
 
         return orderItemGroupDTOS;
+    }
+
+    // -------------------------
+
+    public String proposeOrder(int supplierId, HashMap<Integer, Integer> itemsAndTheirQuantities, LocalDateTime date, boolean periodicDelivery, boolean needsDelivery) {
+        return orderController.proposeOrder(supplierId, itemsAndTheirQuantities, date, periodicDelivery, needsDelivery);
     }
 }

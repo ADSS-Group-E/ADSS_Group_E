@@ -7,16 +7,27 @@ import DataAccessLayer.Supplier.DataAccessObjects.*;
 import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
 import PresentationLayer.Supplier.DataTransferObjects.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class OrderController extends DomainController {
+
+    Order proposedOrder;
+    private SupplierController supplierController;
 
     private OrderItemGroupDAO orderItemGroupDAO;
     public OrderController(OrderDAO DAO) {
         super(DAO);
 
         orderItemGroupDAO= new OrderItemGroupDAO();
+    }
+
+    public OrderController(SupplierController supplierController) {
+        super(new OrderDAO());
+
+        orderItemGroupDAO= new OrderItemGroupDAO();
+        this.supplierController = supplierController;
     }
 
 
@@ -26,7 +37,15 @@ public class OrderController extends DomainController {
     // -------------------- ADDERS ------------------------
 
     public void addOrder(Order order){
-        addWithAI(order);
+        int id = addWithAI(order);
+
+
+        if (id != -1){
+            ArrayList<OrderItemGroup> orderItemGroups = order.getAllItemGroups();
+            if (orderItemGroups == null)
+                return;
+            orderItemGroups.forEach((orderItemGroup)-> addOrderItemGroup(order.getId(), orderItemGroup));
+        }
     }
 
     public void addOrderItemGroup(int orderId, OrderItemGroup orderItemGroup){
@@ -78,6 +97,24 @@ public class OrderController extends DomainController {
     }
 
 
+    // ------------------------------------------
+
+    public String proposeOrder(int supplierId, HashMap<Integer, Integer> itemsAndTheirQuantities, LocalDateTime date, boolean periodicDelivery, boolean needsDelivery){
+        proposedOrder =supplierController.proposeOrder(supplierId, itemsAndTheirQuantities, date, periodicDelivery, needsDelivery);
+        if (proposedOrder != null){
+            return proposedOrder.toString();
+        }
+        else
+            return null;
+    }
+
+    public void confirmOrder(){
+        addOrder(proposedOrder);
+    }
+
+    public void cancelOrder(){
+        proposedOrder = null;
+    }
 
     @Override
     protected DomainObject buildDomainObjectFromDto(DataTransferObject dataTransferObject) {

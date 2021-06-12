@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Order extends DomainObject {
-    private final int companyNumber;
     private final LocalDateTime date;
     private final boolean periodicDelivery;
     private final boolean needsDelivery;
@@ -21,9 +20,16 @@ public class Order extends DomainObject {
     private HashMap<Integer, OrderItemGroup> orderItems;
     private OrderItemGroupDAO orderItemGroupDAO = new OrderItemGroupDAO();
 
-    public Order(int id, int companyNumber, LocalDateTime date, boolean periodicDelivery, boolean needsDelivery) {
+    public Order(int id, LocalDateTime date, boolean periodicDelivery, boolean needsDelivery) {
         super(id);
-        this.companyNumber = companyNumber;
+        this.date = date;
+        this.periodicDelivery = periodicDelivery;
+        this.needsDelivery = needsDelivery;
+        orderItems= new HashMap<>();
+    }
+
+    public Order(LocalDateTime date, boolean periodicDelivery, boolean needsDelivery) {
+        super(-1);
         this.date = date;
         this.periodicDelivery = periodicDelivery;
         this.needsDelivery = needsDelivery;
@@ -32,7 +38,6 @@ public class Order extends DomainObject {
 
     public Order(OrderDTO other){
         super(other.getId());
-        this.companyNumber = other.getCompanyNumber();
         this.date = other.getDate();
         this.periodicDelivery = other.getPeriodicDelivery();
         this.needsDelivery = other.getNeedsDelivery();
@@ -98,6 +103,11 @@ public class Order extends DomainObject {
             orderItemGroup.setId(id);
             orderItems.put(orderItemGroup.getId(), orderItemGroup);
         }
+    }
+
+    // Not persisted
+    public void proposeAddItemGroup(OrderItemGroup orderItemGroup) {
+        orderItems.put(orderItemGroup.getPid(), orderItemGroup);
     }
 
     // -------------------- REMOVERS ------------------------

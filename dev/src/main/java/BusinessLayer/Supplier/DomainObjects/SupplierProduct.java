@@ -12,7 +12,7 @@ import java.util.HashMap;
 public class SupplierProduct extends DomainObject {
     private final int pid;
     private final String name;
-    private int quantity;
+    private int quantity; // TODO remove
     private final double price;
     private final String supplierCN;
     private HashMap<Integer, SupplierItemGroup> items;
