@@ -39,7 +39,7 @@ class SupplierControllerTest {
         contacts.add(new String[]{"Tzahi", "tzahi@apple.com"});
         HashMap<Integer, Integer> discounts = new HashMap<>();
         discounts.put(15000, 20);
-        DiscountStepDTO stepDTO = new DiscountStepDTO(1, 15000, 20, 1);
+        DiscountStepDTO stepDTO = new DiscountStepDTO(1, companyNumber, 15000, 20, 1);
         ArrayList<DiscountStepDTO> list = new ArrayList<>();
         controller.register("Google", 50, "Google Pay", "69913/14", supplierItems, contacts, 10, 5000, discounts);
         String[] appleinfo = controller.getSuppliersInfo().get(0);

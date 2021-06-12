@@ -111,9 +111,9 @@ public class SupplierController extends DomainController {
         return supplier.getAllContacts();
     }
 
-    public SupplierProduct getSupplierProduct(int supplierNum, int pid) {
+    public SupplierProduct getSupplierProduct(int supplierNum, int id) {
         Supplier supplier = getSupplier(supplierNum);
-        return supplier.getProduct(pid);
+        return supplier.getProduct(id);
     }
 
     public ArrayList<SupplierProduct> getAllSupplierProducts(int supplierNum) {
@@ -121,14 +121,14 @@ public class SupplierController extends DomainController {
         return supplier.getAllProducts();
     }
 
-    public SupplierItemGroup getSupplierProductItemGroup(int supplierId, int pid, int itemId){
+    public SupplierItemGroup getSupplierProductItemGroup(int supplierId, int id, int itemId){
         Supplier supplier = getSupplier(supplierId);
-        return supplier.getSupplierProductItemGroup(pid, itemId);
+        return supplier.getSupplierProductItemGroup(id, itemId);
     }
 
-    public ArrayList<SupplierItemGroup> getAllSupplierProductItemGroups(int supplierId, int pid){
+    public ArrayList<SupplierItemGroup> getAllSupplierProductItemGroups(int supplierId, int id){
         Supplier supplier = getSupplier(supplierId);
-        return supplier.getAllSupplierProductItemGroups(pid);
+        return supplier.getAllSupplierProductItemGroups(id);
     }
 
     public QuantityWriter getSupplierQuantityWriter(int supplierId){
@@ -150,7 +150,7 @@ public class SupplierController extends DomainController {
                 supplierProductDTOS) {
             SupplierProduct supplierProduct = new SupplierProduct(supplierProductDTO);
             supplierProduct.loadItems();
-            products.put(supplierProduct.getPid(), supplierProduct);
+            products.put(supplierProduct.getId(), supplierProduct);
         }
 
         /*

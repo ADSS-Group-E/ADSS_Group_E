@@ -67,14 +67,14 @@ public class OrderController extends DomainController {
         return orders;
     }
 
-    public void getOrderItemGroup(int orderId, int itemId){
+    public OrderItemGroup getOrderItemGroup(int orderId, int itemId){
         Order order = getOrder(orderId);
-        order.getOrderItemGroup(itemId);
+        return order.getOrderItemGroup(itemId);
     }
 
-    public void getAllOrderItemGroups(int orderId){
+    public ArrayList<OrderItemGroup> getAllOrderItemGroups(int orderId){
         Order order = getOrder(orderId);
-        order.getAllItemGroups();
+        return order.getAllItemGroups();
     }
 
 

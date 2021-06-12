@@ -79,7 +79,7 @@ class QuantityWriter {
                     quan.put(writer, new ArrayList<>());
                 }
                 discount = new DiscountStepDTO(
-                        rs.getInt("ID"), rs.getInt("stepPrice"), rs.getInt("precentage"), rs.getInt("QWID"));
+                        rs.getInt("ID"), companyNumber, rs.getInt("stepPrice"), rs.getInt("precentage"), rs.getInt("QWID"));
                 quan.get(writer).add(discount);
             }
             for (QuantityWriterDTO quantityWriterDTO : quan.keySet())

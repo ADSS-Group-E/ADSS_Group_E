@@ -101,7 +101,7 @@ public class SupplierController {
             contactDTOs.add(new ContactDTO(strings[0], strings[1], companyNumber));
         }
         for (Integer i : discountSteps.keySet()) {
-            DiscountStepDTO discount = new DiscountStepDTO(i, discountSteps.get(i));
+            DiscountStepDTO discount = new DiscountStepDTO(companyNumber, i, discountSteps.get(i));
             discountStepDTOs.add(discount);
         }
         SupplierDTO supplierDTO = new SupplierDTO(companyNumber, name, bankAccount, paymentMethod);

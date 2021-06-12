@@ -16,7 +16,6 @@ public class Supplier extends DomainObject {
     private final String paymentMethod;
     private QuantityWriter quantityWriter; //TODO
     //private HashMap<Integer,Order> orders;
-    // Kept in the hashmap with PID, not the ID
     private HashMap<Integer,SupplierProduct> products;
     private HashMap<Integer,Contact> contacts;
 
@@ -92,8 +91,8 @@ public class Supplier extends DomainObject {
         }
     }
 
-    public void addSupplierItemGroup(int pid, SupplierItemGroup supplierItemGroup){
-        SupplierProduct supplierProduct = getProduct(pid);
+    public void addSupplierItemGroup(int id, SupplierItemGroup supplierItemGroup){
+        SupplierProduct supplierProduct = getProduct(id);
         supplierProduct.addItemGroup(supplierItemGroup);
     }
 
@@ -131,18 +130,18 @@ public class Supplier extends DomainObject {
 
     // -------------------- REMOVERS ------------------------
 
-    public void removeContact(int pid){
-        if (contactDAO.delete(pid))
-            contacts.remove(pid);
+    public void removeContact(int id){
+        if (contactDAO.delete(id))
+            contacts.remove(id);
     }
 
-    public void removeSupplierProduct(int pid){
-        if (supplierProductDAO.delete(pid))
-            products.remove(pid);
+    public void removeSupplierProduct(int id){
+        if (supplierProductDAO.delete(id))
+            products.remove(id);
     }
 
-    public void removeSupplierProductItemGroup(int pid, int itemId){
-        SupplierProduct supplierProduct = getProduct(pid);
+    public void removeSupplierProductItemGroup(int id, int itemId){
+        SupplierProduct supplierProduct = getProduct(id);
         supplierProduct.removeItemGroup(itemId);
     }
     public void removeQuantityWriter(){
@@ -160,21 +159,21 @@ public class Supplier extends DomainObject {
         return new ArrayList<Contact>(contacts.values());
     }
 
-    public SupplierProduct getProduct(int pid){
-        return products.get(pid);
+    public SupplierProduct getProduct(int id){
+        return products.get(id);
     }
 
     public ArrayList<SupplierProduct> getAllProducts(){
         return new ArrayList<>(products.values());
     }
 
-    public SupplierItemGroup getSupplierProductItemGroup(int pid, int itemId){
-        SupplierProduct supplierProduct = getProduct(pid);
+    public SupplierItemGroup getSupplierProductItemGroup(int id, int itemId){
+        SupplierProduct supplierProduct = getProduct(id);
         return supplierProduct.getItemGroup(itemId);
     }
 
-    public ArrayList<SupplierItemGroup> getAllSupplierProductItemGroups(int pid){
-        SupplierProduct supplierProduct = getProduct(pid);
+    public ArrayList<SupplierItemGroup> getAllSupplierProductItemGroups(int id){
+        SupplierProduct supplierProduct = getProduct(id);
         return supplierProduct.getAllItemGroups();
     }
 
