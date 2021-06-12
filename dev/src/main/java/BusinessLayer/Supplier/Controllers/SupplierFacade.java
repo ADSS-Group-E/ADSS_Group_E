@@ -92,6 +92,17 @@ public class SupplierFacade {
         return new SupplierDTO(supplierController.getSupplier(id));
     }
 
+    public ArrayList<SupplierDTO> getAllSuppliers(){
+        ArrayList<SupplierDTO> DTOlist = new ArrayList<>();
+        //Turn products into DTOs
+        ArrayList<Supplier> suppliers = supplierController.getAllSuppliers();
+        if (suppliers == null){
+            return null;
+        }
+        suppliers.forEach((supplier)-> DTOlist.add(new SupplierDTO(supplier)));
+        return DTOlist;
+    }
+
     public ContactDTO getSupplierContact(int supplierId, int contactId){
         ContactDTO contactDTO = new ContactDTO(supplierController.getSupplierContact(supplierId, contactId));
         contactDTO.setCompanyNumber(supplierId);

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-class PresentationHandler {
+public class PresentationHandler {
     private static PresentationHandler instance = null;
     private ServiceController service = new ServiceController(new SupplierController());
     private InputService inputService = InputService.getInstance();
@@ -17,7 +17,7 @@ class PresentationHandler {
 
     }
 
-    static PresentationHandler getInstance(){ //singleton method to make sure there is only one instance
+    public static PresentationHandler getInstance(){ //singleton method to make sure there is only one instance
         if(instance == null)
             instance = new PresentationHandler();
         return instance;
@@ -176,7 +176,7 @@ class PresentationHandler {
         return true;
     }
 
-     boolean manageQuantityWriter(){
+     public boolean manageQuantityWriter(){
         //asks the user if he needs a quantity writer, and return true if Y and false if N
         String ny = inputService.next("Do you need a Quantity Writer? N/Y ");
         while (!ny.equalsIgnoreCase("N")) {

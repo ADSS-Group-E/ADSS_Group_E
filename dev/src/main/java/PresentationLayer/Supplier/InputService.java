@@ -3,7 +3,7 @@ package PresentationLayer.Supplier;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-final class InputService {//The class controls the input received from the user
+public final class InputService {//The class controls the input received from the user
     private Scanner scanner = new Scanner(System.in);
 
     private static InputService instance = null;
@@ -11,13 +11,13 @@ final class InputService {//The class controls the input received from the user
 
     }
 
-    static InputService getInstance(){
+    public static InputService getInstance(){
         if(instance == null)
             instance = new InputService();
         return instance;
     }
 
-    String next(String message){
+    public String next(String message){
         //goes in a loop to get String and prints the message we provided each time
         boolean retry = true;
         String nextString = "";
@@ -36,7 +36,7 @@ final class InputService {//The class controls the input received from the user
         return nextString;
     }
 
-    int nextInt(String message){
+    public int nextInt(String message){
         //goes in a loop to get int and prints the message we provided each time
         boolean retry = true;
         int nextInt = 0;

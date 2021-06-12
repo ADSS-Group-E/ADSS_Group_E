@@ -103,6 +103,18 @@ public class SupplierController extends DomainController {
         return (Supplier) get(id);
     }
 
+    public ArrayList<Supplier> getAllSuppliers() {
+        ArrayList<Supplier> suppliers = new ArrayList<>();
+        ArrayList<DomainObject> domainObjects = getList();
+
+        for (DomainObject domainObject:
+                domainObjects) {
+            suppliers.add((Supplier)domainObject);
+        }
+
+        return suppliers;
+    }
+
     public Contact getSupplierContact(int supplierId, int contactId){
         Supplier supplier = getSupplier(supplierId);
         return supplier.getContact(contactId);
@@ -142,8 +154,8 @@ public class SupplierController extends DomainController {
 
     // --------------------- OTHER ------------------------
 
-
     // TODO test proposeOrder
+
     /**
      Returns an order object which is not persisted, which represents a possible order which needs to be confirmed
      @param itemsAndTheirQuantities A hashmap between inventory product IDs and the quantity which needs to be ordered from them.
@@ -217,17 +229,7 @@ public class SupplierController extends DomainController {
         return supplier;
     }
 
-    public ArrayList<Supplier> getAllSuppliers() {
-        ArrayList<Supplier> suppliers = new ArrayList<>();
-        ArrayList<DomainObject> domainObjects = getList();
 
-        for (DomainObject domainObject:
-                domainObjects) {
-            suppliers.add((Supplier)domainObject);
-        }
-
-        return suppliers;
-    }
 
     @Override
     protected DataTransferObject buildDtoFromDomainObject(DomainObject domainObject) {
@@ -246,6 +248,5 @@ public class SupplierController extends DomainController {
         }
         return suppliersInfo;
     }
-
 
 }

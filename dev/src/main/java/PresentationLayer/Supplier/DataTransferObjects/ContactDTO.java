@@ -21,6 +21,13 @@ public class ContactDTO extends DataTransferObject {
         this.email = other.getEmail();
     }
 
+    public ContactDTO(int companyNumber, String name, String email) {
+        super(-1);
+        this.companyNumber = companyNumber;
+        this.name = name;
+        this.email = email;
+    }
+
     public void setCompanyNumber(int companyNumber) {
         this.companyNumber = companyNumber;
     }
