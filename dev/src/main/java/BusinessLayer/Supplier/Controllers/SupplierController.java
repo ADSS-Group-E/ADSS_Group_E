@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SupplierController extends DomainController {
-
     SupplierProductDAO supplierProductDAO;
+
     OrderDAO orderDAO;
     ContactDAO contactDAO;
     QuantityWriterDAO quantityWriterDAO;
@@ -28,9 +28,108 @@ public class SupplierController extends DomainController {
         quantityWriterDAO = new QuantityWriterDAO();
     }
 
+
+
+    // -------------------- ADDERS ------------------------
+
+    public void addSupplier(Supplier supplier){
+        add(supplier);
+    }
+
+    public void addSupplierContact(int supplierId, Contact contact){
+        Supplier supplier = getSupplier(supplierId);
+        supplier.addContact(contact);
+    }
+
+    public void addSupplierProduct(int supplierId, SupplierProduct supplierProduct){
+        Supplier supplier = getSupplier(supplierId);
+        supplier.addProduct(supplierProduct);
+    }
+
+    public void addSupplierItemGroup(int supplierId, int pid, SupplierItemGroup supplierItemGroup){
+        Supplier supplier = getSupplier(supplierId);
+        supplier.addSupplierItemGroup(pid, supplierItemGroup);
+    }
+
+    public void setSupplierQuantityWriter(int supplierId, QuantityWriter quantityWriter){
+        Supplier supplier = getSupplier(supplierId);
+        supplier.setQuantityWriter(quantityWriter);
+    }
+
+    public void addSupplierQuantityWriterDiscountStep(int supplierId, DiscountStep discountStep){
+        Supplier supplier = getSupplier(supplierId);
+        supplier.addQuantityWriterDiscountStep(discountStep);
+    }
+
+    // -------------------- REMOVERS ------------------------
+
+    public void removeSupplier(int id){
+        remove(id);
+    }
+
+    public void removeSupplierContact(int supplierId, int contactId){
+        Supplier supplier = getSupplier(supplierId);
+        supplier.removeContact(contactId);
+    }
+
+    public void removeSupplierProduct(int supplierId, int pid){
+        Supplier supplier = getSupplier(supplierId);
+        supplier.removeSupplierProduct(pid);
+    }
+
+    public void removeSupplierProductItemGroup(int supplierId, int pid, int itemId){
+        Supplier supplier = getSupplier(supplierId);
+        supplier.removeSupplierProductItemGroup(pid, itemId);
+    }
+
+    public void removeSupplierQuantityWriter(int supplierId){
+        Supplier supplier = getSupplier(supplierId);
+        supplier.removeQuantityWriter();
+    }
+
+    // -------------------- GETTERS ------------------------
+
     public Supplier getSupplier(int id){
         return (Supplier) get(id);
     }
+
+    public Contact getSupplierContact(int supplierId, int contactId){
+        Supplier supplier = getSupplier(supplierId);
+        return supplier.getContact(contactId);
+    }
+
+    public ArrayList<Contact> getAllSupplierContacts(int supplierNum) {
+        Supplier supplier = getSupplier(supplierNum);
+        return supplier.getAllContacts();
+    }
+
+    public SupplierProduct getSupplierProduct(int supplierNum, int pid) {
+        Supplier supplier = getSupplier(supplierNum);
+        return supplier.getProduct(pid);
+    }
+
+    public ArrayList<SupplierProduct> getAllSupplierProducts(int supplierNum) {
+        Supplier supplier = getSupplier(supplierNum);
+        return supplier.getAllProducts();
+    }
+
+    public SupplierItemGroup getSupplierProductItemGroup(int supplierId, int pid, int itemId){
+        Supplier supplier = getSupplier(supplierId);
+        return supplier.getSupplierProductItemGroup(pid, itemId);
+    }
+
+    public ArrayList<SupplierItemGroup> getAllSupplierProductItemGroups(int supplierId, int pid){
+        Supplier supplier = getSupplier(supplierId);
+        return supplier.getAllSupplierProductItemGroups(pid);
+    }
+
+    public QuantityWriter getSupplierQuantityWriter(int supplierId){
+        Supplier supplier = getSupplier(supplierId);
+        return supplier.getQuantityWriter();
+    }
+
+
+
 
     @Override
     protected DomainObject buildDomainObjectFromDto(DataTransferObject dataTransferObject) {
@@ -96,10 +195,10 @@ public class SupplierController extends DomainController {
         return null;
     }
 
-
     // ---------------- TRANSLATED FUNCTIONALITY ------------------
 
     // Done
+
     public ArrayList<String[]> getSuppliersInfo() {
         ArrayList<String[]> suppliersInfo = new ArrayList<>();
         for (Supplier supplier : getAllSuppliers()) {
@@ -107,16 +206,6 @@ public class SupplierController extends DomainController {
             suppliersInfo.add(info);
         }
         return suppliersInfo;
-    }
-
-    public ArrayList<SupplierProduct> getProductsFromSupplier(int supplierNum) {
-        Supplier supplier = getSupplier(supplierNum);
-        return supplier.getAllProducts();
-    }
-
-    public SupplierProduct getSpecificProduct(int supplierNum, int pid) {
-        Supplier supplier = getSupplier(supplierNum);
-        return supplier.getProduct(pid);
     }
 
 

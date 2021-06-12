@@ -38,19 +38,16 @@ public class QuantityWriter extends DomainObject {
         this.discounts = null; //TODO
     }
 
-    public int calcPrice(QuantityWriterDTO quantityWriterDTO, int price) {
-        if (quantityWriterDTO != null) {
-            //calculates the price
-            int maxPrecenet = 0;
-            if (price < quantityWriterDTO.getMinPriceDiscount())
-                return price;
-            for (DiscountStepDTO step : quantityWriterDTO.getDiscounts()) {
-                if (step.getPercentage() > maxPrecenet && price <= step.getStepPrice())
-                    maxPrecenet = step.getPercentage();
-            }
-            return price * (1 - maxPrecenet / 100) * (1 - quantityWriterDTO.getRegularCostumerDiscount() / 100);
+    public int calcPrice(int price) {
+        int maxPercent = 0;
+        if (price < getMinPriceDiscount())
+            return price;
+        for (DiscountStep step : getDiscounts().values()) {
+            if (step.getPercentage() > maxPercent && price <= step.getStepPrice())
+                maxPercent = step.getPercentage();
         }
-        return price;
+        return price * (1 - maxPercent / 100) * (1 - getRegularCostumerDiscount() / 100);
+
     }
 
     public int getRegularCostumerDiscount() {
@@ -80,6 +77,17 @@ public class QuantityWriter extends DomainObject {
             this.discounts = discountSteps;
 
             loaded = true;
+        }
+    }
+
+    public void addDiscount(DiscountStep discountStep) {
+        DiscountStepDTO discountStepDTO  = new DiscountStepDTO(discountStep);
+        discountStepDTO.setQuantityWriterId(this.getId());
+
+        int id = discountStepDAO.insertWithAI(discountStepDTO);
+        if (id != -1){
+            discountStep.setId(id);
+            discounts.put(discountStep.getId(), discountStep);
         }
     }
 }

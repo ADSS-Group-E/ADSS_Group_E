@@ -27,11 +27,10 @@ public class ContactDAO extends DataAccessObject {
     protected PreparedStatement createInsertPreparedStatement(DataTransferObject dataTransferObject) throws SQLException {
         ContactDTO contactDTO = (ContactDTO) dataTransferObject;
 
-        String sql = "INSERT INTO " + tableName + " ("+ primaryKey + ",companyNumber, name, email) " +
-                "VALUES (?, ?, ?, ?);";
+        String sql = "INSERT INTO " + tableName + " (companyNumber, name, email) " +
+                "VALUES (?, ?, ?);";
         PreparedStatement pstmt = this.c.prepareStatement(sql);
         int i=1;
-        pstmt.setInt(i++,contactDTO.getId());
         pstmt.setInt(i++,contactDTO.getCompanyNumber());
         pstmt.setString(i++, contactDTO.getName());
         pstmt.setString(i++, contactDTO.getEmail());

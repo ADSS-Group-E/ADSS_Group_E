@@ -1,5 +1,6 @@
 package PresentationLayer.Supplier.DataTransferObjects;
 
+import BusinessLayer.Supplier.DomainObjects.SupplierProduct;
 import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
 
 public class SupplierProductDTO extends DataTransferObject {
@@ -20,8 +21,21 @@ public class SupplierProductDTO extends DataTransferObject {
         this.supplierCN = supplierCN;
     }
 
+    public SupplierProductDTO(SupplierProduct other) {
+        super(other.getId());
+        this.pid = other.getPid();
+        this.name = other.getName();
+        this.quantity = other.getQuantity();
+        this.price = other.getPrice();
+        this.supplierCN = other.getSupplierCN();
+    }
+
     public int getCompanyNumber() {
         return companyNumber;
+    }
+
+    public void setCompanyNumber(int companyNumber) {
+        this.companyNumber = companyNumber;
     }
 
     public int getPid() {

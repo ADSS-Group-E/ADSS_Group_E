@@ -27,11 +27,10 @@ public class DiscountStepDAO extends DataAccessObject {
     protected PreparedStatement createInsertPreparedStatement(DataTransferObject dataTransferObject) throws SQLException {
         DiscountStepDTO discountStepDTO = (DiscountStepDTO) dataTransferObject;
 
-        String sql = "INSERT INTO " + tableName + " ("+ primaryKey + ",stepPrice, percentage, quantityWriterID) " +
-                "VALUES (?, ?, ?, ?);";
+        String sql = "INSERT INTO " + tableName + " (stepPrice, percentage, quantityWriterID) " +
+                "VALUES (?, ?, ?);";
         PreparedStatement pstmt = this.c.prepareStatement(sql);
         int i=1;
-        pstmt.setInt(i++,discountStepDTO.getId());
         pstmt.setInt(i++,discountStepDTO.getStepPrice());
         pstmt.setInt(i++, discountStepDTO.getPercentage());
         pstmt.setInt(i++, discountStepDTO.getQuantityWriterId());

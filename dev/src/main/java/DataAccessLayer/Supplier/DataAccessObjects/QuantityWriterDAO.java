@@ -24,11 +24,10 @@ public class QuantityWriterDAO extends DataAccessObject {
     protected PreparedStatement createInsertPreparedStatement(DataTransferObject dataTransferObject) throws SQLException {
         QuantityWriterDTO quantityWriterDTO = (QuantityWriterDTO) dataTransferObject;
 
-        String sql = "INSERT INTO " + tableName + " ("+ primaryKey + ",companyNumber, regularCustomerDiscount, minPriceDiscount) " +
-                "VALUES (?, ?, ?, ?);";
+        String sql = "INSERT INTO " + tableName + " (companyNumber, regularCustomerDiscount, minPriceDiscount) " +
+                "VALUES (?, ?, ?);";
         PreparedStatement pstmt = this.c.prepareStatement(sql);
         int i=1;
-        pstmt.setInt(i++,quantityWriterDTO.getId());
         pstmt.setInt(i++,quantityWriterDTO.getCompanyNumber());
         pstmt.setInt(i++, quantityWriterDTO.getRegularCostumerDiscount());
         pstmt.setInt(i++, quantityWriterDTO.getRegularCostumerDiscount());

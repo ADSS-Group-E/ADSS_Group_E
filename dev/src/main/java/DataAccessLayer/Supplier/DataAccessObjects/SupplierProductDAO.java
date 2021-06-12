@@ -26,11 +26,10 @@ public class SupplierProductDAO extends DataAccessObject {
     protected PreparedStatement createInsertPreparedStatement(DataTransferObject dataTransferObject) throws SQLException {
         SupplierProductDTO supplierProductDTO = (SupplierProductDTO) dataTransferObject;
 
-        String sql = "INSERT INTO " + tableName + " ("+ primaryKey + ", PID, companyNumber, name, quantity, price, supplierCN) " +
-                "VALUES (?, ?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO " + tableName + " (PID, companyNumber, name, quantity, price, supplierCN) " +
+                "VALUES (?, ?, ?, ?, ?);";
         PreparedStatement pstmt = this.c.prepareStatement(sql);
         int i=1;
-        pstmt.setInt(i++,supplierProductDTO.getId());
         pstmt.setInt(i++,supplierProductDTO.getPid());
         pstmt.setInt(i++,supplierProductDTO.getCompanyNumber());
         pstmt.setString(i++, supplierProductDTO.getName());

@@ -1,9 +1,10 @@
 package PresentationLayer.Supplier.DataTransferObjects;
 
+import BusinessLayer.Supplier.DomainObjects.Contact;
 import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
 
 public class ContactDTO extends DataTransferObject {
-    private final int companyNumber;
+    private int companyNumber;
     private final String name;
     private final String email;
 
@@ -12,6 +13,16 @@ public class ContactDTO extends DataTransferObject {
         this.companyNumber = companyNumber;
         this.name = name;
         this.email = email;
+    }
+
+    public ContactDTO(Contact other) {
+        super(other.getId());
+        this.name = other.getName();
+        this.email = other.getEmail();
+    }
+
+    public void setCompanyNumber(int companyNumber) {
+        this.companyNumber = companyNumber;
     }
 
     public String getName() {

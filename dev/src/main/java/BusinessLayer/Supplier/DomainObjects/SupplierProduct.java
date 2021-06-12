@@ -5,6 +5,7 @@ import DataAccessLayer.Supplier.DataAccessObjects.SupplierItemGroupDAO;
 import PresentationLayer.Supplier.DataTransferObjects.SupplierItemGroupDTO;
 import PresentationLayer.Supplier.DataTransferObjects.SupplierProductDTO;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -80,5 +81,33 @@ public class SupplierProduct extends DomainObject {
         }
     }
 
-    // TODO load items
+    // -------------------- ADDERS ------------------------
+
+    public void addItemGroup( SupplierItemGroup supplierItemGroup){
+        SupplierItemGroupDTO supplierItemGroupDTO = new SupplierItemGroupDTO(supplierItemGroup);
+        supplierItemGroupDTO.setSupplierProductId(this.getId());
+
+        int id = supplierItemGroupDAO.insertWithAI(supplierItemGroupDTO);
+        if (id != -1){
+            supplierItemGroup.setId(id);
+            items.put(supplierItemGroup.getId(), supplierItemGroup);
+        }
+    }
+
+    // -------------------- REMOVERS ------------------------
+
+    public void removeItemGroup(int id){
+        if (supplierItemGroupDAO.delete(id))
+            items.remove(id);
+    }
+
+    // -------------------- GETTERS ------------------------
+
+    public SupplierItemGroup getItemGroup (int id){
+        return items.get(id);
+    }
+
+    public ArrayList<SupplierItemGroup> getAllItemGroups(){
+        return new ArrayList<>(items.values());
+    }
 }

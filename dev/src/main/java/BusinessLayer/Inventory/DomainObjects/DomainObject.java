@@ -7,6 +7,10 @@ public abstract class DomainObject {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public DomainObject(int id) {
         this.id = id;
     }

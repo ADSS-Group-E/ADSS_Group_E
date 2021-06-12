@@ -1,9 +1,10 @@
 package PresentationLayer.Supplier.DataTransferObjects;
 
+import BusinessLayer.Supplier.DomainObjects.QuantityWriter;
 import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
 
 public class QuantityWriterDTO extends DataTransferObject {
-    private final int companyNumber;
+    private int companyNumber;
     private final int regularCostumerDiscount;
     private final int minPriceDiscount;
 
@@ -19,6 +20,16 @@ public class QuantityWriterDTO extends DataTransferObject {
         this.companyNumber = companyNumber;
         this.regularCostumerDiscount = regularCostumerDiscount;
         this.minPriceDiscount = minPriceDiscount;
+    }
+
+    public QuantityWriterDTO(QuantityWriter other) {
+        super(other.getId());
+        this.regularCostumerDiscount = other.getRegularCostumerDiscount();
+        this.minPriceDiscount = other.getMinPriceDiscount();
+    }
+
+    public void setCompanyNumber(int companyNumber) {
+        this.companyNumber = companyNumber;
     }
 
     public int getCompanyNumber() {

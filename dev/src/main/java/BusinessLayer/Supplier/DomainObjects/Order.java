@@ -15,6 +15,7 @@ public class Order extends DomainObject {
     private final LocalDateTime date;
     private final boolean periodicDelivery;
     private final boolean needsDelivery;
+    private Supplier supplier;
 
     private HashMap<Integer, OrderItemGroup> orderItems;
 
@@ -35,6 +36,14 @@ public class Order extends DomainObject {
         this.needsDelivery = other.getNeedsDelivery();
     }
 
+    public Supplier getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
+    }
+
     public LocalDateTime getDate() {
         return date;
     }
@@ -48,7 +57,6 @@ public class Order extends DomainObject {
     }
 
     public HashMap<Integer, OrderItemGroup> getOrderItems() {
-        loadItems();
         return orderItems;
     }
 
