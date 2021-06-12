@@ -5,6 +5,7 @@ import DataAccessLayer.Supplier.DataAccessObjects.OrderItemGroupDAO;
 import PresentationLayer.Supplier.DataTransferObjects.OrderDTO;
 import PresentationLayer.Supplier.DataTransferObjects.OrderItemGroupDTO;
 import PresentationLayer.Supplier.DataTransferObjects.SupplierItemDTO;
+import PresentationLayer.Supplier.DataTransferObjects.SupplierItemGroupDTO;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class Order extends DomainObject {
     private Supplier supplier;
 
     private HashMap<Integer, OrderItemGroup> orderItems;
+    private OrderItemGroupDAO orderItemGroupDAO = new OrderItemGroupDAO();
 
     public Order(int id, int companyNumber, LocalDateTime date, boolean periodicDelivery, boolean needsDelivery) {
         super(id);
@@ -82,6 +84,37 @@ public class Order extends DomainObject {
 
     public void loadItems(HashMap<Integer, OrderItemGroup> orderItems) {
         this.orderItems = orderItems;
+    }
+
+
+    // -------------------- ADDERS ------------------------
+
+    public void addOrderItemGroup(OrderItemGroup orderItemGroup) {
+        OrderItemGroupDTO orderItemGroupDTO = new OrderItemGroupDTO(orderItemGroup);
+        orderItemGroupDTO.setOrderId(this.getId());
+
+        int id = orderItemGroupDAO.insertWithAI(orderItemGroupDTO);
+        if (id != -1){
+            orderItemGroup.setId(id);
+            orderItems.put(orderItemGroup.getId(), orderItemGroup);
+        }
+    }
+
+    // -------------------- REMOVERS ------------------------
+
+    public void removeOrderItemGroup(int id){
+        if (orderItemGroupDAO.delete(id))
+            orderItems.remove(id);
+    }
+
+    // -------------------- GETTERS ------------------------
+
+    public OrderItemGroup getOrderItemGroup (int id){
+        return orderItems.get(id);
+    }
+
+    public ArrayList<OrderItemGroup> getAllItemGroups(){
+        return new ArrayList<>(orderItems.values());
     }
 }
 

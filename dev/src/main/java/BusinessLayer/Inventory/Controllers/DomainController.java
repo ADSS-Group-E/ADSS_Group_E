@@ -42,6 +42,14 @@ public abstract class DomainController {
             identityMap.put(domainObject.getId(),domainObject);
     }
 
+    protected void addWithAI(DomainObject domainObject){
+        int id = DAO.insertWithAI(buildDtoFromDomainObject(domainObject));
+        if (id != -1){
+            domainObject.setId(id);
+            identityMap.put(domainObject.getId(),domainObject);
+        }
+    }
+
     // Remover
     protected void remove (int id) {
         DAO.delete(id);

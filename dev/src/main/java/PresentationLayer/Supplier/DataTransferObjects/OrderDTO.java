@@ -1,5 +1,6 @@
 package PresentationLayer.Supplier.DataTransferObjects;
 
+import BusinessLayer.Supplier.DomainObjects.Order;
 import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
 
 import java.time.LocalDateTime;
@@ -24,6 +25,14 @@ public class OrderDTO extends DataTransferObject {
         this.date = date;
         this.periodicDelivery = periodicDelivery;
         this.needsDelivery = needsDelivery;
+    }
+
+    public OrderDTO(Order other) {
+        super(other.getId());
+        this.companyNumber = other.getSupplier().getId();
+        this.date = other.getDate();
+        this.periodicDelivery = other.getPeriodicDelivery();
+        this.needsDelivery = other.getNeedsDelivery();
     }
 
     public int getCompanyNumber() {

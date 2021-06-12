@@ -61,6 +61,10 @@ public class SupplierController extends DomainController {
         supplier.addQuantityWriterDiscountStep(discountStep);
     }
 
+
+
+
+
     // -------------------- REMOVERS ------------------------
 
     public void removeSupplier(int id){
@@ -86,6 +90,10 @@ public class SupplierController extends DomainController {
         Supplier supplier = getSupplier(supplierId);
         supplier.removeQuantityWriter();
     }
+
+
+
+
 
     // -------------------- GETTERS ------------------------
 
@@ -192,7 +200,7 @@ public class SupplierController extends DomainController {
 
     @Override
     protected DataTransferObject buildDtoFromDomainObject(DomainObject domainObject) {
-        return null;
+        return new SupplierDTO((Supplier) domainObject);
     }
 
     // ---------------- TRANSLATED FUNCTIONALITY ------------------

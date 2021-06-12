@@ -19,13 +19,37 @@ public class OrderController extends DomainController {
         orderItemGroupDAO= new OrderItemGroupDAO();
     }
 
+
+
+
+
+    // -------------------- ADDERS ------------------------
+
     public void addOrder(Order order){
-        add(order);
+        addWithAI(order);
     }
+
+    public void addOrderItemGroup(int orderId, OrderItemGroup orderItemGroup){
+        Order order = getOrder(orderId);
+        order.addOrderItemGroup( orderItemGroup);
+    }
+
+
+
+    // -------------------- REMOVERS ------------------------
 
     public void removeOrder(int id){
         remove(id);
     }
+
+    public void removeOrderItemGroup(int orderId, int itemId){
+        Order order = getOrder(orderId);
+        order.removeOrderItemGroup(itemId);
+    }
+
+
+
+    // -------------------- GETTERS ------------------------
 
     public Order getOrder(int id){
         return (Order) get(id);
@@ -42,6 +66,18 @@ public class OrderController extends DomainController {
 
         return orders;
     }
+
+    public void getOrderItemGroup(int orderId, int itemId){
+        Order order = getOrder(orderId);
+        order.getOrderItemGroup(itemId);
+    }
+
+    public void getAllOrderItemGroups(int orderId){
+        Order order = getOrder(orderId);
+        order.getAllItemGroups();
+    }
+
+
 
     @Override
     protected DomainObject buildDomainObjectFromDto(DataTransferObject dataTransferObject) {
@@ -64,7 +100,7 @@ public class OrderController extends DomainController {
 
     @Override
     protected DataTransferObject buildDtoFromDomainObject(DomainObject domainObject) {
-        return null;
+        return new OrderDTO((Order) domainObject);
     }
 
 

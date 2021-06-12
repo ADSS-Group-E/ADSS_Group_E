@@ -1,5 +1,7 @@
 package PresentationLayer.Supplier.DataTransferObjects;
 
+import BusinessLayer.Supplier.DomainObjects.QuantityWriter;
+import BusinessLayer.Supplier.DomainObjects.Supplier;
 import DataAccessLayer.Inventory.DataAccessObjects.DataAccessObject;
 import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
 
@@ -17,6 +19,21 @@ public class SupplierDTO extends DataTransferObject {
         this.bankAccount = bankAccount;
         this.paymentMethod = paymentMethod;
         this.quantityWriterId = -1;
+    }
+
+    public SupplierDTO(Supplier other) {
+        super(other.getId());
+        this.name = other.getName();
+        this.bankAccount = other.getBankAccount();
+        this.paymentMethod=other.getPaymentMethod();
+
+        QuantityWriter quantityWriter = other.getQuantityWriter();
+        if (quantityWriter == null){
+            this.quantityWriterId = -1;
+        }
+        else{
+            this.quantityWriterId = quantityWriter.getId();
+        }
     }
 
     public int getCompanyNumber() {

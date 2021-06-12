@@ -29,11 +29,10 @@ public class OrderDAO extends DataAccessObject {
     protected PreparedStatement createInsertPreparedStatement(DataTransferObject dataTransferObject) throws SQLException {
         OrderDTO orderDTO = (OrderDTO) dataTransferObject;
 
-        String sql = "INSERT INTO " + tableName + " ("+ primaryKey + ", companyNumber, date, periodicDelivery, needsDelivery) " +
-                "VALUES (?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO " + tableName + " (companyNumber, date, periodicDelivery, needsDelivery) " +
+                "VALUES (?, ?, ?, ?);";
         PreparedStatement pstmt = this.c.prepareStatement(sql);
         int i=1;
-        pstmt.setInt(i++,orderDTO.getId());
         pstmt.setInt(i++,orderDTO.getCompanyNumber());
         pstmt.setString(i++,orderDTO.getDate().toString());
         pstmt.setBoolean(i++, orderDTO.getPeriodicDelivery());
