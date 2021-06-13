@@ -36,8 +36,8 @@ class Order {
             int id = -1;
             c = db.connect();
             stmt = c.createStatement();
-            String sql = String.format("INSERT INTO " + tableName + " (date, periodicDelivery, needsDelivery) " +
-                    "VALUES ('%s', %d, %d);", order.getDate(), order.getPeriodicDelivery(), order.getNeedsDelivery());
+            String sql = String.format("INSERT INTO " + tableName + " (date, periodicDelivery, needsDelivery, weight, isDelivered) " +
+                    "VALUES ('%s', %d, %d, %d, %d);", order.getDate(), order.getPeriodicDelivery(), order.getNeedsDelivery(), order.getWeight(), 0);
             c.prepareStatement(sql, key);
             stmt.executeUpdate(sql);
             ResultSet rs = stmt.getGeneratedKeys();
@@ -91,7 +91,7 @@ class Order {
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 order = new OrderDTO(
-                        rs.getInt("orderID"), rs.getString("date"), rs.getInt("periodicDelivery"), rs.getInt("needsDelivery"), new ArrayList<>()
+                        rs.getInt("orderID"), rs.getString("date"), rs.getInt("periodicDelivery"), rs.getInt("needsDelivery"), new ArrayList<>(), rs.getInt("weight"), rs.getInt("isDelivered") == 1
                 );
                 if (!regularOrders.containsKey(order)) {
                     regularOrders.put(order, new ArrayList<>());
@@ -100,7 +100,7 @@ class Order {
                 regularOrders.get(order).add(item);
             }
             for (OrderDTO orderDTO : regularOrders.keySet())
-                result.add(new OrderDTO(orderDTO.getId(), orderDTO.getDate(), orderDTO.getPeriodicDelivery(), orderDTO.getNeedsDelivery(), regularOrders.get(orderDTO)));
+                result.add(new OrderDTO(orderDTO.getId(), orderDTO.getDate(), orderDTO.getPeriodicDelivery(), orderDTO.getNeedsDelivery(), regularOrders.get(orderDTO), orderDTO.getWeight(), orderDTO.getIsDelivered()));
             close();
         }
         catch (SQLException e) {
@@ -121,7 +121,7 @@ class Order {
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 order = new OrderDTO(
-                        rs.getInt("orderID"), rs.getString("date"), rs.getInt("periodicDelivery"), rs.getInt("needsDelivery"), new ArrayList<>()
+                        rs.getInt("orderID"), rs.getString("date"), rs.getInt("periodicDelivery"), rs.getInt("needsDelivery"), new ArrayList<>(), rs.getInt("weight"), rs.getInt("isDelivered") == 1
                 );
                 if (!regularOrders.containsKey(order)) {
                     regularOrders.put(order, new ArrayList<>());
@@ -130,7 +130,7 @@ class Order {
                 regularOrders.get(order).add(item);
             }
             for (OrderDTO orderDTO : regularOrders.keySet())
-                result.add(new OrderDTO(orderDTO.getId(), orderDTO.getDate(), orderDTO.getPeriodicDelivery(), orderDTO.getNeedsDelivery(), regularOrders.get(orderDTO)));
+                result.add(new OrderDTO(orderDTO.getId(), orderDTO.getDate(), orderDTO.getPeriodicDelivery(), orderDTO.getNeedsDelivery(), regularOrders.get(orderDTO), orderDTO.getWeight(), orderDTO.getIsDelivered()));
             close();
         }
         catch (SQLException e) {
@@ -151,7 +151,7 @@ class Order {
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 order = new OrderDTO(
-                        rs.getInt("orderID"), rs.getString("date"), rs.getInt("periodicDelivery"), rs.getInt("needsDelivery"), new ArrayList<>()
+                        rs.getInt("orderID"), rs.getString("date"), rs.getInt("periodicDelivery"), rs.getInt("needsDelivery"), new ArrayList<>(), rs.getInt("weight"), rs.getInt("isDelivered") == 1
                 );
                 if (!regularOrders.containsKey(order)) {
                     regularOrders.put(order, new ArrayList<>());
@@ -160,12 +160,60 @@ class Order {
                 regularOrders.get(order).add(item);
             }
             for (OrderDTO orderDTO : regularOrders.keySet())
-                result.add(new OrderDTO(orderDTO.getId(), orderDTO.getDate(), orderDTO.getPeriodicDelivery(), orderDTO.getNeedsDelivery(), regularOrders.get(orderDTO)));
+                result.add(new OrderDTO(orderDTO.getId(), orderDTO.getDate(), orderDTO.getPeriodicDelivery(), orderDTO.getNeedsDelivery(), regularOrders.get(orderDTO), orderDTO.getWeight(), orderDTO.getIsDelivered()));
             close();
         }
         catch (SQLException e) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
         }
         return order;
+    }
+
+    ArrayList<OrderDTO> selectDO() {
+        OrderDTO order;
+        SupplierItemDTO item;
+        HashMap<OrderDTO, ArrayList<SupplierItemDTO>> regularOrders = new HashMap<>();
+        ArrayList<OrderDTO> result = new ArrayList<>();
+        try {
+            c = db.connect();
+            stmt = c.createStatement();
+            String sql = "SELECT * FROM " + tableName + " LEFT JOIN OrderItems SI on " + tableName + ".orderID = SI.orderID WHERE " + tableName + ".isDelivered = 0;";
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                order = new OrderDTO(
+                        rs.getInt("orderID"), rs.getString("date"), rs.getInt("periodicDelivery"), rs.getInt("needsDelivery"), new ArrayList<>(), rs.getInt("weight"), rs.getInt("isDelivered") == 1
+                );
+                if (!regularOrders.containsKey(order)) {
+                    regularOrders.put(order, new ArrayList<>());
+                }
+                item = new SupplierItemDTO(rs.getInt("productID"), rs.getInt("quantity"), rs.getInt("price"), rs.getInt("companyNumber"));
+                regularOrders.get(order).add(item);
+            }
+            for (OrderDTO orderDTO : regularOrders.keySet())
+                result.add(new OrderDTO(orderDTO.getId(), orderDTO.getDate(), orderDTO.getPeriodicDelivery(), orderDTO.getNeedsDelivery(), regularOrders.get(orderDTO), orderDTO.getWeight(), orderDTO.getIsDelivered()));
+            close();
+        }
+        catch (SQLException e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        }
+        return result;
+    }
+
+    ArrayList<Integer> selectSupplyDays(int companyNumber) {
+        ArrayList<Integer> result = new ArrayList<>();
+        try {
+            c = db.connect();
+            stmt = c.createStatement();
+            String sql = String.format("SELECT * FROM SupplyDays WHERE companyNumber = %d;", companyNumber);
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                result.add(rs.getInt("weekDay"));
+            }
+            close();
+        }
+        catch (SQLException e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        }
+        return result;
     }
 }

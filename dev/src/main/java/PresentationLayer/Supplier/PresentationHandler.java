@@ -15,7 +15,7 @@ class PresentationHandler {
     private HashMap<Integer, String> days = new HashMap<>();
 
     private PresentationHandler(){
-        days.put(0, "Sunday");
+        days.put(7, "Sunday");
         days.put(1, "Monday");
         days.put(2, "Tuesday");
         days.put(3, "Wednesday");
@@ -174,23 +174,23 @@ class PresentationHandler {
         return map;
     }
 
-    ArrayList<String> getDays() {
-        ArrayList<String> result = new ArrayList<>();
-        for(int key : days.keySet()) {
+    ArrayList<Integer> getDays() {
+        ArrayList<Integer> result = new ArrayList<>();
+        for(int key = 1; key <= days.size(); key++) {
             OutputService.getInstance().println(key + " - " + days.get(key));
         }
         String ans = "Y";
         int counter = 0;
         while (ans.equalsIgnoreCase("Y") && counter <= days.size()) {
             int day = InputService.getInstance().nextInt("Pick number of the day in the week: ");
-            while (day <= 0 || day >= days.size()) {
+            while (day <= 0 || day > days.size()) {
                 OutputService.getInstance().println("Please try again.");
-                for(int key : days.keySet()) {
+                for(int key = 1; key <= days.size(); key++) {
                     OutputService.getInstance().println(key + " - " + days.get(key));
                 }
                 day = InputService.getInstance().nextInt("Pick number of the day in the week: ");
             }
-            result.add(days.get(day));
+            result.add(day);
             counter++;
             ans = inputService.next("Add another Day? N/Y ");
         }

@@ -46,21 +46,21 @@ public class SupplierController {
         discounts.put(1000, 10);
         discounts.put(2000, 15);
         discounts.put(4000, 20);
-        ArrayList<String> supplyDays1 = new ArrayList<>();
-        supplyDays1.add("Tuesday");
-        supplyDays1.add("Thursday");
-        ArrayList<String> supplyDays2 = new ArrayList<>();
-        supplyDays2.add("Monday");
-        supplyDays2.add("Tuesday");
-        supplyDays2.add("Wednesday");
+        ArrayList<Integer> supplyDays1 = new ArrayList<>();
+        supplyDays1.add(2);
+        supplyDays1.add(3);
+        ArrayList<Integer> supplyDays2 = new ArrayList<>();
+        supplyDays2.add(1);
+        supplyDays2.add(2);
+        supplyDays2.add(3);
         register("Amazon", 10, "Cheque", "8145441/24", supplierOneItems, contacts, 10, 500, discounts, supplyDays1);
         register("Google", 54, "Paypal", "15144/455", supplierTwoItems, contacts, 10, 500, discounts, supplyDays2);
         ArrayList<String[]> orderItems = new ArrayList<>();
         orderItems.add(new String[]{100 + "", "Candy Corn", 30 + "", 100 + "", 8989 + ""});
-        createOrder(10, false, true, orderItems);
+        createOrder(10, false, true, orderItems, 10000);
         ArrayList<String[]> orderItems2 = new ArrayList<>();
         orderItems2.add(new String[]{66 + "", "Dog", 3000 + "", 10 + "", 5041 + ""});
-        createOrder(54, true, true, orderItems2);
+        createOrder(54, true, true, orderItems2, 30000);
     }
 
     public ArrayList<String[]> getSuppliersInfo() {
@@ -73,7 +73,7 @@ public class SupplierController {
     }
 
     public void register(String name, int companyNumber, String paymentMethod,
-                 String bankAccount, ArrayList<String[]> items, ArrayList<String[]> contacts, ArrayList<String> supplyDays){
+                 String bankAccount, ArrayList<String[]> items, ArrayList<String[]> contacts, ArrayList<Integer> supplyDays){
         ArrayList<SupplierItemDTO> itemDTOs = new ArrayList<>();
         ArrayList<ContactDTO> contactDTOs = new ArrayList<>();
         //create an arraylist with size of the number of items
@@ -94,7 +94,7 @@ public class SupplierController {
 
     public void register(String name, int companyNumber, String paymentMethod, String bankAccount,
                          ArrayList<String[]> items, ArrayList<String[]> contacts, int regCostumer,
-                         int minPrice, HashMap<Integer, Integer> discountSteps, ArrayList<String> supplyDays){
+                         int minPrice, HashMap<Integer, Integer> discountSteps, ArrayList<Integer> supplyDays){
         //same as register only adds a quantity writer as well
         ArrayList<SupplierItemDTO> itemDTOs = new ArrayList<>();
         ArrayList<ContactDTO> contactDTOs = new ArrayList<>();
@@ -117,14 +117,14 @@ public class SupplierController {
         data.insert(supplierDTO);
     }
 
-    public int createOrder(int supplierNum, boolean needsDelivery, boolean constantDelivery, ArrayList<String[]> items){
+    public int createOrder(int supplierNum, boolean needsDelivery, boolean constantDelivery, ArrayList<String[]> items, int weight){
         ArrayList<SupplierItemDTO> itemDTOs = new ArrayList<>();
         for (String[] strings : items) { //creates an item array from all the items provided
             itemDTOs.add(new SupplierItemDTO(Integer.parseInt(strings[0]), strings[1], Integer.parseInt(strings[3]), Integer.parseInt(strings[2]), strings[4], supplierNum));
         }
         //creates the order
         //adds the order
-        OrderDTO orderDTO = new OrderDTO(ZonedDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy-hh:mm:ss")), constantDelivery? 1 : 0, needsDelivery? 1 : 0, itemDTOs);
+        OrderDTO orderDTO = new OrderDTO(ZonedDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy-hh:mm:ss")), constantDelivery? 1 : 0, needsDelivery? 1 : 0, itemDTOs, weight);
         data.insert(orderDTO);
         return quantityWriter.calcPrice(data.getSupplier(supplierNum).getQuantityWriter(), order.getPrice(orderDTO)); //calculates it's price
     }
@@ -218,14 +218,14 @@ public class SupplierController {
         return data.chooseBestSupplier(items);
     }
 
-    public String proposeOrder(int supplierNum, boolean needsDelivery, boolean constantDelivery, ArrayList<String[]> items){
+    public String proposeOrder(int supplierNum, boolean needsDelivery, boolean constantDelivery, ArrayList<String[]> items, int weight){
         ArrayList<SupplierItemDTO> itemDTOs = new ArrayList<>();
         for (String[] strings : items) { //creates an item array from all the items provided
             itemDTOs.add(new SupplierItemDTO(Integer.parseInt(strings[0]), strings[1], Integer.parseInt(strings[3]), Integer.parseInt(strings[2]), strings[4], supplierNum));
         }
         //creates the order
         //adds the order
-        OrderDTO order = new OrderDTO(ZonedDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy-hh:mm:ss")), constantDelivery? 1 : 0, needsDelivery? 1 : 0, itemDTOs);
+        OrderDTO order = new OrderDTO(ZonedDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy-hh:mm:ss")), constantDelivery? 1 : 0, needsDelivery? 1 : 0, itemDTOs, weight);
         StringBuilder output = new StringBuilder();
         output.append(String.format("[Date: %s, Needs Delivery: %s, Periodic Delivery: %s]", order.getDate(), order.getNeedsDelivery() == 1, order.getPeriodicDelivery() == 1));
         output.append("\nItems:");
@@ -233,6 +233,15 @@ public class SupplierController {
             output.append(String.format("\nID: %s\nPrice: %d\nQuantity: %d\nCompany Number: %d]", item.getId(), item.getPrice(), item.getQuantity(), item.getCompanyNumber()));
         }
         return output.toString();
+    }
+
+    public HashMap<OrderDTO, ArrayList<Integer>> getDeliveryOrders() {
+        return data.getDeliveryOrders();
+        /*for (OrderDTO ord : dels.keySet()) {
+            for(int i : dels.get(ord))
+                System.out.println(ord.getOrderItems().get(0).getCompanyNumber() + " " + i);
+        }
+        return dels;*/
     }
 }
 

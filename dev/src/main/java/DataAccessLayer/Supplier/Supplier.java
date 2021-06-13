@@ -62,13 +62,13 @@ class Supplier {
         return generatedId;
     }
 
-    private void insert(int companyNumber, ArrayList<String> supplyDays) {
+    private void insert(int companyNumber, ArrayList<Integer> supplyDays) {
         try {
             c = db.connect();
-            for (String supplyDay : supplyDays) {
+            for (int supplyDay : supplyDays) {
                 stmt = c.createStatement();
                 String sql = String.format("INSERT INTO SupplyDays (companyNumber, weekDay) " +
-                        "VALUES (%d, '%s');", companyNumber, supplyDay);
+                        "VALUES (%d, %d);", companyNumber, supplyDay);
                 stmt.executeUpdate(sql);
             }
             close();

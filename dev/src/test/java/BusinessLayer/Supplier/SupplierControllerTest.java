@@ -41,8 +41,8 @@ class SupplierControllerTest {
         discounts.put(15000, 20);
         DiscountStepDTO stepDTO = new DiscountStepDTO(1, 15000, 20, 1);
         ArrayList<DiscountStepDTO> list = new ArrayList<>();
-        ArrayList<String> supplyDays = new ArrayList<>();
-        supplyDays.add("Tuesday");
+        ArrayList<Integer> supplyDays = new ArrayList<>();
+        supplyDays.add(2);
         controller.register("Google", 50, "Google Pay", "69913/14", supplierItems, contacts, 10, 5000, discounts, supplyDays);
         String[] appleinfo = controller.getSuppliersInfo().get(0);
         assertEquals("Google", appleinfo[1]);
@@ -58,8 +58,8 @@ class SupplierControllerTest {
 
     @Test
     void registerWithoutQuantityWriter() {
-        ArrayList<String> supplyDays = new ArrayList<>();
-        supplyDays.add("Tuesday");
+        ArrayList<Integer> supplyDays = new ArrayList<>();
+        supplyDays.add(2);
         ArrayList<String[]> supplierItems = new ArrayList<>();
         supplierItems.add(new String[]{10 + "", "Polaroid", 9000 + "", 500 + "", 1041 + ""});
         ArrayList<String[]> contacts = new ArrayList<>();
@@ -78,7 +78,7 @@ class SupplierControllerTest {
         supItems.add(new String[]{10 + "", "Polaroid", 100 + "", 500 + "", 1041 + ""});
         ArrayList<SupplierItemDTO> items = new ArrayList<>();
         items.add(new SupplierItemDTO(10, "Polaroid", 100, 500, "1041", 941));
-        controller.createOrder(50, true, true, supItems);
+        controller.createOrder(50, true, true, supItems, 50);
         OrderDTO order = controller.getOrderFromSupplier(1);
         assertEquals(1, order.getPeriodicDelivery());
         assertEquals(1, order.getNeedsDelivery());

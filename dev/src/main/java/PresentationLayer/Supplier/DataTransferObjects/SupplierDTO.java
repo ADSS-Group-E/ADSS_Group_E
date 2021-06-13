@@ -11,7 +11,7 @@ public class SupplierDTO {
     private ArrayList<OrderDTO> orders;
     private ArrayList<SupplierItemDTO> items;
     private ArrayList<ContactDTO> contacts;
-    private ArrayList<String> supplyDays;
+    private ArrayList<Integer> supplyDays;
 
     public SupplierDTO(int companyNumber, String name, String bankAccount, String paymentMethod) {
         this.companyNumber = companyNumber;
@@ -65,11 +65,11 @@ public class SupplierDTO {
             this.contacts = contacts;
     }
 
-    public void setSupplyDays(ArrayList<String> supplyDays) {
+    public void setSupplyDays(ArrayList<Integer> supplyDays) {
         this.supplyDays = supplyDays;
     }
 
-    public ArrayList<String> getSupplyDays() {
+    public ArrayList<Integer> getSupplyDays() {
         return supplyDays;
     }
 }

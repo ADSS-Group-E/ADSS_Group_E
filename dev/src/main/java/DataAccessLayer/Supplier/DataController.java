@@ -77,6 +77,15 @@ public class DataController {
         return items.chooseBestSupplier(query.toString(), counter);
     }
 
+    public HashMap<OrderDTO, ArrayList<Integer>> getDeliveryOrders() {
+        HashMap<OrderDTO, ArrayList<Integer>> result = new HashMap<>();
+        ArrayList<OrderDTO> deliveryOrders =  orders.selectDO();
+        for (OrderDTO ord : deliveryOrders) {
+            result.put(ord, orders.selectSupplyDays(ord.getOrderItems().get(0).getCompanyNumber()));
+        }
+        return result;
+    }
+
     public void insert(SupplierDTO sup) {
         int id = supplier.insert(sup);
         if (id != -1)

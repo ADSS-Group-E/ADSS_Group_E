@@ -8,21 +8,37 @@ public class OrderDTO {
     private final int periodicDelivery;
     private final int needsDelivery;
     private ArrayList<SupplierItemDTO> orderItems;
+    private int weight;
+    private boolean isDelivered;
 
-    public OrderDTO(String date, int periodicDelivery, int needsDelivery, ArrayList<SupplierItemDTO> orderItems) {
+    public OrderDTO(String date, int periodicDelivery, int needsDelivery, ArrayList<SupplierItemDTO> orderItems, int weight) {
         this.id = -1;
         this.date = date;
         this.periodicDelivery = periodicDelivery;
         this.needsDelivery = needsDelivery;
         this.orderItems = orderItems;
+        this.weight = weight;
+        this.isDelivered = false;
     }
 
-    public OrderDTO(int id, String date, int periodicDelivery, int needsDelivery, ArrayList<SupplierItemDTO> orderItems) {
+    public OrderDTO(int id, String date, int periodicDelivery, int needsDelivery, ArrayList<SupplierItemDTO> orderItems, int weight) {
         this.id = id;
         this.date = date;
         this.periodicDelivery = periodicDelivery;
         this.needsDelivery = needsDelivery;
         this.orderItems = orderItems;
+        this.weight = weight;
+        this.isDelivered = false;
+    }
+
+    public OrderDTO(int id, String date, int periodicDelivery, int needsDelivery, ArrayList<SupplierItemDTO> orderItems, int weight, boolean isDelivered) {
+        this.id = id;
+        this.date = date;
+        this.periodicDelivery = periodicDelivery;
+        this.needsDelivery = needsDelivery;
+        this.orderItems = orderItems;
+        this.weight = weight;
+        this.isDelivered = isDelivered;
     }
 
     public int getId() {
@@ -50,4 +66,8 @@ public class OrderDTO {
     }
 
     public void setId(int id) { this.id = id; }
+
+    public int getWeight() { return weight; }
+
+    public boolean getIsDelivered() { return isDelivered; }
 }

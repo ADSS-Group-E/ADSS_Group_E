@@ -38,7 +38,7 @@ public class SupplierOptionsMenu extends OptionsMenu {
         ArrayList<String[]> items = PresentationHandler.getInstance().createItemList(); //creates item list
         ArrayList<String[]> contacts = PresentationHandler.getInstance().createContactList(); //creates contact list
         boolean hasQuantityWriter = PresentationHandler.getInstance().manageQuantityWriter(); //asks if Quantity Writer is needed
-        ArrayList<String> supplyDays = PresentationHandler.getInstance().getDays();
+        ArrayList<Integer> supplyDays = PresentationHandler.getInstance().getDays();
         if (!hasQuantityWriter) //if not
         {
             service.register(name, companyNumber, paymentMethod, bankAccount, items, contacts, supplyDays); //register without him
@@ -68,7 +68,8 @@ public class SupplierOptionsMenu extends OptionsMenu {
             out.println("\nSupplier items: ");
             out.println(PresentationHandler.getInstance().showSupplierItems(supplierItems)); //show the supplier items
             ArrayList<String[]> items = PresentationHandler.getInstance().createItemList(input); //create item list
-            out.println("Total Order price: " + service.createOrder(input, needsDelivery, constantDelivery, items) + ""); //create order and print it's total price
+            int weight = in.nextInt("Enter order weight: ");
+            out.println("Total Order price: " + service.createOrder(input, needsDelivery, constantDelivery, items, weight) + ""); //create order and print it's total price
         }
     }
 
