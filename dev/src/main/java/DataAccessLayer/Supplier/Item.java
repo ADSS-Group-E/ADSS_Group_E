@@ -28,7 +28,6 @@ class Item {
 
     void insert(SupplierItemDTO item) {
         try {
-            String[] key = {"ID"};
             c = db.connect();
             stmt = c.createStatement();
             String sql = String.format("INSERT INTO SupplierItem (productID, name, quantity, price, supplierCN, companyNumber) " +

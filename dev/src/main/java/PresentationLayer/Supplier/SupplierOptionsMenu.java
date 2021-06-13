@@ -28,7 +28,6 @@ public class SupplierOptionsMenu extends OptionsMenu {
     private OutputService out = OutputService.getInstance();
     private ServiceController service = new ServiceController(new SupplierController()); //initializes empty objects
 
-
     private void addSupplier(){
 
         //get supplier information
@@ -39,8 +38,11 @@ public class SupplierOptionsMenu extends OptionsMenu {
         ArrayList<String[]> items = PresentationHandler.getInstance().createItemList(); //creates item list
         ArrayList<String[]> contacts = PresentationHandler.getInstance().createContactList(); //creates contact list
         boolean hasQuantityWriter = PresentationHandler.getInstance().manageQuantityWriter(); //asks if Quantity Writer is needed
+        ArrayList<String> supplyDays = PresentationHandler.getInstance().getDays();
         if (!hasQuantityWriter) //if not
-            service.register(name, companyNumber, paymentMethod, bankAccount, items, contacts); //register without him
+        {
+            service.register(name, companyNumber, paymentMethod, bankAccount, items, contacts, supplyDays); //register without him
+        }
         else { //if does need quantity writer
             int regCostumer = in.nextInt("Regular costumer discount: %"); //asks for discount given to a regular costumer
             while (regCostumer >= service.getMaxDiscount()) { //while the max discount is illegal
@@ -49,7 +51,7 @@ public class SupplierOptionsMenu extends OptionsMenu {
             }
             int minPrice = in.nextInt("Minimum buy price for discount: "); //minimum order price for discount to happen
             HashMap<Integer, Integer> discountSteps = PresentationHandler.getInstance().createDiscountList(); //creates a discount list
-            service.register(name, companyNumber, paymentMethod, bankAccount, items, contacts, regCostumer, minPrice, discountSteps); //registers the supplier
+            service.register(name, companyNumber, paymentMethod, bankAccount, items, contacts, regCostumer, minPrice, discountSteps, supplyDays); //registers the supplier
         }
     }
 

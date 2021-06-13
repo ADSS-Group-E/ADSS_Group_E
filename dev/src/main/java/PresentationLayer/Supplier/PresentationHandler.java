@@ -12,9 +12,16 @@ class PresentationHandler {
     private ServiceController service = new ServiceController(new SupplierController());
     private InputService inputService = InputService.getInstance();
     private OutputService outputService = OutputService.getInstance();
+    private HashMap<Integer, String> days = new HashMap<>();
 
     private PresentationHandler(){
-
+        days.put(0, "Sunday");
+        days.put(1, "Monday");
+        days.put(2, "Tuesday");
+        days.put(3, "Wednesday");
+        days.put(4, "Thursday");
+        days.put(5, "Friday");
+        days.put(6, "Saturday");
     }
 
     static PresentationHandler getInstance(){ //singleton method to make sure there is only one instance
@@ -165,6 +172,29 @@ class PresentationHandler {
             ans = inputService.next("");
         }
         return map;
+    }
+
+    ArrayList<String> getDays() {
+        ArrayList<String> result = new ArrayList<>();
+        for(int key : days.keySet()) {
+            OutputService.getInstance().println(key + " - " + days.get(key));
+        }
+        String ans = "Y";
+        int counter = 0;
+        while (ans.equalsIgnoreCase("Y") && counter <= days.size()) {
+            int day = InputService.getInstance().nextInt("Pick number of the day in the week: ");
+            while (day <= 0 || day >= days.size()) {
+                OutputService.getInstance().println("Please try again.");
+                for(int key : days.keySet()) {
+                    OutputService.getInstance().println(key + " - " + days.get(key));
+                }
+                day = InputService.getInstance().nextInt("Pick number of the day in the week: ");
+            }
+            result.add(days.get(day));
+            counter++;
+            ans = inputService.next("Add another Day? N/Y ");
+        }
+        return result;
     }
 
      boolean showSupplierInfo(){

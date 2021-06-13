@@ -46,8 +46,15 @@ public class SupplierController {
         discounts.put(1000, 10);
         discounts.put(2000, 15);
         discounts.put(4000, 20);
-        register("Amazon", 10, "Cheque", "8145441/24", supplierOneItems, contacts, 10, 500, discounts);
-        register("Google", 54, "Paypal", "15144/455", supplierTwoItems, contacts, 10, 500, discounts);
+        ArrayList<String> supplyDays1 = new ArrayList<>();
+        supplyDays1.add("Tuesday");
+        supplyDays1.add("Thursday");
+        ArrayList<String> supplyDays2 = new ArrayList<>();
+        supplyDays2.add("Monday");
+        supplyDays2.add("Tuesday");
+        supplyDays2.add("Wednesday");
+        register("Amazon", 10, "Cheque", "8145441/24", supplierOneItems, contacts, 10, 500, discounts, supplyDays1);
+        register("Google", 54, "Paypal", "15144/455", supplierTwoItems, contacts, 10, 500, discounts, supplyDays2);
         ArrayList<String[]> orderItems = new ArrayList<>();
         orderItems.add(new String[]{100 + "", "Candy Corn", 30 + "", 100 + "", 8989 + ""});
         createOrder(10, false, true, orderItems);
@@ -66,7 +73,7 @@ public class SupplierController {
     }
 
     public void register(String name, int companyNumber, String paymentMethod,
-                 String bankAccount, ArrayList<String[]> items, ArrayList<String[]> contacts){
+                 String bankAccount, ArrayList<String[]> items, ArrayList<String[]> contacts, ArrayList<String> supplyDays){
         ArrayList<SupplierItemDTO> itemDTOs = new ArrayList<>();
         ArrayList<ContactDTO> contactDTOs = new ArrayList<>();
         //create an arraylist with size of the number of items
@@ -81,12 +88,13 @@ public class SupplierController {
         SupplierDTO supplierDTO = new SupplierDTO(companyNumber, name, bankAccount, paymentMethod);
         supplierDTO.setItems(itemDTOs);
         supplierDTO.setContacts(contactDTOs);
+        supplierDTO.setSupplyDays(supplyDays);
         data.insert(supplierDTO);
     }
 
     public void register(String name, int companyNumber, String paymentMethod, String bankAccount,
                          ArrayList<String[]> items, ArrayList<String[]> contacts, int regCostumer,
-                         int minPrice, HashMap<Integer, Integer> discountSteps){
+                         int minPrice, HashMap<Integer, Integer> discountSteps, ArrayList<String> supplyDays){
         //same as register only adds a quantity writer as well
         ArrayList<SupplierItemDTO> itemDTOs = new ArrayList<>();
         ArrayList<ContactDTO> contactDTOs = new ArrayList<>();
@@ -104,6 +112,7 @@ public class SupplierController {
         SupplierDTO supplierDTO = new SupplierDTO(companyNumber, name, bankAccount, paymentMethod);
         supplierDTO.setItems(itemDTOs);
         supplierDTO.setContacts(contactDTOs);
+        supplierDTO.setSupplyDays(supplyDays);
         supplierDTO.setQuantityWriter(new QuantityWriterDTO(companyNumber, regCostumer, minPrice, discountStepDTOs));
         data.insert(supplierDTO);
     }

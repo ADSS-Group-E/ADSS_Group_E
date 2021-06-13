@@ -42,6 +42,7 @@ class Supplier {
                 generatedId = rs.getInt(1);
             }
             close();
+            insert(sup.getCompanyNumber(), sup.getSupplyDays());
             Contact contact = new Contact(db);
             for (ContactDTO contactDTO : sup.getContacts()) {
                 contact.insert(contactDTO);
@@ -59,6 +60,22 @@ class Supplier {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
         }
         return generatedId;
+    }
+
+    private void insert(int companyNumber, ArrayList<String> supplyDays) {
+        try {
+            c = db.connect();
+            for (String supplyDay : supplyDays) {
+                stmt = c.createStatement();
+                String sql = String.format("INSERT INTO SupplyDays (companyNumber, weekDay) " +
+                        "VALUES (%d, '%s');", companyNumber, supplyDay);
+                stmt.executeUpdate(sql);
+            }
+            close();
+        }
+        catch (SQLException e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        }
     }
 
     ArrayList<SupplierDTO> select() {

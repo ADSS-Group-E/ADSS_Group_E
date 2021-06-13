@@ -18,17 +18,17 @@ public class ServiceController {
 
     private SupplierController supplierController;
 
-    public void register(String name, int companyNumber, String paymentMethod, String bankAccount, ArrayList<String[]> items, ArrayList<String[]> contacts) {
+    public void register(String name, int companyNumber, String paymentMethod, String bankAccount, ArrayList<String[]> items, ArrayList<String[]> contacts, ArrayList<String> supplyDays) {
         //enters a supplier to the supplier list
-        supplierController.register(name, companyNumber, paymentMethod, bankAccount, items, contacts);
+        supplierController.register(name, companyNumber, paymentMethod, bankAccount, items, contacts, supplyDays);
     }
 
     public void register(String name, int companyNumber, String paymentMethod, String bankAccount,
     ArrayList<String[]> items, ArrayList<String[]> contacts, int regCostumer,
-    int minPrice, HashMap<Integer, Integer> discountSteps) {
+    int minPrice, HashMap<Integer, Integer> discountSteps, ArrayList<String> supplyDays) {
         //enters a supplier to the supplier list with a quantity writer
               supplierController.register(name, companyNumber, paymentMethod, bankAccount, items, contacts,
-              regCostumer, minPrice, discountSteps);
+              regCostumer, minPrice, discountSteps, supplyDays);
     }
 
     public int createOrder(int supplierNum, boolean needsDelivery, boolean constantDelivery, ArrayList<String[]> items) {
