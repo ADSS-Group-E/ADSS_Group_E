@@ -3,6 +3,7 @@ package DataAccessLayer.Workers_Transport.Workers;
 import BusinessLayer.Workers_Transport.DriverPackage.Driver;
 import BusinessLayer.Workers_Transport.WorkersPackage.*;
 import DataAccessLayer.Workers_Transport.Repo;
+import PresentationLayer.Workers_Transport.QualificationsDTO;
 import PresentationLayer.Workers_Transport.ShiftDTO;
 import PresentationLayer.Workers_Transport.WorkerDTO;
 
@@ -457,6 +458,46 @@ public class Workers {
                             	PRIMARY KEY("ID","Day","Shift_Type")
                             )
      */
+
+    public static QualificationsDTO getTopicQualification(String ID)throws Exception{
+        try (Connection conn = Repo.openConnection()) {
+            String sql = "SELECT * FROM Branches WHERE branchManagerID=?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1,ID);
+            ResultSet results = pst.executeQuery();
+
+            if(results.next())
+                return QualificationsDTO.BranchManager;
+
+            String sql2 = "SELECT * FROM Branches WHERE HRD_ID=?";
+            PreparedStatement pst2 = conn.prepareStatement(sql);
+            pst.setString(1,ID);
+            ResultSet results2 = pst.executeQuery();
+
+            if(results.next())
+                return QualificationsDTO.Human_Resources_Director;
+
+            String sql3 = "SELECT * FROM Branches WHERE logisticsManagerID=?";
+            PreparedStatement pst3 = conn.prepareStatement(sql);
+            pst.setString(1,ID);
+            ResultSet results3 = pst.executeQuery();
+
+            if(results.next())
+                return QualificationsDTO.LogisticsManager;
+
+            String sql4 = "SELECT * FROM Qualifications WHERE ID=? AND Qualification=StoreKeeper";
+            PreparedStatement pst4 = conn.prepareStatement(sql);
+            pst.setString(1,ID);
+            ResultSet results4 = pst.executeQuery();
+
+            if(results.next())
+                return QualificationsDTO.Storekeeper;
+
+        } catch (Exception e) {
+            throw e;
+        }
+        return null;
+    }
 
     public static void insertWorkerAvailableDays(String ID,boolean [][]favoriteDays,boolean[][] cantWork) throws SQLException {
         try (Connection conn = Repo.openConnection()) {
