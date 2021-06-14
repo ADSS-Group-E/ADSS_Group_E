@@ -3,7 +3,7 @@ import PresentationLayer.CommandLineInterface;
 
 import PresentationLayer.Option;
 import PresentationLayer.OptionsMenu;
-import PresentationLayer.Workers_Transport.QualificationsDTO;
+import PresentationLayer.Workers.DataTransferObjects.QualificationsDTO;
 
 
 public class MainTransportOptionsMenu extends OptionsMenu {
@@ -23,7 +23,7 @@ public class MainTransportOptionsMenu extends OptionsMenu {
         deliveriesOptionsMenu = new DeliveriesOptionsMenu(parentCLI);
 
         int i=1;
-        options.put(i++, new Option( "Drivers", driversOptionsMenu::enter,QualificationsDTO.Storekeeper));
+        options.put(i++, new Option( "Drivers", driversOptionsMenu::enter, QualificationsDTO.LogisticsManager));
         options.put(i++, new Option( "Trucks", trucksOptionsMenu::enter));
         options.put(i++, new Option( "Locations", locationsOptionsMenu::enter));
         options.put(i++, new Option( "Orders", ordersOptionsMenu::enter));

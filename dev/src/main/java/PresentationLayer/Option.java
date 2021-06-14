@@ -1,9 +1,9 @@
 package PresentationLayer;
 
-import PresentationLayer.Workers_Transport.QualificationsDTO;
-import PresentationLayer.Workers_Transport.WorkerDTO;
+import DataAccessLayer.Workers_Transport.Workers.Workers;
+import PresentationLayer.Workers.DataTransferObjects.QualificationsDTO;
+import PresentationLayer.Workers.DataTransferObjects.WorkerDTO;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -43,6 +43,13 @@ public class Option {
     public boolean checkQualified(WorkerDTO workerDTO){
         if (requirements.isEmpty())
             return true;
-        return workerDTO.getQualifications().containsAll(requirements);
+        try{
+            QualificationsDTO qualification = Workers.getTopicQualification(workerDTO.getID());
+            return requirements.contains(qualification);
+        }
+        catch (Exception e){
+            System.err.println("Something went wrong with checkQualified: " + e);
+            return false;
+        }
     }
 }

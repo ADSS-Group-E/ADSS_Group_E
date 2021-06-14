@@ -4,6 +4,7 @@ import PresentationLayer.CommandLineInterface;
 import PresentationLayer.Inventory.DataTransferObjects.DiscountDTO;
 import PresentationLayer.Option;
 import PresentationLayer.OptionsMenu;
+import PresentationLayer.Workers.DataTransferObjects.QualificationsDTO;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -30,9 +31,9 @@ public class DiscountsOptionsMenu extends OptionsMenu {
 
         options.put(i++, new Option("List all discounts", this::getDiscountList));
 
-        options.put(i++, new Option("Add discount", this::addDiscount));
+        options.put(i++, new Option("Add discount", this::addDiscount, QualificationsDTO.Storekeeper));
 
-        options.put(i++, new Option("Remove discount", this::removeDiscount));
+        options.put(i++, new Option("Remove discount", this::removeDiscount, QualificationsDTO.Storekeeper));
 
         options.put(i, new Option( "Back", this::back));
     }
@@ -43,7 +44,7 @@ public class DiscountsOptionsMenu extends OptionsMenu {
     public void getDiscount(){
         System.out.println("Please enter the Discount ID for the discount you wish to display:");
         int did = in.nextInt();
-        DiscountDTO discount = parentCLI.getFacade().getDiscount(did);
+        DiscountDTO discount = parentCLI.getInventoryFacade().getDiscount(did);
         System.out.println(discount);
     }
 
@@ -51,7 +52,7 @@ public class DiscountsOptionsMenu extends OptionsMenu {
      * Display a list of all the Discounts that exist
      */
     public void getDiscountList(){
-        ArrayList<DiscountDTO> DTOlist = parentCLI.getFacade().getDiscountList();
+        ArrayList<DiscountDTO> DTOlist = parentCLI.getInventoryFacade().getDiscountList();
         System.out.printf("%-10s %s%n", "DID","Name");
         DTOlist.forEach((DTO)->System.out.printf("%-10s %s%n", DTO.getId(),DTO.getName()));
     }
@@ -150,7 +151,7 @@ public class DiscountsOptionsMenu extends OptionsMenu {
         }
 
         // Add the new discount by calling the InventoryFacade function with the data the user just entered.
-        parentCLI.getFacade().addDiscount(new DiscountDTO(did, name, discountPercentage, startDate, endDate), cids, pids);
+        parentCLI.getInventoryFacade().addDiscount(new DiscountDTO(did, name, discountPercentage, startDate, endDate), cids, pids);
         System.out.println("The new discount was added successfully.");
     }
 
@@ -165,7 +166,7 @@ public class DiscountsOptionsMenu extends OptionsMenu {
         String verify = in.next().trim();
         if (verify.equals("y")) {
             // Remove the discount by calling the InventoryFacade function with the data the user just entered.
-            parentCLI.getFacade().removeDiscount(did);
+            parentCLI.getInventoryFacade().removeDiscount(did);
             System.out.println("The discount was removed successfully.");
         }
         else {

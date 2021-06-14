@@ -4,6 +4,7 @@ import PresentationLayer.CommandLineInterface;
 import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
 import PresentationLayer.Option;
 import PresentationLayer.OptionsMenu;
+import PresentationLayer.Workers.DataTransferObjects.QualificationsDTO;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -28,10 +29,10 @@ public class ProductsOptionsMenu extends OptionsMenu {
         int i=1;
         options.put(i++, new Option( "Get product",this::getProduct));
         options.put(i++, new Option( "List all products",this::getProductList));
-        options.put(i++, new Option( "Add product",this::addProduct));
-        options.put(i++, new Option( "Remove product",this::removeProduct));
-        options.put(i++, new Option( "Add item",this::addItem));
-        options.put(i++, new Option( "Remove item",this::removeItem));
+        options.put(i++, new Option( "Add product",this::addProduct, QualificationsDTO.Storekeeper));
+        options.put(i++, new Option( "Remove product",this::removeProduct, QualificationsDTO.Storekeeper));
+        options.put(i++, new Option( "Add item",this::addItem, QualificationsDTO.Storekeeper));
+        options.put(i++, new Option( "Remove item",this::removeItem, QualificationsDTO.Storekeeper));
         options.put(i, new Option( "Back", this::back));
     }
 
@@ -41,7 +42,7 @@ public class ProductsOptionsMenu extends OptionsMenu {
     public void getProduct(){
         System.out.println("Please enter the product id for the product you wish to display:");
         int pid = in.nextInt();
-        ProductDTO product = parentCLI.getFacade().getProduct(pid);
+        ProductDTO product = parentCLI.getInventoryFacade().getProduct(pid);
         System.out.println(product);
     }
 
@@ -49,7 +50,7 @@ public class ProductsOptionsMenu extends OptionsMenu {
      * Display a list of all the products that exist
      */
     public void getProductList(){
-        ArrayList<ProductDTO> DTOlist = parentCLI.getFacade().getProductList();
+        ArrayList<ProductDTO> DTOlist = parentCLI.getInventoryFacade().getProductList();
         if (DTOlist != null){
             System.out.printf("%-10s %s%n", "PID","Name");
             DTOlist.forEach((DTO)->System.out.printf("%-10s %s%n", DTO.getPid(),DTO.getName()));
@@ -98,7 +99,7 @@ public class ProductsOptionsMenu extends OptionsMenu {
         int categoryId = in.nextInt();
 
         // Add the new product by calling the InventoryFacade function with the data the user just entered.
-        parentCLI.getFacade().addProduct(new ProductDTO(pid, name, storageLocation, storeLocation , manufacturer, sellingPrice, minAmount,categoryId, -1));
+        parentCLI.getInventoryFacade().addProduct(new ProductDTO(pid, name, storageLocation, storeLocation , manufacturer, sellingPrice, minAmount,categoryId, -1));
         System.out.println("The new product was added successfully.");
     }
 
@@ -113,7 +114,7 @@ public class ProductsOptionsMenu extends OptionsMenu {
         String verify = in.next().trim();
         if (verify.equals("y")) {
             // Remove the product by calling the InventoryFacade function with the ID the user just entered.
-            parentCLI.getFacade().removeProduct(pid);
+            parentCLI.getInventoryFacade().removeProduct(pid);
             System.out.println("The product was removed successfully.");
         }
         else {
@@ -160,11 +161,11 @@ public class ProductsOptionsMenu extends OptionsMenu {
         // Add the new item by calling the InventoryFacade function with the data the user just entered.
         switch (choice){
             case 1:
-                parentCLI.getFacade().addItemToStore(pid,quantity, priceBoughtAt, expiration);
+                parentCLI.getInventoryFacade().addItemToStore(pid,quantity, priceBoughtAt, expiration);
                 System.out.println("The new item was added successfully.");
                 break;
             case 2:
-                parentCLI.getFacade().addItemToStorage(pid, quantity, priceBoughtAt, expiration);
+                parentCLI.getInventoryFacade().addItemToStorage(pid, quantity, priceBoughtAt, expiration);
                 System.out.println("The new item was added successfully.");
                 break;
             default:
@@ -185,7 +186,7 @@ public class ProductsOptionsMenu extends OptionsMenu {
         String verify = in.next().trim();
         if (verify.equals("y")) {
             // Remove the item by calling the InventoryFacade function with the data the user just entered.
-            parentCLI.getFacade().removeItem(pid,id);
+            parentCLI.getInventoryFacade().removeItem(pid,id);
             System.out.println("The item was removed successfully.");
         }
         else {

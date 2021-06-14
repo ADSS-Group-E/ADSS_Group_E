@@ -2,7 +2,7 @@ package DataAccessLayer;
 
 import BusinessLayer.Workers_Transport.WorkersPackage.WorkersFacade;
 import DataAccessLayer.Workers_Transport.Repo;
-import PresentationLayer.Workers_Transport.*;
+import PresentationLayer.Workers.DataTransferObjects.*;
 
 import java.time.LocalDate;
 import java.util.LinkedList;

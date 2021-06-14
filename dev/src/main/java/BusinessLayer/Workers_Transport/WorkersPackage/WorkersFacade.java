@@ -3,16 +3,11 @@ package BusinessLayer.Workers_Transport.WorkersPackage;
 import BusinessLayer.Workers_Transport.DriverPackage.Driver;
 import BusinessLayer.Workers_Transport.Response;
 import BusinessLayer.Workers_Transport.ResponseT;
-import DataAccessLayer.Workers_Transport.Repo;
 import DataAccessLayer.Workers_Transport.Transports.Drivers;
 import DataAccessLayer.Workers_Transport.Workers.Shifts;
 import DataAccessLayer.Workers_Transport.Workers.Workers;
-import PresentationLayer.Workers_Transport.*;
+import PresentationLayer.Workers.DataTransferObjects.*;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -22,7 +17,7 @@ public class WorkersFacade {
     private final ShiftController shiftController;
     private static WorkersFacade instance = null;
 
-    private WorkersFacade() {
+    public WorkersFacade() {
         this.branchController =new BranchController();
         this.shiftController = new ShiftController();
     }
@@ -338,7 +333,7 @@ public class WorkersFacade {
     }
 
 
-    public Response setBankAccount(String WorkerID,BankAccountDTO bankAccount) {
+    public Response setBankAccount(String WorkerID, BankAccountDTO bankAccount) {
         try{
             Workers.updateBankAccount(WorkerID,bankAccount.getBankName(),bankAccount.getBranch(),bankAccount.getBankAccount());
         }catch(Exception e){
@@ -358,7 +353,7 @@ public class WorkersFacade {
         return new ResponseT<>(bankAccount);
     }
 
-    public Response setHiringConditions( String WorkerID,HiringConditionsDTO hiringConditions) {
+    public Response setHiringConditions(String WorkerID, HiringConditionsDTO hiringConditions) {
         try{
             Workers.updateHiringConditions(WorkerID,hiringConditions.getSalaryPerHour(),hiringConditions.getFund(),hiringConditions.getVacationDays(),hiringConditions.getSickLeavePerMonth());
         }catch(Exception e){

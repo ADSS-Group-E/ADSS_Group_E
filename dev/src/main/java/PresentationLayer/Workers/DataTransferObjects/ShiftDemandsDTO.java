@@ -1,4 +1,4 @@
-package PresentationLayer.Workers_Transport;
+package PresentationLayer.Workers.DataTransferObjects;
 
 import BusinessLayer.Workers_Transport.WorkersPackage.ShiftType;
 

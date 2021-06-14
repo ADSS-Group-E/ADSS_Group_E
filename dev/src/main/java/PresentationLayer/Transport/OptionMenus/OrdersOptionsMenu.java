@@ -4,6 +4,7 @@ import BusinessLayer.Workers_Transport.DeliveryPackage.DeliveryFacade;
 import PresentationLayer.CommandLineInterface;
 import PresentationLayer.Option;
 import PresentationLayer.OptionsMenu;
+import PresentationLayer.Workers.DataTransferObjects.QualificationsDTO;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,12 +15,12 @@ public class OrdersOptionsMenu extends OptionsMenu {
     public OrdersOptionsMenu(CommandLineInterface parentCLI) {
         super(parentCLI);
         int i = 1;
-        options.put(i++, new Option("Create New Order", this::createNewOrder));
-        options.put(i++, new Option("Delete Order", this::deleteOrder));
-        options.put(i++, new Option("Add Item to Order", this::addItem));
-        options.put(i++, new Option("Remove Item from Order", this::removeItem));
-        options.put(i++, new Option("Change Quantity of Item in Order", this::changeQuantity));
-        options.put(i++, new Option("Change Total Weight of Order", this::changeWeight));
+        options.put(i++, new Option("Create New Order", this::createNewOrder, QualificationsDTO.LogisticsManager));
+        options.put(i++, new Option("Delete Order", this::deleteOrder, QualificationsDTO.LogisticsManager));
+        options.put(i++, new Option("Add Item to Order", this::addItem, QualificationsDTO.LogisticsManager));
+        options.put(i++, new Option("Remove Item from Order", this::removeItem, QualificationsDTO.LogisticsManager));
+        options.put(i++, new Option("Change Quantity of Item in Order", this::changeQuantity, QualificationsDTO.LogisticsManager));
+        options.put(i++, new Option("Change Total Weight of Order", this::changeWeight, QualificationsDTO.LogisticsManager));
         options.put(i++, new Option("Display Orders", this::displayOrders));
         options.put(i, new Option("Back", this::back));
     }

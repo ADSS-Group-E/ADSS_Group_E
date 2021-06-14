@@ -1,4 +1,4 @@
-package PresentationLayer.Workers_Transport;
+package PresentationLayer.Workers.DataTransferObjects;
 
 public enum QualificationsDTO {
     Cashier,
@@ -8,5 +8,6 @@ public enum QualificationsDTO {
     Guard,
     BranchManager,
     Assistant,
-    ShiftManager;
+    ShiftManager,
+    LogisticsManager;
 }

@@ -2,7 +2,7 @@ package PresentationLayer;
 
 import BusinessLayer.Workers_Transport.ResponseT;
 import BusinessLayer.Workers_Transport.WorkersPackage.WorkersFacade;
-import PresentationLayer.Workers_Transport.WorkerDTO;
+import PresentationLayer.Workers.DataTransferObjects.WorkerDTO;
 
 public class LoginOptionsMenu extends OptionsMenu {
     QuickSelectWorker quickSelectWorker;
@@ -25,7 +25,8 @@ public class LoginOptionsMenu extends OptionsMenu {
     class QuickSelectWorker extends OptionsMenu{
         private static final String BRANCH_MANAGER_ID = "323079103";
         private static final String HRD_ID = "208060210";
-        private static final String STOREKEEPER_ID = "208060210";
+        private static final String LOGISTICS_ID = "207896321";
+        private static final String STOREKEEPER_ID = "254987413";
 
         private WorkersFacade workersFacade = WorkersFacade.getInstance();
 
@@ -35,6 +36,7 @@ public class LoginOptionsMenu extends OptionsMenu {
             int i=1;
             options.put(i++, new Option( "Branch Manager",() -> {loginWithID(BRANCH_MANAGER_ID);}));
             options.put(i++, new Option( "Human Resources Director",() -> {loginWithID(HRD_ID);}));
+            options.put(i++, new Option( "Logistic Manager",() -> {loginWithID(LOGISTICS_ID);}));
             options.put(i++, new Option( "Storekeeper",() -> {loginWithID(STOREKEEPER_ID);}));
             options.put(i, new Option( "Back", this::back));
         }

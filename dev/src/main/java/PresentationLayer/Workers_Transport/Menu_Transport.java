@@ -5,6 +5,10 @@ import BusinessLayer.Workers_Transport.Response;
 import BusinessLayer.Workers_Transport.WorkersPackage.WorkersFacade;
 import DataAccessLayer.Workers_Transport.Repo;
 import DataAccessLayer.Workers_Transport.Transports.DTO;
+import PresentationLayer.Workers.DataTransferObjects.AvailableWorkDaysDTO;
+import PresentationLayer.Workers.DataTransferObjects.BankAccountDTO;
+import PresentationLayer.Workers.DataTransferObjects.HiringConditionsDTO;
+import PresentationLayer.Workers.DataTransferObjects.WorkerDTO;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
