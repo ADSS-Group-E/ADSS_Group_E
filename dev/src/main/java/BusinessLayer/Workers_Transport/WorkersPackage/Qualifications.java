@@ -8,5 +8,6 @@ public enum Qualifications {
     Guard,
     BranchManager,
     Assistant,
-    ShiftManager;
+    ShiftManager,
+    LogisticsManager;
 }

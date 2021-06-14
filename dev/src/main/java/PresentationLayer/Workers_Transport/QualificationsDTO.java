@@ -8,5 +8,6 @@ public enum QualificationsDTO {
     Guard,
     BranchManager,
     Assistant,
-    ShiftManager;
+    ShiftManager,
+    LogisticsManager;
 }
