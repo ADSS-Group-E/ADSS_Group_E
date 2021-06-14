@@ -1,6 +1,7 @@
 package PresentationLayer;
 
 
+import BusinessLayer.AcceptOrderHandler;
 import BusinessLayer.Inventory.Controllers.*;
 import BusinessLayer.OrderFromReportHandler;
 import BusinessLayer.Supplier.SupplierController;
@@ -35,6 +36,7 @@ public class CommandLineInterface {
     private final MainOptionsMenu mainOptionsMenu;
     private WorkerDTO loggedInWorker;
     private final Facade workersTransportFacade;
+    private final AcceptOrderHandler acceptOrderHandler;
 
     // Getters
     public InventoryFacade getInventoryFacade() {
@@ -53,7 +55,9 @@ public class CommandLineInterface {
         return serviceController;
     }
 
-
+    public AcceptOrderHandler getAcceptOrderHandler() {
+        return acceptOrderHandler;
+    }
 
     public WorkerDTO getLoggedInWorker() {
         return loggedInWorker;
@@ -78,6 +82,7 @@ public class CommandLineInterface {
         inventoryFacade = new InventoryFacade(pCont, rCont, cCont, dCont);
 
         orderFromReportHandler = new OrderFromReportHandler(rCont,sCont);
+        acceptOrderHandler = new AcceptOrderHandler(pCont);
         serviceController = new ServiceController(sCont);
 
         loginOptionsMenu = new LoginOptionsMenu(this);
@@ -126,6 +131,8 @@ public class CommandLineInterface {
             e.printStackTrace();
             return;
         }
+        inventoryFacade.addCategory(4,"Fruit");
+        inventoryFacade.addCategory(3,"Milk");
         inventoryFacade.addCategory(1,"Juice");
         inventoryFacade.addCategory(new CategoryDTO(2,"<500 ML",1));
         inventoryFacade.addProduct(new ProductDTO(1, "Test Juice", "AB01","B13", "Test Company", 10.1, 5,2, -1));
@@ -133,6 +140,16 @@ public class CommandLineInterface {
         inventoryFacade.addItemToStorage(1,3, 11, LocalDateTime.of(2021,4,25,16,0));
         inventoryFacade.addItemToStore(1,20, 11.5, LocalDateTime.of(2021,4,1,16,0));
         inventoryFacade.addItemToStorage(1,4, 12, LocalDateTime.of(2021,4,1,16,0));
+        inventoryFacade.addProduct(new ProductDTO(2, "Test Milk", "AB01","B13", "Test Company", 69, 100,3, -1));
+        inventoryFacade.addItemToStore(2,5, 10.5,  LocalDateTime.of(2021,4,24,16,0));
+        inventoryFacade.addItemToStorage(2,3, 11, LocalDateTime.of(2021,4,25,16,0));
+        inventoryFacade.addItemToStore(2,20, 11.5, LocalDateTime.of(2021,4,1,16,0));
+        inventoryFacade.addItemToStorage(2,4, 12, LocalDateTime.of(2021,4,1,16,0));
+        inventoryFacade.addProduct(new ProductDTO(3, "Test Apples", "AB01","B13", "Test Company", 6.9, 100,4, -1));
+        inventoryFacade.addItemToStore(3,5, 10.5,  LocalDateTime.of(2021,4,24,16,0));
+        inventoryFacade.addItemToStorage(3,3, 11, LocalDateTime.of(2021,4,25,16,0));
+        inventoryFacade.addItemToStore(3,20, 11.5, LocalDateTime.of(2021,4,1,16,0));
+        inventoryFacade.addItemToStorage(3,4, 12, LocalDateTime.of(2021,4,1,16,0));
         ArrayList<Integer> cids = new ArrayList<>();
         ArrayList<Integer> pids = new ArrayList<>();
         cids.add(1);

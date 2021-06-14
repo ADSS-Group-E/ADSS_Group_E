@@ -40,12 +40,13 @@ public class ProductController extends DomainController{
         this.itemGroupDAO = itemGroupDAO;
     }
 
-    public void acceptOrder(Order order){
+    // Dismissals is a map between a product id and the amount which needs to be dismissed from the order
+    public void acceptOrder(Order order, HashMap<Integer, Integer> dismissals){
         HashMap<Product, ItemGroup> itemGroups = new HashMap<>();
 
         //TODO: Implement OrderItem, getOrderItems, getPid, ItemGroup constructor with OrderItem, Order.accept
-        /* Commented out code while it's not implemented
 
+/*
         // First iterate through orderItems to get it's corresponding product and create a new itemGroup for it
         ArrayList<OrderItem> orderItems = order.getOrderItems();
         for (OrderItem orderItem:
@@ -57,10 +58,28 @@ public class ProductController extends DomainController{
             }
 
             ItemGroup itemGroup = new ItemGroup(orderItem);
-            
-            itemGroups.put(product, itemGroup);
+
+            if (dismissals.containsKey(product.getId())){
+                int amountToDismiss = dismissals.get(product.getId());
+                if (itemGroup.getQuantity() - amountToDismiss > 0){
+                    // Dismissing part of itemgroup
+                    itemGroup.setQuantity(itemGroup.getQuantity() - amountToDismiss);
+                    dismissals.remove(product.getId());
+
+                    itemGroups.put(product, itemGroup);
+                }
+                else{
+                    // Dismissing whole itemgroup
+                    dismissals.put(product.getId(), amountToDismiss - itemGroup.getQuantity());
+                }
+            }
+            else{
+                itemGroups.put(product, itemGroup);
+            }
         }
-        */
+
+ */
+
         // Once every orderItem has been confirmed to have a matching product, add the itemGroups to storage
         Iterator<Map.Entry<Product, ItemGroup>> it = itemGroups.entrySet().iterator();
         while (it.hasNext()) {
