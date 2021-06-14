@@ -22,7 +22,7 @@ public class WorkersFacade {
     private final ShiftController shiftController;
     private static WorkersFacade instance = null;
 
-    private WorkersFacade() {
+    public WorkersFacade() {
         this.branchController =new BranchController();
         this.shiftController = new ShiftController();
     }

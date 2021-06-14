@@ -3,6 +3,7 @@ package PresentationLayer;
 import PresentationLayer.Inventory.OptionMenus.MainInventoryOptionsMenu;
 import PresentationLayer.Supplier.SupplierOptionsMenu;
 import PresentationLayer.Transport.OptionMenus.MainTransportOptionsMenu;
+import PresentationLayer.Workers.OptionMenus.MainWorkersOptionsMenu;
 
 /**
  * This class represents the main menu of the system.
@@ -17,6 +18,8 @@ public class MainOptionsMenu extends OptionsMenu {
     private final MainInventoryOptionsMenu mainInventoryOptionsMenu;
     private final SupplierOptionsMenu supplierOptionsMenu;
     private final MainTransportOptionsMenu mainTransportOptionsMenu;
+    private final MainWorkersOptionsMenu mainWorkersOptionsMenu;
+
 
 
     public MainOptionsMenu(CommandLineInterface parentCLI) {
@@ -25,11 +28,13 @@ public class MainOptionsMenu extends OptionsMenu {
         mainInventoryOptionsMenu = new MainInventoryOptionsMenu(parentCLI);
         supplierOptionsMenu = new SupplierOptionsMenu(parentCLI);
         mainTransportOptionsMenu = new MainTransportOptionsMenu(parentCLI);
+        mainWorkersOptionsMenu = new MainWorkersOptionsMenu(parentCLI);
 
         int i = 1;
         options.put(i++, new Option( "Inventory options", mainInventoryOptionsMenu::enter));
         options.put(i++, new Option( "Supplier options", supplierOptionsMenu::enter));
         options.put(i++, new Option( "Transport options", mainTransportOptionsMenu::enter));
+        options.put(i++, new Option( "Workers options", mainWorkersOptionsMenu::enter));
         options.put(i++, new Option( "Log out",() -> {
             System.out.println("Logging out.");
             parentCLI.setLoggedInWorker(null);
