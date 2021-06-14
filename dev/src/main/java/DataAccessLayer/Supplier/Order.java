@@ -79,6 +79,21 @@ class Order {
         }
     }
 
+    void delete(String set) {
+        try {
+            c = db.connect();
+            stmt = c.createStatement();
+            String sql = String.format("DELETE FROM OrderItems WHERE " +
+                    "orderID IN %s;" +
+                    "DELETE FROM " + tableName + " WHERE orderID IN %s", set, set);
+            stmt.executeUpdate(sql);
+            close();
+        }
+        catch (SQLException e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        }
+    }
+
     ArrayList<OrderDTO> selectRO() {
         OrderDTO order;
         SupplierItemDTO item;

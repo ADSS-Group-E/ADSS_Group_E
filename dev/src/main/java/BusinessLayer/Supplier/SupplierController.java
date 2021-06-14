@@ -243,5 +243,9 @@ public class SupplierController {
         }
         return dels;*/
     }
+
+    public void cancelOrders(ArrayList<Integer> orders) {
+        data.cancelOrders(orders);
+    }
 }
 

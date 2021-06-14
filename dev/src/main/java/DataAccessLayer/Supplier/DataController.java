@@ -153,5 +153,14 @@ public class DataController {
     public OrderDTO selectO(int id) {
         return orders.select(id);
     }
+
+    public void cancelOrders(ArrayList<Integer> orderIDs) {
+        StringBuilder set = new StringBuilder("(");
+        for (int i : orderIDs) {
+            set.append(i).append(", ");
+        }
+        set = new StringBuilder(set.substring(0, set.length() - 2) + ")");
+        orders.delete(set.toString());
+    }
 }
 
