@@ -45,14 +45,14 @@ public class ReportsOptionsMenu extends OptionsMenu {
     public void getReport(){
         System.out.println("Please enter the report id for the report you wish to display:");
         int rid = in.nextInt();
-        System.out.println(parentCLI.getFacade().getReport(rid));
+        System.out.println(parentCLI.getInventoryFacade().getReport(rid));
     }
 
     /**
      * Display a list of all the Reports that were generated
      */
     public void getReportList(){
-        ArrayList<String> stringList = parentCLI.getFacade().getReportList();
+        ArrayList<String> stringList = parentCLI.getInventoryFacade().getReportList();
         System.out.printf("%-10s%-20s%-20s%n", "RID","Created","Type");
         System.out.println(String.join("\n",stringList));
     }
@@ -100,13 +100,13 @@ public class ReportsOptionsMenu extends OptionsMenu {
                     }
                 }
 
-                int stockRid = parentCLI.getFacade().generateStockReport(cids,pids);
-                String stockReport = parentCLI.getFacade().getReport(stockRid);
+                int stockRid = parentCLI.getInventoryFacade().generateStockReport(cids,pids);
+                String stockReport = parentCLI.getInventoryFacade().getReport(stockRid);
                 System.out.println(stockReport);
                 break;
             case 2:
-                int lowStockRid =parentCLI.getFacade().generateLowStockReport();
-                String lowStockReport = parentCLI.getFacade().getReport(lowStockRid);
+                int lowStockRid =parentCLI.getInventoryFacade().generateLowStockReport();
+                String lowStockReport = parentCLI.getInventoryFacade().getReport(lowStockRid);
                 System.out.println(lowStockReport);
                 System.out.println("Would you like to generate an automatic order from suppliers based on this report? (y/n)");
                 String verify = in.next().trim();
@@ -127,8 +127,8 @@ public class ReportsOptionsMenu extends OptionsMenu {
                 break;
             case 3:
                 //Invalids report
-                int invalidsRid =parentCLI.getFacade().generateInvalidsReport();
-                String invalidsReport = parentCLI.getFacade().getReport(invalidsRid);
+                int invalidsRid =parentCLI.getInventoryFacade().generateInvalidsReport();
+                String invalidsReport = parentCLI.getInventoryFacade().getReport(invalidsRid);
                 System.out.println(invalidsReport);
                 break;
             default:
@@ -147,7 +147,7 @@ public class ReportsOptionsMenu extends OptionsMenu {
         String verify = in.next().trim();
         if (verify.equals("y")) {
            // Remove the report by calling the InventoryFacade function with the data the user just entered.
-           parentCLI.getFacade().removeReport(rid);
+           parentCLI.getInventoryFacade().removeReport(rid);
             System.out.println("The report was removed successfully.");
         }
         else {

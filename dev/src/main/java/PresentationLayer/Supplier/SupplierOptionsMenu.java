@@ -6,6 +6,7 @@ import PresentationLayer.Option;
 import PresentationLayer.OptionsMenu;
 import PresentationLayer.Supplier.DataTransferObjects.OrderDTO;
 import PresentationLayer.Supplier.DataTransferObjects.SupplierItemDTO;
+import PresentationLayer.Workers.DataTransferObjects.QualificationsDTO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,10 +18,10 @@ public class SupplierOptionsMenu extends OptionsMenu {
         super(parentCLI);
         int i=1;
         options.put(i++, new Option( "Add supplier",this::addSupplier));
-        options.put(i++, new Option( "Create order",this::createOrder));
+        options.put(i++, new Option( "Create order",this::createOrder, QualificationsDTO.Storekeeper));
         options.put(i++, new Option( "Get weekly orders",this::getWeeklyOrders));
-        options.put(i++, new Option( "Update order item quantity",this::updateQuantity));
-        options.put(i++, new Option( "Delete item from order",this::deleteItem));
+        options.put(i++, new Option( "Update order item quantity",this::updateQuantity, QualificationsDTO.Storekeeper));
+        options.put(i++, new Option( "Delete item from order",this::deleteItem, QualificationsDTO.Storekeeper));
         options.put(i, new Option( "Back", this::back));
     }
 

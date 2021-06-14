@@ -4,6 +4,9 @@ import PresentationLayer.Inventory.OptionMenus.MainInventoryOptionsMenu;
 import PresentationLayer.Supplier.SupplierOptionsMenu;
 import PresentationLayer.Transport.OptionMenus.MainTransportOptionsMenu;
 import PresentationLayer.Workers.OptionMenus.MainWorkersOptionsMenu;
+import PresentationLayer.Workers.DataTransferObjects.QualificationsDTO;
+
+import java.util.HashSet;
 
 /**
  * This class represents the main menu of the system.
@@ -30,10 +33,19 @@ public class MainOptionsMenu extends OptionsMenu {
         mainTransportOptionsMenu = new MainTransportOptionsMenu(parentCLI);
         mainWorkersOptionsMenu = new MainWorkersOptionsMenu(parentCLI);
 
+        HashSet<QualificationsDTO> storekeeperAndBranchManager = new HashSet<>();
+        storekeeperAndBranchManager.add(QualificationsDTO.BranchManager);
+        storekeeperAndBranchManager.add(QualificationsDTO.Storekeeper);
+
+        HashSet<QualificationsDTO> logisticsAndBranchManager = new HashSet<>();
+        logisticsAndBranchManager.add(QualificationsDTO.BranchManager);
+        logisticsAndBranchManager.add(QualificationsDTO.LogisticsManager);
+
+
         int i = 1;
-        options.put(i++, new Option( "Inventory options", mainInventoryOptionsMenu::enter));
-        options.put(i++, new Option( "Supplier options", supplierOptionsMenu::enter));
-        options.put(i++, new Option( "Transport options", mainTransportOptionsMenu::enter));
+        options.put(i++, new Option( "Inventory options", mainInventoryOptionsMenu::enter, storekeeperAndBranchManager));
+        options.put(i++, new Option( "Supplier options", supplierOptionsMenu::enter,  storekeeperAndBranchManager));
+        options.put(i++, new Option( "Transport options", mainTransportOptionsMenu::enter, logisticsAndBranchManager));
         options.put(i++, new Option( "Workers options", mainWorkersOptionsMenu::enter));
         options.put(i++, new Option( "Log out",() -> {
             System.out.println("Logging out.");

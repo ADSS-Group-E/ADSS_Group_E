@@ -1,6 +1,6 @@
 package BusinessLayer.Workers_Transport.WorkersPackage;
 
-import PresentationLayer.Workers_Transport.ShiftDemandsDTO;
+import PresentationLayer.Workers.DataTransferObjects.ShiftDemandsDTO;
 
 import java.time.LocalDate;
 

@@ -4,6 +4,7 @@ import PresentationLayer.Inventory.DataTransferObjects.CategoryDTO;
 import PresentationLayer.CommandLineInterface;
 import PresentationLayer.Option;
 import PresentationLayer.OptionsMenu;
+import PresentationLayer.Workers.DataTransferObjects.QualificationsDTO;
 
 import java.util.ArrayList;
 
@@ -27,9 +28,9 @@ public class CategoriesOptionsMenu extends OptionsMenu {
 
         options.put(i++, new Option( "List all categories",this::getCategoryList));
 
-        options.put(i++, new Option( "Add category",this::addCategory));
+        options.put(i++, new Option( "Add category",this::addCategory, QualificationsDTO.Storekeeper));
 
-        options.put(i++, new Option( "Remove category",this::removeCategory));
+        options.put(i++, new Option( "Remove category",this::removeCategory, QualificationsDTO.Storekeeper));
 
         options.put(i, new Option( "Back", this::back));
     }
@@ -40,7 +41,7 @@ public class CategoriesOptionsMenu extends OptionsMenu {
     public void getCategory(){
         System.out.println("Please enter the Category ID for the category you wish to display:");
         int cid = in.nextInt();
-        CategoryDTO category = parentCLI.getFacade().getCategory(cid);
+        CategoryDTO category = parentCLI.getInventoryFacade().getCategory(cid);
         System.out.println(category);
     }
 
@@ -48,7 +49,7 @@ public class CategoriesOptionsMenu extends OptionsMenu {
      * Display a list of all the Categories that exist
      */
     public void getCategoryList(){
-        ArrayList<CategoryDTO> DTOlist = parentCLI.getFacade().getCategoryList();
+        ArrayList<CategoryDTO> DTOlist = parentCLI.getInventoryFacade().getCategoryList();
         System.out.printf("%-10s %s%n", "CID","Name");
         DTOlist.forEach((DTO)->System.out.printf("%-10s %s%n", DTO.getCid(),DTO.getName()));
     }
@@ -72,11 +73,11 @@ public class CategoriesOptionsMenu extends OptionsMenu {
             int superCategoryId;
             superCategoryId = Integer.parseInt(in.nextLine());
             // Add the new category with super-category by calling the InventoryFacade function with the data the user just entered.
-            parentCLI.getFacade().addCategory(new CategoryDTO(cid, name,superCategoryId));
+            parentCLI.getInventoryFacade().addCategory(new CategoryDTO(cid, name,superCategoryId));
         }
         catch(NumberFormatException e){
             // Add the new category by calling the InventoryFacade function with the data the user just entered.
-            parentCLI.getFacade().addCategory(cid,name);
+            parentCLI.getInventoryFacade().addCategory(cid,name);
         }
         System.out.println("The new category was added successfully.");
     }
@@ -92,7 +93,7 @@ public class CategoriesOptionsMenu extends OptionsMenu {
         String verify = in.next().trim();
         if (verify.equals("y")) {
             // Remove the category by calling the InventoryFacade function with the ID the user just entered.
-            parentCLI.getFacade().removeCategory(cid);
+            parentCLI.getInventoryFacade().removeCategory(cid);
             System.out.println("The category was removed successfully.");
         }
         else {

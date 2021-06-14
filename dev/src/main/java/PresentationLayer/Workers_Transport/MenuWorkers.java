@@ -6,7 +6,7 @@ import BusinessLayer.Workers_Transport.Facade;
 import BusinessLayer.Workers_Transport.Response;
 import BusinessLayer.Workers_Transport.ResponseT;
 import DataAccessLayer.Workers_Transport.Transports.DTO;
-import DataAccessLayer.Workers_Transport.Workers.Workers;
+import PresentationLayer.Workers.DataTransferObjects.*;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;

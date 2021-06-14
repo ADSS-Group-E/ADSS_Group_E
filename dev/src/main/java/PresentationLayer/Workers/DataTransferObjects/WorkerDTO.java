@@ -1,4 +1,4 @@
-package PresentationLayer.Workers_Transport;
+package PresentationLayer.Workers.DataTransferObjects;
 
 import java.time.LocalDate;
 import java.util.LinkedList;
@@ -99,5 +99,10 @@ public class WorkerDTO {
         this.hiringConditions = hiringConditions;
         this.availableWorkDays = availableWorkDays;
         this.qualifications = new LinkedList<>();
+    }
+
+    @Override
+    public String toString() {
+        return firstName + " " + lastName;
     }
 }

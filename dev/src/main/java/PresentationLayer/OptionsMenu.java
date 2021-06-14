@@ -1,14 +1,10 @@
 package PresentationLayer;
 
 
-import PresentationLayer.CommandLineInterface;
-import PresentationLayer.Option;
-import PresentationLayer.Workers_Transport.QualificationsDTO;
-import PresentationLayer.Workers_Transport.WorkerDTO;
+import PresentationLayer.Workers.DataTransferObjects.WorkerDTO;
 
 import java.util.Map;
 import java.util.Scanner;
-import java.util.Set;
 import java.util.TreeMap;
 
 public abstract class OptionsMenu {
@@ -41,6 +37,7 @@ public abstract class OptionsMenu {
     }
 
     private void setAuthorizedOptions(WorkerDTO loggedInWorker){
+        authorizedOptions = new TreeMap<>();
         int i = 1;
         for (Map.Entry<Integer, Option> entry : options.entrySet()) {
             Option option = entry.getValue();

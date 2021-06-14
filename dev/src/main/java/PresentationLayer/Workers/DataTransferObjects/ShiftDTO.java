@@ -1,4 +1,4 @@
-package PresentationLayer.Workers_Transport;
+package PresentationLayer.Workers.DataTransferObjects;
 
 import java.time.LocalDate;
 import java.util.EnumMap;

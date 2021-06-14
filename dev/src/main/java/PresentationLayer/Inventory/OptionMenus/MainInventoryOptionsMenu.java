@@ -3,7 +3,6 @@ package PresentationLayer.Inventory.OptionMenus;
 import PresentationLayer.CommandLineInterface;
 import PresentationLayer.Option;
 import PresentationLayer.OptionsMenu;
-import PresentationLayer.Workers_Transport.QualificationsDTO;
 
 /**
  * This class represents the main menu of the system.
@@ -29,7 +28,7 @@ public class MainInventoryOptionsMenu extends OptionsMenu {
         reportsOptionsMenu = new ReportsOptionsMenu(parentCLI);
 
         int i=1;
-        options.put(i++, new Option( "Products", productsOptionsMenu::enter,QualificationsDTO.Storekeeper));
+        options.put(i++, new Option( "Products", productsOptionsMenu::enter));
         options.put(i++, new Option( "Categories", categoriesOptionsMenu::enter));
         options.put(i++, new Option( "Discounts", discountsOptionsMenu::enter));
         options.put(i++, new Option( "Reports", reportsOptionsMenu::enter));

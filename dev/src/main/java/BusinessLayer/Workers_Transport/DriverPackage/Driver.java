@@ -1,9 +1,7 @@
 package BusinessLayer.Workers_Transport.DriverPackage;
 
-import BusinessLayer.Workers_Transport.WorkersPackage.BankAccount;
 import BusinessLayer.Workers_Transport.WorkersPackage.Worker;
-import PresentationLayer.Workers_Transport.WorkerDTO;
-import BusinessLayer.Workers_Transport.WorkersPackage.WorkersFacade;
+
 import java.util.*;
 
 public class Driver extends Worker {

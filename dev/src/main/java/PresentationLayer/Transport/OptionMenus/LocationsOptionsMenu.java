@@ -1,10 +1,10 @@
 package PresentationLayer.Transport.OptionMenus;
 
 import BusinessLayer.Workers_Transport.DeliveryPackage.DeliveryFacade;
-import BusinessLayer.Workers_Transport.Response;
 import PresentationLayer.CommandLineInterface;
 import PresentationLayer.Option;
 import PresentationLayer.OptionsMenu;
+import PresentationLayer.Workers.DataTransferObjects.QualificationsDTO;
 
 public class LocationsOptionsMenu extends OptionsMenu {
     private final DeliveryFacade deliveryFacade = DeliveryFacade.getInstance();
@@ -12,10 +12,10 @@ public class LocationsOptionsMenu extends OptionsMenu {
     public LocationsOptionsMenu(CommandLineInterface parentCLI) {
         super(parentCLI);
         int i = 1;
-        options.put(i++, new Option("Create New Location", this::createNewLocation));
-        options.put(i++, new Option("Delete Location", this::deleteLocation));
-        options.put(i++, new Option("Change Phone Number", this::changePhoneNumber));
-        options.put(i++, new Option("Change Contact Name", this::changeContactName));
+        options.put(i++, new Option("Create New Location", this::createNewLocation, QualificationsDTO.LogisticsManager));
+        options.put(i++, new Option("Delete Location", this::deleteLocation, QualificationsDTO.LogisticsManager));
+        options.put(i++, new Option("Change Phone Number", this::changePhoneNumber, QualificationsDTO.LogisticsManager));
+        options.put(i++, new Option("Change Contact Name", this::changeContactName, QualificationsDTO.LogisticsManager));
         options.put(i++, new Option("Display Location", this::displayLocation));
         options.put(i, new Option("Back", this::back));
     }

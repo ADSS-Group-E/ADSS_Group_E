@@ -4,6 +4,7 @@ import BusinessLayer.Workers_Transport.DeliveryPackage.DeliveryFacade;
 import PresentationLayer.CommandLineInterface;
 import PresentationLayer.Option;
 import PresentationLayer.OptionsMenu;
+import PresentationLayer.Workers.DataTransferObjects.QualificationsDTO;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
@@ -16,16 +17,16 @@ public class DeliveriesOptionsMenu extends OptionsMenu {
     public DeliveriesOptionsMenu(CommandLineInterface parentCLI) {
         super(parentCLI);
         int i = 1;
-        options.put(i++, new Option("Create New Delivery", this::createNewDelivery));
-        options.put(i++, new Option("Delete Delivery", this::deleteDelivery));
-        options.put(i++, new Option("Change Delivery Date", this::changeDate));
-        options.put(i++, new Option("Change Delivery Time", this::changeTime));
-        options.put(i++, new Option("Change Delivery Weight", this::changeWeight));
-        options.put(i++, new Option("Change Truck for Delivery", this::changeTruck));
-        options.put(i++, new Option("Change Driver for Delivery", this::changeDriver));
-        options.put(i++, new Option("Add Order and Location", this::addOrder));
-        options.put(i++, new Option("Remove Order and Location", this::removeOrder));
-        options.put(i++, new Option("Change Status", this::changeStatus));
+        options.put(i++, new Option("Create New Delivery", this::createNewDelivery, QualificationsDTO.LogisticsManager));
+        options.put(i++, new Option("Delete Delivery", this::deleteDelivery, QualificationsDTO.LogisticsManager));
+        options.put(i++, new Option("Change Delivery Date", this::changeDate, QualificationsDTO.LogisticsManager));
+        options.put(i++, new Option("Change Delivery Time", this::changeTime, QualificationsDTO.LogisticsManager));
+        options.put(i++, new Option("Change Delivery Weight", this::changeWeight, QualificationsDTO.LogisticsManager));
+        options.put(i++, new Option("Change Truck for Delivery", this::changeTruck, QualificationsDTO.LogisticsManager));
+        options.put(i++, new Option("Change Driver for Delivery", this::changeDriver, QualificationsDTO.LogisticsManager));
+        options.put(i++, new Option("Add Order and Location", this::addOrder, QualificationsDTO.LogisticsManager));
+        options.put(i++, new Option("Remove Order and Location", this::removeOrder, QualificationsDTO.LogisticsManager));
+        options.put(i++, new Option("Change Status", this::changeStatus, QualificationsDTO.LogisticsManager));
         options.put(i++, new Option("Display Deliveries", this::displayDeliveries));
 
         options.put(i, new Option("Back", this::back));

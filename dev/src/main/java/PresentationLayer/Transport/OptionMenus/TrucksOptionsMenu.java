@@ -5,9 +5,7 @@ import BusinessLayer.Workers_Transport.Response;
 import PresentationLayer.CommandLineInterface;
 import PresentationLayer.Option;
 import PresentationLayer.OptionsMenu;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import PresentationLayer.Workers.DataTransferObjects.QualificationsDTO;
 
 public class TrucksOptionsMenu extends OptionsMenu {
     private final DeliveryFacade deliveryFacade = DeliveryFacade.getInstance();
@@ -15,8 +13,8 @@ public class TrucksOptionsMenu extends OptionsMenu {
     public TrucksOptionsMenu(CommandLineInterface parentCLI) {
         super(parentCLI);
         int i = 1;
-        options.put(i++, new Option("Create New Truck", this::createNewTruck));
-        options.put(i++, new Option("Remove Truck", this::removeTruck));
+        options.put(i++, new Option("Create New Truck", this::createNewTruck, QualificationsDTO.LogisticsManager));
+        options.put(i++, new Option("Remove Truck", this::removeTruck, QualificationsDTO.LogisticsManager));
         options.put(i++, new Option("Display Trucks", this::displayTrucks));
         options.put(i, new Option("Back", this::back));
     }

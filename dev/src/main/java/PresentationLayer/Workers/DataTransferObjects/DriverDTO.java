@@ -1,7 +1,8 @@
-package PresentationLayer.Workers_Transport;
+package PresentationLayer.Workers.DataTransferObjects;
+
+import PresentationLayer.Workers.DataTransferObjects.WorkerDTO;
 
 import java.util.Date;
-import java.util.List;
 
 public class DriverDTO extends WorkerDTO {
 

@@ -1,17 +1,11 @@
 package DataAccessLayer.Workers_Transport.Workers;
 
-import BusinessLayer.Workers_Transport.DriverPackage.Driver;
 import BusinessLayer.Workers_Transport.WorkersPackage.*;
 import DataAccessLayer.Workers_Transport.Repo;
-import PresentationLayer.Workers_Transport.QualificationsDTO;
-import PresentationLayer.Workers_Transport.ShiftDTO;
-import PresentationLayer.Workers_Transport.WorkerDTO;
+import PresentationLayer.Workers.DataTransferObjects.QualificationsDTO;
 
 import java.sql.*;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -470,27 +464,28 @@ public class Workers {
                 return QualificationsDTO.BranchManager;
 
             String sql2 = "SELECT * FROM Branches WHERE HRD_ID=?";
-            PreparedStatement pst2 = conn.prepareStatement(sql);
-            pst.setString(1,ID);
-            ResultSet results2 = pst.executeQuery();
+            PreparedStatement pst2 = conn.prepareStatement(sql2);
+            pst2.setString(1,ID);
+            ResultSet results2 = pst2.executeQuery();
 
-            if(results.next())
+            if(results2.next())
                 return QualificationsDTO.Human_Resources_Director;
 
             String sql3 = "SELECT * FROM Branches WHERE logisticsManagerID=?";
-            PreparedStatement pst3 = conn.prepareStatement(sql);
-            pst.setString(1,ID);
-            ResultSet results3 = pst.executeQuery();
+            PreparedStatement pst3 = conn.prepareStatement(sql3);
+            pst3.setString(1,ID);
+            ResultSet results3 = pst3.executeQuery();
 
-            if(results.next())
+            if(results3.next())
                 return QualificationsDTO.LogisticsManager;
 
-            String sql4 = "SELECT * FROM Qualifications WHERE ID=? AND Qualification=StoreKeeper";
-            PreparedStatement pst4 = conn.prepareStatement(sql);
-            pst.setString(1,ID);
-            ResultSet results4 = pst.executeQuery();
+            String sql4 = "SELECT * FROM Qualifications WHERE ID=? AND Qualification=?";
+            PreparedStatement pst4 = conn.prepareStatement(sql4);
+            pst4.setString(1,ID);
+            pst4.setString(2,"Storekeeper");
+            ResultSet results4 = pst4.executeQuery();
 
-            if(results.next())
+            if(results4.next())
                 return QualificationsDTO.Storekeeper;
 
         } catch (Exception e) {
