@@ -1,4 +1,19 @@
 BEGIN TRANSACTION;
+DROP TABLE IF EXISTS "SOrder";
+CREATE TABLE IF NOT EXISTS "SOrder" (
+	"orderID"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	"date"	TEXT NOT NULL,
+	"periodicDelivery"	BOOLEAN NOT NULL CHECK("periodicDelivery" IN (0,1)),
+	"needsDelivery"	BOOLEAN NOT NULL CHECK("needsDelivery" IN (0,1)),
+	"weight"	INTEGER NOT NULL,
+	"isDelivered"	INTEGER NOT NULL CHECK("isDelivered" IN (0,1))
+);
+DROP TABLE IF EXISTS "SupplyDays";
+CREATE TABLE IF NOT EXISTS "SupplyDays" (
+	"companyNumber"	INTEGER NOT NULL,
+	"weekDay"	TEXT NOT NULL,
+	PRIMARY KEY("companyNumber","weekDay")
+);
 DROP TABLE IF EXISTS "Supplier";
 CREATE TABLE IF NOT EXISTS "Supplier" (
 	"companyNumber"	INTEGER NOT NULL,
@@ -56,11 +71,10 @@ CREATE TABLE IF NOT EXISTS "Report" (
 );
 DROP TABLE IF EXISTS "StepDiscount";
 CREATE TABLE IF NOT EXISTS "StepDiscount" (
-	"ID"	INTEGER NOT NULL,
+	"ID"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	"stepPrice"	INTEGER NOT NULL,
 	"precentage"	INTEGER NOT NULL,
 	"QWID"	INTEGER NOT NULL,
-	PRIMARY KEY("ID" AUTOINCREMENT),
 	FOREIGN KEY("QWID") REFERENCES "QuantityWriter"("ID")
 );
 DROP TABLE IF EXISTS "OrderItems";
@@ -68,8 +82,8 @@ CREATE TABLE IF NOT EXISTS "OrderItems" (
 	"productID"	INTEGER NOT NULL,
 	"companyNumber"	INTEGER NOT NULL,
 	"orderID"	INTEGER NOT NULL,
-	"price"	INTEGER NOT NULL CHECK("price" >= 0),
-	"quantity"	INTEGER NOT NULL CHECK("quantity" >= 0),
+	"price"	INTEGER NOT NULL CHECK("price">=0),
+	"quantity"	INTEGER NOT NULL CHECK("quantity">=0),
 	PRIMARY KEY("productID","companyNumber","orderID"),
 	FOREIGN KEY("productID") REFERENCES "Product"("ID"),
 	FOREIGN KEY("orderID") REFERENCES "SOrder"("orderID"),
@@ -80,30 +94,21 @@ CREATE TABLE IF NOT EXISTS "SupplierItem" (
 	"productID"	INTEGER NOT NULL,
 	"companyNumber"	INTEGER NOT NULL,
 	"name"	TEXT NOT NULL,
-	"quantity"	TEXT NOT NULL CHECK("quantity" >= 0),
+	"quantity"	TEXT NOT NULL CHECK("quantity">=0),
 	"price"	INTEGER NOT NULL,
 	"supplierCN"	INTEGER,
 	PRIMARY KEY("productID","companyNumber"),
 	FOREIGN KEY("productID") REFERENCES "Product"("ID"),
 	FOREIGN KEY("companyNumber") REFERENCES "Supplier"("companyNumber")
 );
-DROP TABLE IF EXISTS "SOrder";
-CREATE TABLE IF NOT EXISTS "SOrder" (
-	"orderID"	INTEGER NOT NULL,
-	"date"	TEXT NOT NULL,
-	"periodicDelivery"	BOOLEAN NOT NULL CHECK("periodicDelivery" IN (0, 1)),
-	"needsDelivery"	BOOLEAN NOT NULL CHECK("needsDelivery" IN (0, 1)),
-	PRIMARY KEY("orderID" AUTOINCREMENT)
-);
 DROP TABLE IF EXISTS "ItemGroup";
 CREATE TABLE IF NOT EXISTS "ItemGroup" (
-	"ID"	INTEGER NOT NULL,
+	"ID"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	"PID"	INTEGER NOT NULL,
 	"location"	INTEGER NOT NULL,
 	"quantity"	INTEGER NOT NULL,
 	"priceBoughtAt"	REAL NOT NULL,
 	"expiration"	TEXT NOT NULL,
-	PRIMARY KEY("ID" AUTOINCREMENT),
 	FOREIGN KEY("PID") REFERENCES "Product"("ID")
 );
 DROP TABLE IF EXISTS "Discount";

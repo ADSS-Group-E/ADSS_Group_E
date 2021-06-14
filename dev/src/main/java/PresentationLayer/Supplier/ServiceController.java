@@ -18,22 +18,22 @@ public class ServiceController {
 
     private SupplierController supplierController;
 
-    public void register(String name, int companyNumber, String paymentMethod, String bankAccount, ArrayList<String[]> items, ArrayList<String[]> contacts) {
+    public void register(String name, int companyNumber, String paymentMethod, String bankAccount, ArrayList<String[]> items, ArrayList<String[]> contacts, ArrayList<Integer> supplyDays) {
         //enters a supplier to the supplier list
-        supplierController.register(name, companyNumber, paymentMethod, bankAccount, items, contacts);
+        supplierController.register(name, companyNumber, paymentMethod, bankAccount, items, contacts, supplyDays);
     }
 
     public void register(String name, int companyNumber, String paymentMethod, String bankAccount,
     ArrayList<String[]> items, ArrayList<String[]> contacts, int regCostumer,
-    int minPrice, HashMap<Integer, Integer> discountSteps) {
+    int minPrice, HashMap<Integer, Integer> discountSteps, ArrayList<Integer> supplyDays) {
         //enters a supplier to the supplier list with a quantity writer
               supplierController.register(name, companyNumber, paymentMethod, bankAccount, items, contacts,
-              regCostumer, minPrice, discountSteps);
+              regCostumer, minPrice, discountSteps, supplyDays);
     }
 
-    public int createOrder(int supplierNum, boolean needsDelivery, boolean constantDelivery, ArrayList<String[]> items) {
+    public int createOrder(int supplierNum, boolean needsDelivery, boolean constantDelivery, ArrayList<String[]> items, int weight) {
         //creates an order for the supplier
-        return supplierController.createOrder(supplierNum, needsDelivery, constantDelivery, items);
+        return supplierController.createOrder(supplierNum, needsDelivery, constantDelivery, items, weight);
     }
 
     public int getMaxDiscount() {

@@ -11,6 +11,7 @@ public class SupplierDTO {
     private ArrayList<OrderDTO> orders;
     private ArrayList<SupplierItemDTO> items;
     private ArrayList<ContactDTO> contacts;
+    private ArrayList<Integer> supplyDays;
 
     public SupplierDTO(int companyNumber, String name, String bankAccount, String paymentMethod) {
         this.companyNumber = companyNumber;
@@ -21,6 +22,7 @@ public class SupplierDTO {
         orders = new ArrayList<>();
         items = new ArrayList<>();
         contacts = new ArrayList<>();
+        supplyDays = new ArrayList<>();
     }
 
     public int getCompanyNumber() {
@@ -61,5 +63,13 @@ public class SupplierDTO {
     public void setContacts(ArrayList<ContactDTO> contacts) {
         if (this.contacts.equals(new ArrayList<>()))
             this.contacts = contacts;
+    }
+
+    public void setSupplyDays(ArrayList<Integer> supplyDays) {
+        this.supplyDays = supplyDays;
+    }
+
+    public ArrayList<Integer> getSupplyDays() {
+        return supplyDays;
     }
 }
