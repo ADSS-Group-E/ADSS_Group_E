@@ -9,6 +9,7 @@ import DataAccessLayer.Workers_Transport.Transports.DTO;
 import DataAccessLayer.Workers_Transport.Transports.Drivers;
 import PresentationLayer.Workers_Transport.*;
 
+import java.sql.SQLException;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -30,8 +31,8 @@ public class Facade {
         return wFacade.resetShiftDemands(branchID);
     }
 
-    public Response addBranch(int branchID, WorkerDTO branchManager, WorkerDTO activeHRD) {
-        return wFacade.addBranch(branchID, branchManager, activeHRD);
+    public Response addBranch(int branchID, WorkerDTO branchManager, WorkerDTO activeHRD,WorkerDTO logisticsManager) {
+        return wFacade.addBranch(branchID, branchManager, activeHRD,logisticsManager);
     }
 
     public ResponseT<BranchDTO> getBranch(int ID) {
@@ -515,4 +516,11 @@ public class Facade {
     public Response getBackToWork(String workerID) {
         return wFacade.getBackToWork(workerID);
     }
+
+
+
+
+
+
+
 }

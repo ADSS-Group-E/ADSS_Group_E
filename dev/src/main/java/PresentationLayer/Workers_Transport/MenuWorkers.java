@@ -795,16 +795,17 @@ public class MenuWorkers {
     }
 
     private static void addNewBranch() {
-        WorkerDTO branchManager, branchHRD;
+        WorkerDTO branchManager, branchHRD,logisticsManager;
         System.out.println("Please enter new branch ID");
         int branchID = reader.nextInt();
         ResponseT<Boolean> isBranchExists= facade.isBranchExists(branchID);
         if(isBranchExists.isErrorOccurred()) {
 
-            System.out.println("add new branch manager and HRD");
+            System.out.println("add new branch manager and HRD and logistics manager");
             branchManager = createWorkerWithoutAdd();
             branchHRD = createWorkerWithoutAdd();
-            Response response = facade.addBranch(branchID, branchManager, branchHRD);
+            logisticsManager=createWorkerWithoutAdd();
+            Response response = facade.addBranch(branchID, branchManager, branchHRD,logisticsManager);
             if (response.isErrorOccurred()) {
                 System.out.println(response.getErrorMessage());
                 return;

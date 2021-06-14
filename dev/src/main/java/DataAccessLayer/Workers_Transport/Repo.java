@@ -329,17 +329,30 @@ public class Repo {
     //TODO : add foreign key to branchManagerID and HRD_ID
     public static void createBranches(Connection conn)  {
         try (Statement stmt = conn.createStatement();) {
-
-            String sql1 = """
+            String sql1="""
+                    CREATE TABLE IF NOT EXISTS Branches (
+                                        	branchID	INTEGER NOT NULL,
+                                        	branchManagerID	TEXT NOT NULL,
+                                        	HRD_ID	TEXT NOT NULL,
+                                        	logisticsManagerID	TEXT NOT NULL,
+                                        	PRIMARY KEY(branchID),
+                                        	FOREIGN KEY (branchManagerID) REFERENCES Workers(id),
+                    	                    FOREIGN KEY (logisticsManagerID) REFERENCES Workers(id),            
+                                            FOREIGN KEY (HRD_ID) REFERENCES Workers(id)
+                                        )
+                    """;
+           /* String sql1 = """
                     CREATE TABLE IF NOT EXISTS "Branches" (
                     	"branchID"	INTEGER NOT NULL,
                     	"branchManagerID"	TEXT NOT NULL,
                     	"HRD_ID"	TEXT NOT NULL,
-                    	PRIMARY KEY("branchID")
-                    	FOREIGN KEY (branchManagerID) REFERENCES Workers(id),            
+                    	"logisticsManagerID TEXT NOT NULL,
+                    	PRIMARY KEY("branchID"),
+                    	FOREIGN KEY (branchManagerID) REFERENCES Workers(id),
+                    	FOREIGN KEY (logisticsManagerID) REFERENCES Workers(id),            
                         FOREIGN KEY (HRD_ID) REFERENCES Workers(id)
                     )
-                        """;
+                        """;*/
             stmt.executeUpdate(sql1);
 
         }catch (SQLException e) {

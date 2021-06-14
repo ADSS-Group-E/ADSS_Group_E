@@ -102,6 +102,7 @@ public class RepoTest {
         List<QualificationsDTO> qualificationsDTO3 = new LinkedList<>();
         qualificationsDTO3.add(QualificationsDTO.ShiftManager);
         qualificationsDTO3.add(QualificationsDTO.Arranger);
+        qualificationsDTO3.add(QualificationsDTO.logisticsManager);
 
         List<QualificationsDTO> qualificationsDTO4 = new LinkedList<>();
         qualificationsDTO4.add(QualificationsDTO.Human_Resources_Director);
@@ -184,8 +185,8 @@ public class RepoTest {
         WorkerDTO workerDTO22 = new WorkerDTO("Avi", "Ohayon", "325431754", bankAccountDTO24, hiringConditionsDTO24, availableWorkDaysDTO9, qualificationsDTO5);
         WorkerDTO workerDTO23 = new WorkerDTO("Dganit", "Refeli", "298764234", bankAccountDTO25, hiringConditionsDTO25, availableWorkDaysDTO6, qualificationsDTO6);
 
-        workersFacade.addBranch(1, branchManager, HRD);
-        workersFacade.addWorker(workerDTO1, 1);
+        workersFacade.addBranch(1, branchManager, HRD,workerDTO1);
+        //workersFacade.addWorker(workerDTO1, 1);
         workersFacade.addWorker(workerDTO2, 1);
         //facade.addWorker(workerDTO3, 1);
         workersFacade.addWorker(workerDTO4, 1);

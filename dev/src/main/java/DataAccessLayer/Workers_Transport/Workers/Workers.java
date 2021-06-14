@@ -842,13 +842,14 @@ public class Workers {
 
     }
 
-    public static void addBranch(int branchID, String branchManagerID, String HRD_ID) throws SQLException{
+    public static void addBranch(int branchID, String branchManagerID, String HRD_ID,String logisticsManagerID) throws SQLException{
         try (Connection conn = Repo.openConnection()) {
-            String sql = "INSERT OR IGNORE INTO Branches VALUES (?, ?, ?)";
+            String sql = "INSERT OR IGNORE INTO Branches VALUES (?, ?, ? , ?)";
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setInt(1,branchID);
             pst.setString(2,branchManagerID);
             pst.setString(3,HRD_ID);
+            pst.setString(4,logisticsManagerID);
             pst.executeUpdate();
         } catch (SQLException e) {
             throw e;
@@ -913,15 +914,44 @@ public class Workers {
     }
 
       /*
-    CREATE TABLE IF NOT EXISTS "Branches" (
-                    	"branchID"	INTEGER NOT NULL,
-                    	"branchManagerID"	TEXT NOT NULL,
-                    	"HRD_ID"	TEXT NOT NULL,
-                    	PRIMARY KEY("branchID")
-                    	FOREIGN KEY (branchManagerID) REFERENCES Workers(id),
-                        FOREIGN KEY (HRD_ID) REFERENCES Workers(id)
-                    )
+    """
+                    CREATE TABLE IF NOT EXISTS Branches (
+                                        	branchID	INTEGER NOT NULL,
+                                        	branchManagerID	TEXT NOT NULL,
+                                        	HRD_ID	TEXT NOT NULL,
+                                        	logisticsManagerID	TEXT NOT NULL,
+                                        	PRIMARY KEY(branchID),
+                                        	FOREIGN KEY (branchManagerID) REFERENCES Workers(id),
+                    	                    FOREIGN KEY (logisticsManagerID) REFERENCES Workers(id),
+                                            FOREIGN KEY (HRD_ID) REFERENCES Workers(id)
+                                        )
+                    """;
      */
+
+    public static boolean isHRDManagerExists(String HRD_ID)throws SQLException{
+        try (Connection conn = Repo.openConnection()) {
+            String sql = "SELECT * FROM Branches WHERE HRD_ID=?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1,HRD_ID);
+            ResultSet results = pst.executeQuery();
+            return results.next();
+
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
+
+    public static boolean isLogisticsManagerExists(String logisticsManagerID)throws SQLException{
+        try (Connection conn = Repo.openConnection()) {
+            String sql = "SELECT * FROM Branches WHERE logisticsManagerID=?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1,logisticsManagerID);
+            ResultSet results = pst.executeQuery();
+            return results.next();
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
 
     public static Worker getBranchManager(int branchID) throws Exception {
         try (Connection conn = Repo.openConnection()) {
@@ -1128,6 +1158,18 @@ public class Workers {
         }
     }
 
+
+    public static boolean isStoreKeeper(String ID) throws Exception{
+        try (Connection conn = Repo.openConnection()) {
+            String sql = "SELECT * From Qualifications WHERE ID=? AND Qualification=Storekeeper";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, ID);
+            ResultSet results = pst.executeQuery();
+            return results.next();
+        }catch (Exception e) {
+            throw e;
+        }
+    }
 
 
 
