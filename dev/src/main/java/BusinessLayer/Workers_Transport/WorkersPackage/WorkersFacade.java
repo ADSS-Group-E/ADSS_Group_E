@@ -54,15 +54,16 @@ public class WorkersFacade {
         return new Response();
     }
 
-    public Response addBranch(int branchID, WorkerDTO branchManager, WorkerDTO activeHRD) {
+    public Response addBranch(int branchID, WorkerDTO branchManager, WorkerDTO activeHRD, WorkerDTO logistics) {
         try {
              branchController.addBranch(branchID, convertWorkerToBusiness(branchManager), convertWorkerToBusiness(activeHRD));
              shiftController.addBranch(branchID);
              addWorker(branchManager, branchID);
             addWorker(activeHRD, branchID);
+            addWorker(logistics, branchID);
             Workers.insertWorker(convertWorkerToBusiness(branchManager),branchID);
             Workers.insertWorker(convertWorkerToBusiness(activeHRD),branchID);
-            Workers.addBranch(branchID,branchManager.getID(),activeHRD.getID());
+            Workers.addBranch(branchID,branchManager.getID(),activeHRD.getID(), logistics.getID());
         }catch(Exception e){
             return new Response(e.getMessage());
         }

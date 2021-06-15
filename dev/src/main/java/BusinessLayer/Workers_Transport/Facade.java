@@ -27,8 +27,8 @@ public class Facade {
         return wFacade.resetShiftDemands(branchID);
     }
 
-    public Response addBranch(int branchID, WorkerDTO branchManager, WorkerDTO activeHRD) {
-        return wFacade.addBranch(branchID, branchManager, activeHRD);
+    public Response addBranch(int branchID, WorkerDTO branchManager, WorkerDTO activeHRD, WorkerDTO logistics) {
+        return wFacade.addBranch(branchID, branchManager, activeHRD, logistics);
     }
 
     public ResponseT<BranchDTO> getBranch(int ID) {

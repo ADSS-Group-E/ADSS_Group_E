@@ -878,13 +878,14 @@ public class Workers {
 
     }
 
-    public static void addBranch(int branchID, String branchManagerID, String HRD_ID) throws SQLException{
+    public static void addBranch(int branchID, String branchManagerID, String HRD_ID, String logistics_ID) throws SQLException{
         try (Connection conn = Repo.openConnection()) {
-            String sql = "INSERT OR IGNORE INTO Branches VALUES (?, ?, ?)";
+            String sql = "INSERT OR IGNORE INTO Branches VALUES (?, ?, ?, ?)";
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setInt(1,branchID);
             pst.setString(2,branchManagerID);
             pst.setString(3,HRD_ID);
+            pst.setString(4,logistics_ID);
             pst.executeUpdate();
         } catch (SQLException e) {
             throw e;

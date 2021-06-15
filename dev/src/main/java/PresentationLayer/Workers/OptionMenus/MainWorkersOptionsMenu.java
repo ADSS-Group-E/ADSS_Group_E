@@ -736,7 +736,7 @@ public class MainWorkersOptionsMenu extends OptionsMenu {
 
 
     private void addNewBranch() {
-        WorkerDTO branchManager, branchHRD;
+        WorkerDTO branchManager, branchHRD, logistics;
         System.out.println("Please enter new branch ID");
         int branchID = in.nextInt();
         ResponseT<Boolean> isBranchExists= facade.isBranchExists(branchID);
@@ -745,7 +745,8 @@ public class MainWorkersOptionsMenu extends OptionsMenu {
             System.out.println("add new branch manager and HRD");
             branchManager = createWorkerWithoutAdd();
             branchHRD = createWorkerWithoutAdd();
-            Response response = facade.addBranch(branchID, branchManager, branchHRD);
+            logistics = createWorkerWithoutAdd();
+            Response response = facade.addBranch(branchID, branchManager, branchHRD, logistics);
             if (response.isErrorOccurred()) {
                 System.out.println(response.getErrorMessage());
                 return;
