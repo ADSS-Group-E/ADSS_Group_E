@@ -33,7 +33,7 @@ public class OrderController {
         return o;
     }
 
-    public Order createOrder(int id, Map<String, Integer> items, String supplierId, int locationId, double totalWeight) throws Exception {
+    public Order createOrder(int id, Map<Integer, Integer> items, String supplierId, int locationId, double totalWeight) throws Exception {
         //if(DataAccessLayer.Workers_Transport.Transports.Order.checkOrder(id)!=null)
             //throw new Exception("the order already exists");
         if(items.isEmpty())
@@ -47,7 +47,7 @@ public class OrderController {
             //throw new Exception("the order already exists");
         //this.orders.put(order.getId(), order);
         DataAccessLayer.Workers_Transport.Transports.Order.insertOrder(new DTO.Order(order.getId(),order.getSupplierId(),order.getLocationId(),order.getTotalWeight()));
-        for (Map.Entry<String,Integer > entry: order.getItems().entrySet()
+        for (Map.Entry<Integer,Integer > entry: order.getItems().entrySet()
         ) {
             DataAccessLayer.Workers_Transport.Transports.Order.insertItemsForOrders(new DTO.ItemsForOrders(order.getId(),entry.getKey(),entry.getValue()));
         }
@@ -60,7 +60,7 @@ public class OrderController {
         DataAccessLayer.Workers_Transport.Transports.Order.deleteOrder(order.getId());
     }
 
-    public void addItem(int id, String item, int quantity) throws Exception {
+    public void addItem(int id, int item, int quantity) throws Exception {
         if(DataAccessLayer.Workers_Transport.Transports.Order.checkOrder(id)==null)
             throw new Exception("the order doesn't exists");
         if(quantity <= 0)
@@ -70,7 +70,7 @@ public class OrderController {
         orders.get(id).getItems().put(item, quantity);
         DataAccessLayer.Workers_Transport.Transports.Order.insertItemsForOrders(new DTO.ItemsForOrders(id,item,quantity));
     }
-    public void removeItem(int id, String item) throws Exception
+    public void removeItem(int id, int item) throws Exception
     {
         Order o =DataAccessLayer.Workers_Transport.Transports.Order.checkOrder(id);
 
@@ -83,7 +83,7 @@ public class OrderController {
         orders.get(id).getItems().remove(item);
         DataAccessLayer.Workers_Transport.Transports.Order.deleteItem(id,item);
     }
-    public void updateQuantity(int id, String item, int quantity) throws Exception
+    public void updateQuantity(int id, int item, int quantity) throws Exception
     {
         if(DataAccessLayer.Workers_Transport.Transports.Order.checkOrder(id)==null)
             throw new Exception("the order doesn't exists");

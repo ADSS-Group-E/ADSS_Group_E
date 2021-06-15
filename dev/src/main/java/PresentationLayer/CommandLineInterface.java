@@ -410,44 +410,29 @@ public class CommandLineInterface {
             deliveryFacade.createTruck("2360154", "volvo", 1000.0, 4500.0);
             deliveryFacade.createTruck("30122623", "chevrolet", 5000.0, 9000.5);
             deliveryFacade.createTruck("11122333", "honda", 10000.0, 15000.0);
-            Map<String, Integer> items1 = new HashMap<String, Integer>() {
+            Map<Integer, Integer> items1 = new HashMap<Integer, Integer>() {
                 {
-                    put("milk", 20);
-                    put("pasta", 50);
-                    put("chocolate", 10);
-                    put("cola", 10);
+                    put(1, 20);
                 }
             };
-            Map<String, Integer> items2 = new HashMap<String, Integer>() {
+            Map<Integer, Integer> items2 = new HashMap<Integer, Integer>() {
                 {
-                    put("milk", 25);
-                    put("rice", 30);
-                    put("cheese", 40);
-                    put("eggs", 45);
+                    put(2, 25);
                 }
             };
-            Map<String, Integer> items3 = new HashMap<String, Integer>() {
+            Map<Integer, Integer> items3 = new HashMap<Integer, Integer>() {
                 {
-                    put("eggs", 10);
-                    put("cola zero", 15);
-                    put("beer", 23);
-                    put("candy", 17);
+                    put(3, 10);
                 }
             };
-            Map<String, Integer> items4 = new HashMap<String, Integer>() {
+            Map<Integer, Integer> items4 = new HashMap<Integer, Integer>() {
                 {
-                    put("eggs", 10);
-                    put("milk", 15);
-                    put("tomato", 23);
-                    put("cucumber", 17);
+                    put(1, 10);
                 }
             };
-            Map<String, Integer> items5 = new HashMap<String, Integer>() {
+            Map<Integer, Integer> items5 = new HashMap<Integer, Integer>() {
                 {
-                    put("ice cream", 20);
-                    put("toilet paper", 15);
-                    put("cucumber", 50);
-                    put("fish", 10);
+                    put(2, 20);
                 }
             };
             deliveryFacade.createOrder(12, items1, "487", 1, 1000.0);

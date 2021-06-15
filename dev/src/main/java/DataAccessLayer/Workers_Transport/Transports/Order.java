@@ -36,7 +36,7 @@ public class Order {
             String query = "INSERT OR IGNORE INTO ItemsForOrder VALUES (?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setInt(1,i.orderId );
-            stmt.setString(2, i.item);
+            stmt.setInt(2, i.item);
             stmt.setInt(3, i.qunt);
             stmt.executeUpdate();
             conn.close();
@@ -53,18 +53,18 @@ public class Order {
             ResultSet results = pst.executeQuery();
             if(results.next()==false)
                 return null;
-            HashMap<String,Integer> items=getItemsForOrder(id);
+            HashMap<Integer,Integer> items=getItemsForOrder(id);
             return new BusinessLayer.Workers_Transport.DeliveryPackage.Order(results.getInt(1),items,results.getString(2),results.getInt(3),results.getDouble(4));
         } catch (Exception e) {
             throw e;        }
     }
 
-    public static boolean checkItem(int id,String item) throws SQLException {
+    public static boolean checkItem(int id,int item) throws SQLException {
         try (Connection conn = Repo.openConnection()) {
             String sql = "SELECT * From ItemsForOrder WHERE ORDER_ID=? AND ITEM=?";
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setInt(1,id);
-            pst.setString(2,item);
+            pst.setInt(2,item);
 
             ResultSet results = pst.executeQuery();
             if(results.next()==false)
@@ -74,8 +74,8 @@ public class Order {
         return true;
     }
 
-    public static HashMap<String,Integer> getItemsForOrder(int id) throws SQLException {
-        HashMap<String,Integer> ItemsMap=new HashMap<>();
+    public static HashMap<Integer,Integer> getItemsForOrder(int id) throws SQLException {
+        HashMap<Integer,Integer> ItemsMap=new HashMap<>();
         try (Connection conn = Repo.openConnection()) {
             String sql = "SELECT * From ItemsForOrder WHERE ORDER_ID=?";
             PreparedStatement pst = conn.prepareStatement(sql);
@@ -84,13 +84,13 @@ public class Order {
             ResultSet results = pst.executeQuery();
             if(results.next()==false)
                 return null;
-            String  item = results.getString(2);
+            int  productId = results.getInt(2);
             int qun=results.getInt(3);
-            ItemsMap.put(item,qun);
+            ItemsMap.put(productId,qun);
             while (results.next()) {
-                String  item1 = results.getString(2);
+                int  productId1 = results.getInt(2);
                 int qun1=results.getInt(3);
-                ItemsMap.put(item1,qun1);
+                ItemsMap.put(productId1,qun1);
             }
         } catch (Exception e) {
             throw e;        }
@@ -115,12 +115,12 @@ public class Order {
 
     }
 
-    public static void deleteItem(int id,String item) throws Exception {
+    public static void deleteItem(int id,int item) throws Exception {
         try (Connection conn = Repo.openConnection()) {
             String sql = "DELETE FROM ItemsForOrder WHERE ORDER_ID=? AND ITEM=?";
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setInt(1,id);
-            pst.setString(2,item);
+            pst.setInt(2,item);
 
             pst.executeUpdate();
 
@@ -130,13 +130,13 @@ public class Order {
 
     }
 
-    public static void updatQunt(int id, String item, int qunt) throws SQLException {
+    public static void updatQunt(int id, int item, int qunt) throws SQLException {
         try (Connection conn = Repo.openConnection()) {
             String sql = "UPDATE ItemsForOrder SET QUINTITY =? WHERE ORDER_ID=? AND ITEM=?";
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setInt(1,qunt);
             pst.setInt(2,id);
-            pst.setString(3,item);
+            pst.setInt(3,item);
 
             pst.executeUpdate();
 

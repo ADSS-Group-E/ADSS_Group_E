@@ -5,12 +5,12 @@ import java.util.*;
 public class Order {
 
     private int id;
-    private Map<String, Integer> items;
+    private Map<Integer, Integer> items;
     private String supplierId;
     private int locationId;
     private double totalWeight;
 
-    public Order(int id, Map<String, Integer> items, String supplierId, int locationId, double totalWeight) {
+    public Order(int id, Map<Integer, Integer> items, String supplierId, int locationId, double totalWeight) {
         this.id = id;
         this.items = items;
         this.supplierId = supplierId;
@@ -26,11 +26,11 @@ public class Order {
         this.id = id;
     }
 
-    public Map<String, Integer> getItems() {
+    public Map<Integer, Integer> getItems() {
         return items;
     }
 
-    public void setItems(Map<String, Integer> items) {
+    public void setItems(Map<Integer, Integer> items) {
         this.items = items;
     }
 
