@@ -13,8 +13,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
 
-import static PresentationLayer.Workers_Transport.Main.createDate;
-
 
 public class MainWorkersOptionsMenu extends OptionsMenu {
 
@@ -58,6 +56,17 @@ public class MainWorkersOptionsMenu extends OptionsMenu {
         options.put(i++, new Option( "Display workers by branch ID", this::displayWorkersByBranchID));
 
         options.put(i++, new Option( "Back", this::back));
+    }
+
+    public LocalDate createDate() {
+        int day, month, year;
+        System.out.println("Enter the day in month:");
+        day = in.nextInt();
+        System.out.println("Enter the month:");
+        month = in.nextInt();
+        System.out.println("Enter the year:");
+        year = in.nextInt();
+        return LocalDate.of(year, month, day);
     }
 
     public void createWeeklyAssignment(){

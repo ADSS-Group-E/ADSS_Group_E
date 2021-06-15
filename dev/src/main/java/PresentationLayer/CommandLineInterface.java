@@ -4,7 +4,10 @@ package PresentationLayer;
 import BusinessLayer.Inventory.Controllers.*;
 import BusinessLayer.OrderFromReportHandler;
 import BusinessLayer.Supplier.SupplierController;
+import BusinessLayer.Workers_Transport.DeliveryPackage.DeliveryFacade;
 import BusinessLayer.Workers_Transport.Facade;
+import DataAccessLayer.Workers_Transport.Repo;
+import DataAccessLayer.Workers_Transport.Transports.DTO;
 import PresentationLayer.Inventory.DataTransferObjects.CategoryDTO;
 import PresentationLayer.Inventory.DataTransferObjects.DiscountDTO;
 import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
@@ -14,13 +17,12 @@ import PresentationLayer.Workers.DataTransferObjects.*;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.Date;
 
 /**
  * This class represents the command line interface
@@ -35,6 +37,7 @@ public class CommandLineInterface {
     private final MainOptionsMenu mainOptionsMenu;
     private WorkerDTO loggedInWorker;
     private final Facade workersTransportFacade;
+
 
     // Getters
     public InventoryFacade getInventoryFacade() {
@@ -146,6 +149,8 @@ public class CommandLineInterface {
                         pids);
 
         serviceController.initialize();
+
+        init();
         workersInitialize();
     }
 
@@ -358,22 +363,141 @@ public class CommandLineInterface {
 
     }
 
-//
-//        LocalDate now = LocalDate.now();
-//        ShiftTypeDTO shiftTypeDTO = ShiftTypeDTO.Morning;
-//        ShiftDemandsDTO shiftDemandsDTO = new ShiftDemandsDTO(now, 1, 1, 1, 1, 1);
-//        Response response=facade.addShiftDemands(1,now,shiftTypeDTO,shiftDemandsDTO);
-//        if(response.isErrorOccurred())
-//            System.out.println(response.getErrorMessage());
-//        else{
-//            ResponseT<ShiftDemandsDTO>responseT=facade.getShiftDemands(now,1,shiftTypeDTO);
-//            if(responseT.isErrorOccurred())
-//                System.out.println(responseT.getErrorMessage());
-//            else{
-//                System.out.println("The shift demand is:");
-//                System.out.println(responseT.getValue());
-//            }
-//        }
+    // Transport
+    public void init()
+    {
+        try
+        {
+            Facade workersFacade = this.getWorkersTransportFacade();
+            DeliveryFacade deliveryFacade =DeliveryFacade.getInstance();
+
+            BankAccountDTO bankAccountDTO1 = new BankAccountDTO("Bank Mizrahi-Tefahot", "216", "123451");
+            BankAccountDTO bankAccountDTO2 = new BankAccountDTO("Bank Mizrahi-Tefahot", "216", "222221");
+            BankAccountDTO bankAccountDTO3 = new BankAccountDTO("Bank Otsar Ha-Hayal", "318", "060001");
+            LocalDate startDate1 = LocalDate.of(2020, 5, 23);
+            LocalDate startDate2 = LocalDate.of(2021, 1, 15);
+            LocalDate startDate3 = LocalDate.of(2021, 2, 22);
+            HiringConditionsDTO hiringConditionsDTO1 = new HiringConditionsDTO(10000, "Baillie Gifford American", 10, 5);
+            HiringConditionsDTO hiringConditionsDTO2 = new HiringConditionsDTO(12000, "Baillie Gifford American", 7, 3);
+            HiringConditionsDTO hiringConditionsDTO3 = new HiringConditionsDTO(8000, "Baillie Gifford American", 12, 7);
+            Boolean favoriteShifts1[][] = new Boolean[][]{{true, false}, {true, true}, {false, false}, {true, true}, {false, true}, {true, false}, {true, true}};
+            Boolean favoriteShifts2[][] = new Boolean[][]{{true, false}, {true, true}, {false, true}, {true, true}, {true, true}, {false, false}, {true, true}};
+            Boolean favoriteShifts3[][] = new Boolean[][]{{true, true}, {false, false}, {false, false}, {true, true}, {false, true}, {true, false}, {true, true}};
+            Boolean cantWork1[][] = new Boolean[][]{{false, true}, {false, false}, {true, true}, {false, false}, {true, false}, {false, true}, {false, false}};
+            Boolean cantWork2[][] = new Boolean[][]{{false, true}, {false, false}, {true, false}, {false, false}, {false, false}, {true, true}, {false, false}};
+            Boolean cantWork3[][] = new Boolean[][]{{false, false}, {true, true}, {true, true}, {false, false}, {true, false}, {false, true}, {false, false}};
+            AvailableWorkDaysDTO availableWorkDaysDTO1 = new AvailableWorkDaysDTO(favoriteShifts1, cantWork1);
+            AvailableWorkDaysDTO availableWorkDaysDTO2 = new AvailableWorkDaysDTO(favoriteShifts2, cantWork2);
+            AvailableWorkDaysDTO availableWorkDaysDTO3 = new AvailableWorkDaysDTO(favoriteShifts3, cantWork3);
+            Date expDate = new SimpleDateFormat("dd/MM/yyyy").parse("31/12/2030");
+            WorkerDTO yarinw = new WorkerDTO("yarin", "peretz", "313577645", bankAccountDTO1, hiringConditionsDTO1, availableWorkDaysDTO1);
+            WorkerDTO eden = new WorkerDTO("eden", "bishela", "208060254", bankAccountDTO2, hiringConditionsDTO2, availableWorkDaysDTO2);
+            WorkerDTO Gal = new WorkerDTO("Gal", "Brown", "207894326", bankAccountDTO3, hiringConditionsDTO3, availableWorkDaysDTO3);
+            //DriverDTO yarin= new DriverDTO(yarinw,"A",expDate);
+
+            workersFacade.addWorker(yarinw, 1);
+            DTO.Driver yarin=new DTO.Driver("313577645","A",expDate);
+            deliveryFacade.createDriver(yarin,1);
+
+            //facade.createDriver("313577645", "yarin", "B", expDate);
+            //facade.createDriver("123456789", "reem", "C", expDate);
+            deliveryFacade.createLocation(1, "superli", "lachish 151 shoham", "0543160553", "yossi", "center");
+            deliveryFacade.createLocation(2, "maxstock", "shoham 26 haifa", "0504616909", "ben", "north");
+            deliveryFacade.createLocation(3, "shufersal", "azrieli tel aviv", "0543160550", "ronit", "center");
+            deliveryFacade.createLocation(4, "tara", "bialik 32 ramat gan", "0581234567", "moshe", "center");
+            deliveryFacade.createLocation(5, "tnuva", "rabin 12 beer sheva", "0538523644", "assaf", "south");
+            deliveryFacade.createLocation(6, "osem", "shimshon 24 krayot", "0528549847", "shoshana", "north");
+            deliveryFacade.createTruck("2360154", "volvo", 1000.0, 4500.0);
+            deliveryFacade.createTruck("30122623", "chevrolet", 5000.0, 9000.5);
+            deliveryFacade.createTruck("11122333", "honda", 10000.0, 15000.0);
+            Map<String, Integer> items1 = new HashMap<String, Integer>() {
+                {
+                    put("milk", 20);
+                    put("pasta", 50);
+                    put("chocolate", 10);
+                    put("cola", 10);
+                }
+            };
+            Map<String, Integer> items2 = new HashMap<String, Integer>() {
+                {
+                    put("milk", 25);
+                    put("rice", 30);
+                    put("cheese", 40);
+                    put("eggs", 45);
+                }
+            };
+            Map<String, Integer> items3 = new HashMap<String, Integer>() {
+                {
+                    put("eggs", 10);
+                    put("cola zero", 15);
+                    put("beer", 23);
+                    put("candy", 17);
+                }
+            };
+            Map<String, Integer> items4 = new HashMap<String, Integer>() {
+                {
+                    put("eggs", 10);
+                    put("milk", 15);
+                    put("tomato", 23);
+                    put("cucumber", 17);
+                }
+            };
+            Map<String, Integer> items5 = new HashMap<String, Integer>() {
+                {
+                    put("ice cream", 20);
+                    put("toilet paper", 15);
+                    put("cucumber", 50);
+                    put("fish", 10);
+                }
+            };
+            deliveryFacade.createOrder(12, items1, "487", 1, 1000.0);
+            deliveryFacade.createOrder(34, items2, "159", 2, 3500.0);
+            deliveryFacade.createOrder(56, items3, "263", 3, 2500.0);
+            deliveryFacade.createOrder(78, items4, "546", 1, 2000.0);
+            deliveryFacade.createOrder(98, items5, "943", 3, 2000.0);
+            Date newDate1 = new GregorianCalendar(2022, Calendar.MAY, 11).getTime();
+            Date newDate2 = new GregorianCalendar(2020, Calendar.DECEMBER, 31).getTime();
+            Date newDate3 = new GregorianCalendar(2020, Calendar.JULY, 7).getTime();
+            Time newTime1 = Time.valueOf("12:30:00");
+            Time newTime2 = Time.valueOf("13:00:00");
+            Time newTime3 = Time.valueOf("11:25:30");
+            List<Integer> centerLocations = new ArrayList<Integer>() {
+                {
+                    add(3);
+                    add(4);
+                }
+            };
+            List<Integer> northLocations = new ArrayList<Integer>() {
+                {
+                    add(2);
+                }
+            };
+            List<Integer> orders1 = new ArrayList<Integer>() {
+                {
+                    add(12);
+                    add(56);
+                }
+            };
+            List<Integer> orders2 = new ArrayList<Integer>() {
+                {
+                    add(34);
+                }
+            };
+            List<Integer> orders3 = new ArrayList<Integer>() {
+                {
+                    add(78);
+                    add(98);
+                }
+            };
+            deliveryFacade.createDelivery("101", newDate1, newTime1, "313577645", 1, centerLocations, "11122333", orders1);
+            //facade.createDelivery("102", newDate2, newTime2, "312164668", 5, northLocations, "30122623", orders2);
+            //facade.createDelivery("103", newDate3, newTime3, "123456789", 6, centerLocations, "11122333", orders3);
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+    }
 
 }
 
