@@ -347,6 +347,10 @@ public class DeliveryFacade {
         return orderController.getOrders();
     }
 
+    public Order getOrder(int id) throws Exception {
+        return orderController.getOrder(id);
+    }
+
     public void addOrder(Order order) throws Exception
     {
         try
