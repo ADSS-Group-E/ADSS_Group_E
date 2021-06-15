@@ -176,14 +176,15 @@ class PresentationHandler {
 
     ArrayList<Integer> getDays() {
         ArrayList<Integer> result = new ArrayList<>();
-        for(int key = 1; key <= days.size(); key++) {
+        result.add(days.size());
+        for(int key = 1; key < days.size(); key++) {
             OutputService.getInstance().println(key + " - " + days.get(key));
         }
         String ans = "Y";
-        int counter = 0;
+        int counter = 1;
         while (ans.equalsIgnoreCase("Y") && counter <= days.size()) {
             int day = InputService.getInstance().nextInt("Pick number of the day in the week: ");
-            while (day <= 0 || day > days.size()) {
+            while (day <= 0 || day > days.size() || result.contains(day)) {
                 OutputService.getInstance().println("Please try again.");
                 for(int key = 1; key <= days.size(); key++) {
                     OutputService.getInstance().println(key + " - " + days.get(key));

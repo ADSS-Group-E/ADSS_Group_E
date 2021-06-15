@@ -47,9 +47,11 @@ public class SupplierController {
         discounts.put(2000, 15);
         discounts.put(4000, 20);
         ArrayList<Integer> supplyDays1 = new ArrayList<>();
+        supplyDays1.add(7);
         supplyDays1.add(2);
         supplyDays1.add(3);
         ArrayList<Integer> supplyDays2 = new ArrayList<>();
+        supplyDays2.add(7);
         supplyDays2.add(1);
         supplyDays2.add(2);
         supplyDays2.add(3);
