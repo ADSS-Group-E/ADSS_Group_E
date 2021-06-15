@@ -1,6 +1,8 @@
 package BusinessLayer.Workers_Transport.DeliveryPackage;
 
+import BusinessLayer.Supplier.SupplierController;
 import DataAccessLayer.Workers_Transport.Transports.DTO;
+import PresentationLayer.Supplier.DataTransferObjects.OrderDTO;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -9,10 +11,18 @@ public class OrderController {
 
     private Map<Integer, Order> orders;
     private static OrderController orderController = null;
+    private HashMap<Order,ArrayList<Integer>> ordersMap;
 
     private OrderController()
     {
+        ordersMap = new HashMap<>();
         this.orders = new HashMap<>();
+        SupplierController supplierController= new SupplierController();
+        HashMap<OrderDTO,ArrayList<Integer>> temp=  supplierController.getDeliveryOrders();
+        for(OrderDTO key :temp.keySet()){
+            Order order = new Order(key);
+            ordersMap.put(order,temp.get(key));
+        }
     }
 
     public static OrderController getInstance()

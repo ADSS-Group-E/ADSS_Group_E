@@ -31,8 +31,11 @@ public class AcceptOrderHandler {
     public boolean checkOrderHasItem(int orderId, int productId){
         try{
             Order order = oCont.getOrder(orderId);
-            // TODO - Check orderitems
-            return true;
+            HashMap<Integer,Integer> items = new HashMap<>(order.getItems());
+            if (items.containsKey(productId))
+                return true;
+            else
+                return false;
         }
         catch (Exception e){
             return false;

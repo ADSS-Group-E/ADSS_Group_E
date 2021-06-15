@@ -1,5 +1,8 @@
 package BusinessLayer.Workers_Transport.DeliveryPackage;
 
+import PresentationLayer.Supplier.DataTransferObjects.OrderDTO;
+import PresentationLayer.Supplier.DataTransferObjects.SupplierItemDTO;
+
 import java.util.*;
 
 public class Order {
@@ -16,6 +19,18 @@ public class Order {
         this.supplierId = supplierId;
         this.locationId = locationId;
         this.totalWeight = totalWeight;
+    }
+
+    public Order(OrderDTO dto){
+        items = new HashMap<>();
+        this.id=dto.getId();
+        ArrayList<SupplierItemDTO> supplierItemDTOS=dto.getOrderItems();
+        for(SupplierItemDTO item : supplierItemDTOS){
+            items.put(item.getId(), item.getQuantity());
+        }
+        this.supplierId=String.valueOf(dto.getOrderItems().get(0).getCompanyNumber());
+        this.locationId=dto.getLocationID();
+        this.totalWeight=dto.getWeight();
     }
 
     public int getId() {
