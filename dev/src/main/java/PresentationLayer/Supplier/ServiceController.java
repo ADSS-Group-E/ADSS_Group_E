@@ -31,9 +31,9 @@ public class ServiceController {
               regCostumer, minPrice, discountSteps, supplyDays);
     }
 
-    public int createOrder(int supplierNum, boolean needsDelivery, boolean constantDelivery, ArrayList<String[]> items, int weight) {
+    public int createOrder(int supplierNum, boolean needsDelivery, boolean constantDelivery, ArrayList<String[]> items, int weight, int locationID) {
         //creates an order for the supplier
-        return supplierController.createOrder(supplierNum, needsDelivery, constantDelivery, items, weight);
+        return supplierController.createOrder(supplierNum, needsDelivery, constantDelivery, items, weight, locationID);
     }
 
     public int getMaxDiscount() {

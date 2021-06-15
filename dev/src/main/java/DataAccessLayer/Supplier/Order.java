@@ -10,7 +10,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-class Order {
+public class Order {
     private DBConnection db;
     private Connection c = null;
     private Statement stmt = null;
@@ -36,8 +36,8 @@ class Order {
             int id = -1;
             c = db.connect();
             stmt = c.createStatement();
-            String sql = String.format("INSERT INTO " + tableName + " (date, periodicDelivery, needsDelivery, weight, isDelivered) " +
-                    "VALUES ('%s', %d, %d, %d, %d);", order.getDate(), order.getPeriodicDelivery(), order.getNeedsDelivery(), order.getWeight(), 0);
+            String sql = String.format("INSERT INTO " + tableName + " (date, periodicDelivery, needsDelivery, weight, isDelivered, locationID) " +
+                    "VALUES ('%s', %d, %d, %d, %d, %d);", order.getDate(), order.getPeriodicDelivery(), order.getNeedsDelivery(), order.getWeight(), 0, order.getLocationID());
             c.prepareStatement(sql, key);
             stmt.executeUpdate(sql);
             ResultSet rs = stmt.getGeneratedKeys();

@@ -78,7 +78,7 @@ class SupplierControllerTest {
         supItems.add(new String[]{10 + "", "Polaroid", 100 + "", 500 + "", 1041 + ""});
         ArrayList<SupplierItemDTO> items = new ArrayList<>();
         items.add(new SupplierItemDTO(10, "Polaroid", 100, 500, "1041", 941));
-        controller.createOrder(50, true, true, supItems, 50);
+        controller.createOrder(50, true, true, supItems, 50, 1);
         OrderDTO order = controller.getOrderFromSupplier(1);
         assertEquals(1, order.getPeriodicDelivery());
         assertEquals(1, order.getNeedsDelivery());

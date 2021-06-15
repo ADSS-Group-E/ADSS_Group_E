@@ -70,7 +70,8 @@ public class SupplierOptionsMenu extends OptionsMenu {
             out.println(PresentationHandler.getInstance().showSupplierItems(supplierItems)); //show the supplier items
             ArrayList<String[]> items = PresentationHandler.getInstance().createItemList(input); //create item list
             int weight = in.nextInt("Enter order weight: ");
-            out.println("Total Order price: " + service.createOrder(input, needsDelivery, constantDelivery, items, weight) + ""); //create order and print it's total price
+            int locationID = in.nextInt("Enter location ID: ");
+            out.println("Total Order price: " + service.createOrder(input, needsDelivery, constantDelivery, items, weight, locationID) + ""); //create order and print it's total price
         }
     }
 

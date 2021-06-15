@@ -57,10 +57,10 @@ public class SupplierController {
         register("Google", 54, "Paypal", "15144/455", supplierTwoItems, contacts, 10, 500, discounts, supplyDays2);
         ArrayList<String[]> orderItems = new ArrayList<>();
         orderItems.add(new String[]{100 + "", "Candy Corn", 30 + "", 100 + "", 8989 + ""});
-        createOrder(10, false, true, orderItems, 10000);
+        createOrder(10, false, true, orderItems, 10000, 1);
         ArrayList<String[]> orderItems2 = new ArrayList<>();
         orderItems2.add(new String[]{66 + "", "Dog", 3000 + "", 10 + "", 5041 + ""});
-        createOrder(54, true, true, orderItems2, 30000);
+        createOrder(54, true, true, orderItems2, 30000, 1);
     }
 
     public ArrayList<String[]> getSuppliersInfo() {
@@ -117,14 +117,14 @@ public class SupplierController {
         data.insert(supplierDTO);
     }
 
-    public int createOrder(int supplierNum, boolean needsDelivery, boolean constantDelivery, ArrayList<String[]> items, int weight){
+    public int createOrder(int supplierNum, boolean needsDelivery, boolean constantDelivery, ArrayList<String[]> items, int weight, int locationID){
         ArrayList<SupplierItemDTO> itemDTOs = new ArrayList<>();
         for (String[] strings : items) { //creates an item array from all the items provided
             itemDTOs.add(new SupplierItemDTO(Integer.parseInt(strings[0]), strings[1], Integer.parseInt(strings[3]), Integer.parseInt(strings[2]), strings[4], supplierNum));
         }
         //creates the order
         //adds the order
-        OrderDTO orderDTO = new OrderDTO(ZonedDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy-hh:mm:ss")), constantDelivery? 1 : 0, needsDelivery? 1 : 0, itemDTOs, weight);
+        OrderDTO orderDTO = new OrderDTO(ZonedDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy-hh:mm:ss")), constantDelivery? 1 : 0, needsDelivery? 1 : 0, itemDTOs, weight, locationID);
         data.insert(orderDTO);
         return quantityWriter.calcPrice(data.getSupplier(supplierNum).getQuantityWriter(), order.getPrice(orderDTO)); //calculates it's price
     }
@@ -218,14 +218,14 @@ public class SupplierController {
         return data.chooseBestSupplier(items);
     }
 
-    public String proposeOrder(int supplierNum, boolean needsDelivery, boolean constantDelivery, ArrayList<String[]> items, int weight){
+    public String proposeOrder(int supplierNum, boolean needsDelivery, boolean constantDelivery, ArrayList<String[]> items, int weight, int locationID){
         ArrayList<SupplierItemDTO> itemDTOs = new ArrayList<>();
         for (String[] strings : items) { //creates an item array from all the items provided
             itemDTOs.add(new SupplierItemDTO(Integer.parseInt(strings[0]), strings[1], Integer.parseInt(strings[3]), Integer.parseInt(strings[2]), strings[4], supplierNum));
         }
         //creates the order
         //adds the order
-        OrderDTO order = new OrderDTO(ZonedDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy-hh:mm:ss")), constantDelivery? 1 : 0, needsDelivery? 1 : 0, itemDTOs, weight);
+        OrderDTO order = new OrderDTO(ZonedDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy-hh:mm:ss")), constantDelivery? 1 : 0, needsDelivery? 1 : 0, itemDTOs, weight, locationID);
         StringBuilder output = new StringBuilder();
         output.append(String.format("[Date: %s, Needs Delivery: %s, Periodic Delivery: %s]", order.getDate(), order.getNeedsDelivery() == 1, order.getPeriodicDelivery() == 1));
         output.append("\nItems:");

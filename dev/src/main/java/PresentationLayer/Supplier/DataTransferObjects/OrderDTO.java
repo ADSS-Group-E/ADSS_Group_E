@@ -10,8 +10,9 @@ public class OrderDTO {
     private ArrayList<SupplierItemDTO> orderItems;
     private int weight;
     private boolean isDelivered;
+    private int locationID;
 
-    public OrderDTO(String date, int periodicDelivery, int needsDelivery, ArrayList<SupplierItemDTO> orderItems, int weight) {
+    public OrderDTO(String date, int periodicDelivery, int needsDelivery, ArrayList<SupplierItemDTO> orderItems, int weight, int locationID) {
         this.id = -1;
         this.date = date;
         this.periodicDelivery = periodicDelivery;
@@ -19,9 +20,10 @@ public class OrderDTO {
         this.orderItems = orderItems;
         this.weight = weight;
         this.isDelivered = false;
+        this.locationID = locationID;
     }
 
-    public OrderDTO(int id, String date, int periodicDelivery, int needsDelivery, ArrayList<SupplierItemDTO> orderItems, int weight) {
+    public OrderDTO(int id, String date, int periodicDelivery, int needsDelivery, ArrayList<SupplierItemDTO> orderItems, int weight, int locationID) {
         this.id = id;
         this.date = date;
         this.periodicDelivery = periodicDelivery;
@@ -29,6 +31,7 @@ public class OrderDTO {
         this.orderItems = orderItems;
         this.weight = weight;
         this.isDelivered = false;
+        this.locationID = locationID;
     }
 
     public OrderDTO(int id, String date, int periodicDelivery, int needsDelivery, ArrayList<SupplierItemDTO> orderItems, int weight, boolean isDelivered) {
@@ -70,4 +73,6 @@ public class OrderDTO {
     public int getWeight() { return weight; }
 
     public boolean getIsDelivered() { return isDelivered; }
+
+    public int getLocationID() { return locationID; }
 }

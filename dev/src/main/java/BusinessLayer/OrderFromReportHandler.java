@@ -24,7 +24,7 @@ public class OrderFromReportHandler {
         if (items.size() > 0) {
             int supplierNum = sCont.chooseBestSupplierForItems(items);
             // TODO: make needsDelivery a prompt
-            return sCont.proposeOrder(supplierNum, true, false, items, 10 * items.size()); // TODO what to do about needsDelivery?
+            return sCont.proposeOrder(supplierNum, true, false, items, 10 * items.size(), 1); // TODO what to do about needsDelivery?
         }
         else return "";
     }
@@ -34,7 +34,7 @@ public class OrderFromReportHandler {
         Report report = rCont.getReport(reportId);
         ArrayList<String[]> items = makeItemsFromReport(report);
         int supplierNum = sCont.chooseBestSupplierForItems(items);
-        sCont.createOrder(supplierNum, needsDelivery, false, items, 10 * items.size()); // TODO what to do about needsDelivery?
+        sCont.createOrder(supplierNum, needsDelivery, false, items, 10 * items.size(), 1); // TODO what to do about needsDelivery?
     }
 
     private ArrayList<String[]> makeItemsFromReport(Report report){
