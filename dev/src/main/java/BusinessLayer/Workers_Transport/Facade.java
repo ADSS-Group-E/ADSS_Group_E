@@ -27,8 +27,8 @@ public class Facade {
         return wFacade.resetShiftDemands(branchID);
     }
 
-    public Response addBranch(int branchID, WorkerDTO branchManager, WorkerDTO activeHRD) {
-        return wFacade.addBranch(branchID, branchManager, activeHRD);
+    public Response addBranch(int branchID, WorkerDTO branchManager, WorkerDTO activeHRD, WorkerDTO logistics) {
+        return wFacade.addBranch(branchID, branchManager, activeHRD, logistics);
     }
 
     public ResponseT<BranchDTO> getBranch(int ID) {
@@ -292,7 +292,7 @@ public class Facade {
         return new Response();
     }
 
-    public Response createOrder(int id, Map<String, Integer> items, String supplierId, Integer locationId, double totalWeight) {
+    public Response createOrder(int id, Map<Integer, Integer> items, String supplierId, Integer locationId, double totalWeight) {
         try{
             dFacade.createOrder( id, items,  supplierId,  locationId,  totalWeight);
         }catch(Exception e){
@@ -317,7 +317,7 @@ public class Facade {
         return new Response();
     }
 
-    public Response addItem(Integer id, String item, int quantity){
+    public Response addItem(Integer id, int item, int quantity){
         try{
             dFacade.addItem( id,  item, quantity);
         }catch(Exception e){
@@ -327,7 +327,7 @@ public class Facade {
     }
 
 
-    public Response removeItem(Integer id, String item){
+    public Response removeItem(Integer id, int item){
         try{
             dFacade.removeItem(id,item);
         }catch(Exception e){
@@ -337,7 +337,7 @@ public class Facade {
     }
 
 
-    public Response updateQuantity(Integer id, String item, int quantity){
+    public Response updateQuantity(Integer id, int item, int quantity){
         try{
             dFacade.updateQuantity(id,item,quantity);
         }catch(Exception e){

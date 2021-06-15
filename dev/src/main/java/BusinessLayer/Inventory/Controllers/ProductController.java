@@ -8,6 +8,7 @@ import PresentationLayer.Inventory.DataTransferObjects.DataTransferObject;
 import PresentationLayer.Inventory.DataTransferObjects.ItemGroupDTO;
 import PresentationLayer.Inventory.DataTransferObjects.ProductDTO;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -40,36 +41,59 @@ public class ProductController extends DomainController{
         this.itemGroupDAO = itemGroupDAO;
     }
 
-    public void acceptOrder(Order order){
+    // Dismissals is a map between a product id and the amount which needs to be dismissed from the order
+    public void acceptOrder(Order order, HashMap<Integer, Integer> dismissals){
         HashMap<Product, ItemGroup> itemGroups = new HashMap<>();
 
         //TODO: Implement OrderItem, getOrderItems, getPid, ItemGroup constructor with OrderItem, Order.accept
-        /* Commented out code while it's not implemented
-
         // First iterate through orderItems to get it's corresponding product and create a new itemGroup for it
-        ArrayList<OrderItem> orderItems = order.getOrderItems();
-        for (OrderItem orderItem:
-             orderItems) {
-            Product product = getProduct(orderItem.getPid());
+        HashMap<Integer,Integer> orderItems = new HashMap<>(order.getItems());
+        Iterator<Map.Entry<Integer, Integer>> it = orderItems.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<Integer, Integer> pair = it.next();
+            int productId = pair.getKey();
+            int quantity = pair.getValue();
+
+            Product product = getProduct(productId);
             if (product == null){
-                System.err.println( "acceptOrder couldn't match pid " + orderItem.getPid());
+                System.err.println( "acceptOrder couldn't match pid " + productId);
                 return;
             }
+            // TODO something about price
+            double price = product.getSellingPrice() + 10;
 
-            ItemGroup itemGroup = new ItemGroup(orderItem);
-            
-            itemGroups.put(product, itemGroup);
+            ItemGroup itemGroup = new ItemGroup(quantity, price, LocalDateTime.of(2020,7,13,12,0));
+
+            if (dismissals.containsKey(product.getId())){
+                int amountToDismiss = dismissals.get(product.getId());
+                if (itemGroup.getQuantity() - amountToDismiss > 0){
+                    // Dismissing part of itemgroup
+                    itemGroup.setQuantity(itemGroup.getQuantity() - amountToDismiss);
+                    dismissals.remove(product.getId());
+
+                    itemGroups.put(product, itemGroup);
+                }
+                else{
+                    // Dismissing whole itemgroup
+                    dismissals.put(product.getId(), amountToDismiss - itemGroup.getQuantity());
+                }
+            }
+            else{
+                itemGroups.put(product, itemGroup);
+            }
+
+            it.remove(); // avoids a ConcurrentModificationException
         }
-        */
+
+
         // Once every orderItem has been confirmed to have a matching product, add the itemGroups to storage
-        Iterator<Map.Entry<Product, ItemGroup>> it = itemGroups.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<Product, ItemGroup> pair = it.next();
-            System.out.println(pair.getKey() + " = " + pair.getValue());
+        Iterator<Map.Entry<Product, ItemGroup>> it2 = itemGroups.entrySet().iterator();
+        while (it2.hasNext()) {
+            Map.Entry<Product, ItemGroup> pair = it2.next();
 
             pair.getKey().addItemGroupToStorage(pair.getValue());
 
-            it.remove(); // avoids a ConcurrentModificationException
+            it2.remove(); // avoids a ConcurrentModificationException
         }
 
         // order.accept();

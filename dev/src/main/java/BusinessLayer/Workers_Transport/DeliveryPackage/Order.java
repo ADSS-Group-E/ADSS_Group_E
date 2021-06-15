@@ -1,21 +1,36 @@
 package BusinessLayer.Workers_Transport.DeliveryPackage;
 
+import PresentationLayer.Supplier.DataTransferObjects.OrderDTO;
+import PresentationLayer.Supplier.DataTransferObjects.SupplierItemDTO;
+
 import java.util.*;
 
 public class Order {
 
     private int id;
-    private Map<String, Integer> items;
+    private Map<Integer, Integer> items;
     private String supplierId;
     private int locationId;
     private double totalWeight;
 
-    public Order(int id, Map<String, Integer> items, String supplierId, int locationId, double totalWeight) {
+    public Order(int id, Map<Integer, Integer> items, String supplierId, int locationId, double totalWeight) {
         this.id = id;
         this.items = items;
         this.supplierId = supplierId;
         this.locationId = locationId;
         this.totalWeight = totalWeight;
+    }
+
+    public Order(OrderDTO dto){
+        items = new HashMap<>();
+        this.id=dto.getId();
+        ArrayList<SupplierItemDTO> supplierItemDTOS=dto.getOrderItems();
+        for(SupplierItemDTO item : supplierItemDTOS){
+            items.put(item.getId(), item.getQuantity());
+        }
+        this.supplierId=String.valueOf(dto.getOrderItems().get(0).getCompanyNumber());
+        this.locationId=dto.getLocationID();
+        this.totalWeight=dto.getWeight();
     }
 
     public int getId() {
@@ -26,11 +41,11 @@ public class Order {
         this.id = id;
     }
 
-    public Map<String, Integer> getItems() {
+    public Map<Integer, Integer> getItems() {
         return items;
     }
 
-    public void setItems(Map<String, Integer> items) {
+    public void setItems(Map<Integer, Integer> items) {
         this.items = items;
     }
 

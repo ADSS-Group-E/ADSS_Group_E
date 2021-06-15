@@ -86,10 +86,10 @@ public class DTO {
 
     public static class ItemsForOrders{
         protected int orderId;
-        protected String item;
+        protected int item;
         protected int qunt;
 
-        public ItemsForOrders(int orderId,String item,int qunt)
+        public ItemsForOrders(int orderId,int item,int qunt)
         {
             this.orderId=orderId;
             this.item=item;

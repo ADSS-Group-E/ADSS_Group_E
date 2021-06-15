@@ -1,6 +1,7 @@
 package PresentationLayer;
 
 
+import BusinessLayer.AcceptOrderHandler;
 import BusinessLayer.Inventory.Controllers.*;
 import BusinessLayer.OrderFromReportHandler;
 import BusinessLayer.Supplier.SupplierController;
@@ -37,6 +38,7 @@ public class CommandLineInterface {
     private final MainOptionsMenu mainOptionsMenu;
     private WorkerDTO loggedInWorker;
     private final Facade workersTransportFacade;
+    private final AcceptOrderHandler acceptOrderHandler;
 
 
     // Getters
@@ -56,7 +58,9 @@ public class CommandLineInterface {
         return serviceController;
     }
 
-
+    public AcceptOrderHandler getAcceptOrderHandler() {
+        return acceptOrderHandler;
+    }
 
     public WorkerDTO getLoggedInWorker() {
         return loggedInWorker;
@@ -81,6 +85,7 @@ public class CommandLineInterface {
         inventoryFacade = new InventoryFacade(pCont, rCont, cCont, dCont);
 
         orderFromReportHandler = new OrderFromReportHandler(rCont,sCont);
+        acceptOrderHandler = new AcceptOrderHandler(pCont);
         serviceController = new ServiceController(sCont);
 
         loginOptionsMenu = new LoginOptionsMenu(this);
@@ -129,6 +134,8 @@ public class CommandLineInterface {
             e.printStackTrace();
             return;
         }
+        inventoryFacade.addCategory(4,"Fruit");
+        inventoryFacade.addCategory(3,"Milk");
         inventoryFacade.addCategory(1,"Juice");
         inventoryFacade.addCategory(new CategoryDTO(2,"<500 ML",1));
         inventoryFacade.addProduct(new ProductDTO(1, "Test Juice", "AB01","B13", "Test Company", 10.1, 5,2, -1));
@@ -136,6 +143,16 @@ public class CommandLineInterface {
         inventoryFacade.addItemToStorage(1,3, 11, LocalDateTime.of(2021,4,25,16,0));
         inventoryFacade.addItemToStore(1,20, 11.5, LocalDateTime.of(2021,4,1,16,0));
         inventoryFacade.addItemToStorage(1,4, 12, LocalDateTime.of(2021,4,1,16,0));
+        inventoryFacade.addProduct(new ProductDTO(2, "Test Milk", "AB01","B13", "Test Company", 69, 100,3, -1));
+        inventoryFacade.addItemToStore(2,5, 10.5,  LocalDateTime.of(2021,4,24,16,0));
+        inventoryFacade.addItemToStorage(2,3, 11, LocalDateTime.of(2021,4,25,16,0));
+        inventoryFacade.addItemToStore(2,20, 11.5, LocalDateTime.of(2021,4,1,16,0));
+        inventoryFacade.addItemToStorage(2,4, 12, LocalDateTime.of(2021,4,1,16,0));
+        inventoryFacade.addProduct(new ProductDTO(3, "Test Apples", "AB01","B13", "Test Company", 6.9, 100,4, -1));
+        inventoryFacade.addItemToStore(3,5, 10.5,  LocalDateTime.of(2021,4,24,16,0));
+        inventoryFacade.addItemToStorage(3,3, 11, LocalDateTime.of(2021,4,25,16,0));
+        inventoryFacade.addItemToStore(3,20, 11.5, LocalDateTime.of(2021,4,1,16,0));
+        inventoryFacade.addItemToStorage(3,4, 12, LocalDateTime.of(2021,4,1,16,0));
         ArrayList<Integer> cids = new ArrayList<>();
         ArrayList<Integer> pids = new ArrayList<>();
         cids.add(1);
@@ -330,7 +347,7 @@ public class CommandLineInterface {
         WorkerDTO workerDTO22 = new WorkerDTO("Avi", "Ohayon", "325431754", bankAccountDTO24, hiringConditionsDTO24, availableWorkDaysDTO9, qualificationsDTO5);
         WorkerDTO workerDTO23 = new WorkerDTO("Dganit", "Refeli", "298764234", bankAccountDTO25, hiringConditionsDTO25, availableWorkDaysDTO6, qualificationsDTO6);
 
-        workersFacade.addBranch(1, branchManager, HRD);
+        workersFacade.addBranch(1, branchManager, HRD, workerDTO1);
         workersFacade.addWorker(workerDTO1, 1);
         workersFacade.addWorker(workerDTO2, 1);
         //facade.addWorker(workerDTO3, 1);
@@ -410,44 +427,29 @@ public class CommandLineInterface {
             deliveryFacade.createTruck("2360154", "volvo", 1000.0, 4500.0);
             deliveryFacade.createTruck("30122623", "chevrolet", 5000.0, 9000.5);
             deliveryFacade.createTruck("11122333", "honda", 10000.0, 15000.0);
-            Map<String, Integer> items1 = new HashMap<String, Integer>() {
+            Map<Integer, Integer> items1 = new HashMap<Integer, Integer>() {
                 {
-                    put("milk", 20);
-                    put("pasta", 50);
-                    put("chocolate", 10);
-                    put("cola", 10);
+                    put(1, 20);
                 }
             };
-            Map<String, Integer> items2 = new HashMap<String, Integer>() {
+            Map<Integer, Integer> items2 = new HashMap<Integer, Integer>() {
                 {
-                    put("milk", 25);
-                    put("rice", 30);
-                    put("cheese", 40);
-                    put("eggs", 45);
+                    put(2, 25);
                 }
             };
-            Map<String, Integer> items3 = new HashMap<String, Integer>() {
+            Map<Integer, Integer> items3 = new HashMap<Integer, Integer>() {
                 {
-                    put("eggs", 10);
-                    put("cola zero", 15);
-                    put("beer", 23);
-                    put("candy", 17);
+                    put(3, 10);
                 }
             };
-            Map<String, Integer> items4 = new HashMap<String, Integer>() {
+            Map<Integer, Integer> items4 = new HashMap<Integer, Integer>() {
                 {
-                    put("eggs", 10);
-                    put("milk", 15);
-                    put("tomato", 23);
-                    put("cucumber", 17);
+                    put(1, 10);
                 }
             };
-            Map<String, Integer> items5 = new HashMap<String, Integer>() {
+            Map<Integer, Integer> items5 = new HashMap<Integer, Integer>() {
                 {
-                    put("ice cream", 20);
-                    put("toilet paper", 15);
-                    put("cucumber", 50);
-                    put("fish", 10);
+                    put(2, 20);
                 }
             };
             deliveryFacade.createOrder(12, items1, "487", 1, 1000.0);

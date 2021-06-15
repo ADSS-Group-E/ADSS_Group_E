@@ -26,20 +26,20 @@ public class OrdersOptionsMenu extends OptionsMenu {
     }
 
     private void createNewOrder() {
-        String name, s1;
-        int id;
+        String name;
+        int id , s1;
         int quantity;
         double totalWeight;
 
-        Map<String, Integer> items = new HashMap<>();
+        Map<Integer, Integer> items = new HashMap<>();
         System.out.println("to create order details please first enter items - itemName, quantity\n" +
-                "to finish please enter x");
-        s1 = in.next();
-        while(s1.compareTo("x") != 0)
+                "to finish please enter -1");
+        s1 = in.nextInt();
+        while(s1 != -1)
         {
             quantity = in.nextInt();
             items.put(s1, quantity);
-            s1 = in.next();
+            s1 = in.nextInt();
         }
         System.out.println("please enter order details: id, supplier id, location id, total weight");
         id = in.nextInt();
@@ -67,16 +67,16 @@ public class OrdersOptionsMenu extends OptionsMenu {
     }
 
     private void addItem() {
-        String name;
+        int productId;
         int id;
         int quantity;
 
-        System.out.println("please enter order id, item name, quantity");
+        System.out.println("please enter order id, product id, quantity");
         id = in.nextInt();
-        name = in.next();
+        productId = in.nextInt();
         quantity = in.nextInt();
         try{
-            deliveryFacade.addItem(id, name, quantity);
+            deliveryFacade.addItem(id, productId, quantity);
         }
         catch (Exception e){
             System.out.println(e.getMessage() + "\nYou entered wrong details please try again");
@@ -84,14 +84,13 @@ public class OrdersOptionsMenu extends OptionsMenu {
     }
 
     private void removeItem() {
-        String name;
-        int id;
+        int id, productId;
 
         System.out.println("please enter order id, item name");
         id = in.nextInt();
-        name = in.next();
+        productId = in.nextInt();
         try{
-            deliveryFacade.removeItem(id, name);
+            deliveryFacade.removeItem(id, productId);
         }
         catch (Exception e){
             System.out.println(e.getMessage() + "\nYou entered wrong details please try again");
@@ -99,16 +98,15 @@ public class OrdersOptionsMenu extends OptionsMenu {
     }
 
     private void changeQuantity() {
-        String name;
-        int id;
+        int id, productId;
         int quantity;
 
         System.out.println("please enter order id, item name, quantity");
         id = in.nextInt();
-        name = in.next();
+        productId = in.nextInt();
         quantity = in.nextInt();
         try{
-            deliveryFacade.updateQuantity(id, name, quantity);
+            deliveryFacade.updateQuantity(id, productId, quantity);
         }
         catch (Exception e){
             System.out.println(e.getMessage() + "\nYou entered wrong details please try again");

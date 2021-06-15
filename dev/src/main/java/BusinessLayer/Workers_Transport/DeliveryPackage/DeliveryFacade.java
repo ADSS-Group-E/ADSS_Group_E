@@ -328,7 +328,7 @@ public class DeliveryFacade {
         return true;
     }
 
-    public Order createOrder(int id, Map<String, Integer> items, String supplierId, int locationId, double totalWeight) throws Exception
+    public Order createOrder(int id, Map<Integer, Integer> items, String supplierId, int locationId, double totalWeight) throws Exception
     {
         try
         {
@@ -345,6 +345,10 @@ public class DeliveryFacade {
     public Map<Integer, Order> getOrders()
     {
         return orderController.getOrders();
+    }
+
+    public Order getOrder(int id) throws Exception {
+        return orderController.getOrder(id);
     }
 
     public void addOrder(Order order) throws Exception
@@ -373,7 +377,7 @@ public class DeliveryFacade {
         }
     }
 
-    public void addItem(int id, String item, int quantity) throws Exception
+    public void addItem(int id, int item, int quantity) throws Exception
     {
         if(DataAccessLayer.Workers_Transport.Transports.Delivery.checkOrder(id))
             throw new Exception("cant change delivery that is InTransit or Delivered");
@@ -388,7 +392,7 @@ public class DeliveryFacade {
     }
 
 
-    public void removeItem(int id, String item) throws Exception
+    public void removeItem(int id, int item) throws Exception
     {
         if(DataAccessLayer.Workers_Transport.Transports.Delivery.checkOrder(id))
             throw new Exception("cant change delivery that is InTransit or Delivered");
@@ -403,7 +407,7 @@ public class DeliveryFacade {
     }
 
 
-    public void updateQuantity(int id, String item, int quantity) throws Exception
+    public void updateQuantity(int id, int item, int quantity) throws Exception
     {
         if(DataAccessLayer.Workers_Transport.Transports.Delivery.checkOrder(id))
             throw new Exception("cant change delivery that is InTransit or Delivered");
