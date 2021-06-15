@@ -1,8 +1,10 @@
 package DataAccessLayer.Workers_Transport.Workers;
 
+import BusinessLayer.Supplier.SupplierController;
 import BusinessLayer.Workers_Transport.DriverPackage.Driver;
 import BusinessLayer.Workers_Transport.WorkersPackage.*;
 import DataAccessLayer.Workers_Transport.Repo;
+import DataAccessLayer.Workers_Transport.Transports.Delivery;
 import DataAccessLayer.Workers_Transport.Transports.Drivers;
 import PresentationLayer.Workers_Transport.WorkerDTO;
 
@@ -519,9 +521,22 @@ CREATE TABLE IF NOT EXISTS workersAtShift (
                         String storekeeper_ID= scanner.next();
                         System.out.println("enter the ID of the logistics manager");
                         String logistics_ID= scanner.next();
+
+                        SupplierController supplierController=new SupplierController();
                         try {
                             if(Workers.isStoreKeeper(storekeeper_ID)&&Workers.isHRDManagerExists(HRD_ID)&&Workers.isLogisticsManagerExists(logistics_ID)) {
                                 //TODO : call cancel order function
+                                String st= j==0 ? "Morning" : "Evening";
+
+                                List<Integer>ordersToCancel= Delivery.getOrdersOfShift(shiftDemands[i][j].getDate(),st);
+                                Shifts.setDeliveryRequired(shiftDemands[i][j].getDate(),j==0 ? "Morning" : "Evening",Workers.getBranchID(HRD_ID),false);
+                                for(int orderID : ordersToCancel){
+                                    Delivery.updateStatus(Integer.toString(orderID), "cancelled");
+                                }
+
+
+                                supplierController.cancelOrders(ordersToCancel);
+
                             }
                         }catch(Exception e){
                             throw e;

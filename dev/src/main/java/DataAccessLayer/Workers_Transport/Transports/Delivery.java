@@ -4,6 +4,7 @@ import BusinessLayer.Workers_Transport.WorkersPackage.Worker;
 import DataAccessLayer.Workers_Transport.Repo;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -134,6 +135,57 @@ public class Delivery {
             throw e;
         }
         return orders;
+    }
+
+    public static List<Integer> getOrdersOfShift(LocalDate date, String shiftType) throws SQLException {
+        try (Connection conn = Repo.openConnection()) {
+            List<String> deliveryIds= Delivery.getDeliveriesIdsByShift(date,shiftType);
+            List<Integer> orderIds= new ArrayList<>();
+            for (String id: deliveryIds) {
+                orderIds.addAll(getOrdersForDelivery(id));
+            }
+            if (orderIds.isEmpty()) return null;
+            return  orderIds;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public static List<String> getDeliveriesIdsByShift(LocalDate date, String shiftType) throws SQLException {
+        try (Connection conn = Repo.openConnection()) {
+
+            Date date1=Date.valueOf(date);
+            List<String> idsArray=new ArrayList<>();
+
+            Time time1;
+            Time time2;
+            if (shiftType=="Morning"){
+                time1=Time.valueOf("08:00:00");
+                time2=Time.valueOf("15:59:59");
+            }
+            else
+            {
+                time1=Time.valueOf("16:00:00");
+                time2=Time.valueOf("23:00:00");
+            }
+
+            String sql = "SELECT * From Deliveries WHERE DELIVERY_DATE=? AND (DELIVER_TIME >= ? AND DELIVER_TIME <= ?)";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setDate(1,date1);
+            pst.setTime(2,time1);
+            pst.setTime(3,time2);
+
+            ResultSet results = pst.executeQuery();
+            while (results.next()) {
+                String i= results.getString(1);
+                idsArray.add(i);
+            }
+            if(idsArray.isEmpty())
+                return null;
+            return idsArray;
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     public static void deleteDelivery(String id) throws Exception {
