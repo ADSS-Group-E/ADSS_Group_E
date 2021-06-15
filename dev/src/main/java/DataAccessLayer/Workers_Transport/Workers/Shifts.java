@@ -1,15 +1,16 @@
 package DataAccessLayer.Workers_Transport.Workers;
 
+import BusinessLayer.Supplier.SupplierController;
 import BusinessLayer.Workers_Transport.DriverPackage.Driver;
 import BusinessLayer.Workers_Transport.WorkersPackage.*;
 import DataAccessLayer.Workers_Transport.Repo;
+import DataAccessLayer.Workers_Transport.Transports.Delivery;
 import DataAccessLayer.Workers_Transport.Transports.Drivers;
 
 import java.sql.*;
+import java.sql.Date;
 import java.time.LocalDate;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 public class Shifts {
 
@@ -475,6 +476,7 @@ CREATE TABLE IF NOT EXISTS workersAtShift (
                         }
                     }
                 }
+
                 if(shiftManagersTemp.isEmpty()){
                     System.out.println("cant create the shift of "+startDate.plusDays(i) + " in the "+type.name().toLowerCase(Locale.ROOT)+ " because there is no shift manager");
                     continue;
@@ -482,11 +484,62 @@ CREATE TABLE IF NOT EXISTS workersAtShift (
                 //throw new IllegalArgumentException("cant create a shift without a shift manager");
                 shiftManager=shiftManagersTemp.remove(0);
 
-                if (driver!=null) {
+                if(driver!=null)
                     driversTemp.remove(driver);
-                }
+
                 if(shiftDemands[i][j]!=null&&shiftDemands[i][j].getDeliveryRequired()&& driver==null){
                     System.out.println("the shift of "+startDate.plusDays(i) + " in the "+type.name().toLowerCase(Locale.ROOT)+ " must contain a driver");
+                    //TODO : add a menu
+                    Scanner scanner=new Scanner(System.in);
+                    System.out.println("Do you want to call to HRD to change the driver assignment to fit to yom aspaka enter Y for yes and N for no");
+                    String input= scanner.next();
+                    boolean callToHRD=input.equals("Y")||input.equals("y");
+                    if(callToHRD){
+                        //TODO : open a menu of HRD and change the shift to the driver
+
+                        System.out.println("enter the ID of the HRD to change the shift");
+                        String HRD_ID= scanner.next();
+                        if(Workers.isHRDManagerExists(HRD_ID)){
+                            if(drivers.isEmpty()){
+                                System.out.println("There is no drivers at all so we cant change the shift");
+                                continue;
+                            }
+                            driver=drivers.get(0);
+                            System.out.println("changed successfully");
+                        }
+
+
+                    }else{
+                        //TODO : cancel the order
+                        System.out.println("for cancelling the order you need to get confirmation from the HRD,storekeeper and logistics manager");
+                        System.out.println("enter the ID of the HRD");
+                        String HRD_ID= scanner.next();
+                        System.out.println("enter the ID of the storekeeper");
+                        String storekeeper_ID= scanner.next();
+                        System.out.println("enter the ID of the logistics manager");
+                        String logistics_ID= scanner.next();
+
+                        SupplierController supplierController=new SupplierController();
+                        try {
+                            if(Workers.isStoreKeeper(storekeeper_ID)&&Workers.isHRDManagerExists(HRD_ID)&&Workers.isLogisticsManagerExists(logistics_ID)) {
+                                //TODO : call cancel order function
+                                String st= j==0 ? "Morning" : "Evening";
+
+                                ArrayList<Integer> ordersToCancel= new ArrayList<>(Delivery.getOrdersOfShift(shiftDemands[i][j].getDate(),st));
+                                Shifts.setDeliveryRequired(shiftDemands[i][j].getDate(),j==0 ? "Morning" : "Evening",Workers.getBranchID(HRD_ID),false);
+                                for(int orderID : ordersToCancel){
+                                    Delivery.updateStatus(Integer.toString(orderID), "cancelled");
+                                }
+
+
+                                supplierController.cancelOrders(ordersToCancel);
+
+                            }
+                        }catch(Exception e){
+                            throw e;
+                        }
+                        //check if is allowed to be storeKeeper
+                    }
                     continue;
                 }
 
@@ -494,6 +547,10 @@ CREATE TABLE IF NOT EXISTS workersAtShift (
                     System.out.println("This shift must contain storekeeper, because delivery is on the way to the store");
                     continue;
                 }
+
+                // isStoreKeeperExists(shiftDemands[i][j].getDate(),j==0 ? "Morning" : "Evening",storeKeeperID);
+
+
                 try{
                     ableToWork=createShiftAssignment(startDate,type,branchID,workers,shiftManager,driver);
                     //ableToWork=createShiftAssignment(startDate,type,branchID,ableToWork,branchManager, driver);

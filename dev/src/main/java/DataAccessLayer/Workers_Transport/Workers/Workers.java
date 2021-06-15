@@ -623,6 +623,45 @@ public class Workers {
     }
 
 
+    public static boolean isStoreKeeper(String ID) throws Exception{
+        try (Connection conn = Repo.openConnection()) {
+            String sql = "SELECT * From Qualifications WHERE ID=? AND Qualification=Storekeeper";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, ID);
+            ResultSet results = pst.executeQuery();
+            return results.next();
+        }catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public static boolean isHRDManagerExists(String HRD_ID)throws SQLException{
+        try (Connection conn = Repo.openConnection()) {
+            String sql = "SELECT * FROM Branches WHERE HRD_ID=?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1,HRD_ID);
+            ResultSet results = pst.executeQuery();
+            return results.next();
+
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
+
+    public static boolean isLogisticsManagerExists(String logisticsManagerID)throws SQLException{
+        try (Connection conn = Repo.openConnection()) {
+            String sql = "SELECT * FROM Branches WHERE logisticsManagerID=?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1,logisticsManagerID);
+            ResultSet results = pst.executeQuery();
+            return results.next();
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
+
+
+
     public static String getFirstNameFromDB(String ID) throws Exception {
         try (Connection conn = Repo.openConnection()) {
             String sql = "SELECT * From Workers WHERE ID=?";
