@@ -30,16 +30,16 @@ public class SupplierController {
     public void initialize() {
         data = new DataController();
         ArrayList<String[]> supplierOneItems = new ArrayList<>();//supplier one items
-        supplierOneItems.add(new String[]{10 + "", "Corn", 10 + "", 1500 + "", 5554 + ""});
-        supplierOneItems.add(new String[]{50 + "","Popcorn", 20 + "", 500 + "", 5666 + ""});
-        supplierOneItems.add(new String[]{100 + "", "Candy Corn", 30 + "", 200 + "", 8989 + ""});
-        supplierOneItems.add(new String[]{1 + "", "Test Juice", 5 + "", 10 + "", 111 + ""});
-        supplierOneItems.add(new String[]{2 + "", "Test Milk", 5 + "", 10 + "", 112 + ""});
-        supplierOneItems.add(new String[]{3 + "", "Test Milk", 5 + "", 10 + "", 113 + ""});
+        supplierOneItems.add(new String[]{10 + "", "Corn", 10 + "", 15000 + "", 5554 + ""});
+        supplierOneItems.add(new String[]{50 + "","Popcorn", 20 + "", 5000 + "", 5666 + ""});
+        supplierOneItems.add(new String[]{100 + "", "Candy Corn", 30 + "", 20000 + "", 8989 + ""});
+        supplierOneItems.add(new String[]{1 + "", "Test Juice", 5 + "", 10000 + "", 111 + ""});
+        supplierOneItems.add(new String[]{2 + "", "Test Milk", 5 + "", 10000 + "", 112 + ""});
+        supplierOneItems.add(new String[]{3 + "", "Test Milk", 5 + "", 10000 + "", 113 + ""});
         ArrayList<String[]> supplierTwoItems = new ArrayList<>();//supplier two items
-        supplierTwoItems.add(new String[]{54 + "", "Hot Dog", 10 + "", 1500 + "", 100 + ""});
-        supplierTwoItems.add(new String[]{110 + "", "Corn Dog", 20 + "", 500 + "", 206 + ""});
-        supplierTwoItems.add(new String[]{66 + "", "Dog", 3000 + "", 10 + "", 5041 + ""});
+        supplierTwoItems.add(new String[]{54 + "", "Hot Dog", 10 + "", 15000 + "", 100 + ""});
+        supplierTwoItems.add(new String[]{110 + "", "Corn Dog", 20 + "", 5000 + "", 206 + ""});
+        supplierTwoItems.add(new String[]{66 + "", "Dog", 3000 + "", 10000 + "", 5041 + ""});
         ArrayList<String[]> contacts = new ArrayList<>();
         contacts.add(new String[]{"Tzahi", "tzahi@tzahi.com"});
         HashMap<Integer, Integer> discounts = new HashMap<>();
